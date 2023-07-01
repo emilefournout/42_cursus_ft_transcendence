@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+
+  db:
+    container_name: database
+    image: postgres
+    restart: unless-stopped
+    environment:
+      #POSTGRES_DB: postgres
+      #POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 5000:8080
+
+  backend:
+    container_name: backend
+    build: ./backend/.
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    container_name: frontend
+    build: ./frontend/.
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
