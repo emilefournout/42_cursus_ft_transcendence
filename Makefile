@@ -1,5 +1,8 @@
 up:
 	docker-compose up
 
-clean:
+down:
 	docker-compose down
+
+clean: down
+	./clean_docker.sh
