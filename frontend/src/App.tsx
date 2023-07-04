@@ -1,24 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
+import { socket } from './services/socket'
 import './App.css';
 
 function App() {
+  const [message, setMessage] = useState("")
+
+  function sendMessage() {
+    if (message !== "") {
+      socket.emit("send_message", message)
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input
+        type="text"
+        placeholder="Message..."
+        onChange={(event) => {
+          setMessage(event.target.value)
+        }}
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }
