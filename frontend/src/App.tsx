@@ -1,27 +1,13 @@
 import React from 'react';
-import { useState } from 'react';
-import { socket } from './services/socket'
 import './App.css';
+import Chat from './components/Chat'
 
 function App() {
-  const [message, setMessage] = useState("")
-
-  function sendMessage() {
-    if (message !== "") {
-      socket.emit("send_message", message)
-    }
-  }
 
   return (
     <div className="App">
-      <input
-        type="text"
-        placeholder="Message..."
-        onChange={(event) => {
-          setMessage(event.target.value)
-        }}
-      />
-      <button onClick={sendMessage}>Send</button>
+      <h2>Probando el componente Chat</h2>
+      <Chat />
     </div>
   );
 }
