@@ -1,4 +1,3 @@
-import { CreateUserDto } from './dto/user.dto';
 import {
   Controller,
   Get,
@@ -10,8 +9,12 @@ import {
   ParseIntPipe,
   NotFoundException,
   NotImplementedException,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { GetUser } from '../auth/decorator';
+import { JwtAuthGuard } from 'src/auth/guard';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -25,6 +28,17 @@ export class UserController {
     }
     return user;
   }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  findUserMe(@GetUser() user) {
+    const userInfo = this.userService.getUserInfoById(user.id);
+    if (userInfo === undefined) {
+      throw new NotFoundException('User not found');
+    }
+    return userInfo;
+  }
+
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
