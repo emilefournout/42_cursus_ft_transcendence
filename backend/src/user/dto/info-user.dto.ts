@@ -1,5 +1,3 @@
-
-
 export class UserBasicInfoDto {
   id: number;
   username: string;
