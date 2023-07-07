@@ -17,6 +17,7 @@ model User {
   email         String @unique
   createdAt     DateTime @default(now())
   avatar        String? // URL to Avatar
+  status        OnlineStatus @default(OFFLINE)
   userGames     UserGame[]
   chatMember    ChatMember[]
   messages      Message[]

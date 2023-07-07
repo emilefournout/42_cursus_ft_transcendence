@@ -21,28 +21,29 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get(':id')
-  findUser(@Param('id', ParseIntPipe) id) {
-    const user = this.userService.getUserInfoById(id);
-    if (user === undefined) {
-      throw new NotFoundException('User not found');
-    }
+  async findUser(@Param('id', ParseIntPipe) id) {
+    const user = await this.userService.findUserById(id);
+    if (user === null || user === undefined)
+      throw new NotFoundException('User not found')
     return user;
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  findUserMe(@GetUser() user) {
-    const userInfo = this.userService.getUserInfoById(user.id);
-    if (userInfo === undefined) {
+  async findUserMe(@GetUser() user) {
+    const userInfo = await this.userService.getUserInfoById(user.id);
+    if (userInfo === null || userInfo === undefined) {
       throw new NotFoundException('User not found');
     }
     return userInfo;
   }
 
-
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    this.userService.createUser(createUserDto.username, createUserDto.password, createUserDto.email, createUserDto.avatar);
+    this.userService.createUser(createUserDto.username,
+      createUserDto.password,
+      createUserDto.email,
+      createUserDto.avatar);
   }
 
   @Patch(':id')
