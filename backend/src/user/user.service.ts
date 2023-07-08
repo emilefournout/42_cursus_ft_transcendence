@@ -1,95 +1,52 @@
-const bcrypt = require('bcrypt');
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Avatar, OnlineStatus, User } from './user.entity';
-import { CreateUserDto, UserBasicInfoDto } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
+import { saltRounds } from 'src/auth/constants';
+import { ForbiddenException, Injectable, NotAcceptableException } from '@nestjs/common';
+import { Prisma, User } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { UserBasicInfoDto } from './dto/info-user.dto';
+import { use } from 'passport';
 @Injectable()
 export class UserService {
-  private users: User[] = [
-    {
-      id: 1,
-      username: 'efournou',
-      password: '',
-      salt: '',
-      status: OnlineStatus.ONLINE,
-      email: '',
-      avatar: null,
-    },
-    {
-      id: 2,
-      username: 'jarredon',
-      password: '',
-      salt: '',
-      status: OnlineStatus.OFFLINE,
-      email: '',
-      avatar: null,
-    },
-    {
-      id: 3,
-      username: 'apena-ba',
-      password: '',
-      salt: '',
-      status: OnlineStatus.ONLINE,
-      email: '',
-      avatar: null,
-    },
-    {
-      id: 4,
-      username: 'n-tamayo',
-      password: '',
-      salt: '',
-      status: OnlineStatus.PLAYING,
-      email: '',
-      avatar: null,
-    },
-    {
-      id: 5,
-      username: 'josesanc',
-      password: '',
-      salt: '',
-      status: OnlineStatus.PLAYING,
-      email: '',
-      avatar: null,
-    },
-  ];
 
-  createUser(username: string, password: string, email: string, avatar: Avatar) {
-    if (
-      this.users.find(
-        (elem) =>
-          elem.username == username ||
-          elem.email == email,
-      ) != undefined
-    ) {
-      throw new ForbiddenException('Repeated username or email');
+  constructor(private prisma: PrismaService) {}
+
+  async createUser(username: string, password: string, email: string, avatar: File) {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt)
+    try {
+      await this.prisma.user.create({
+        data: {
+          username: username,
+          password: hash,
+          email: email
+        }
+      });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this email');
+          }
+        }
     }
-    const maxID = this.users.reduce((a, b) => Math.max(a, b.id), -Infinity);
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
-    let newUser = new User();
-    newUser.id = maxID + 1;
-    newUser.password = hash;
-    newUser.salt = salt;
-    newUser.username = username
-    newUser.email = email;
-    newUser.status = OnlineStatus.OFFLINE;
-    newUser.avatar = null;
-    this.users.push(newUser);
   }
 
-  findUserById(id: number): User {
-    return this.users.find((elem) => elem.id == id);
+  async findUserById(id: number) : Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where:{
+        id: id
+      }
+    });
+    return user;
   }
 
-  getUserInfoById(id: number): UserBasicInfoDto {
-    const user = this.findUserById(id);
-    if (user === undefined) {
-      return undefined;
-    }
-    let userInfo = new UserBasicInfoDto();
+  async getUserInfoById(id: number)  : Promise<UserBasicInfoDto> {
+    const userInfo = new UserBasicInfoDto()
+    const user = await this.findUserById(id)
+    if (user === null || user === undefined)
+      return null
     userInfo.id = user.id;
     userInfo.username = user.username;
     userInfo.status = user.status;
-    userInfo.avatar = user.avatar;
     return userInfo;
   }
 }

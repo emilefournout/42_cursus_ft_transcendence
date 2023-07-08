@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      =  env("DATABASE_URL")
+}
+
+model User {
+  id            Int @id @default(autoincrement())
+  username      String
+  password      String
+  email         String @unique
+  createdAt     DateTime @default(now())
+  avatar        String? // URL to Avatar
+  status        OnlineStatus @default(OFFLINE)
+  userGames     UserGame[]
+  chatMember    ChatMember[]
+  messages      Message[]
+}
+
+model UserGame {
+  id            Int    @id @default(autoincrement())
+  userId        Int
+  gameId        String
+  user          User   @relation(fields: [userId], references: [id])
+  game          Game   @relation(fields: [gameId], references: [uuid])
+  createdAt     DateTime @default(now())
+}
+
+model Game {
+  uuid String @id @default(uuid())
+  userGames    UserGame[]
+  points_user1 Int @default(0)
+  points_user2 Int @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Avatar {
+  id Int @id @default(autoincrement())
+  image Bytes
+}
+
+model ChatMember {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  chatId Int
+  chat Chat @relation(fields: [chatId], references: [id])
+  administrator Boolean @default(false)
+  owner Boolean @default(false)
+}
+
+model Chat {
+  id           Int @id @default(autoincrement())
+  visibility  ChatVisibility
+  password    String?
+  members     ChatMember[]
+}
+
+model Message {
+  uuid        String @id @default(uuid())
+  text        String
+  createdAt   DateTime @default(now())
+  userId      Int
+  writer      User @relation(fields: [userId], references: [id])
+}
+
+enum OnlineStatus {
+  ONLINE
+  OFFLINE
+  PLAYING
+}
+
+enum ChatVisibility {
+  PUBLIC
+  PRIVATE
+  PROTECTED
+}
