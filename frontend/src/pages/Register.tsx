@@ -17,7 +17,11 @@ export function Register() {
         'Content-type': 'application/json; charset=UTF-8',
       },
     })
-      .then((response: Response) => console.log(response.status))
+      .then((response: Response) => {
+        if (response.status === 201) {
+          window.alert('User created correctly')
+        }
+      })
       .catch(error => console.log(error))
   }
 
