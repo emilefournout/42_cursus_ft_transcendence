@@ -6,7 +6,7 @@ export function Register() {
   const [email, setEmail] = useState('')
 
   function register() {
-    fetch('http://localhost:3000/user', {
+    fetch(`${process.env.REACT_APP_BACKEND}/user`, {
       method: 'POST',
       body: JSON.stringify({
         username,

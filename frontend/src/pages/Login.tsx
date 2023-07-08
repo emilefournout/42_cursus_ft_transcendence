@@ -6,7 +6,7 @@ export function Login() {
   const [password, setPassword] = useState('')
 
   function login() {
-    fetch('http://localhost:3000/auth/login', {
+    fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, {
       method: 'POST',
       body: JSON.stringify({
         username,
@@ -44,6 +44,7 @@ export function Login() {
           onChange={event => setPassword(event.target.value)}
         />
         <button onClick={login}>Login</button>
+        <a href={`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(process.env.REACT_APP_REDIRECT_URI ?? '')}&response_type=code`}>Login with 42</a>
       </div>
     </>
   );
