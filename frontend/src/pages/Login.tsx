@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Register } from "./Register";
+import Register from "../components/Register";
+import TwoFactorAuth from "../components/TwoFactorAuth";
 
 export function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [show2FA, setShow2FA] = useState(false)
 
   function login() {
     fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, {
@@ -45,7 +47,12 @@ export function Login() {
         />
         <button onClick={login}>Login</button>
       </div>
-      <a href={`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(process.env.REACT_APP_REDIRECT_URI ?? '')}&response_type=code`}>Login with 42</a>
+      <div>
+        <a href={`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(process.env.REACT_APP_REDIRECT_URI ?? '')}&response_type=code`}>Login with 42</a>
+      </div>
+      <button onClick={() => setShow2FA(!show2FA)}>Two Factor Authentication</button>
+      <br></br>
+      {show2FA && <TwoFactorAuth username={username} />}
     </>
   );
 }
