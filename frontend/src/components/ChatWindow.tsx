@@ -33,7 +33,6 @@ function ChatWindow({socket, username, room}: IChatWindow) {
         time: getTime()
       }
       socket.emit("send_message", data)
-      setMessageList(msgs => [...msgs, data])
       setMessage("")
     }
   }
