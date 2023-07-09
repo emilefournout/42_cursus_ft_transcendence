@@ -44,8 +44,8 @@ export function Login() {
           onChange={event => setPassword(event.target.value)}
         />
         <button onClick={login}>Login</button>
-        <a href={`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(process.env.REACT_APP_REDIRECT_URI ?? '')}&response_type=code`}>Login with 42</a>
       </div>
+      <a href={`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(process.env.REACT_APP_REDIRECT_URI ?? '')}&response_type=code`}>Login with 42</a>
     </>
   );
 }
