@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import { saltRounds } from 'src/auth/constants';
-import { ForbiddenException, Injectable, NotAcceptableException } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
-import { use } from 'passport';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { UpdateUserDto } from './dto/update-user.dto';
+
 @Injectable()
 export class UserService {
 
@@ -22,7 +23,7 @@ export class UserService {
         }
       });
     } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error instanceof PrismaClientKnownRequestError) {
           if (error.code === 'P2002') {
             throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this email');
           }
@@ -30,7 +31,7 @@ export class UserService {
     }
   }
 
-  async findUserById(id: number) : Promise<User> {
+  async findUserById(id: number) {
     const user = await this.prisma.user.findUnique({
       where:{
         id: id
@@ -48,5 +49,26 @@ export class UserService {
     userInfo.username = user.username;
     userInfo.status = user.status;
     return userInfo;
+  }
+
+  async deleteUser(id: number) {
+    await this.prisma.user.delete({
+      where: {
+        id: id
+      }
+    })
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto){
+    const user = await this.findUserById(id)
+    if (user === null || user === undefined)
+      throw new NotFoundException('User not found');
+    Object.assign(user, updateUserDto)
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: user
+    })
   }
 }
