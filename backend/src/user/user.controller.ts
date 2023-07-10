@@ -8,13 +8,13 @@ import {
   Body,
   ParseIntPipe,
   NotFoundException,
-  NotImplementedException,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -47,12 +47,12 @@ export class UserController {
   }
 
   @Patch(':id')
-  updateUser(@Param('id', ParseIntPipe) id) {
-    throw new NotImplementedException();
+  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    await this.userService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id', ParseIntPipe) id) {
-    throw new NotImplementedException();
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    await this.userService.deleteUser(id);
   }
 }
