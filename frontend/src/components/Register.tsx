@@ -21,6 +21,12 @@ function Register() {
         if (response.status === 201) {
           window.alert('User created correctly')
         }
+        return response.json()
+      })
+      .then(data => {
+        if (data.error) {
+          window.alert(data.message)
+        }
       })
       .catch(error => console.log(error))
   }

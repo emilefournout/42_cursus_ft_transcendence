@@ -18,7 +18,7 @@ function TwoFactorAuth({username}: {username: string}) { // TODO maybe we can ge
         return response.text()
       })
       .then((data: string) => {
-        data == 'OK'
+        data === 'OK'
         ? window.alert('Good')
         : window.alert('Incorrect code')
       })
