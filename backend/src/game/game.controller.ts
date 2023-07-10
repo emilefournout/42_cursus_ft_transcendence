@@ -3,8 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
+  NotImplementedException,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -16,16 +18,25 @@ export class GameController {
   constructor(private gameService: GameService) {}
 
   @Get(':id')
-  findGame(@Param('id', ParseIntPipe) id) {
-    return this.gameService.findGameById(id);
+  findGame(@Param('id', ParseUUIDPipe) id: string) {
+    const game = this.gameService.findGameById(id);
+    if (game === undefined)
+      throw new NotFoundException('Game was not found');
+    return game
   }
 
   @Post()
-  createGame(@Body() createGameDto: CreateGameDto) {}
+  createGame(@Body() createGameDto: CreateGameDto) {
+    throw new NotImplementedException();
+  }
 
   @Patch(':id')
-  updateGame(@Param('id', ParseIntPipe) id) {}
+  updateGame(@Param('id', ParseUUIDPipe) id) {
+    throw new NotImplementedException();
+  }
 
   @Delete(':id')
-  deleteGame(@Param('id', ParseIntPipe) id) {}
+  deleteGame(@Param('id', ParseUUIDPipe) id) {
+    throw new NotImplementedException();
+  }
 }
