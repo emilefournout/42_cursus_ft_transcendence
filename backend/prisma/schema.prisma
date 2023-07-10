@@ -60,6 +60,7 @@ model Chat {
   visibility  ChatVisibility
   password    String?
   members     ChatMember[]
+  messages    Message[]
 }
 
 model Message {
@@ -67,7 +68,9 @@ model Message {
   text        String
   createdAt   DateTime @default(now())
   userId      Int
+  chatId      Int
   writer      User @relation(fields: [userId], references: [id])
+  chat        Chat @relation(fields: [chatId], references: [id])
 }
 
 enum OnlineStatus {
