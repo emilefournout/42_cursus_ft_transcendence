@@ -11,16 +11,18 @@ datasource db {
 }
 
 model User {
-  id            Int @id @default(autoincrement())
-  username      String
-  password      String
-  email         String @unique
-  createdAt     DateTime @default(now())
-  avatar        String? // URL to Avatar
-  status        OnlineStatus @default(OFFLINE)
-  userGames     UserGame[]
-  chatMember    ChatMember[]
-  messages      Message[]
+  id                                Int @id @default(autoincrement())
+  username                          String
+  password                          String // Hashed
+  email                             String @unique
+  createdAt                         DateTime @default(now())
+  avatarURL                         String? // URL to Avatar
+  istwoFactorAuthenticationEnabled  Boolean  @default(false)
+  twoFactorAuthenticationSecret     String?  // Hashed
+  status                            OnlineStatus @default(OFFLINE)
+  userGames                         UserGame[]
+  chatMember                        ChatMember[]
+  messages                          Message[]
 }
 
 model UserGame {
