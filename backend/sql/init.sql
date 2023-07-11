@@ -11,7 +11,9 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "avatar" TEXT,
+    "avatarURL" TEXT,
+    "istwoFactorAuthenticationEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "twoFactorAuthenticationSecret" TEXT,
     "status" "OnlineStatus" NOT NULL DEFAULT 'OFFLINE',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
