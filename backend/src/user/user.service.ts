@@ -1,5 +1,4 @@
-import * as bcrypt from 'bcrypt';
-import { saltRounds } from 'src/auth/constants';
+import * as argon2 from 'argon2';
 import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
@@ -12,8 +11,7 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(username: string, password: string, email: string, avatar: File) {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(password, salt)
+    const hash = await argon2.hash(password)
     try {
       await this.prisma.user.create({
         data: {

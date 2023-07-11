@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -27,7 +27,7 @@ export class AuthService {
             }
         });
         try {
-            const verified:boolean = await bcrypt.compare(password, user.password);
+            const verified:boolean = await argon2.verify(user.password, password);
             if (verified)
                 return this.signToken(user.id, user.username);
             else
