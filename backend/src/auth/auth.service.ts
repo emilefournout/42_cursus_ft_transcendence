@@ -20,20 +20,27 @@ export class AuthService {
         };
     }
 
-    async login(username: string, password: string) {
+    async login(username: string) {
         const user = await this.prisma.user.findFirst({
             where:{
                 username: username,
             }
         });
         try {
-            const verified:boolean = await argon2.verify(user.password, password);
-            if (verified)
-                return this.signToken(user.id, user.username);
-            else
+            // const verified:boolean = await argon2.verify(user.password, password);
+            const verified = true;
+            if (!verified)
                 throw new UnauthorizedException();
+            if (user.istwoFactorAuthenticationEnabled) {
+
+            }
+            return this.signToken(user.id, user.username);
         } catch (error) {
-            throw new UnauthorizedException();
+            throw error;
         }
+    }
+
+    async verifyTwoFactorAuthentication(id: number, code: string) {
+        
     }
 }

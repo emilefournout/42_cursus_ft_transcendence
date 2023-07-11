@@ -10,14 +10,11 @@ export class UserService {
 
   constructor(private prisma: PrismaService) {}
 
-  async createUser(username: string, password: string, email: string, avatar: File) {
-    const hash = await argon2.hash(password)
+  async createUser(username: string, avatar: File) {
     try {
       await this.prisma.user.create({
         data: {
           username: username,
-          password: hash,
-          email: email
         }
       });
     } catch (error) {
@@ -25,6 +22,9 @@ export class UserService {
           if (error.code === 'P2002') {
             throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this email');
           }
+        }
+        else {
+          throw error
         }
     }
   }

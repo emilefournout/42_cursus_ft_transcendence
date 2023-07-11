@@ -40,10 +40,7 @@ export class UserController {
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
-    await this.userService.createUser(createUserDto.username,
-      createUserDto.password,
-      createUserDto.email,
-      createUserDto.avatar);
+    await this.userService.createUser(createUserDto.username, createUserDto.avatar);
   }
 
   @Patch(':id')

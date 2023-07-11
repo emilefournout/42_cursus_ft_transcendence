@@ -8,25 +8,14 @@ CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED');
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "avatarURL" TEXT,
     "istwoFactorAuthenticationEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "temporalSecret" TEXT,
     "twoFactorAuthenticationSecret" TEXT,
     "status" "OnlineStatus" NOT NULL DEFAULT 'OFFLINE',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UserGame" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "gameId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "UserGame_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -78,14 +67,20 @@ CREATE TABLE "Message" (
     CONSTRAINT "Message_pkey" PRIMARY KEY ("uuid")
 );
 
+-- CreateTable
+CREATE TABLE "_GameToUser" (
+    "A" TEXT NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
--- AddForeignKey
-ALTER TABLE "UserGame" ADD CONSTRAINT "UserGame_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "_GameToUser_AB_unique" ON "_GameToUser"("A", "B");
 
--- AddForeignKey
-ALTER TABLE "UserGame" ADD CONSTRAINT "UserGame_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("uuid") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE INDEX "_GameToUser_B_index" ON "_GameToUser"("B");
 
 -- AddForeignKey
 ALTER TABLE "ChatMember" ADD CONSTRAINT "ChatMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -98,4 +93,10 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "Chat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GameToUser" ADD CONSTRAINT "_GameToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Game"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GameToUser" ADD CONSTRAINT "_GameToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

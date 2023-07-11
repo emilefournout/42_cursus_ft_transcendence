@@ -12,31 +12,23 @@ datasource db {
 
 model User {
   id                                Int @id @default(autoincrement())
-  username                          String
-  password                          String // Hashed
-  email                             String @unique
+  username                          String @unique
   createdAt                         DateTime @default(now())
   avatarURL                         String? // URL to Avatar
   istwoFactorAuthenticationEnabled  Boolean  @default(false)
-  twoFactorAuthenticationSecret     String?  // Hashed
+  temporalSecret                    String?
+  twoFactorAuthenticationSecret     String?
+  // friends                           User[] @relation("Friendship")
+  // blockedUsers                      User[] @relation("Blacklist")
   status                            OnlineStatus @default(OFFLINE)
-  userGames                         UserGame[]
+  games                             Game[]
   chatMember                        ChatMember[]
   messages                          Message[]
 }
 
-model UserGame {
-  id            Int    @id @default(autoincrement())
-  userId        Int
-  gameId        String
-  user          User   @relation(fields: [userId], references: [id])
-  game          Game   @relation(fields: [gameId], references: [uuid])
-  createdAt     DateTime @default(now())
-}
-
 model Game {
   uuid String @id @default(uuid())
-  userGames    UserGame[]
+  users    User[]
   points_user1 Int @default(0)
   points_user2 Int @default(0)
   createdAt DateTime @default(now())

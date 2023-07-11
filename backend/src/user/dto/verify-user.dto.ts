@@ -1,12 +1,17 @@
 import {
   IsDefined,
+  IsInt,
   IsNotEmpty,
   IsString
 } from 'class-validator';
 
-export class LoginUserDto {
+export class VerifyUserDto {
+  @IsDefined()
+  @IsInt()
+  id: number;
+
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  username: string
+  code: string;
 }
