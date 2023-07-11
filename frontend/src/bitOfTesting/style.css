@@ -63,14 +63,25 @@ h2 {
 	height: fit-content;
 }
 
-.wrapper-img {
+.wrapper-welcome-grid {
 	--img-size: 128px;
 
+	width: 75%;
+	
+	display: grid;
+	grid-gap: 16px;
+	grid-template-columns: var(--img-size) var(--img-size) 1fr;
+}
+
+.wrapper-img {
 	width: var(--img-size);
 	height: var(--img-size);
 
 	display: inline-block;
 	position: relative;
+
+	grid-column: 1;
+	grid-row: 1 / 3;
 }
 
 /* Fontstuffs */
