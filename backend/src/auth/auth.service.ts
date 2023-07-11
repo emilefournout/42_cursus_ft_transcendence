@@ -26,7 +26,7 @@ export class AuthService {
                 username: username,
             }
         });
-        try{
+        try {
             const verified:boolean = await bcrypt.compare(password, user.password);
             if (verified)
                 return this.signToken(user.id, user.username);

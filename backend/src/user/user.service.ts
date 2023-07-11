@@ -43,8 +43,8 @@ export class UserService {
   async getUserInfoById(id: number)  : Promise<UserBasicInfoDto> {
     const userInfo = new UserBasicInfoDto()
     const user = await this.findUserById(id)
-    if (user === null || user === undefined)
-      return null
+    if (!user)
+      throw new NotFoundException('User not found');
     userInfo.id = user.id;
     userInfo.username = user.username;
     userInfo.status = user.status;
@@ -61,7 +61,7 @@ export class UserService {
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
     const user = await this.findUserById(id)
-    if (user === null || user === undefined)
+    if (!user)
       throw new NotFoundException('User not found');
     Object.assign(user, updateUserDto)
     await this.prisma.user.update({
