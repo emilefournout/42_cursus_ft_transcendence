@@ -1,4 +1,3 @@
-import * as argon2 from 'argon2';
 import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
@@ -17,15 +16,14 @@ export class UserService {
           username: username,
         }
       });
+      return true;
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === 'P2002') {
+          if (error.code == 'P2002') {
             throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this email');
           }
         }
-        else {
-          throw error
-        }
+        return false;
     }
   }
 

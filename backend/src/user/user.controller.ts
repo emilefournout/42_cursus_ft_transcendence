@@ -1,5 +1,6 @@
 import {
   Controller,
+  ForbiddenException,
   Get,
   Post,
   Param,
@@ -40,7 +41,9 @@ export class UserController {
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
-    await this.userService.createUser(createUserDto.username, createUserDto.avatar);
+    const created:boolean = await this.userService.createUser(createUserDto.username, createUserDto.avatar);
+    if (!created)
+      throw new ForbiddenException('User could not be created')
   }
 
   @Patch(':id')
