@@ -41,13 +41,6 @@ export class AuthService {
             }
         });
         try {
-            // const verified:boolean = await argon2.verify(user.password, password);
-            const verified = true;
-            if (!verified)
-                throw new UnauthorizedException();
-            if (user.istwoFactorAuthenticationEnabled) {
-
-            }
             return this.signToken(user.id, user.username);
         } catch (error) {
             throw error;
