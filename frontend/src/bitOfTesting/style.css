@@ -169,6 +169,7 @@ button {
 	/* Draws the background only where it intersects with text. Text must be transparent since it is drawn on top of the background. */
 	border-style: solid;
 	background-clip: text;
+	-webkit-background-clip: text;
 }
 
 .btn-bottom {
@@ -219,7 +220,8 @@ button {
 }
 
 .window-title {
-	writing-mode: sideways-lr;
+	writing-mode: vertical-lr;
+	transform: rotate(180deg);
 	font-size: 16px;
 	color: var(--Light-Text);
 
@@ -228,8 +230,8 @@ button {
 	border-color: var(--Honey-Yellow);
 	border-width: 2px;
 	border-style: solid;
-	border-left: none;
-	border-top: none;
+	border-right: none;
+	border-bottom: none;
 	border-bottom-right-radius: var(--Default-BR);
 }
 
