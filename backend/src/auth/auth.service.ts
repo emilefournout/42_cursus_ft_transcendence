@@ -81,15 +81,9 @@ export class AuthService {
     })
       .then(response => response.json())
       .then((data: I42_oauth) => data.access_token ?? 'No token')
-      // Use the token to get information of the user, because
-      .then((token: string) => {
-        if (token == 'No token') { return token }
-
-        return fetch('https://api.intra.42.fr/v2/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
-          .then(response => response.json())
+      .catch(error => {
+        console.log(error)
+        return 'No token'
       })
-      .catch(error => error)
   }
 }
