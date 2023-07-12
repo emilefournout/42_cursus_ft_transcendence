@@ -1,35 +1,7 @@
-import React, { useState } from "react";
-import Register from "../../components/Register";
-import TwoFactorAuth from "../../components/TwoFactorAuth";
+import React from "react";
 import "./Login.css";
 
 export function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [show2FA, setShow2FA] = useState(false);
-
-  function login() {
-    fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response: Response) => response.json())
-      .then((data) => {
-        if (data.access_token) {
-          localStorage.setItem("access_token", data.access_token);
-          window.location.href = "/home";
-        } else {
-          window.alert("Cannot login");
-        }
-      })
-      .catch((error) => console.log(error));
-  }
 
   return (
     <>
@@ -47,16 +19,10 @@ export function Login() {
               process.env.REACT_APP_REDIRECT_URI ?? ""
             )}&response_type=code`}
           >
-            Login with 42
+            <button>Login with 42</button>
           </a>
         </div>
       </div>
-
-      {/*<button onClick={() => setShow2FA(!show2FA)}>
-        Two Factor Authentication
-      </button>
-      <br></br>
-      {show2FA && <TwoFactorAuth username={username} />}*/}
     </>
   );
 }
