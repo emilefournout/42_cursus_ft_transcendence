@@ -61,12 +61,15 @@ h2 {
 
 .wrapper-welcome-grid {
 	--img-size: 128px;
+	--gap-size: 16px;
+	--row-size: calc(var(--img-size) / 2 - var(--gap-size) / 2);
 
 	width: 75%;
 	
 	display: grid;
-	grid-gap: 16px;
+	grid-gap: var(--gap-size);
 	grid-template-columns: var(--img-size) 1fr 1fr;
+	grid-template-rows: var(--row-size) var(--row-size);
 }
 
 .wrapper-img {
@@ -318,4 +321,20 @@ input:focus {
 	border-image: var(--LtR-Mooned-Cosmic) 1;
 	background-color: var(--Trans-Cosmic-Purple);
 	border-width: 4px;
+}
+
+/* Welcome page shennanigans */
+#wp-username-input {
+	grid-column: 2 / 4;
+	grid-row: 1;
+}
+
+#wp-2fa-input {
+	grid-column: 2;
+	grid-row: 2; 
+}
+
+#wp-submit {
+	grid-column: 3;
+	grid-row: 2;
 }
