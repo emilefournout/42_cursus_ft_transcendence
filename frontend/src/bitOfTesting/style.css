@@ -133,6 +133,7 @@ body::before, body::after {
 button {
 	/* Change some default properties */
 	border: none;
+	border-width: 2px;
 	border-radius: var(--Default-BR);
 	border-color: var(--Crisped-Orange);
 	background: var(--Honey-Yellow);
