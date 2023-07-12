@@ -1,8 +1,8 @@
-import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserRelationDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -56,15 +56,28 @@ export class UserService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
-    const user = await this.findUserById(id)
-    if (!user)
-      throw new NotFoundException('User not found');
-    Object.assign(user, updateUserDto)
-    await this.prisma.user.update({
-      where: {
-        id: id
-      },
-      data: user
-    })
+    function checkNullUser(user, returnError) {
+      if(user === null || user == undefined)
+        throw new NotFoundException(returnError);
+      return user;
+    }
+
+    const user = checkNullUser(await this.findUserById(id), 'User not found');
+    if(updateUserDto.friend === null || updateUserDto.blocked === null)
+      throw new BadRequestException({message: `${updateUserDto.friend === null ? 'friend' : 'blocked'} must be an object`,
+      error: "Bad Request", 
+      statusCode: 400});
+    if(updateUserDto.friend !== undefined)
+      checkNullUser(await this.findUserById(updateUserDto.friend.id), 'Target user not found')
+    if(updateUserDto.blocked !== undefined)
+      checkNullUser(await this.findUserById(updateUserDto.blocked.id), 'Target user not found')
+
+    //Object.assign(user, updateUserDto)
+    //await this.prisma.user.update({
+    //  where: {
+    //    id: id
+    //  },
+    //  data: user
+    //})
   }
 }
