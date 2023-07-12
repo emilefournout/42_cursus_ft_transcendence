@@ -12,11 +12,6 @@ export class AuthController {
     return this.userService.login(loginUser.username);
   }
 
-  @Post("verify-2fa")
-  async verifyUser(@Body() verifyUser: VerifyUserDto) {
-    return this.userService.verifyTwoFactorAuthentication(verifyUser.id, verifyUser.code);
-  }
-
   @Get('qr-image')
   qrImage(@Query('user') user: string) {
     return this.userService.getQR(user)
