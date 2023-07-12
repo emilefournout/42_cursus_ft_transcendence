@@ -70,7 +70,7 @@ h2 {
 	
 	display: grid;
 	grid-gap: 16px;
-	grid-template-columns: var(--img-size) var(--img-size) 1fr;
+	grid-template-columns: var(--img-size) 1fr 1fr;
 }
 
 .wrapper-img {
@@ -293,6 +293,8 @@ input {
 	color: var(--Light-Text);
 	padding: 0.4em 0.2em;
 	cursor: pointer;
+	display: block;
+	width: 100%;
 
 	transition: border-image 0.3s ease;
 	transition: background-color 0.3s ease;
