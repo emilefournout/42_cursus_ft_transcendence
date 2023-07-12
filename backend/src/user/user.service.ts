@@ -66,19 +66,19 @@ export class UserService {
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
     function checkNullUser(user, returnError) {
-      if(user === null || user == undefined)
+      if (!user)
         throw new NotFoundException(returnError);
       return user;
     }
 
     const user = checkNullUser(await this.findUserById(id), 'User not found');
-    if(updateUserDto.friend === null || updateUserDto.blocked === null)
+    if (updateUserDto.friend === null || updateUserDto.blocked === null)
       throw new BadRequestException({message: `${updateUserDto.friend === null ? 'friend' : 'blocked'} must be an object`,
       error: "Bad Request", 
       statusCode: 400});
-    if(updateUserDto.friend !== undefined)
+    if (updateUserDto.friend !== undefined)
       checkNullUser(await this.findUserById(updateUserDto.friend.id), 'Target user not found')
-    if(updateUserDto.blocked !== undefined)
+    if (updateUserDto.blocked !== undefined)
       checkNullUser(await this.findUserById(updateUserDto.blocked.id), 'Target user not found')
 
     //Object.assign(user, updateUserDto)
