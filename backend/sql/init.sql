@@ -1,4 +1,10 @@
 -- CreateEnum
+CREATE TYPE "TwoFactorAuthenticationStatus" AS ENUM ('DISABLED', 'PENDING', 'ENABLED');
+
+-- CreateEnum
+CREATE TYPE "FriendshipStatus" AS ENUM ('PENDING', 'ENABLED');
+
+-- CreateEnum
 CREATE TYPE "OnlineStatus" AS ENUM ('ONLINE', 'OFFLINE', 'PLAYING');
 
 -- CreateEnum
@@ -10,12 +16,36 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "avatarURL" TEXT,
-    "istwoFactorAuthenticationEnabled" BOOLEAN NOT NULL DEFAULT false,
-    "temporalSecret" TEXT,
-    "twoFactorAuthenticationSecret" TEXT,
     "status" "OnlineStatus" NOT NULL DEFAULT 'OFFLINE',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserFriendship" (
+    "requester_id" INTEGER NOT NULL,
+    "adressee_id" INTEGER NOT NULL,
+    "status" "FriendshipStatus" NOT NULL DEFAULT 'PENDING',
+
+    CONSTRAINT "UserFriendship_pkey" PRIMARY KEY ("requester_id","adressee_id")
+);
+
+-- CreateTable
+CREATE TABLE "UserBlocked" (
+    "user1_id" INTEGER NOT NULL,
+    "user2_id" INTEGER NOT NULL,
+
+    CONSTRAINT "UserBlocked_pkey" PRIMARY KEY ("user1_id","user2_id")
+);
+
+-- CreateTable
+CREATE TABLE "TwoFactorAuthentication" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "status" "TwoFactorAuthenticationStatus" NOT NULL DEFAULT 'DISABLED',
+    "twoFactorAuthenticationSecret" TEXT NOT NULL,
+
+    CONSTRAINT "TwoFactorAuthentication_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -77,10 +107,28 @@ CREATE TABLE "_GameToUser" (
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "TwoFactorAuthentication_user_id_key" ON "TwoFactorAuthentication"("user_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_GameToUser_AB_unique" ON "_GameToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_GameToUser_B_index" ON "_GameToUser"("B");
+
+-- AddForeignKey
+ALTER TABLE "UserFriendship" ADD CONSTRAINT "UserFriendship_requester_id_fkey" FOREIGN KEY ("requester_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserFriendship" ADD CONSTRAINT "UserFriendship_adressee_id_fkey" FOREIGN KEY ("adressee_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserBlocked" ADD CONSTRAINT "UserBlocked_user1_id_fkey" FOREIGN KEY ("user1_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserBlocked" ADD CONSTRAINT "UserBlocked_user2_id_fkey" FOREIGN KEY ("user2_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TwoFactorAuthentication" ADD CONSTRAINT "TwoFactorAuthentication_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ChatMember" ADD CONSTRAINT "ChatMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
