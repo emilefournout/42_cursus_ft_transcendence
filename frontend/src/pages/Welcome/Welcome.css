@@ -1,0 +1,21 @@
+#wp-username-input {
+	grid-column: 2 / 4;
+	grid-row: 1;
+}
+
+#wp-2fa-input {
+	grid-column: 2;
+	grid-row: 2;
+}
+
+#wp-submit {
+	grid-column: 3;
+	grid-row: 2;
+}
+
+
+
+/* Make underline full width */
+.wp-underline {
+    width: 100%;
+}

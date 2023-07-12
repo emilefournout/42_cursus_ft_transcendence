@@ -1,8 +1,8 @@
 import React from "react";
+import "./Welcome.css";
 
 export function Welcome() {
   return (
-    <>
       <div className="window-module">
         <div className="window-top-bar">
           <div className="window-title">Welcome</div>
@@ -10,7 +10,7 @@ export function Welcome() {
             <span className="txt txt-shadow-top">
               A bit of setup before we begin:
             </span>
-            <div className="underline full_width"></div>
+            <div className="underline wp-underline"></div>
           </div>
         </div>
         <div className="window-body-centered">
@@ -35,6 +35,5 @@ export function Welcome() {
           </div>
         </div>
       </div>
-    </>
   );
 }

@@ -31,13 +31,7 @@
 	--Default-BR: 2px;
 }
 
-#root {
-    width: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
+
 
 /* Some overriding */
 * {
@@ -45,14 +39,14 @@
 	font-size: 48px;
 }
 
-h1 {
-	font-size: 108px;
-	margin: 8px 0;
+body {
+	display: flex;
+	margin: 0;
+	font-family: Bungee;
+	background-color: var(--Darks-Back);
 }
 
-h2 {
-	margin: 8px 0;
-}
+
 
 /* Wrappers */
 .wrapper-col {
@@ -93,6 +87,8 @@ h2 {
 	cursor: pointer;
 }
 
+
+
 /* Fontstuffs */
 /* <link href="https://fonts.googleapis.com/css?family?Bungee" rel="stylesheet"> */
 /* @font-face {
@@ -100,12 +96,7 @@ h2 {
  *     src: url(https://fonts.googleapis.com/css?family=Bungee);
  * } */
 
-body {
-	display: flex;
-	margin: 0;
-	font-family: Bungee;
-	background-color: var(--Darks-Back);
-}
+
 
 /* Sidebar */
 body::before, body::after {
@@ -119,9 +110,12 @@ body::before, body::after {
 	content: "";
 }
 
+
+
 /* Textstuffs */
 .txt {
 	--shadow-colour: var(--Cosmic-Purple);
+
 	font-family: Bungee;
 	color: var(--Honey-Yellow);
 }
@@ -137,6 +131,8 @@ body::before, body::after {
 .txt-shadow-blu {
 	--shadow-colour: var(--Mooned-Teal);
 }
+
+
 
 /* Buttons */
 button {
@@ -172,7 +168,7 @@ button {
 
 	height: 1.85em;
 
-	padding: 0.72em;
+	padding: 0 0.72em;
 }
 
 .btn:hover {
@@ -203,6 +199,8 @@ button {
 	border-bottom-right-radius: 32px;
 }
 
+
+
 /* Decorative underline */
 .underline {
 	width: 75%;
@@ -210,6 +208,8 @@ button {
 
 	background: var(--LtR-Crisped-Honey);
 }
+
+
 
 /* Window stuff */
 .window-module {
@@ -258,6 +258,8 @@ button {
 	flex-grow: 2;
 }
 
+
+
 /* Avatar */
 .user-avatar {
 	width: var(--img-size);
@@ -293,6 +295,8 @@ button {
 .wrapper-img:hover #change-img {
 	opacity: 1;
 }
+
+
 
 /* User input */
 input {
@@ -331,24 +335,4 @@ input:focus {
 	border-image: var(--LtR-Mooned-Cosmic) 1;
 	background-color: var(--Trans-Cosmic-Purple);
 	border-width: 4px;
-}
-
-/* Welcome page shennanigans */
-#wp-username-input {
-	grid-column: 2 / 4;
-	grid-row: 1;
-}
-
-#wp-2fa-input {
-	grid-column: 2;
-	grid-row: 2;
-}
-
-#wp-submit {
-	grid-column: 3;
-	grid-row: 2;
-}
-
-.full_width{
-	width: 100%;
 }

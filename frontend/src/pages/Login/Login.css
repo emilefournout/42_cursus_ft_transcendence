@@ -1,0 +1,20 @@
+/* Set root container to center all the stuff */
+#root {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+/* Global overriding */
+h1 {
+	font-size: 108px;
+	margin: 8px 0;
+}
+
+h2 {
+	margin: 8px 0;
+}
