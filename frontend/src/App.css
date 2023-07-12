@@ -31,6 +31,14 @@
 	--Default-BR: 2px;
 }
 
+#root {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 /* Some overriding */
 * {
 	box-sizing: border-box;
@@ -337,14 +345,6 @@ input:focus {
 #wp-submit {
 	grid-column: 3;
 	grid-row: 2;
-}
-
-.Login{
-    width: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 }
 
 .full_width{
