@@ -1,17 +1,19 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { HomePage } from "./pages/HomePage/HomePage";
+import { Home } from "./pages/Home/Home";
 import { Login } from "./pages/Login/Login";
 import { Game } from "./pages/Game/Game";
+import { Welcome } from "./pages/Welcome/Welcome";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/game" element={<Game />} />
+        <Route path="/welcome" element={<Welcome />} />
       </Routes>
     </>
   );
