@@ -2,6 +2,7 @@ import { Controller, Get, NotFoundException, Param, Post, ParseIntPipe, Body, Fo
 import { ChatService } from './chat.service';
 import { CreateChatDto, CreateMessageDto } from './dto';
 import { throwError } from 'rxjs';
+import { AddChatUserDto } from './dto/add-chat-user.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -37,5 +38,10 @@ export class ChatController {
         const created: boolean = await this.chatService.createChatMessages(chatId, createMessageDto.userId, createMessageDto.text);
         if (!created)
             throw new ForbiddenException('Message not created')
+    }
+
+    @Post(':id/user')
+    async addChatUser(@Param('id', ParseIntPipe) chatId, @Body() addChatUserDto: AddChatUserDto) {
+        await this.chatService.addChatUser(chatId, addChatUserDto.id);
     }
 }

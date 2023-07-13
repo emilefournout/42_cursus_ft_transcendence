@@ -79,13 +79,13 @@ model Avatar {
 }
 
 model ChatMember {
-  id            Int     @id @default(autoincrement())
   userId        Int
   user          User    @relation(fields: [userId], references: [id])
   chatId        Int
   chat          Chat    @relation(fields: [chatId], references: [id])
   administrator Boolean @default(false)
   owner         Boolean @default(false)
+  @@id([chatId, userId])
 }
 
 model Chat {

@@ -1,7 +1,8 @@
 import * as argon2 from 'argon2';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
+import { AddChatUserDto } from './dto/add-chat-user.dto';
 
 @Injectable()
 export class ChatService {
@@ -53,5 +54,32 @@ export class ChatService {
       }
     });
     return messages;
+  }
+
+  async addChatUser(chatId: number, addChatUserDto: AddChatUserDto) {
+    const chat = await this.findChatById(chatId)
+    if(!chat)
+      throw new NotFoundException('Chat not found');
+    if(! await this.prisma.user.findUnique({
+      where: {
+        id: addChatUserDto.id
+      }
+    }))
+      throw new NotFoundException('User not found');
+    if(await this.prisma.chatMember.findUnique({
+      where: {
+        chatId_userId: {
+          chatId: chatId,
+          userId: addChatUserDto.id
+        }
+      }
+    }))
+      throw new ForbiddenException('User alredy in chat');
+    if(chat.visibility === 'PRIVATE')
+      throw new ForbiddenException('Chat is private');
+    else if(chat.visibility === 'PROTECTED'){
+      if(!addChatUserDto.password || ! await argon2.verify(chat.password, addChatUserDto.password))
+        throw new ForbiddenException('Incorrect password')
+    }
   }
 }
