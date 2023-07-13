@@ -42,6 +42,6 @@ export class ChatController {
 
     @Post(':id/user')
     async addChatUser(@Param('id', ParseIntPipe) chatId, @Body() addChatUserDto: AddChatUserDto) {
-        await this.chatService.addChatUser(chatId, addChatUserDto.id);
+        await this.chatService.addChatUser(chatId, addChatUserDto);
     }
 }

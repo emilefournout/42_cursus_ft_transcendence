@@ -3,10 +3,11 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
 import { AddChatUserDto } from './dto/add-chat-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ChatService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private userService: UserService) {}
 
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
     if (typeof password !== undefined) {
@@ -60,11 +61,7 @@ export class ChatService {
     const chat = await this.findChatById(chatId)
     if(!chat)
       throw new NotFoundException('Chat not found');
-    if(! await this.prisma.user.findUnique({
-      where: {
-        id: addChatUserDto.id
-      }
-    }))
+    if(! await this.userService.findUserById(addChatUserDto.id))
       throw new NotFoundException('User not found');
     if(await this.prisma.chatMember.findUnique({
       where: {
@@ -78,8 +75,22 @@ export class ChatService {
     if(chat.visibility === 'PRIVATE')
       throw new ForbiddenException('Chat is private');
     else if(chat.visibility === 'PROTECTED'){
-      if(!addChatUserDto.password || ! await argon2.verify(chat.password, addChatUserDto.password))
+      try {
+        if(!addChatUserDto.password || ! await argon2.verify(chat.password, addChatUserDto.password))
+          throw new ForbiddenException('Incorrect password')
+      } catch(error) {
         throw new ForbiddenException('Incorrect password')
+      }
+    }
+    try {
+      this.prisma.chatMember.create({
+        data: {
+          userId: addChatUserDto.id,
+          chatId: chatId
+        }
+      });
+    } catch (error) {
+      throw new ForbiddenException('Could not add user to chat')
     }
   }
 }
