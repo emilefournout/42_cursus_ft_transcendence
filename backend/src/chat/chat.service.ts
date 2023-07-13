@@ -118,5 +118,6 @@ export class ChatService {
     } catch(error) {
       throw new ForbiddenException('Could not delete chat member')
     }
+    // TODO -> Check if user was owner and set other user as owner
   }
 }
