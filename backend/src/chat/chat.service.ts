@@ -57,21 +57,28 @@ export class ChatService {
     return messages;
   }
 
-  async addChatUser(chatId: number, addChatUserDto: AddChatUserDto) {
-    const chat = await this.findChatById(chatId)
-    if(!chat)
-      throw new NotFoundException('Chat not found');
-    if(! await this.userService.findUserById(addChatUserDto.id))
-      throw new NotFoundException('User not found');
-    if(await this.prisma.chatMember.findUnique({
+  async findChatMemberByIds(chatId: number, userId: number) {
+    const chatMember = await this.prisma.chatMember.findUnique({
       where: {
         chatId_userId: {
           chatId: chatId,
-          userId: addChatUserDto.id
+          userId: userId
         }
       }
-    }))
+    });
+    return chatMember;
+  }
+
+  async createChatMember(chatId: number, addChatUserDto: AddChatUserDto) {
+    const chat = await this.findChatById(chatId)
+    const user = await this.userService.findUserById(addChatUserDto.id)
+    if(!chat || !user)
+      throw new NotFoundException(`${'Chat' ? !chat : 'User'} not found`);
+    
+    const chatMember = await this.findChatMemberByIds(chatId, addChatUserDto.id)
+    if(chatMember)
       throw new ForbiddenException('User alredy in chat');
+    
     if(chat.visibility === 'PRIVATE')
       throw new ForbiddenException('Chat is private');
     else if(chat.visibility === 'PROTECTED'){
@@ -82,6 +89,7 @@ export class ChatService {
         throw new ForbiddenException('Incorrect password')
       }
     }
+    
     try {
       this.prisma.chatMember.create({
         data: {
@@ -90,7 +98,25 @@ export class ChatService {
         }
       });
     } catch (error) {
-      throw new ForbiddenException('Could not add user to chat')
+      throw new ForbiddenException('Could not create chat member')
+    }
+  }
+
+  async deleteChatMember(chatId: number, userId: number) {
+    const chatMember = this.findChatMemberByIds(chatId, userId);
+    if(!chatMember)
+      throw new NotFoundException('Chat member not found');
+    try {
+      this.prisma.chatMember.delete({
+        where: {
+          chatId_userId: {
+            chatId: chatId,
+            userId: userId
+          }
+        }
+      });
+    } catch(error) {
+      throw new ForbiddenException('Could not delete chat member')
     }
   }
 }
