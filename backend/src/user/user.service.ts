@@ -1,8 +1,8 @@
-import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { UpdateUserDto, UpdateUserRelationDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -50,43 +50,147 @@ export class UserService {
     const user = await this.findUserById(id)
     if (!user)
       throw new NotFoundException('User not found');
-    userInfo.id = user.id;
-    userInfo.username = user.username;
-    userInfo.status = user.status;
-    return userInfo;
+      userInfo.id = user.id;
+      userInfo.username = user.username;
+      userInfo.status = user.status;
+      return userInfo;
   }
 
   async deleteUser(id: number) {
-    await this.prisma.user.delete({
+    try {
+      await this.prisma.user.delete({
       where: {
         id: id
       }
     })
+    } catch(error) {
+      throw new ForbiddenException('Could not delete user')
+    }
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
-    function checkNullUser(user, returnError) {
-      if (!user)
-        throw new NotFoundException(returnError);
-      return user;
+    const user = await this.findUserById(id)
+    if(!user)
+      throw new NotFoundException('User not found');
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        username: updateUserDto.username
+      }
+    })
+  }
+
+  async addUserBlocked(id: number, target_id: number){
+    const user = await this.findUserById(id)
+    const target = await this.findUserById(target_id)
+    if(!user || !target)
+      throw new NotFoundException('User not found');
+    try {
+      await this.prisma.userBlocked.create({
+        data: {
+        user1_id: user.id,
+        user2_id: target.id
+      }})
+    } catch(error) {
+      throw new ForbiddenException('Could not create blocked user')
     }
+  }
 
-    const user = checkNullUser(await this.findUserById(id), 'User not found');
-    if (updateUserDto.friend === null || updateUserDto.blocked === null)
-      throw new BadRequestException({message: `${updateUserDto.friend === null ? 'friend' : 'blocked'} must be an object`,
-      error: "Bad Request", 
-      statusCode: 400});
-    if (updateUserDto.friend !== undefined)
-      checkNullUser(await this.findUserById(updateUserDto.friend.id), 'Target user not found')
-    if (updateUserDto.blocked !== undefined)
-      checkNullUser(await this.findUserById(updateUserDto.blocked.id), 'Target user not found')
+  async deleteUserBlocked(id: number, target_id: number){
+    const user = await this.findUserById(id)
+    const target = await this.findUserById(target_id)
+    if(!user || !target)
+      throw new NotFoundException('User not found');
+    try {
+      await this.prisma.userBlocked.delete({
+        where: {
+          user1_id_user2_id: {
+            user1_id: user.id,
+            user2_id: target.id
+          }
+        }
+      })
+    } catch(error) {
+      throw new ForbiddenException('Could not remove blocked user')
+    }
+  }
 
-    //Object.assign(user, updateUserDto)
-    //await this.prisma.user.update({
-    //  where: {
-    //    id: id
-    //  },
-    //  data: user
-    //})
+//   await this.userService.addUserFriends(id, updateUserRelationDto);
+//   await this.userService.acceptUserFriends(id, updateUserRelationDto);
+//   await this.userService.declineUserFriends(id, updateUserRelationDto);
+
+  async addUserFriends(id: number, target_id: number){
+    const user = await this.findUserById(id)
+    const target = await this.findUserById(target_id)
+    if(!user || !target)
+      throw new NotFoundException('User not found');
+    try {
+      await this.prisma.userFriendship.create({
+        data: {
+          requester_id: user.id,
+          adressee_id: target.id
+      }})
+    } catch(error) {
+      throw new ForbiddenException('Could not add friend')
+    }
+  }
+
+  async acceptUserFriends(id: number, target_id: number) {
+    const user = await this.findUserById(id)
+    const target = await this.findUserById(target_id)
+    if(!user || !target)
+      throw new NotFoundException('User not found');
+    const friendship = await this.prisma.userFriendship.findUnique({
+      where: {
+        requester_id_adressee_id : {
+          requester_id: user.id,
+          adressee_id: target.id
+        }
+      }
+    })
+    if(!friendship)
+      throw new NotFoundException('Friendship not found');
+    await this.prisma.userFriendship.update({
+      where: {
+        requester_id_adressee_id : {
+          requester_id: user.id,
+          adressee_id: target.id
+        }
+      },
+      data: {
+        status: 'ENABLED'
+      }
+    })
+  }
+
+  async declineUserFriends(id: number, target_id: number) {
+    const user = await this.findUserById(id)
+    const target = await this.findUserById(target_id)
+    if(!user || !target)
+      throw new NotFoundException('User not found');
+    const friendship = await this.prisma.userFriendship.findUnique({
+      where: {
+        requester_id_adressee_id : {
+          requester_id: user.id,
+          adressee_id: target.id
+        }
+      }
+    })
+    if(!friendship)
+      throw new NotFoundException('Friendship not found');
+    try {
+      await this.prisma.userFriendship.delete({
+        where: {
+          requester_id_adressee_id: {
+            requester_id: user.id,
+            adressee_id: target.id
+          }
+        }
+      })
+    } catch(error) {
+      throw new ForbiddenException('Could not delete friendship user')
+    }
   }
 }
