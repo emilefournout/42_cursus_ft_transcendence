@@ -1,6 +1,6 @@
 import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
-export class AddChatUserDto {
+export class CreateChatMemberDto {
     @IsNumber()
     @IsDefined()
     @IsNotEmpty()
