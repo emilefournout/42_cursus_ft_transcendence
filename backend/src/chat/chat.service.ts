@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
 
@@ -8,9 +8,10 @@ export class ChatService {
   constructor(private prisma: PrismaService) {}
 
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
-    if (typeof password !== undefined) {
+    if(chatVisibility === 'PROTECTED' && !password)
+      throw  new BadRequestException('No password provided for protected chat');
+    if (password)
       password = await argon2.hash(password);
-    }
     await this.prisma.chat.create({
     data: {
         visibility: chatVisibility,

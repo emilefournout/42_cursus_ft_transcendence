@@ -120,6 +120,8 @@ export class UserService {
     const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
     if(friendship)
       throw new ForbiddenException('Friendship pending')
+    else if(requester_id === adressee_id)
+      throw new ForbiddenException('Requester and adressee has same id')
     try {
       await this.prisma.userFriendship.create({
         data: {
