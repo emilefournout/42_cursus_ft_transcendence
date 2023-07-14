@@ -8,9 +8,9 @@ export function NavBar() {
   return (
       <nav>
         <div id="nav-left-side">
-          <a className="nav-icons"><object data={settingsIcon}></object></a>
-          <a className="nav-icons"><object data={chatsIcon}></object></a>
-          <a className="nav-icons"><object data={userIcon}></object></a>
+          <a className="nav-icons"><img src={settingsIcon}></img></a>
+          <a className="nav-icons"><img src={chatsIcon}></img></a>
+          <a className="nav-icons"><img src={userIcon}></img></a>
         </div>
         <div className=""><h2 className="txt txt-shadow-top">PONG</h2></div>
         <button id="nav-right-side" className="btn btn-bottom-left">Play</button>
