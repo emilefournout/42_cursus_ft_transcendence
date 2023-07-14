@@ -17,6 +17,7 @@ export function Welcome() {
         <div className="window-body-centered">
           <div className="wrapper-welcome-grid">
             <div className="wrapper-img">
+              {/* The src should be a random avatar on first login and the user's chosen one on successive ones. */}
               <img
                 src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                 className="user-avatar"
