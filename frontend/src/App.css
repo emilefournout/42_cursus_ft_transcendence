@@ -41,6 +41,7 @@
 
 body {
 	display: flex;
+	height: 100vh;
 	margin: 0;
 	font-family: Bungee;
 	background-color: var(--Darks-Back);
