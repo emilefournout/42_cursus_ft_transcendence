@@ -166,9 +166,11 @@ button {
 	background: var(--colour-fill);
 	color: var(--colour-text);
 
-	height: 1.85em;
+	padding: 0.32em 0.72em;
+}
 
-	padding: 0 0.72em;
+.btn-fixed-height {
+	height: 1.85em;
 }
 
 .btn:hover {
