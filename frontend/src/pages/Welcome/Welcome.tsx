@@ -1,5 +1,6 @@
 import React from "react";
 import "./Welcome.css";
+import iconVect from "./change-icon.svg"
 
 export function Welcome() {
   return (
@@ -20,7 +21,7 @@ export function Welcome() {
                 src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                 className="user-avatar"
               />
-              <img id="change-img" src="./change-icon.svg" />
+              <img id="change-img" src={iconVect} />
             </div>
             <input
               id="wp-username-input"
