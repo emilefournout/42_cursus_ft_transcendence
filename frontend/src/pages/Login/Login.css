@@ -9,12 +9,21 @@
 
 
 
-/* Global overriding */
-h1 {
+/* Responsive shit and stuff */
+#login-h1 {
 	font-size: 108px;
 	margin: 8px 0;
+
+    font-size: clamp(1.5rem, calc(3vw + 4vh), 3rem);
 }
 
-h2 {
+#login-h2 {
+    text-align: center;
 	margin: 8px 0;
+
+    font-size: clamp(0.7rem, calc(1vw + 2vh), 2rem);
+}
+
+.responsive-button {
+    font-size: clamp(0.7rem, calc(1vw + 2vh), 2rem);
 }
