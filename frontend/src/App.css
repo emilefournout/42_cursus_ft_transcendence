@@ -25,10 +25,14 @@
 	--Cornered-Honey-Crisped: linear-gradient(to bottom right, var(--Honey-Yellow), var(--Crisped-Orange));
 
 	--TtB-Honey-Paled: linear-gradient(var(--Honey-Yellow), var(--Paled-Beige));
+	--TtB-Honey-Crisped: linear-gradient(var(--Honey-Yellow), var(--Crisped-Orange));
 	--TtB-Full-Palette: linear-gradient(var(--Honey-Yellow), var(--Cosmic-Purple), var(--Crisped-Orange), var(--Mooned-Teal), var(--Paled-Beige));
 
 	/* Radius */
 	--Default-BR: 2px;
+
+	/* NavBar height */
+	--NavBar-Height: clamp(42px, calc(1vw + 7vh), 82px);
 }
 
 

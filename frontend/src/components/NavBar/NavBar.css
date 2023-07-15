@@ -1,7 +1,7 @@
 /* Defaults override */
 nav {
 	width: 100%;
-	height: clamp(42px, calc(1vw + 7vh), 82px);
+	height: var(--NavBar-Height);
 
 	position: fixed;
 	top: 0;

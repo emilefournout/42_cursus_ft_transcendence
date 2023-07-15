@@ -1,13 +1,16 @@
 import React from "react";
-import { NewConv } from "./NewConversation/NewConv";
-import { Conversations } from "./Conversations/Conversations";
+import "./LeftBar.css"
+import NewChatIcon from "./NewChatIcon.svg"
 
 export function LeftBar() {
   return (
-    <>
-      <h1>leftbar</h1>
-      <NewConv />
-      <Conversations />
-    </>
+    <div id="lb-main-wrapper" className="wrapper-col">
+      <div id="lb-top-wrapper">
+        <span>Chats</span>
+        <img className="nav-icons" src={NewChatIcon}></img>
+      </div>
+      <div id="lb-bot-wrapper">
+      </div>
+    </div>
   );
 }
