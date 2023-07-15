@@ -1,10 +1,10 @@
-import { Controller, Get, NotFoundException, Param, Post, ParseIntPipe, Body, ForbiddenException, Delete } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Post, ParseIntPipe, Body, ForbiddenException, Delete, Patch } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateChatDto, CreateMessageDto } from './dto';
-import { throwError } from 'rxjs';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { DeleteChatMemberDto } from './dto/delete-chat-member.dto';
 import { MembershipService } from './membership.service';
+import { UpdateChatMemberDto } from './dto/update-chat-member.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -31,8 +31,14 @@ export class ChatController {
         try {
             await this.chatService.createChat(createChatDto.user_id, createChatDto.chatVisibility, createChatDto.password);
         } catch (error) {
+            console.log(error)
             throw new ForbiddenException("Chat could not be created");
         }
+    }
+
+    @Delete(':id')
+    async deleteChat(@Param('id', ParseIntPipe) id) {
+        await this.chatService.deleteChat(id)
     }
 
     @Post(':id/message')
@@ -49,5 +55,9 @@ export class ChatController {
     @Delete(':id/user')
     async deleteChatMember(@Param('id', ParseIntPipe) chatId, @Body() deleteChatMemberDto: DeleteChatMemberDto) {
         await this.memberShipService.deleteChatMember(chatId, deleteChatMemberDto.id);
+    }
+    @Patch(':id/user')
+    async updateChatMember(@Param('id', ParseIntPipe) chatId, @Body() updateChatMember: UpdateChatMemberDto) {
+        await this.memberShipService.updateChatMember(updateChatMember.userId, chatId, updateChatMember.role)
     }
 }
