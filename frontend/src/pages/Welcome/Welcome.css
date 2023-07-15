@@ -11,6 +11,9 @@
 #wp-submit {
 	grid-column: 3;
 	grid-row: 2;
+
+	padding: 0;
+	min-height: var(--row-gap);
 }
 
 
@@ -18,4 +21,11 @@
 /* Make underline full width */
 .wp-underline {
     width: 100%;
+}
+
+
+
+/* Maketext responsive */
+.wp-responsive-txt {
+	font-size: clamp(0.35rem, 3vw, 0.8rem);
 }

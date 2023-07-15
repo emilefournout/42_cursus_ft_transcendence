@@ -26,12 +26,13 @@ export function Welcome() {
             </div>
             <input
               id="wp-username-input"
+              className="wp-responsive-txt"
               type="text"
               placeholder="User Name"
               required
             />
-            <input id="wp-2fa-input" type="text" placeholder="2FA Code" />
-            <button id="wp-submit" className="btn btn-bottom-right">
+            <input id="wp-2fa-input" className="wp-responsive-txt" type="text" placeholder="2FA Code" />
+            <button id="wp-submit" className="btn btn-bottom-right wp-responsive-txt">
               Done!
             </button>
           </div>

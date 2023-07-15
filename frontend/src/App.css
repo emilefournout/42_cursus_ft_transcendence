@@ -63,11 +63,11 @@ body {
 }
 
 .wrapper-welcome-grid {
-	--img-size: 128px;
-	--gap-size: 16px;
+	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
+	--gap-size: clamp(8px, calc(0.6vw + 0.4vh), 16px);
 	--row-size: calc(var(--img-size) / 2 - var(--gap-size) / 2);
 
-	width: 75%;
+	width: clamp(65%, 50vw, 75%);
 
 	display: grid;
 	grid-gap: var(--gap-size);
@@ -216,7 +216,7 @@ button {
 
 /* Window stuff */
 .window-module {
-	width: 768px;
+	width: clamp(500px, 70vw, 840px);
 	height: 512px;
 
 	display: flex;
@@ -229,7 +229,6 @@ button {
 
 .window-top-bar {
 	width: 100%;
-	height: fit-content;
 
 	display: flex;
 }
@@ -237,7 +236,8 @@ button {
 .window-title {
 	writing-mode: vertical-lr;
 	transform: rotate(180deg);
-	font-size: 16px;
+	font-size: clamp(10px, 5vh, 16px);
+	text-align: center;
 	color: var(--Light-Text);
 
 	padding: 1.4em 0.5em;
@@ -252,6 +252,10 @@ button {
 
 .window-overtext {
 	margin: 0.1em 0.4em 0 0.4em;
+}
+
+.window-overtext > span {
+	font-size: clamp(0.7rem, calc(4vw + 2vh), 1rem);
 }
 
 .window-body-centered {
