@@ -1,15 +1,19 @@
-import { Body, Controller, Get, Post, Query, Res } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginUserDto } from "src/user/dto/login-user.dto";
-import { Response } from "express";
+import { Response, Express } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('auth')
 export class AuthController {
   constructor(private userService: AuthService) {}
 
   @Post("login")
-  async loginUser(@Body() loginUser: LoginUserDto) {
-    return this.userService.login(loginUser.username, loginUser.password);
+  @UseInterceptors(FileInterceptor('image'))
+  async loginUser(@UploadedFile() image: Express.Multer.File, @Body() loginUser: LoginUserDto) {
+    console.log(image)
+    console.log(loginUser)
+    // return this.userService.login(loginUser.username, loginUser.code);
   }
 
   @Get('qr-image')
