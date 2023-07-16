@@ -10,8 +10,6 @@ export class LoginUserDto {
   @IsNotEmpty()
   username: string
 
-  @IsDefined()
   @IsString()
-  @IsNotEmpty()
-  password: string
+  code2fa: string
 }
