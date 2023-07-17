@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, Res } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginUserDto } from "src/user/dto/login-user.dto";
-import { VerifyUserDto } from "src/user/dto/verify-user.dto";
+import { Response } from "express";
 
 @Controller('auth')
 export class AuthController {
@@ -23,10 +23,12 @@ export class AuthController {
   }
 
   @Get('42token')
-  async get42Token(@Query('code') code: string): Promise<string> {
-    if (!code) {
-      return 'No code'
+  async get42Token(@Res() res: Response, @Query('code') code: string): Promise<void> {
+    const token = await this.userService.get42Token(code)
+    if (token == 'No token') {
+      return res.clearCookie('42token').redirect('http://localhost:8000')
     }
-    return await this.userService.get42Token(code)
+    // TODO Save the token to check the user later. Maybe put our jwt token.
+    return res.cookie('42token', token).redirect('http://localhost:8000/welcome')
   }
 }
