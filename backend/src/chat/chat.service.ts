@@ -57,6 +57,18 @@ export class ChatService {
     return messages;
   }
 
+  async findChatMessagesByIdSortedByDate(id: number) {
+    const messages = await this.prisma.message.findMany({
+      where: {
+        chatId: id
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    });
+    return messages;
+  }
+
   async findChatMemberByIds(chatId: number, userId: number) {
     const chatMember = await this.prisma.chatMember.findUnique({
       where: {
