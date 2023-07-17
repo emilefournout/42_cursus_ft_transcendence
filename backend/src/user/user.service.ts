@@ -6,7 +6,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-
   constructor(private prisma: PrismaService) {}
 
   async createUser(username: string, avatar: File) {
@@ -20,7 +19,7 @@ export class UserService {
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
           if (error.code == 'P2002') {
-            throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this email');
+            throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this username');
           }
         }
         return false;
@@ -82,33 +81,29 @@ export class UserService {
     })
   }
 
-  async addUserBlocked(id: number, target_id: number){
-    const user = await this.findUserById(id)
-    const target = await this.findUserById(target_id)
+  async addUserBlocked(userId: number, targetId: number){
+    const user = await this.findUserById(userId)
+    const target = await this.findUserById(targetId)
     if(!user || !target)
       throw new NotFoundException('User not found');
     try {
       await this.prisma.userBlocked.create({
         data: {
-        user1_id: user.id,
-        user2_id: target.id
+        user1_id: userId,
+        user2_id: targetId
       }})
     } catch(error) {
       throw new ForbiddenException('Could not create blocked user')
     }
   }
 
-  async deleteUserBlocked(id: number, target_id: number){
-    const user = await this.findUserById(id)
-    const target = await this.findUserById(target_id)
-    if(!user || !target)
-      throw new NotFoundException('User not found');
+  async deleteUserBlocked(userId: number, blockedId: number){
     try {
       await this.prisma.userBlocked.delete({
         where: {
           user1_id_user2_id: {
-            user1_id: user.id,
-            user2_id: target.id
+            user1_id: userId,
+            user2_id: blockedId
           }
         }
       })
@@ -117,46 +112,50 @@ export class UserService {
     }
   }
 
-//   await this.userService.addUserFriends(id, updateUserRelationDto);
-//   await this.userService.acceptUserFriends(id, updateUserRelationDto);
-//   await this.userService.declineUserFriends(id, updateUserRelationDto);
-
-  async addUserFriends(id: number, target_id: number){
-    const user = await this.findUserById(id)
-    const target = await this.findUserById(target_id)
-    if(!user || !target)
+  async addUserFriends(requester_id: number, adressee_id: number){
+    const requester = await this.findUserById(requester_id)
+    const adressee = await this.findUserById(adressee_id)
+    if(!requester || !adressee)
       throw new NotFoundException('User not found');
+    const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
+    if(friendship)
+      throw new ForbiddenException('Friendship pending')
+    else if(requester_id === adressee_id)
+      throw new ForbiddenException('Requester and adressee has same id')
     try {
       await this.prisma.userFriendship.create({
         data: {
-          requester_id: user.id,
-          adressee_id: target.id
+          requester_id: requester_id,
+          adressee_id: adressee_id
       }})
     } catch(error) {
       throw new ForbiddenException('Could not add friend')
     }
   }
 
-  async acceptUserFriends(id: number, target_id: number) {
-    const user = await this.findUserById(id)
-    const target = await this.findUserById(target_id)
-    if(!user || !target)
-      throw new NotFoundException('User not found');
+  private async findFriendShipByIds(requester_id: number, adressee_id: number){
     const friendship = await this.prisma.userFriendship.findUnique({
       where: {
         requester_id_adressee_id : {
-          requester_id: user.id,
-          adressee_id: target.id
+          requester_id: requester_id,
+          adressee_id: adressee_id
         }
       }
-    })
+    });
+    return friendship;
+  }
+
+  async acceptUserFriends(adressee_id: number, requester_id: number) {
+    const friendship = await this.findFriendShipByIds(requester_id, adressee_id)
     if(!friendship)
       throw new NotFoundException('Friendship not found');
+    else if(friendship.status === 'ENABLED')
+      throw new ForbiddenException('Friend alredy accepted');
     await this.prisma.userFriendship.update({
       where: {
         requester_id_adressee_id : {
-          requester_id: user.id,
-          adressee_id: target.id
+          requester_id: requester_id,
+          adressee_id: adressee_id
         }
       },
       data: {
@@ -165,27 +164,19 @@ export class UserService {
     })
   }
 
-  async declineUserFriends(id: number, target_id: number) {
-    const user = await this.findUserById(id)
-    const target = await this.findUserById(target_id)
-    if(!user || !target)
-      throw new NotFoundException('User not found');
-    const friendship = await this.prisma.userFriendship.findUnique({
-      where: {
-        requester_id_adressee_id : {
-          requester_id: user.id,
-          adressee_id: target.id
-        }
-      }
-    })
-    if(!friendship)
+  async declineUserFriends(adressee_id: number, requester_id: number) {
+    const friendship = await this.findFriendShipByIds(requester_id, adressee_id);
+    const request = await this.findFriendShipByIds(adressee_id, requester_id);
+    if(!friendship && !request)
       throw new NotFoundException('Friendship not found');
+    if(!friendship)
+      [requester_id, adressee_id] = [adressee_id, requester_id]
     try {
       await this.prisma.userFriendship.delete({
         where: {
           requester_id_adressee_id: {
-            requester_id: user.id,
-            adressee_id: target.id
+            requester_id: requester_id,
+            adressee_id: adressee_id
           }
         }
       })

@@ -6,11 +6,6 @@ import {
   IsString,
 } from 'class-validator';
 
-export enum FriendshipStatus {
-  PENDING,
-  ENABLED
-}
-
 export class UpdateUserRelationDto {
   @IsNumber()
   @IsDefined()

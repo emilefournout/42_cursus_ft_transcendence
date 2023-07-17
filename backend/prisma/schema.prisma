@@ -25,9 +25,9 @@ model User {
 
 model UserFriendship {
   requester_id Int
-  requester    User             @relation("Friendship1", fields: [requester_id], references: [id])
+  requester    User             @relation("Friendship1", fields: [requester_id], references: [id], onDelete: Cascade)
   adressee_id  Int
-  addresee     User             @relation("Friendship2", fields: [adressee_id], references: [id])
+  addresee     User             @relation("Friendship2", fields: [adressee_id], references: [id], onDelete: Cascade)
   status       FriendshipStatus @default(PENDING)
 
   @@id([requester_id, adressee_id])
@@ -35,9 +35,9 @@ model UserFriendship {
 
 model UserBlocked {
   user1_id Int
-  user1    User @relation("BlockedBy", fields: [user1_id], references: [id])
+  user1    User @relation("BlockedBy", fields: [user1_id], references: [id], onDelete: Cascade)
   user2_id Int
-  user2    User @relation("BlockedTarget", fields: [user2_id], references: [id])
+  user2    User @relation("BlockedTarget", fields: [user2_id], references: [id], onDelete: Cascade)
 
   @@id([user1_id, user2_id])
 }
@@ -76,9 +76,10 @@ model Avatar {
 
 model ChatMember {
   userId        Int
-  user          User    @relation(fields: [userId], references: [id])
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   chatId        Int
-  chat          Chat    @relation(fields: [chatId], references: [id])
+  chat          Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
   administrator Boolean @default(false)
   owner         Boolean @default(false)
   @@id([chatId, userId])

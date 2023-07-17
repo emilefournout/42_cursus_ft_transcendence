@@ -1,18 +1,17 @@
 import * as argon2 from 'argon2';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
-import { AddChatUserDto } from './dto/add-chat-user.dto';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ChatService {
-  constructor(private prisma: PrismaService, private userService: UserService) {}
+  constructor(private prisma: PrismaService) {}
 
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
-    if (typeof password !== undefined) {
+    if(chatVisibility === 'PROTECTED' && !password)
+      throw  new BadRequestException('No password provided for protected chat');
+    if (password)
       password = await argon2.hash(password);
-    }
     await this.prisma.chat.create({
     data: {
         visibility: chatVisibility,
@@ -22,6 +21,21 @@ export class ChatService {
         }
     }
     });
+  }
+
+  async deleteChat(chatId: number){
+    const chat = await this.findChatById(chatId);
+    if(!chat)
+      throw new NotFoundException('Chat not found');
+    try {
+      await this.prisma.chat.delete({
+        where: {
+          id: chatId
+        }
+      });
+    } catch(error) {
+      throw new ForbiddenException('Could not delete chat');
+    }
   }
 
   async createChatMessages(chat_id: number, user_id: number, text: string) {
@@ -132,4 +146,5 @@ export class ChatService {
     }
     // TODO -> Check if user was owner and set other user as owner
   }
+
 }
