@@ -8,7 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
-  providers: [ChatGateway],
   imports: [ConfigModule.forRoot({
     isGlobal: true
   }),
