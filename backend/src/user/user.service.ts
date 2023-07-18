@@ -1,29 +1,20 @@
 import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(username: string, avatar: File) {
-    try {
-      await this.prisma.user.create({
+  async createUser(intraname: string, username: string, avatar: File) {
+      const user = await this.prisma.user.create({
         data: {
+          intraname: intraname,
           username: username,
         }
       });
-      return true;
-    } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code == 'P2002') {
-            throw new ForbiddenException('There is a unique constraint violation, a new user cannot be created with this username');
-          }
-        }
-        return false;
-    }
+      return user;
   }
 
   async findUserById(id: number) {
@@ -44,34 +35,40 @@ export class UserService {
     return user;
   }
 
+  async findUserByIntraname(intraname: string) {
+    const user = await this.prisma.user.findUnique({
+      where:{
+        intraname: intraname
+      }
+    });
+    return user;
+  }
+
   async getUserInfoById(id: number)  : Promise<UserBasicInfoDto> {
-    const userInfo = new UserBasicInfoDto()
     const user = await this.findUserById(id)
     if (!user)
-      throw new NotFoundException('User not found');
-      userInfo.id = user.id;
-      userInfo.username = user.username;
-      userInfo.status = user.status;
-      return userInfo;
+      return null;
+    const userInfo = new UserBasicInfoDto()
+    userInfo.id = user.id;
+    userInfo.username = user.username;
+    userInfo.status = user.status;
+    return userInfo;
   }
 
   async deleteUser(id: number) {
-    try {
-      await this.prisma.user.delete({
+    const user = await this.prisma.user.delete({
       where: {
         id: id
       }
     })
-    } catch(error) {
-      throw new ForbiddenException('Could not delete user')
-    }
+    return user;
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
-    const user = await this.findUserById(id)
-    if(!user)
-      throw new NotFoundException('User not found');
-    await this.prisma.user.update({
+    const user = await this.findUserById(id);
+    if (!user)
+      return null;
+    const updatedUser = await this.prisma.user.update({
       where: {
         id: id
       },
@@ -79,12 +76,13 @@ export class UserService {
         username: updateUserDto.username
       }
     })
+    return updatedUser;
   }
 
   async addUserBlocked(userId: number, targetId: number){
     const user = await this.findUserById(userId)
     const target = await this.findUserById(targetId)
-    if(!user || !target)
+    if (!user || !target)
       throw new NotFoundException('User not found');
     try {
       await this.prisma.userBlocked.create({
