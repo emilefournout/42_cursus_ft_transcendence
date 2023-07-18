@@ -1,4 +1,6 @@
 import * as argon2 from 'argon2';
+import * as jdenticon from 'jdenticon';
+import * as fs from 'fs';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -84,5 +86,12 @@ export class AuthService {
         formData.append('code', code);
         formData.append('redirect_uri', this.config.get('REDIRECT_URI'));
         return formData;
+    }
+
+    generateNewIcon(filepath : string, seed : string) {
+        const size = 100;
+        
+        const png = jdenticon.toPng(seed, size);
+        fs.writeFileSync(filepath, png);
     }
 }
