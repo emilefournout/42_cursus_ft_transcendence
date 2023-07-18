@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Game } from './game.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GameService {
-  findGameById(id: number): Game {
-    return null;
+  constructor (private prisma: PrismaService) {}
+
+  async findGameById(id: string) {
+    const game = await this.prisma.game.findUnique({
+      where: {
+        uuid: id,
+      }
+    })
+    return game;
   }
 }

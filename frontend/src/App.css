@@ -1,0 +1,349 @@
+/* Variables */
+:root {
+	/* Plain colours */
+	--Crisped-Orange: #F08538;
+	--Honey-Yellow: #FFC149;
+	--Mooned-Teal: #0FA3B1;
+	--Cosmic-Purple: #9747FF;
+	--Paled-Beige: #DCC0A6;
+	--Darks-Back: #2D2C2F;
+	--Light-Text: #FFE9D6;
+	--Browned-Text: #362D25;
+
+	/* Translucent colours */
+	--Trans-Light-Text: rgba(255, 233, 214, 0.24);
+	--Trans-Paled-Beige: rgba(220, 192, 166, 0.08);
+	--Trans-Cosmic-Purple: rgba(151, 71, 255, 0.08);
+	--Trans-Crisped-Orange: rgba(240, 133, 56, 0.16);
+
+	/* Gradient colours */
+	--LtR-Honey-Paled: linear-gradient(to right, var(--Honey-Yellow), var(--Paled-Beige));
+	--LtR-Paled-Honey: linear-gradient(to right, var(--Paled-Beige), var(--Honey-Yellow));
+	--LtR-Crisped-Honey: linear-gradient(to right, var(--Crisped-Orange), var(--Honey-Yellow));
+	--LtR-Mooned-Cosmic: linear-gradient(to right, var(--Mooned-Teal), var(--Cosmic-Purple));
+
+	--Cornered-Honey-Crisped: linear-gradient(to bottom right, var(--Honey-Yellow), var(--Crisped-Orange));
+
+	--TtB-Honey-Paled: linear-gradient(var(--Honey-Yellow), var(--Paled-Beige));
+	--TtB-Honey-Crisped: linear-gradient(var(--Honey-Yellow), var(--Crisped-Orange));
+	--TtB-Full-Palette: linear-gradient(var(--Honey-Yellow), var(--Cosmic-Purple), var(--Crisped-Orange), var(--Mooned-Teal), var(--Paled-Beige));
+
+	/* Radius */
+	--Default-BR: 2px;
+
+	/* NavBar height */
+	--NavBar-Height: clamp(42px, calc(1vw + 7vh), 82px);
+}
+
+
+
+/* Some overriding */
+* {
+	box-sizing: border-box;
+	font-size: 48px;
+}
+
+body {
+	display: flex;
+	height: 100vh;
+	margin: 0;
+	font-family: Bungee;
+	background-color: var(--Darks-Back);
+}
+
+
+
+/* Wrappers */
+.wrapper-col {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.wrapper-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.wrapper-welcome-grid {
+	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
+	--gap-size: clamp(8px, calc(0.6vw + 0.4vh), 16px);
+	--row-size: calc(var(--img-size) / 2 - var(--gap-size) / 2);
+
+	width: clamp(65%, 50vw, 75%);
+
+	display: grid;
+	grid-gap: var(--gap-size);
+	grid-template-columns: var(--img-size) 1fr 1fr;
+	grid-template-rows: var(--row-size) var(--row-size);
+}
+
+.wrapper-img {
+	width: var(--img-size);
+	height: var(--img-size);
+
+	display: inline-block;
+	position: relative;
+
+	grid-column: 1;
+	grid-row: 1 / 3;
+
+	cursor: pointer;
+}
+
+
+
+/* Fontstuffs */
+/* <link href="https://fonts.googleapis.com/css?family?Bungee" rel="stylesheet"> */
+/* @font-face {
+ *     font-family: Bungee;
+ *     src: url(https://fonts.googleapis.com/css?family=Bungee);
+ * } */
+
+
+
+/* Sidebar */
+.sidebar body::before, .sidebar body::after {
+	display: inline-block;
+	width: 64px;
+	height: 100vh;
+
+	background: var(--TtB-Full-Palette);
+	filter: blur(8px);
+
+	content: "";
+}
+
+
+
+/* Textstuffs */
+.txt {
+	--shadow-colour: var(--Cosmic-Purple);
+
+	font-family: Bungee;
+	color: var(--Honey-Yellow);
+}
+
+.txt-shadow-top {
+	text-shadow: 0 -0.1em var(--shadow-colour);
+}
+
+.txt-shadow-bot {
+	text-shadow: 0 0.1em var(--shadow-colour);
+}
+
+.txt-shadow-blu {
+	--shadow-colour: var(--Mooned-Teal);
+}
+
+
+
+/* Buttons */
+button {
+	/* Change some default properties */
+	border: none;
+	border-width: 2px;
+	border-radius: var(--Default-BR);
+	border-color: var(--Crisped-Orange);
+	background: var(--Honey-Yellow);
+	background-color: var(--Honey-Yellow);
+	font-family: inherit;
+	font-size: 48px;
+	color: var(--Browned-Text);
+	padding: 0;
+	cursor: pointer;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	min-width: 32px;
+	min-height: 32px;
+
+	text-align: center;
+}
+
+.btn {
+	--colour-fill: var(--Honey-Yellow);
+	--colour-text: var(--Browned-Text);
+
+	background: var(--colour-fill);
+	color: var(--colour-text);
+
+	padding: 0.32em 0.72em;
+}
+
+.btn-fixed-height {
+	height: 1.85em;
+}
+
+.btn:hover {
+	--colour-text: transparent;
+
+	/* Draws the background only where it intersects with text. Text must be transparent since it is drawn on top of the background. */
+	border-style: solid;
+	background-clip: text;
+	-webkit-background-clip: text;
+}
+
+.btn-bottom {
+	--colour-fill: var(--TtB-Honey-Paled);
+
+	border-bottom-left-radius: 32px;
+	border-bottom-right-radius: 32px;
+}
+
+.btn-bottom-left {
+	--colour-fill: var(--LtR-Paled-Honey);
+
+	border-bottom-left-radius: 32px;
+}
+
+.btn-bottom-right {
+	--colour-fill: var(--LtR-Honey-Paled);
+
+	border-bottom-right-radius: 32px;
+}
+
+
+
+/* Decorative underline */
+.underline {
+	width: 75%;
+	height: 2px;
+
+	background: var(--LtR-Crisped-Honey);
+}
+
+
+
+/* Window stuff */
+.window-module {
+	width: clamp(500px, 70vw, 840px);
+	height: 512px;
+
+	display: flex;
+	flex-direction: column;
+
+	border-image: var(--Cornered-Honey-Crisped) 1;
+	border-style: solid;
+	border-width: 2px;
+}
+
+.window-top-bar {
+	width: 100%;
+
+	display: flex;
+}
+
+.window-title {
+	writing-mode: vertical-lr;
+	transform: rotate(180deg);
+	font-size: clamp(10px, 5vh, 16px);
+	text-align: center;
+	color: var(--Light-Text);
+
+	padding: 1.4em 0.5em;
+
+	border-color: var(--Honey-Yellow);
+	border-width: 2px;
+	border-style: solid;
+	border-right: none;
+	border-bottom: none;
+	border-bottom-right-radius: var(--Default-BR);
+}
+
+.window-overtext {
+	margin: 0.1em 0.4em 0 0.4em;
+}
+
+.window-overtext > span {
+	font-size: clamp(0.7rem, calc(4vw + 2vh), 1rem);
+}
+
+.window-body-centered {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-grow: 2;
+}
+
+
+
+/* Avatar */
+.user-avatar {
+	width: var(--img-size);
+	height: var(--img-size);
+
+	border-radius: var(--Default-BR);
+
+	transition: border-radius .3s ease;
+	transition: opacity .3s ease;
+}
+
+.wrapper-img:hover .user-avatar {
+	opacity: 0.12;
+	border-radius: 8px;
+}
+
+#change-img {
+	--icon-size: calc(var(--img-size) / 2);
+	--icon-offset: calc(var(--img-size) / 4);
+
+	width: var(--icon-size);
+	height: var(--icon-size);
+
+	position: absolute;
+	top: var(--icon-offset);
+	left: var(--icon-offset);
+
+	opacity: 0;
+
+	transition: opacity .3s ease;
+}
+
+.wrapper-img:hover #change-img {
+	opacity: 1;
+}
+
+
+
+/* User input */
+input {
+	/* Change some default properties */
+	border: none;
+	border-radius: var(--Default-BR);
+	border-image: var(--LtR-Honey-Paled) 1;
+	border-bottom: 2px solid;
+	background-color: var(--Trans-Paled-Beige);
+	font-family: inherit;
+	font-size: 24px;
+	color: var(--Light-Text);
+	padding: 0.4em 0.2em;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+
+	transition: border-image 0.3s ease;
+	transition: background-color 0.3s ease;
+}
+
+input::placeholder {
+	color: var(--Trans-Light-Text);
+}
+
+input.required:invalid {
+	border-color: var(--Crisped-Orange);
+	border-image: none;
+	background-color: var(--Trans-Crisped-Orange);
+	color: var(--Browned-Text);
+}
+
+input:focus {
+	outline: none;
+
+	border-image: var(--LtR-Mooned-Cosmic) 1;
+	background-color: var(--Trans-Cosmic-Purple);
+	border-width: 4px;
+}
