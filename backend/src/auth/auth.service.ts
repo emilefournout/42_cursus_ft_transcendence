@@ -34,14 +34,15 @@ export class AuthService {
         };
     }
 
-    async login(username: string) {
+    async login(username: string)
+    {
         const user = await this.prisma.user.findFirst({
             where:{
                 username: username,
             }
         });
         try {
-            return this.signToken(user.id, user.username);
+            return await this.signToken(user.id, user.username);
         } catch (error) {
             throw error;
         }
@@ -63,23 +64,25 @@ export class AuthService {
         return 'OK'
     }
 
-  get42Token(code: string): Promise<string> {
-    const formData = new FormData()
-    formData.append('grant_type', 'authorization_code')
-    formData.append('client_id', this.config.get('INTRA_UID'))
-    formData.append('client_secret', this.config.get('INTRA_SECRET'))
-    formData.append('code', code)
-    formData.append('redirect_uri', this.config.get('REDIRECT_URI'))
+    get42Token(code: string): Promise<string> {
+        return fetch('https://api.intra.42.fr/oauth/token', {
+            method: 'POST',
+            body: this.authTokenFormData(code),
+        })
+        .then(response => response.json())
+        .then((data: I42_oauth) => data.access_token ?? null)
+        .catch(() => {
+            return null
+        })
+    }
 
-    return fetch('https://api.intra.42.fr/oauth/token', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then((data: I42_oauth) => data.access_token ?? 'No token')
-      .catch(error => {
-        console.log(error)
-        return 'No token'
-      })
-  }
+    private authTokenFormData(code: string) {
+        const formData = new FormData();
+        formData.append('grant_type', 'authorization_code');
+        formData.append('client_id', this.config.get('INTRA_UID'));
+        formData.append('client_secret', this.config.get('INTRA_SECRET'));
+        formData.append('code', code);
+        formData.append('redirect_uri', this.config.get('REDIRECT_URI'));
+        return formData;
+    }
 }

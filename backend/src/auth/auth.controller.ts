@@ -23,12 +23,7 @@ export class AuthController {
   }
 
   @Get('42token')
-  async get42Token(@Res() res: Response, @Query('code') code: string): Promise<void> {
-    const token = await this.userService.get42Token(code)
-    if (token == 'No token') {
-      return res.clearCookie('42token').redirect('http://localhost:8000')
-    }
-    // TODO Save the token to check the user later. Maybe put our jwt token.
-    return res.cookie('42token', token).redirect('http://localhost:8000/welcome')
+  async get42Token(@Query('code') code: string) {
+    return await this.userService.get42Token(code);
   }
 }
