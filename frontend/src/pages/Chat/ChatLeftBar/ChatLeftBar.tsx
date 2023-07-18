@@ -1,5 +1,5 @@
 import React from "react";
-import "./LeftBar.css"
+import "./ChatLeftBar.css"
 import NewChatIcon from "./NewChatIcon.svg"
 
 export function LeftBar() {

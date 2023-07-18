@@ -1,7 +1,7 @@
 import React from "react";
 import Chat from "../../components/Chat";
 import { NavBar } from "../../components/NavBar/NavBar";
-import { LeftBar } from "./LeftBar/LeftBar";
+import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 
 export function ChatPage() {
   return (
