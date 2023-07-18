@@ -51,8 +51,6 @@ body {
 	background-color: var(--Darks-Back);
 }
 
-
-
 /* Wrappers */
 .wrapper-col {
 	display: flex;
@@ -137,6 +135,13 @@ body {
 	--shadow-colour: var(--Mooned-Teal);
 }
 
+
+/* Titles */
+.title {
+	font-size: 1.5rem;
+	text-align: center;
+	color: var(--Light-Text);
+}
 
 
 /* Buttons */

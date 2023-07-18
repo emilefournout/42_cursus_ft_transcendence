@@ -7,6 +7,7 @@ import { Game } from "./pages/Game/Game";
 import { Welcome } from "./pages/Welcome/Welcome";
 import { ChatPage } from "./pages/Chat/Chat"
 import { RoomParam } from "./pages/Chat/Room/RoomParam/RoomParam";
+import { NotFound } from "./pages/Error/NotFound";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/game" element={<Game />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path='*' element={<NotFound />}/>
       </Routes>
     </>
   );
