@@ -22,10 +22,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    padding-right: 10px;
 }
 
 #lb-top-wrapper > span {
     flex-grow: 1;
+    font-size: clamp(0.7rem, 2vw, 1rem);
 }
 
 #lb-bot-wrapper {
@@ -35,4 +38,6 @@
     background: var(--TtB-Honey-Crisped);
 
     border-bottom-right-radius: 32px;
+    border-top: 2px solid;
+    border-color: var(--Browned-Text);
 }
