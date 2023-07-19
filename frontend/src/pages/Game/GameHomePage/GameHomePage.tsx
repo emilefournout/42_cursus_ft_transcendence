@@ -10,10 +10,9 @@ export function GameHomePage() {
       <SEO
         title="Pong - Game"
         description='Start a game with someone from the Internet or one of your friends.' />
-        <div className="wrapper-col">
+        <div className="container">
+          <div className="loader"></div>
           <p className="title">Finding new rival for you</p>
-          <div className="loader">
-          </div>
           <Link to="/home">
             <button className="btn btn-fixed-height">Cancel</button>
           </Link>

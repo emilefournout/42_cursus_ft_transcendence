@@ -51,6 +51,16 @@ body {
 	background-color: var(--Darks-Back);
 }
 
+/* Containers */
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+	gap: 0.25rem;
+}
+
 /* Wrappers */
 .wrapper-col {
 	display: flex;
@@ -58,7 +68,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	align-self: center;
-	gap: 1rem;
 }
 
 .wrapper-row {
@@ -144,6 +153,7 @@ body {
 .title {
 	font-size: 1.5rem;
 	line-height: 1.5rem;
+	margin-bottom: 0.25rem;
 	text-align: center;
 	color: var(--Light-Text);
 }
