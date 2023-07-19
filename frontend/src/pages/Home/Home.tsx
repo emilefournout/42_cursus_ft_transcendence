@@ -11,7 +11,7 @@ export function Home() {
         <button>Disconnect</button>
       </Link>
 
-      <Link to="/Game">
+      <Link to="/game">
         <button>Play</button>
       </Link>
     </>
