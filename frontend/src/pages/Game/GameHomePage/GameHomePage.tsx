@@ -2,6 +2,7 @@ import React from "react";
 import SEO from "../../../components/Seo";
 import { gameSocket } from "../../../services/socket";
 import { Link } from "react-router-dom";
+import { GamePlayPage } from "../GamePlayPage/GamePlayPage";
 
 export function GameHomePage() {
   gameSocket.emit('join_waiting_room');
@@ -17,6 +18,7 @@ export function GameHomePage() {
             <button className="btn btn-fixed-height">Cancel</button>
           </Link>
         </div>
+        <GamePlayPage />
       {/*Matchmaking button*/}
       {/*separator or*/}
       {/*Invite Friend Form*/}
