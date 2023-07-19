@@ -8,12 +8,10 @@ import { FileInterceptor } from "@nestjs/platform-express";
 export class AuthController {
   constructor(private userService: AuthService) {}
 
-  @Post("login")
+  @Post("register")
   @UseInterceptors(FileInterceptor('image'))
-  async loginUser(@UploadedFile() image: Express.Multer.File, @Body() loginUser: LoginUserDto) {
-    console.log(image)
-    console.log(loginUser)
-    // return this.userService.login(loginUser.username, loginUser.code);
+  async registerUser(@UploadedFile() image: Express.Multer.File, @Body() registerUser: LoginUserDto) {
+    // TODO - Register User and set default 2FA code
   }
 
   @Get('qr-image')
