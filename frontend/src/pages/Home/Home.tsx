@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import Chat from "../../components/Chat";
+import SEO from "../../components/Seo";
+import { NavBar } from "../../components/NavBar/NavBar";
 
 export function Home() {
   return (
     <>
-      <h1>Home</h1>
-      <Chat />
+    <SEO title={"Pong - Home"} description={"Home of the user"} />
+      <NavBar/>
+      <h1 className="title">We don't know what to put here</h1>
+      {/* <Chat /> */}
       <Link to="/">
-        <button>Disconnect</button>
-      </Link>
-
-      <Link to="/game">
-        <button>Play</button>
+        <button className="btn btn-fixed-height">Disconnect</button>
       </Link>
     </>
   );
