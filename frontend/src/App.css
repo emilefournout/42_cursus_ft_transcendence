@@ -144,7 +144,6 @@ body {
 .title {
 	font-size: 1.5rem;
 	line-height: 1.5rem;
-	margin: auto;
 	text-align: center;
 	color: var(--Light-Text);
 }
@@ -359,7 +358,7 @@ input:focus {
 	border-width: 4px;
 }
 
-/*  Based on the code by supahfunk  */
+/*  Based on the code by https://blog.hubspot.com/website/css-loading-animation  */
 
 .loader {
   margin: auto;
