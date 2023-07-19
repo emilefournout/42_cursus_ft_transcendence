@@ -21,8 +21,9 @@ export function Welcome() {
               <img
                 src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg"
                 className="user-avatar"
+                alt="Avatar of the user"
               />
-              <img id="change-img" src={iconVect} />
+              <img id="change-img" src={iconVect} alt="Selecting the avatar icon"/>
             </div>
             <input
               id="wp-username-input"
