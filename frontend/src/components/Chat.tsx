@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { socket } from '../services/socket'
+import { chatSocket } from '../services/socket'
 import ChatWindow from "./ChatWindow"
 import './Chat.css'
 
@@ -10,7 +10,7 @@ function Chat() {
 
   function joinRoom() {
     if (room !== "") {
-      socket.emit("join_room", room)
+      chatSocket.emit("join_room", room)
       setShowChat(true)
     }
   }
@@ -33,7 +33,7 @@ function Chat() {
           <button onClick={joinRoom}>Join the room</button>
         </div>
       ) : (
-        <ChatWindow socket={socket} username={username} room={room} />
+        <ChatWindow socket={chatSocket} username={username} room={room} />
       )}
     </>
   )
