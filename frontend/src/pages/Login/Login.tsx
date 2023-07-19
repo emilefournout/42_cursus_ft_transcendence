@@ -1,12 +1,16 @@
 import React from "react";
 import "./Login.css";
+import SEO from "../../components/Seo";
 
 export function Login() {
-
+  
   return (
       <>
+      <SEO
+        title="Pong - Login"
+        description='Log in now and start a pong games or chat with your friends.' />
         <h1 id="login-h1" className="txt txt-shadow-top">PONG</h1>
-        <div className="underline"></div>
+          <div className="underline"></div>
         <h2 id="login-h2" className="txt txt-shadow-bot txt-shadow-blu">
           A Transcendence Project for 42
         </h2>
