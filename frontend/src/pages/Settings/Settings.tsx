@@ -1,7 +1,9 @@
 import React from "react";
+import { NavBar } from "../../components/NavBar/NavBar";
 export function Settings() {
   return (
     <>
+      <NavBar/>
       {/*Avatar*/}
       {/*Change avatar button*/}
       {/*separator*/}

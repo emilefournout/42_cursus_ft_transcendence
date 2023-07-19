@@ -9,6 +9,7 @@ import { ChatPage } from "./pages/Chat/Chat"
 import { RoomParam } from "./pages/Chat/Room/RoomParam/RoomParam";
 import { NotFound } from "./pages/Error/NotFound";
 import { HelmetProvider } from "react-helmet-async";
+import { Settings } from "./pages/Settings/Settings";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/game" element={<Game />} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chats" element={<ChatPage />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </HelmetProvider>
