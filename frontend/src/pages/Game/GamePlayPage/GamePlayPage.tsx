@@ -31,7 +31,7 @@ export function GamePlayPage() {
 
   return (
     <>
-      <h1>Game</h1>
+      <h1 className="title">Game</h1>
       <GameCanvas {...state} />
     </>
   );
