@@ -1,4 +1,5 @@
 import {
+    ConnectedSocket,
     MessageBody,
     OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit,
     SubscribeMessage, WebSocketGateway, WebSocketServer
@@ -30,23 +31,23 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     }
 
     @SubscribeMessage('join_room')
-    async handleJoinRoom(client: Socket, @MessageBody() roomId : number) {
-        client.join(roomId.toString())
-        return this.chatService.findChatMessagesByIdSortedByDate(roomId);
+    async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() data: {roomId: number}) {
+        client.join(data.roomId.toString())
+        return this.chatService.findChatMessagesByIdSortedByDate(data.roomId);
     }
 
     @SubscribeMessage('send_message')
-    async handleMessage(client: Socket, @MessageBody() data: any) {
+    async handleMessage(@MessageBody() data: any) {
         // data -> { roomId: number, userId: number, author: string, message: string}
-        if (!data.roomId || !data.userId || data.message)
-            return "Message properties invalid"
-        this.chatService.createChatMessages(data.roomId, data.userId, data.message)
+        // if (!data.roomId || !data.userId || data.message)
+        //     return "Message properties invalid"
+        this.chatService.createChatMessages(Number(data.roomId), data.userId, data.message)
         data.time = new Date(Date.now());
-        this.server.to(data.roomId.toString()).emit('receive_message', data)
+        this.server.to(data.room.toString()).emit('receive_message', data)
     }
 
     @SubscribeMessage('leave_room')
-    handleLeaveRoom(client: Socket, @MessageBody() roomId) {
+    handleLeaveRoom(client: Socket, @MessageBody() roomId: number) {
         client.leave(roomId.toString())
     }
 }
