@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as qrcode from "qrcode";
 import { authenticator } from "otplib"
+import { UserService } from 'src/user/user.service';
 
 let tempSecret = ''
 
@@ -22,7 +23,10 @@ interface I42_oauth {
 
 @Injectable()
 export class AuthService {
-    constructor (private jwt : JwtService, private config: ConfigService, private prisma: PrismaService) {}
+    constructor (
+        private jwt : JwtService, private config: ConfigService, private prisma: PrismaService,
+        private userService: UserService,
+    ) {}
 
     async signToken(userId: number, username: string) : Promise<{access_token: string}>
     {
@@ -38,11 +42,14 @@ export class AuthService {
 
     async login(username: string)
     {
-        const user = await this.prisma.user.findFirst({
+        let user = await this.prisma.user.findFirst({
             where:{
                 username: username,
             }
         });
+        if (!user) {
+            user = await this.userService.createUser(username, username, null) // TODO: get intraname
+        }
         try {
             return await this.signToken(user.id, user.username);
         } catch (error) {

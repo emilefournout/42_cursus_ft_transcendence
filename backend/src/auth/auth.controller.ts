@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, Query, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, Req, Res, UnauthorizedException, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginUserDto } from "src/user/dto/login-user.dto";
-import { Response, Express } from "express";
+import { Response, Express, Request } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('auth')
@@ -10,10 +10,15 @@ export class AuthController {
 
   @Post("login")
   @UseInterceptors(FileInterceptor('image'))
-  async loginUser(@UploadedFile() image: Express.Multer.File, @Body() loginUser: LoginUserDto) {
-    console.log(image)
-    console.log(loginUser)
-    // return this.userService.login(loginUser.username, loginUser.code);
+  async loginUser(@Req() request: Request, @UploadedFile() image: Express.Multer.File, @Body() loginUser: LoginUserDto) {
+    const token = request.header('Authorization') && request.header('Authorization').split(' ').length > 1 ?
+      request.header('Authorization').split(' ')[1] : ''
+    console.log('Check token', token) // TODO Check 42token
+    if (!token) {
+      throw new UnauthorizedException()
+    }
+
+    return this.userService.login(loginUser.username);
   }
 
   @Get('qr-image')

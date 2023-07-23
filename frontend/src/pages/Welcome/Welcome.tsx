@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import "./Welcome.css";
 import iconVect from "./change-icon.svg"
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export function Welcome() {
   const [username, setUsername] = useState('')
   const [image, setImage] = useState<File>()
   const [code2fa, setCode2fa] = useState('')
+  const navigate = useNavigate()
 
   function saveImage(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.length) {
@@ -15,6 +18,7 @@ export function Welcome() {
   }
 
   function register() {
+    const token: string | undefined = Cookies.get("42token");
     const formData = new FormData()
     formData.append('username', username)
     formData.append('image', image as File)
@@ -22,9 +26,15 @@ export function Welcome() {
     fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, {
       method: 'POST',
       body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
     })
-      .then((response: Response) => {
-        console.log(response.status) // TODO
+      .then((response: Response) => response.json())
+      .then(data => {
+        if (data.access_token) {
+          navigate('/home')
+        }
       })
       .catch(error => console.log(error))
   }

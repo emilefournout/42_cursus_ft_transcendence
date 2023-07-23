@@ -1,12 +1,19 @@
 import {
   IsDefined,
   IsNotEmpty,
-  IsString
+  IsString,
+  IsOptional,
 } from 'class-validator';
 
 export class LoginUserDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  username: string
+  username: string;
+
+  @IsOptional()
+  image;
+
+  @IsString()
+  code2fa: string;
 }
