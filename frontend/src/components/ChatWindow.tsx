@@ -38,7 +38,6 @@ function ChatWindow({socket, username, room}: IChatWindow) {
   }
 
   useEffect(() => {
-    console.log('efecto')
     socket.off("receive_message")
     socket.on("receive_message", (data: IMessage) => {
       setMessageList(msgs => [...msgs, data])

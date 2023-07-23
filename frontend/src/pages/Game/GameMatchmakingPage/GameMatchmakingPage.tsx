@@ -1,11 +1,24 @@
-import React, { FunctionComponent } from "react";
-import { Link } from "react-router-dom";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SEO from "../../../components/Seo";
 import { gameSocket } from "../../../services/socket";
 
 export function GameMatchmakingPage() {
-  // gameSocket.emit('join_waiting_room');
-  console.log("HEY")
+  const navigate = useNavigate()
+  const username: string | null = localStorage.getItem('username')
+  let waiting = false
+
+  useEffect(() => {
+    if (!waiting) {
+      gameSocket.emit('join_waiting_room', username);
+      waiting = true
+    }
+    gameSocket.off('game_found')
+    gameSocket.on('game_found', gameId => {
+      navigate(`../${gameId}`)
+    })
+  }, [])
+
   return (
     <>
       <SEO

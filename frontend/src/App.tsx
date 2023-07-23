@@ -24,7 +24,7 @@ function App() {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/game" element={<Game />} >
             <Route path="" element={<GameHomePage />} />
-            <Route path="play" element={<GamePlayPage />} />
+            <Route path=":id" element={<GamePlayPage />} />
             <Route path="matchmaking" element={<GameMatchmakingPage />} />
           </Route>
           <Route path="/chats" element={<ChatPage />} />

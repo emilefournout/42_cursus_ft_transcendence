@@ -33,6 +33,7 @@ export function Welcome() {
       .then((response: Response) => response.json())
       .then(data => {
         if (data.access_token) {
+          localStorage.setItem('username', data.username)
           navigate('/home')
         }
       })
