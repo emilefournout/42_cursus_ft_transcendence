@@ -13,13 +13,7 @@ import { GameService } from "./game.service"
 export class GameGateway 
 implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    gameId = '' // TODO remove this
-
-    constructor (
-        private gameService: GameService
-    ) {
-        setInterval(() => this.server.to(this.gameId).emit('update', this.gameService.loop()), 100)
-    }
+    constructor (private gameService: GameService) {}
     
     @WebSocketServer()
     server: Server
@@ -43,6 +37,8 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             game.player1.client.join(game.game)
             game.player2.client.join(game.game)
             this.server.to(game.game).emit('game_found', game.game)
+
+            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 100)
         }
     }
 

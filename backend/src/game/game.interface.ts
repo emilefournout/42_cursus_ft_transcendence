@@ -4,9 +4,10 @@ export interface IGameData {
   padWidth: number;
   padHeight: number;
   ballRadius: number;
-  socket: any;
   leftPad: number;
   rightPad: number;
   ballX: number;
   ballY: number;
+  velocityX: number;
+  velocityY: number;
 }

@@ -9,7 +9,6 @@ export interface GameCanvasProps {
   padWidth: number;
   padHeight: number;
   ballRadius: number;
-  socket: any;
   leftPad: number;
   rightPad: number;
   ballX: number;
@@ -61,7 +60,7 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.beginPath();
       ctx.arc(props.ballX, props.ballY, props.ballRadius, 0, 2 * Math.PI);
       ctx.fill();
-      console.log("BALL", props.ballX, props.ballY);
+      // console.log("BALL", props.ballX, props.ballY);
     }
   });
 

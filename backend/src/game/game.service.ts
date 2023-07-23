@@ -13,17 +13,18 @@ export class GameService {
     private prisma: PrismaService,
   ) {}
 
-  gameState: IGameData = {
+  initState: IGameData = {
     width: 600,
     height: 350,
     padWidth: 10,
     padHeight: 60,
     ballRadius: 8,
-    socket: null,
     leftPad: 100,
     rightPad: 150,
     ballX: 200,
     ballY: 150,
+    velocityX: 10,
+    velocityY: 12,
   }
 
   async findGameById(id: string) {
@@ -37,7 +38,6 @@ export class GameService {
 
   async createGame(player1: {client: Socket, user: User}, player2: {client: Socket, user: User}) {
     // TODO create game in database
-    console.log(this.waitingRoom.length)
     return '123'
   }
 
@@ -52,14 +52,29 @@ export class GameService {
         const player1 = this.waitingRoom.shift()
         const player2 = this.waitingRoom.shift()
         const game = await this.createGame(player1, player2)
+
+        const gameState = Object.assign({}, this.initState)
+        this.games.set(game, gameState)
         return { game, player1, player2 }
       }
     }
     return null
   }
 
-  loop() {
-    this.gameState.ballX += 1
-    return this.gameState
+  loop(game: string) {
+    const gameState = this.games.get(game)
+    gameState.ballX += gameState.velocityX
+    gameState.ballY += gameState.velocityY
+    if (gameState.ballY + gameState.ballRadius > gameState.height
+        || gameState.ballY - gameState.ballRadius < 0) {
+      gameState.velocityY = -gameState.velocityY
+    }
+    // TODO Check pads and points
+    if (gameState.ballX + gameState.ballRadius > gameState.width
+        || gameState.ballX - gameState.ballRadius < 0) {
+      gameState.velocityX = -gameState.velocityX
+    }
+
+    return gameState
   }
 }
