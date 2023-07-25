@@ -64,19 +64,18 @@ export function GameCanvas(props: GameCanvasProps) {
     }
   });
 
-  const id = useParams();
+  const { id } = useParams();
   const access_token: string | undefined = Cookies.get("42token");
 
   useEffect(() => {
     function handleKeyDown(event: any) {
-      if (event.keyCode === 38) {
-        console.log("send keyup");
+      if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
           playerId: access_token,
           gameId: id,
           direction: "up",
         });
-      } else if (event.keyCode === 40) {
+      } else if (event.key === "ArrowDown") {
         gameSocket.emit("move_user", {
           playerId: access_token,
           gameId: id,
