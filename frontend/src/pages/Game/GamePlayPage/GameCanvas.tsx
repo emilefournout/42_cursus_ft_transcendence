@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { gameSocket } from "../../../services/socket";
+import { GameSocket } from "../../../services/socket";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -18,7 +18,10 @@ export interface GameCanvasProps {
 export function GameCanvas(props: GameCanvasProps) {
   const padWallSeparation = 20;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
+  const { id } = useParams();
+  const access_token: string | undefined = Cookies.get("42token"); // Shoud be used LocalStorage  
+  const gameSocket = GameSocket.getInstance().socket;
+  
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
@@ -63,33 +66,21 @@ export function GameCanvas(props: GameCanvasProps) {
       // console.log("BALL", props.ballX, props.ballY);
     }
   });
-
-  const { id } = useParams();
-  const access_token: string | undefined = Cookies.get("42token");
-
-  useEffect(() => {
-    function handleKeyDown(event: any) {
+  function handleKeyDown(event: any) {
       if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
-          playerId: access_token,
+          playerId: Cookies.get("42token"),
           gameId: id,
           direction: "up",
         });
       } else if (event.key === "ArrowDown") {
         gameSocket.emit("move_user", {
-          playerId: access_token,
+          playerId: Cookies.get("42token"),
           gameId: id,
           direction: "down",
         });
       }
     }
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return function cleanup() {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [access_token, id]);
 
   return (
     <>
@@ -98,6 +89,7 @@ export function GameCanvas(props: GameCanvasProps) {
         width={props.width}
         height={props.height}
         style={{ border: "2px solid black" }}
+        onKeyDown={handleKeyDown}
       ></canvas>
     </>
   );

@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "../../../components/Seo";
-import { gameSocket } from "../../../services/socket";
+import { GameSocket } from "../../../services/socket";
 
 export function GameMatchmakingPage() {
   const navigate = useNavigate()
+  const gameSocket = GameSocket.getInstance().socket;
   const username: string | null = localStorage.getItem('username')
   let waiting = false
 
