@@ -3,7 +3,9 @@ import { AuthService } from "./auth.service";
 import { LoginUserDto } from "src/user/dto/login-user.dto";
 import { Response, Express, Request } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private userService: AuthService) {}
