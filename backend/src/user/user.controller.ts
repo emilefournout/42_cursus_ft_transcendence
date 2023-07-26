@@ -24,7 +24,7 @@ export class UserController {
   
   constructor(private userService: UserService) {}
 
-  @Get(':id')
+  @Get('info/:id')
   async findUser(@Param('id', ParseIntPipe) id) {
     const user = await this.userService.findUserById(id);
     if (!user)
@@ -56,12 +56,13 @@ export class UserController {
       throw new UserNotFoundException()
   }
 
-  @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    let user;
+  @Delete('me')
+  @UseGuards(JwtAuthGuard)
+  async deleteUser(@GetUser() user) {
+    let userDeleted;
 
     try {
-      user = await this.userService.deleteUser(id); 
+      userDeleted = await this.userService.deleteUser(user.id); 
     } catch (error) {
       throw new UserNotDeletedException();
     }
@@ -69,16 +70,17 @@ export class UserController {
       throw new UserNotDeletedException();
   }
 
-  @Patch(':id')
-  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    let user;
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
+    let userUpdated;
 
     try {
-      user = await this.userService.updateUser(id, updateUserDto);
+      userUpdated = await this.userService.updateUser(user.id, updateUserDto);
     } catch (error) {
       throw new UserNotUpdatedException();
     }
-    if (!user)
+    if (!userUpdated)
       throw new UserNotUpdatedException();
   }
 
