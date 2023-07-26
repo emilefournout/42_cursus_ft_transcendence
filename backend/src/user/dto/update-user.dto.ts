@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDefined,
@@ -7,13 +8,15 @@ import {
 } from 'class-validator';
 
 export class UpdateUserRelationDto {
+  @ApiProperty()
   @IsNumber()
   @IsDefined()
   @IsNotEmpty()
-  id: number
+  targetId: number
 }
 
 export class UpdateUserDto {
+  @ApiProperty()
   @IsString()
   @IsDefined()
   @IsNotEmpty()
