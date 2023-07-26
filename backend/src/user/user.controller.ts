@@ -18,7 +18,7 @@ import { JwtAuthGuard } from 'src/auth/guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, UpdateUserRelationDto } from './dto/update-user.dto';
 import { UserNotCreatedException, UserNotUpdatedException, UserNotDeletedException, UserNotFoundException } from './exceptions/user-service.exception';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
 @Controller('user')
@@ -36,6 +36,7 @@ export class UserController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async findUserMe(@GetUser() user) {
     const userInfo = await this.userService.getUserInfoById(user.id);
@@ -60,6 +61,7 @@ export class UserController {
     }
 
   @Delete('me')
+  @ApiBearerAuth()
   @ApiOperation({description: 'Remove your account'})
   @UseGuards(JwtAuthGuard)
   async deleteUser(@GetUser() user) {
@@ -75,6 +77,7 @@ export class UserController {
   }
 
   @Patch('me')
+  @ApiBearerAuth()
   @ApiOperation({description: 'Update your account'})
   @UseGuards(JwtAuthGuard)
   async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
