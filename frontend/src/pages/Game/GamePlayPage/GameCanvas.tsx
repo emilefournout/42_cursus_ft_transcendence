@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { GameSocket } from "../../../services/socket";
 import { useParams } from "react-router-dom";
-import Cookies from "js-cookie";
 
 export interface GameCanvasProps {
   width: number;
@@ -19,7 +18,6 @@ export function GameCanvas(props: GameCanvasProps) {
   const padWallSeparation = 20;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { id } = useParams();
-  const access_token: string | undefined = Cookies.get("42token"); // Shoud be used LocalStorage  
   const gameSocket = GameSocket.getInstance().socket;
   
   useEffect(() => {
@@ -69,13 +67,13 @@ export function GameCanvas(props: GameCanvasProps) {
   function handleKeyDown(event: any) {
       if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
-          playerId: Cookies.get("42token"),
+          playerId: localStorage.get("access_token"),
           gameId: id,
           direction: "up",
         });
       } else if (event.key === "ArrowDown") {
         gameSocket.emit("move_user", {
-          playerId: Cookies.get("42token"),
+          playerId: localStorage.get("access_token"),
           gameId: id,
           direction: "down",
         });
