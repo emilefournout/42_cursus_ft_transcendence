@@ -25,14 +25,13 @@ interface I42_oauth {
 export class AuthService {
     constructor (
         private jwt : JwtService, private config: ConfigService, private prisma: PrismaService,
-        private userService: UserService,
     ) {}
 
     async signToken(userId: number, username: string) : Promise<{access_token: string, userId: number, username: string}>
     {
         const payload = {sub: userId, username};
         const token = await this.jwt.signAsync(payload, {
-            expiresIn: '59m',
+            expiresIn: '7d',
             secret: this.config.get('JWT_SECRET')
         })
         return {
@@ -50,7 +49,12 @@ export class AuthService {
             }
         });
         if (!user) {
-            user = await this.userService.createUser(username, username, null) // TODO: get intraname
+            user = await this.prisma.user.create({
+                data:{
+                    username: username,
+                    intraname: username
+                }
+            })
         }
         try {
             return await this.signToken(user.id, user.username);
@@ -73,6 +77,10 @@ export class AuthService {
             throw new UnauthorizedException()
         // TODO save tempSecret as secret in db
         return 'OK'
+    }
+
+    async refreshToken() {
+        return ;
     }
 
     get42Token(code: string): Promise<string> {
