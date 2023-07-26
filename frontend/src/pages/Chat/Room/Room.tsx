@@ -6,6 +6,7 @@ import { RoomInput } from "./RoomInput/RoomInput";
 export function Room() {
   return (
     <>
+      COUCOU
       <RoomNavBar />
       <Messages />
       <RoomInput />
