@@ -38,6 +38,7 @@
     "jdenticon": "^3.2.0",
     "otplib": "^12.0.1",
     "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.11.1",
     "prisma": "^4.16.2",
     "qrcode": "^1.5.3",
