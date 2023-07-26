@@ -56,11 +56,7 @@ export class AuthService {
                 }
             })
         }
-        try {
-            return await this.signToken(user.id, user.username);
-        } catch (error) {
-            throw error;
-        }
+        return await this.signToken(user.id, user.username);
     }
 
     async getQR(user: string) {
