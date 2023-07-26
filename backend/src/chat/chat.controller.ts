@@ -49,7 +49,7 @@ export class ChatController {
     }
 
     @ApiParam({name: 'id'})
-    @ApiOperation({description: 'Password and chatVisibility are optional. If neither of them are provided, a bad request error will be returned. If chatVisibility changes to PROTECTED, a password is required'})
+    @ApiOperation({description: 'Password and chatVisibility are optional. If neither of them are provided, a bad request error will be returned. If chatVisibility changes to PROTECTED, a password is required. If the chat to be updated has DIRECT visibility, a forbidden error will be returned'})
     @Patch(':id')
     async updateChat(@Param('id', ParseIntPipe) id, @Body() updateChatDto: UpdateChatDto) {
         await this.chatService.updateChat(id, updateChatDto)

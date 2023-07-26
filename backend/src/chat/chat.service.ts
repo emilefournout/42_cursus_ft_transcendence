@@ -47,9 +47,11 @@ export class ChatService {
       throw new BadRequestException('Empty request');
     else if(updateChatDto.chatVisibility === 'PROTECTED' && !updateChatDto.password)
       throw new BadRequestException('Protected chat requires a password');
-    const chat = this.findChatById(id);
+    const chat = await this.findChatById(id);
     if(!chat)
       throw new NotFoundException('Chat not found');
+    else if(chat.visibility === 'DIRECT')
+      throw new ForbiddenException('Direct chat is immutable');
     if(updateChatDto.chatVisibility !== 'PROTECTED')
       updateChatDto.password = null
     Object.assign(chat, updateChatDto)

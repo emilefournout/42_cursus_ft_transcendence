@@ -114,4 +114,5 @@ enum ChatVisibility {
   PUBLIC
   PRIVATE
   PROTECTED
+  DIRECT
 }
