@@ -44,15 +44,14 @@ export class UserController {
     return userInfo;
   }
 
-  @ApiOperation({description: "Avatar is optional"})
   @Post()
+  @ApiOperation({description: "Avatar is optional"})
   async createUser(@Body() createUserDto: CreateUserDto) {
     let user;
 
     try {
-      user = await this.userService.createUser(createUserDto.intraname,
-         createUserDto.username,
-         createUserDto.avatar);
+      user = await this.userService.createUser(createUserDto.username,
+         createUserDto.username, "fakeFile");
     } catch (error) {
       throw new UserNotFoundException();
     }

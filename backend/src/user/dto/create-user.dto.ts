@@ -13,15 +13,5 @@ export class CreateUserDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  intraname: string;
-
-  @ApiProperty()
-  @IsDefined()
-  @IsString()
-  @IsNotEmpty()
   username: string;
-
-  // @IsOptional()
-  @ApiProperty()
-  avatar?: File;
 }
