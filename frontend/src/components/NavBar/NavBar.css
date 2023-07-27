@@ -38,7 +38,6 @@ nav > a {
 }
 
 .nav-icons {
-    --nav-icon-size: clamp(30px, 5vh, 1.2rem);
 	width: var(--nav-icon-size);
 	height: var(--nav-icon-size);
 
