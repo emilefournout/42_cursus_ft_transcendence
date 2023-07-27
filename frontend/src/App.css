@@ -300,6 +300,8 @@ button {
 
 	transition: border-radius .3s ease;
 	transition: opacity .3s ease;
+
+	cursor: pointer;
 }
 
 .wrapper-img:hover .user-avatar {
@@ -321,6 +323,8 @@ button {
 	opacity: 0;
 
 	transition: opacity .3s ease;
+
+	cursor: pointer;
 }
 
 .wrapper-img:hover #change-img {
