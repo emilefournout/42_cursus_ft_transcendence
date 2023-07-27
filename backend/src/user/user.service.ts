@@ -12,6 +12,7 @@ export class UserService {
         data: {
           intraname: intraname,
           username: username,
+          avatarURL: avatar
         }
       });
       return user;
@@ -27,7 +28,7 @@ export class UserService {
   }
 
   async findUserByName(username: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where:{
         username: username
       }
@@ -36,7 +37,7 @@ export class UserService {
   }
 
   async findUserByIntraname(intraname: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where:{
         intraname: intraname
       }

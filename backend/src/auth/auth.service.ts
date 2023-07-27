@@ -24,7 +24,7 @@ interface I42_oauth {
 @Injectable()
 export class AuthService {
     constructor (
-        private jwt : JwtService, private config: ConfigService, private prisma: PrismaService,
+        private jwt : JwtService, private config: ConfigService, private prisma: PrismaService,  private userService: UserService
     ) {}
 
     async signToken(userId: number, username: string) : Promise<{access_token: string, userId: number, username: string}>
@@ -41,21 +41,18 @@ export class AuthService {
         };
     }
 
+    async register(intraname: string, username: string, avatarURL: string)
+    {
+        let user = await this.userService.findUserByName(username);
+        if (!user) {
+            user = await this.userService.createUser(intraname, username, avatarURL)
+        }
+        return await this.signToken(user.id, user.username);
+    }
+
     async login(username: string)
     {
-        let user = await this.prisma.user.findFirst({
-            where:{
-                username: username,
-            }
-        });
-        if (!user) {
-            user = await this.prisma.user.create({
-                data:{
-                    username: username,
-                    intraname: username
-                }
-            })
-        }
+        let user = await this.userService.findUserByIntraname(username);
         return await this.signToken(user.id, user.username);
     }
 
@@ -90,6 +87,16 @@ export class AuthService {
             return null
         })
     }
+    
+    async getIntraLogin(token : string) {
+        const response = await fetch("https://api.intra.42.fr/v2/me", {
+        headers: { Authentication: `Bearer ${token}` }
+        });
+        const data = await response.json()
+        if (data.status > 400)
+            throw new Error("Access token is invalid")
+        return data["login"];
+    }
 
     private authTokenFormData(code: string) {
         const formData = new FormData();
@@ -99,12 +106,5 @@ export class AuthService {
         formData.append('code', code);
         formData.append('redirect_uri', this.config.get('REDIRECT_URI'));
         return formData;
-    }
-
-    generateNewIcon(filepath : string, seed : string) {
-        const size = 100;
-        
-        const png = jdenticon.toPng(seed, size);
-        fs.writeFileSync(filepath, png);
     }
 }

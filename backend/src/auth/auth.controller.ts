@@ -18,19 +18,20 @@ import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Response, Express, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
-import * as fs from 'fs';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '../profile/profile.service';
+import { RegisterUserDto } from 'src/user/dto/register-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService, private profileService: ProfileService) {}
+  constructor(private authService: AuthService, private userService: UserService,private profileService: ProfileService) {}
 
-  @Post('login')
+  @Post('register')
   @UseInterceptors(FileInterceptor('image'))
-  async loginUser(
+  async registerAuth(
     @Req() request: Request,
-    @Body() loginUser: LoginUserDto,
+    @Body() loginUser: RegisterUserDto,
     @UploadedFile() image?: Express.Multer.File
   ) {
     const token = extractTokenFromRequest(request);
@@ -39,16 +40,20 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     try {
+      // const intraname = await this.authService.getIntraLogin(token)
+      let url: string;
+      
       if (image !== undefined) {
-        this.profileService.saveImage(image);
+        url = this.profileService.saveImage(image);
       } else {
-        this.profileService.generateNewIcon();
+        url = this.profileService.generateNewIcon();
       }  
-      return this.authService.login(loginUser.username);
+      return this.authService.register(loginUser.username /*intraname*/, loginUser.username,  url);
     } catch (error) {
       throw new UnauthorizedException()
     }
   }
+
 
   @Get('qr-image')
   qrImage(@Query('user') user: string) {
@@ -65,10 +70,32 @@ export class AuthController {
     @Res() res: Response,
     @Query('code') code: string
   ): Promise<void> {
-    const token = await this.authService.get42Token(code);
-    return res
-      .cookie('42token', token)
-      .redirect('http://localhost:8000/welcome');
+    let token: string;
+    try {
+      token = await this.authService.get42Token(code);
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+    try {
+      // const intraname = await this.authService.getIntraLogin(token);
+      const user = null // await this.userService.findUserByIntraname(intraname)
+      if (!user)
+      {
+        return res
+          .cookie('42token', token)
+          .redirect('http://localhost:8000/welcome');
+      } else {
+        return res
+        .send(await this.authService.signToken(user.id, user.username))
+        .redirect('http://localhost:8000/home')
+      }
+      
+    } catch (error) {
+      console.log(error);
+      return res
+        .cookie('42token', token)
+        .redirect('http://localhost:8000/welcome');
+    }
   }
 }
 
@@ -77,4 +104,5 @@ function extractTokenFromRequest(request) {
     request.header('Authorization').split(' ').length > 1
     ? request.header('Authorization').split(' ')[1]
     : '';
+
 }

@@ -23,7 +23,7 @@ export function Welcome() {
     formData.append('username', username)
     formData.append('image', image as File)
     formData.append('code2fa', code2fa)
-    fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/auth/register`, {
       method: 'POST',
       body: formData,
       headers: {

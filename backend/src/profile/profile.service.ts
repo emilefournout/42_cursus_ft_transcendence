@@ -1,7 +1,7 @@
 import * as jdenticon from 'jdenticon';
 import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
-import { getRandomValues, randomBytes } from 'crypto';
+import { randomBytes } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 
