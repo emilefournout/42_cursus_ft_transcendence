@@ -49,9 +49,9 @@ export function Welcome() {
             <span className="txt txt-shadow-top">
               A bit of setup before we begin:
             </span>
+            <div className="underline wp-underline"></div>
           </div>
         </div>
-        <div className="underline wp-underline"></div>
         <div className="window-body-centered">
           <div className="wrapper-welcome-grid">
             <div className="wrapper-img">

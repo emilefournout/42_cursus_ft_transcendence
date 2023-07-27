@@ -185,10 +185,22 @@ button {
 }
 
 .btn {
+	border-width: 2px;
+	border-radius: var(--Default-BR);
+	border-color: var(--Crisped-Orange);
+	cursor: pointer;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	text-align: center;
+
 	--colour-fill: var(--Honey-Yellow);
 	--colour-text: var(--Browned-Text);
 
 	background: var(--colour-fill);
+	background-color: var(--Honey-Yellow);
 	color: var(--colour-text);
 
 	padding: 0.32em 0.72em;
@@ -300,6 +312,8 @@ button {
 
 	transition: border-radius .3s ease;
 	transition: opacity .3s ease;
+
+	cursor: pointer;
 }
 
 .wrapper-img:hover .user-avatar {
@@ -321,6 +335,8 @@ button {
 	opacity: 0;
 
 	transition: opacity .3s ease;
+
+	cursor: pointer;
 }
 
 .wrapper-img:hover #change-img {
