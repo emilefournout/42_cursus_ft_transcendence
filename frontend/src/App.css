@@ -131,7 +131,6 @@ body {
 .txt {
 	--shadow-colour: var(--Cosmic-Purple);
 
-	line-height: 1.5rem;
 	font-family: Bungee;
 	color: var(--Honey-Yellow);
 }
