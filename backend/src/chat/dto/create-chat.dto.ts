@@ -15,12 +15,13 @@ export class CreateChatDto {
   @IsInt()
   user_id: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: ChatVisibility })
   @IsDefined()
   @IsEnum(ChatVisibility)
   chatVisibility: ChatVisibility;
 
   @ApiProperty()
   @IsOptional()
+  @IsString()
   password?: string;
 }
