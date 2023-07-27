@@ -26,8 +26,8 @@ export class UserController {
   
   constructor(private userService: UserService) {}
 
-  @ApiParam({name: 'id'})
   @Get('info/:id')
+  @ApiParam({name: 'id'})
   async findUser(@Param('id', ParseIntPipe) id) {
     const user = await this.userService.findUserById(id);
     if (!user)

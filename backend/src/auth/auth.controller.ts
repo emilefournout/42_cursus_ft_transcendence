@@ -17,7 +17,7 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Response, Express, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProfileService } from '../profile/profile.service';
 import { RegisterUserDto } from 'src/user/dto/register-user.dto';
 import { UserService } from 'src/user/user.service';
@@ -29,6 +29,8 @@ export class AuthController {
 
   @Post('register')
   @UseInterceptors(FileInterceptor('image'))
+  @ApiOperation({ summary: 'Registers a new user' })
+  @ApiResponse({description: "Returns an access token if the user logged in or throws an exception if not authorized."})
   async registerAuth(
     @Req() request: Request,
     @Body() loginUser: RegisterUserDto,
@@ -56,16 +58,20 @@ export class AuthController {
 
 
   @Get('qr-image')
+  @ApiOperation({ summary: 'Returns a qr image for the 2FA' })
+  @ApiResponse({description: "Renders and return a qr image given the secret for a given username."})
   qrImage(@Query('user') user: string) {
     return this.authService.getQR(user);
   }
 
   @Get('set-2fa')
+  @ApiOperation({ summary: 'Fixes the 2FA for a given user' })
   set2FA(@Query('user') user: string, @Query('code') code: string) {
     return this.authService.set2FA(user, code);
   }
 
   @Get('42token')
+  @ApiOperation({ summary: 'Returns the 42 access token' })
   async get42Token(
     @Res() res: Response,
     @Query('code') code: string
