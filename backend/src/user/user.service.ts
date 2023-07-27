@@ -49,11 +49,7 @@ export class UserService {
     const user = await this.findUserById(id)
     if (!user)
       return null;
-    const userInfo = new UserBasicInfoDto()
-    userInfo.id = user.id;
-    userInfo.username = user.username;
-    userInfo.status = user.status;
-    return userInfo;
+    return UserBasicInfoDto.fromUser(user);
   }
 
   async deleteUser(id: number) {
