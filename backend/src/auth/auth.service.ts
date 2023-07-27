@@ -90,7 +90,8 @@ export class AuthService {
     
     async getIntraLogin(token : string) {
         const response = await fetch("https://api.intra.42.fr/v2/me", {
-        headers: { Authentication: `Bearer ${token}` }
+        headers: { 
+            "Authorization": `Bearer ${token}` }
         });
         const data = await response.json()
         if (data.status > 400)
