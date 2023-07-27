@@ -33,6 +33,9 @@
 
 	/* NavBar height */
 	--NavBar-Height: clamp(42px, calc(1vw + 7vh), 82px);
+
+	/* NavIcons size */
+    --nav-icon-size: clamp(30px, 5vh, 1.2rem);
 }
 
 
