@@ -27,7 +27,9 @@ function App() {
             <Route path=":id" element={<GamePlayPage />} />
             <Route path="matchmaking" element={<GameMatchmakingPage />} />
           </Route>
-          <Route path="/chats" element={<ChatPage />} />
+          <Route path="/chats" element={<ChatPage />} >
+            <Route path=":id" element={<ChatPage />} />
+          </Route>
           <Route path="/settings" element={<Settings />} />
           <Route path='*' element={<NotFound />}/>
         </Routes>
