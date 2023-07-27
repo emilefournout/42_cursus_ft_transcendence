@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDefined,
   IsNotEmpty,
@@ -9,11 +10,10 @@ export class RegisterUserDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   username: string;
 
-  @IsOptional()
-  image;
-
+  @ApiProperty()
   @IsString()
   @IsOptional()
   code2fa: string;
