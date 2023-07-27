@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id                   Int                      @id @default(autoincrement())
-  intraname            String                   @unique
+  intraname            String                   // Not unique for testing, @unique
   username             String                   @unique
   createdAt            DateTime                 @default(now())
   avatarURL            String? // URL to Avatar

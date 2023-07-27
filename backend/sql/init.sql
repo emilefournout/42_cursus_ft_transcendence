@@ -106,9 +106,6 @@ CREATE TABLE "_GameToUser" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_intraname_key" ON "User"("intraname");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
