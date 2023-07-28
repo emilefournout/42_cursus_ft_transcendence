@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { ChatVisibility } from "@prisma/client";
 
 export class ChatBasicInfoDto {
@@ -8,7 +8,7 @@ export class ChatBasicInfoDto {
   })
   id: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     description: "Name of the chat"
   })

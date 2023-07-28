@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDefined, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 export class RegisterUserDto {
@@ -11,16 +11,16 @@ export class RegisterUserDto {
   username: string;
 
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Possible image to upload as profile avatar.'
   })
   image?: any;
 
   @IsOptional()
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
+    type: String,
     description: 'Two factor authentication code.',
-    required: false
   })
   code2fa: string;
 }

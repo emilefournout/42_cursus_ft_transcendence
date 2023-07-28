@@ -1,16 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsBoolean, IsDefined, IsNotEmpty, IsNumber, IsObject, IsOptional } from "class-validator";
 
 export class ChatRoleDto {
-  @ApiProperty()
   @IsOptional()
   @IsBoolean()
+  @ApiPropertyOptional()
   owner?: boolean
   
-  @ApiProperty()
   @IsOptional()
   @IsBoolean()
+  @ApiPropertyOptional()
   administrator?: boolean
 }
 
