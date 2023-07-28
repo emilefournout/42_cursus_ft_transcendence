@@ -85,18 +85,16 @@ export class AuthController {
       const user = null // await this.userService.findUserByIntraname(intraname)
       if (!user)
       {
-        console.log("42 Token" + token)
         return res
           .cookie('42token', token)
           .redirect('http://localhost:8000/welcome');
       } else {
         return res
-        .send(await this.authService.signToken(user.id, user.username))
+        // .send(await this.authService.signToken(user.id, user.username))
         .redirect('http://localhost:8000/home')
       }
       
     } catch (error) {
-      console.log(error);
       return res
         .cookie('42token', token)
         .redirect('http://localhost:8000/welcome');
