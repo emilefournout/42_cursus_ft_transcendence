@@ -37,20 +37,18 @@ export class AuthController {
     @UploadedFile() image?: Express.Multer.File
   ) {
     const token = extractTokenFromRequest(request);
-    console.log('Check 42token here', token); // TODO Check 42token
     if (!token) {
       throw new UnauthorizedException();
     }
     try {
-      // const intraname = await this.authService.getIntraLogin(token)
+      const intraname = await this.authService.getIntraLogin(token)
       let url: string;
-      
       if (image !== undefined) {
         url = this.profileService.saveImage(image);
       } else {
         url = this.profileService.generateNewIcon();
       }  
-      return this.authService.register(loginUser.username /*intraname*/, loginUser.username,  url);
+      return this.authService.register(intraname, loginUser.username,  url);
     } catch (error) {
       throw new UnauthorizedException()
     }
@@ -87,6 +85,7 @@ export class AuthController {
       const user = null // await this.userService.findUserByIntraname(intraname)
       if (!user)
       {
+        console.log("42 Token" + token)
         return res
           .cookie('42token', token)
           .redirect('http://localhost:8000/welcome');
