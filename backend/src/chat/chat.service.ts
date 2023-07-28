@@ -4,10 +4,24 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { ChatBasicInfoDto } from './dto/info-chat.dto';
 
 @Injectable()
 export class ChatService {
   constructor(private prisma: PrismaService) {}
+  
+  async findChatsInfo(id: any) {
+    const chats = await this.prisma.chat.findMany({
+      include: {
+        members: {
+          where: {
+            userId: id
+          }
+        }
+      }
+    })
+    return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
+  }
 
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
     if(chatVisibility === 'PROTECTED' && !password)
