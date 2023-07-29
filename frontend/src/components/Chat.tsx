@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { chatSocket } from '../services/socket'
+import { ChatSocket } from '../services/socket'
 import ChatWindow from "./ChatWindow"
 import './Chat.css'
 
@@ -7,7 +7,7 @@ function Chat() {
   const [username, setUsername] = useState("") // TODO get username
   const [room, setRoom] = useState("")
   const [showChat, setShowChat] = useState(false)
-
+  const chatSocket = ChatSocket.getInstance().socket;
   function joinRoom() {
     if (room !== "") {
       chatSocket.emit("join_room", {roomId: Number(room)})

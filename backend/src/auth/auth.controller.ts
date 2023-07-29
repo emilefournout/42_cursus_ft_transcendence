@@ -3,21 +3,21 @@ import { AuthService } from "./auth.service";
 import { LoginUserDto } from "src/user/dto/login-user.dto";
 import { Response, Express, Request } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private userService: AuthService) {}
 
   @Post("login")
   @UseInterceptors(FileInterceptor('image'))
-  async loginUser(@Req() request: Request, @UploadedFile() image: Express.Multer.File, @Body() loginUser: LoginUserDto) {
-    const token = request.header('Authorization') && request.header('Authorization').split(' ').length > 1 ?
-      request.header('Authorization').split(' ')[1] : ''
-    console.log('Check token', token) // TODO Check 42token
+  async loginUser(@Req() request: Request, @Body() loginUser: LoginUserDto, @UploadedFile() image?: Express.Multer.File) {
+    const token = extractTokenFromRequest(request)
+    console.log('Check 42token here', token) // TODO Check 42token
     if (!token) {
       throw new UnauthorizedException()
     }
-
     return this.userService.login(loginUser.username);
   }
 
@@ -31,13 +31,15 @@ export class AuthController {
     return this.userService.set2FA(user, code)
   }
 
-  // @Get('42token')
-  // async get42Token(@Query('code') code: string) {
-  //   return await this.userService.get42Token(code);
-  // }
   @Get('42token')
   async get42Token(@Res() res: Response, @Query('code') code: string): Promise<void> {
     const token = await this.userService.get42Token(code)
     return res.cookie('42token', token).redirect('http://localhost:8000/welcome')
   }
 }
+
+function extractTokenFromRequest(request) {
+  return request.header('Authorization') && request.header('Authorization').split(' ').length > 1 ?
+    request.header('Authorization').split(' ')[1] : '';
+}
+

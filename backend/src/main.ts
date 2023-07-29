@@ -12,6 +12,7 @@ async function bootstrap() {
   }));
   app.use(json({limit: '50mb'}))
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Transcendence API')
     .setDescription('42 school Transcendence API')
     .setVersion('1.0')

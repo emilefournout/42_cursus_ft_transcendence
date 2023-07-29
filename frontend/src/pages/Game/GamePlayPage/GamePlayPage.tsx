@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
-import { gameSocket } from "../../../services/socket";
+import { GameSocket } from "../../../services/socket";
 
 export function GamePlayPage() {
+  const gameSocket = GameSocket.getInstance().socket;
   const boardState: GameCanvasProps = {
     width: 600,
     height: 350,

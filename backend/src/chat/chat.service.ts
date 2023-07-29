@@ -3,6 +3,7 @@ import { BadRequestException, ForbiddenException, Injectable, NotFoundException 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
+import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -11,8 +12,10 @@ export class ChatService {
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
     if(chatVisibility === 'PROTECTED' && !password)
       throw  new BadRequestException('No password provided for protected chat');
-    if (password)
+    else if (chatVisibility === 'PROTECTED' && password)
       password = await argon2.hash(password);
+    else
+      password = null
     await this.prisma.chat.create({
     data: {
         visibility: chatVisibility,
@@ -36,6 +39,29 @@ export class ChatService {
       });
     } catch(error) {
       throw new ForbiddenException('Could not delete chat');
+    }
+  }
+
+  async updateChat(id: number, updateChatDto: UpdateChatDto) {
+    if(updateChatDto.password === undefined && updateChatDto.chatVisibility === undefined)
+      throw new BadRequestException('Empty request');
+    else if(updateChatDto.chatVisibility === 'PROTECTED' && !updateChatDto.password)
+      throw new BadRequestException('Protected chat requires a password');
+    const chat = this.findChatById(id);
+    if(!chat)
+      throw new NotFoundException('Chat not found');
+    if(updateChatDto.chatVisibility !== 'PROTECTED')
+      updateChatDto.password = null
+    Object.assign(chat, updateChatDto)
+    try {
+      this.prisma.chat.update({
+        where: {
+          id: id
+        },
+        data: chat
+      })
+    } catch(error) {
+      throw new ForbiddenException('Could not update user');
     }
   }
 
