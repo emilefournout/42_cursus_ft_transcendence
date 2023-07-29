@@ -12,11 +12,11 @@ export class ProfileService {
     constructor () {}
 
     saveImage(file : Express.Multer.File){
-        if (file.size > 50_000)
+        if (file.size > 10_000_000) // 10 MB
             throw new Error("Max size image violated")
         const fileExtension: string = path.extname(file.originalname)
         if (!fileExtension &&  fileExtension.match(/(jpg|jpeg|png)/g))
-            throw new Error("Invalud extension")
+            throw new Error("Invalid extension")
         const filename = uuidv4() + fileExtension
         fs.writeFileSync(ProfileService.filepath + filename, file.buffer);
         return filename
