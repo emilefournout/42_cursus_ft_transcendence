@@ -10,7 +10,8 @@
 
 	cursor: pointer;
 
-	transition: height .3s ease;
+	transition: color .2s ease;
+	transition: font-size .2s ease;
 }
 
 .vis-btn:hover {
@@ -19,7 +20,7 @@
 	background-clip: unset;
 	-webkit-background-clip: unset;
 
-	height: 95%;
+	color: var(--Light-Text);
 }
 
 .vis-btn-selected {
