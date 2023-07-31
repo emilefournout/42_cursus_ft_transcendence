@@ -9,7 +9,8 @@ export interface VisibilityButtonProps {
 }
 export function VisibilityButton(props: VisibilityButtonProps) {
   const buttonSizeClass: string =
-    props.type === props.selected ? "vis-btn-selected" : "vis-btn-unselected";
+    (props.type === props.selected ? "vis-btn-selected" : "vis-btn-unselected") +
+    (props.type === Visibility.PUBLIC ? " btn btn-bottom-left" : props.type === Visibility.PRIVATE ? " btn btn-bottom-right" : " btn");
   const text: string = props.type.toString();
 
   const update = () => {
