@@ -1,5 +1,6 @@
 .vis-btn {
 	width: 200px;
+	height: 100%;
 
 	margin: 0.1rem;
 
@@ -8,6 +9,8 @@
 	align-items: center;
 
 	cursor: pointer;
+
+	transition: height .3s ease;
 }
 
 .vis-btn:hover {
@@ -15,6 +18,8 @@
 	--colour-text: var(--Browned-Text);
 	background-clip: unset;
 	-webkit-background-clip: unset;
+
+	height: 95%;
 }
 
 .vis-btn-selected {
