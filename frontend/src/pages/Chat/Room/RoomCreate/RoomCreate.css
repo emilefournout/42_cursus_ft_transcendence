@@ -1,0 +1,6 @@
+.wrapper-new-room {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	flex-grow: 1;
+}

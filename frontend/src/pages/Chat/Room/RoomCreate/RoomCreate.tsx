@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
 import chat from "../../../../components/Chat";
+import "./RoomCreate.css"
+
 export enum Visibility {
   PUBLIC = "PUBLIC",
   PRIVATE = "PRIVATE",
@@ -90,26 +92,29 @@ export function RoomCreate() {
   };
 
   return (
-    <>
+    <div className="wrapper-new-room">
       <h1>Create a new room</h1>
-      <VisibilityButton
-        type={Visibility.PUBLIC}
-        selected={selected}
-        typeCallback={setSelected}
-        clearCallback={clearState}
-      />
-      <VisibilityButton
-        type={Visibility.PROTECTED}
-        selected={selected}
-        typeCallback={setSelected}
-        clearCallback={clearState}
-      />
-      <VisibilityButton
-        type={Visibility.PRIVATE}
-        selected={selected}
-        typeCallback={setSelected}
-        clearCallback={clearState}
-      />
+	  <h3>Visibility:</h3>
+	  <div className="wrapper-row">
+		  <VisibilityButton
+			type={Visibility.PUBLIC}
+			selected={selected}
+			typeCallback={setSelected}
+			clearCallback={clearState}
+		  />
+		  <VisibilityButton
+			type={Visibility.PROTECTED}
+			selected={selected}
+			typeCallback={setSelected}
+			clearCallback={clearState}
+		  />
+		  <VisibilityButton
+			type={Visibility.PRIVATE}
+			selected={selected}
+			typeCallback={setSelected}
+			clearCallback={clearState}
+		  />
+		</div>
       {selected === Visibility.PROTECTED && (
         <>
           <div>
@@ -129,6 +134,6 @@ export function RoomCreate() {
       )}
 
       <button onClick={() => validateConfirm()}>create room</button>
-    </>
+    </div>
   );
 }

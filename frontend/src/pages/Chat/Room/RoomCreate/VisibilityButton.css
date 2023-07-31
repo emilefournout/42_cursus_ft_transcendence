@@ -1,11 +1,10 @@
-.btn-large {
-    color: #2e7d32;
-  font-size: 1.5em;
-  padding: 15px 30px;
+.vis-btn-selected {
+	font-size: 1.5em;
+	padding: 15px 30px;
 }
 
-.btn-small {
-    color: #0FA3B1;
-  font-size: 0.8em;
-  padding: 5px 10px;
+.vis-btn-unselected {
+	color: #0FA3B1;
+	font-size: 0.8em;
+	padding: 5px 10px;
 }
