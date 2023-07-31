@@ -1,10 +1,21 @@
+.vis-btn {
+	width: 200px;
+
+	margin: 0.1rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.vis-btn:hover {
+	border: none;
+}
+
 .vis-btn-selected {
-	font-size: 1.5em;
-	padding: 15px 30px;
+	font-size: clamp(0.3rem, 2.5vw, 0.6rem);
 }
 
 .vis-btn-unselected {
-	color: #0FA3B1;
-	font-size: 0.8em;
-	padding: 5px 10px;
+	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
 }
