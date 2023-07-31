@@ -4,3 +4,11 @@
 	flex-direction: column;
 	flex-grow: 1;
 }
+
+.wrapper-vis-btns {
+	align-items: center;
+
+	min-width: fit-content;
+	width: 620px;
+	height: 1.2rem;
+}

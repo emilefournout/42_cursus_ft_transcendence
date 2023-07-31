@@ -1,5 +1,5 @@
 .vis-btn {
-	width: 200px;
+	width: 100%;
 	height: 100%;
 
 	margin: 0.1rem;
@@ -10,7 +10,6 @@
 
 	cursor: pointer;
 
-	transition: color .2s ease;
 	transition: font-size .2s ease;
 }
 
@@ -20,7 +19,7 @@
 	background-clip: unset;
 	-webkit-background-clip: unset;
 
-	color: var(--Light-Text);
+	font-size: clamp(0.1rem, 2.5vw, 0.4rem);;
 }
 
 .vis-btn-selected {

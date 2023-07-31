@@ -95,7 +95,7 @@ export function RoomCreate() {
 		<div className="wrapper-new-room">
 			<h2 className="txt-light">Create a new room</h2>
 			<h3 className="txt-light mini-title">Visibility:</h3>
-			<div className="wrapper-row align-items-center">
+			<div className="wrapper-row wrapper-vis-btns">
 				<VisibilityButton
 					type={Visibility.PUBLIC}
 					selected={selected}

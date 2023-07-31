@@ -76,10 +76,6 @@ body {
 	justify-content: space-between;
 }
 
-.align-items-center {
-	align-items: center;
-}
-
 .wrapper-welcome-grid {
 	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
 	--gap-size: clamp(8px, calc(0.6vw + 0.4vh), 16px);
