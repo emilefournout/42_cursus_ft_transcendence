@@ -148,6 +148,10 @@ body {
 	--shadow-colour: var(--Mooned-Teal);
 }
 
+.txt-light {
+	color: var(--Light-Text);
+}
+
 
 /* Titles */
 .title {
@@ -156,6 +160,10 @@ body {
 	margin-bottom: 0.25rem;
 	text-align: center;
 	color: var(--Light-Text);
+}
+
+.mini-title {
+	font-size: 0.5rem;
 }
 
 

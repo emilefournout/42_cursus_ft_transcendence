@@ -91,49 +91,48 @@ export function RoomCreate() {
     await fetchCreateRoom(chatVisibility);
   };
 
-  return (
-    <div className="wrapper-new-room">
-      <h1>Create a new room</h1>
-	  <h3>Visibility:</h3>
-	  <div className="wrapper-row">
-		  <VisibilityButton
-			type={Visibility.PUBLIC}
-			selected={selected}
-			typeCallback={setSelected}
-			clearCallback={clearState}
-		  />
-		  <VisibilityButton
-			type={Visibility.PROTECTED}
-			selected={selected}
-			typeCallback={setSelected}
-			clearCallback={clearState}
-		  />
-		  <VisibilityButton
-			type={Visibility.PRIVATE}
-			selected={selected}
-			typeCallback={setSelected}
-			clearCallback={clearState}
-		  />
+	return (
+		<div className="wrapper-new-room">
+			<h2 className="txt-light">Create a new room</h2>
+			<h3 className="txt-light mini-title">Visibility:</h3>
+			<div className="wrapper-row">
+				<VisibilityButton
+					type={Visibility.PUBLIC}
+					selected={selected}
+					typeCallback={setSelected}
+					clearCallback={clearState}
+				/>
+				<VisibilityButton
+					type={Visibility.PROTECTED}
+					selected={selected}
+					typeCallback={setSelected}
+					clearCallback={clearState}
+				/>
+				<VisibilityButton
+					type={Visibility.PRIVATE}
+					selected={selected}
+					typeCallback={setSelected}
+					clearCallback={clearState}
+				/>
+			</div>
+			{selected === Visibility.PROTECTED && (
+				<>
+					<div>
+						<input
+							type="password"
+							placeholder="set password"
+							onChange={(e) => validatePassword(e.target.value)}
+						/>
+						<input
+							type="password"
+							placeholder="confirm password"
+							onChange={(e) => setConfirm(e.target.value)}
+						/>
+					</div>
+					{errorMessage}
+				</>
+			)}
+			<button onClick={() => validateConfirm()}>create room</button>
 		</div>
-      {selected === Visibility.PROTECTED && (
-        <>
-          <div>
-            <input
-              type="password"
-              placeholder="set password"
-              onChange={(e) => validatePassword(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="confirm password"
-              onChange={(e) => setConfirm(e.target.value)}
-            />
-          </div>
-          {errorMessage}
-        </>
-      )}
-
-      <button onClick={() => validateConfirm()}>create room</button>
-    </div>
-  );
+	);
 }
