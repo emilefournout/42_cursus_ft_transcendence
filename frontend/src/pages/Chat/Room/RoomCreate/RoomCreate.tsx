@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
+import chat from "../../../../components/Chat";
 export enum Visibility {
   PUBLIC = "PUBLIC",
   PRIVATE = "PRIVATE",
@@ -22,7 +23,14 @@ export function RoomCreate() {
   );
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const validatePassword = (value: string) => {
+
+  const clearState = (): void => {
+    setPasswordSecurity(passwordStrength.EMPTY);
+    setErrorMessage(passwordStrength.EMPTY.toString());
+    setPassword("");
+    setConfirm("");
+  };
+  const validatePassword = (value: string): void => {
     if (
       validator.isStrongPassword(value, {
         minLength: 8,
@@ -40,26 +48,45 @@ export function RoomCreate() {
     }
     setPassword(value);
   };
-  const validateConfirm = () => {
+  const fetchCreateRoom = async (chatVisibility: string): Promise<void> => {
+    fetch("http://localhost:3000/chat", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiZW1pbGUiLCJpYXQiOjE2OTAzODUwOTQsImV4cCI6MTY5MDk4OTg5NH0.f4S1hXhx9tum1VQnKHXQtZ0QIgfmOJNzhl2ubPk5koQ",
+        accept: "*/*",
+      },
+      body: JSON.stringify({
+        user_id: "1",
+        chatVisibility: chatVisibility,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("message ->", data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la requête Fetch:", error);
+      });
+  };
+  const validateConfirm = async (): Promise<void> => {
+    let chatVisibility: string;
     if (selected === Visibility.PROTECTED) {
       if (passwordSecurity !== passwordStrength.STRONG) {
         setErrorMessage(passwordSecurity.toString());
+        return;
       } else if (password !== confirm) {
         setErrorMessage("Passwords do not match");
+        return;
       } else {
         setErrorMessage(passwordStrength.STRONG.toString());
-        console.log("create room");
-        // TODO: create room
+        chatVisibility = "PROTECTED";
       }
     } else {
-      console.log("create room");
+      chatVisibility = "PUBLIC";
     }
-  };
-  const clearState = () => {
-    setPasswordSecurity(passwordStrength.EMPTY);
-    setErrorMessage(passwordStrength.EMPTY.toString());
-    setPassword("");
-    setConfirm("");
+    console.log("chatVisibility", chatVisibility);
+    await fetchCreateRoom(chatVisibility);
   };
 
   return (
