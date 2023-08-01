@@ -79,34 +79,44 @@ export class UserController {
       throw new UserNotUpdatedException();
   }
 
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Blocks targetId user for id", description: "Payload targetId is the user that will be blocked"})
-  @Post(':id/blocked')
-  async addUserBlocked(@Param('id', ParseIntPipe) id: number, @Body() updateUserRelationDto: UpdateUserRelationDto) {
-    await this.userService.addUserBlocked(id, updateUserRelationDto.targetId);
+  @ApiParam({name: 'id', description: 'The id of the user the sender wants to block'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: "Blocks the user with id for the sender", description: "The user with the id will be blocked"})
+  @UseGuards(JwtAuthGuard)
+  @Post('/block/:id')
+  async addUserBlocked(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+    await this.userService.addUserBlocked(user.id, id);
   }
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Removes block to targetId user for id", description: "Payload targetId is the user that will be unblocked"})
-  @Delete(':id/blocked')
-  async deleteUserBlocked(@Param('id', ParseIntPipe) id: number, @Body() updateUserRelationDto: UpdateUserRelationDto) {
-    await this.userService.deleteUserBlocked(id, updateUserRelationDto.targetId);
+  @ApiParam({name: 'id', description: 'The id of the user the sender wants to remove the block'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: "Removes the block to id for the sender", description: "The user with the id will be unblocked"})
+  @UseGuards(JwtAuthGuard)
+  @Delete('/block/:id')
+  async deleteUserBlocked(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+    await this.userService.deleteUserBlocked(user.id, id);
   }
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Add user targetId user to id friends", description: "Payload targetId is the user that will recieve a friendship request"})
-  @Post(':id/friends')
-  async addUserFriends(@Param('id', ParseIntPipe) id: number, @Body() updateUserRelationDto: UpdateUserRelationDto) {
-    await this.userService.addUserFriends(id, updateUserRelationDto.targetId);
+  @ApiParam({name: 'id', description: 'The id of the user the sender wants to be friends with'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: "Invites id to be friends", description: "The user with the id will recieve a friendship request"})
+  @UseGuards(JwtAuthGuard)
+  @Post('/friends/send/:id')
+  async addUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+    await this.userService.addUserFriends(user.id, id);
   }
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Accepts user targetId user to id friends", description: "Payload targetId is the user that will be accepted"})
-  @Patch(':id/friends/accept')
-  async acceptUserFriends(@Param('id', ParseIntPipe) id: number, @Body() updateUserRelationDto: UpdateUserRelationDto) {
-    await this.userService.acceptUserFriends(id, updateUserRelationDto.targetId);
+  @ApiParam({name: 'id', description: 'The id of the user that send the invitation'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: "Accepts the invitation from id", description: "The user with the id will have its invitation accepted"})
+  @UseGuards(JwtAuthGuard)
+  @Patch('/friends/accept/:id')
+  async acceptUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+    await this.userService.acceptUserFriends(user.id, id);;
   }
-  @ApiParam({name: 'id'})
-  @Delete(':id/friends/decline')
-  @ApiOperation({summary: "Removes user targetId user to id friends", description: "Payload targetId is the user that will be declined"})
-  async declineUserFriends(@Param('id', ParseIntPipe) id: number, @Body() updateUserRelationDto: UpdateUserRelationDto) {
-    await this.userService.declineUserFriends(id, updateUserRelationDto.targetId);
+  @ApiParam({name: 'id', description: 'The id of the user that send the invitation'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: "Declines id user invitation", description: "The user invitation to be friends from id with the will be declined"})
+  @UseGuards(JwtAuthGuard)
+  @Delete('/friends/decline/:id')
+  async declineUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+    await this.userService.declineUserFriends(user.id, id);;
   }
 }
