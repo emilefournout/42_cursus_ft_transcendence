@@ -3,6 +3,13 @@
 	align-items: center;
 	flex-direction: column;
 	flex-grow: 1;
+
+	color: var(--Light-Text);
+	font-size: 0.7rem;
+}
+
+.wrapper-new-room > button {
+	margin-top: 8px;
 }
 
 .wrapper-vis-btns {
@@ -11,4 +18,11 @@
 	min-width: fit-content;
 	width: 620px;
 	height: 1.2rem;
+}
+
+#wrapper-new-room-pswrd {
+	margin-top: 2rem;
+
+	display: grid;
+	grid-gap: 8px;
 }

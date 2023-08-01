@@ -117,7 +117,7 @@ export function RoomCreate() {
 			</div>
 			{selected === Visibility.PROTECTED && (
 				<>
-					<div>
+					<div id="wrapper-new-room-pswrd">
 						<input
 							type="password"
 							placeholder="set password"
