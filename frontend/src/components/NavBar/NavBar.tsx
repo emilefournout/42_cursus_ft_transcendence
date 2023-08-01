@@ -20,8 +20,8 @@ export function NavBar() {
           </Link>
         </div>
         <h2 className="txt txt-shadow-top nav-responsive-text">PONG</h2>
-        <Link to="/game">
-          <button id="nav-right-side" className="btn btn-bottom-left nav-responsive-text">Play</button>
+        <Link to="/game" id="nav-right-side" className="btn btn-bottom-left nav-responsive-text">
+          Play
         </Link>
       </nav>
   );

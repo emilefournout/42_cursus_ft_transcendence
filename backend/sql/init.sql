@@ -8,7 +8,7 @@ CREATE TYPE "FriendshipStatus" AS ENUM ('PENDING', 'ENABLED');
 CREATE TYPE "OnlineStatus" AS ENUM ('ONLINE', 'OFFLINE', 'PLAYING');
 
 -- CreateEnum
-CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED');
+CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED', 'DIRECT');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -81,6 +81,7 @@ CREATE TABLE "ChatMember" (
 -- CreateTable
 CREATE TABLE "Chat" (
     "id" SERIAL NOT NULL,
+    "name" TEXT,
     "visibility" "ChatVisibility" NOT NULL,
     "password" TEXT,
 
@@ -103,9 +104,6 @@ CREATE TABLE "_GameToUser" (
     "A" TEXT NOT NULL,
     "B" INTEGER NOT NULL
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_intraname_key" ON "User"("intraname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");

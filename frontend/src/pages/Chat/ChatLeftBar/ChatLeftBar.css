@@ -5,7 +5,7 @@
 }
 
 #lb-top-wrapper {
-    width: calc(100% + 0.6rem + 12px);
+	width: calc(100% + var(--nav-icon-size) + 18px);
     height: var(--NavBar-Height);
 
     background-color: var(--Honey-Yellow);

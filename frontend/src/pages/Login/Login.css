@@ -11,7 +11,7 @@
 
 /* Responsive shit and stuff */
 #login-h1 {
-	font-size: 108px;
+    text-align: center;
 	margin: 8px 0;
 
     font-size: clamp(1.5rem, calc(3vw + 4vh), 3rem);
@@ -21,7 +21,7 @@
     text-align: center;
 	margin: 8px 0;
 
-    font-size: clamp(0.7rem, calc(1vw + 2vh), 2rem);
+    font-size: clamp(0.5rem, calc(1vw + 1.4vh), 1.8rem);
 }
 
 .responsive-button {

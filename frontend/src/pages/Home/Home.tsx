@@ -12,7 +12,7 @@ export function Home() {
       <h1 className="title">We don't know what to put here</h1>
       {/* <Chat /> */}
       <Link to="/">
-        <button className="btn btn-fixed-height">Disconnect</button>
+        <button className="btn btn-fixed-height" onClick={() => localStorage.removeItem('access_token')}>Disconnect</button>
       </Link>
     </>
   );

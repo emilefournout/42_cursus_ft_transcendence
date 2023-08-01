@@ -12,6 +12,7 @@ export class UserService {
         data: {
           intraname: intraname,
           username: username,
+          avatarURL: avatar
         }
       });
       return user;
@@ -27,7 +28,7 @@ export class UserService {
   }
 
   async findUserByName(username: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where:{
         username: username
       }
@@ -36,7 +37,7 @@ export class UserService {
   }
 
   async findUserByIntraname(intraname: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where:{
         intraname: intraname
       }
@@ -48,11 +49,7 @@ export class UserService {
     const user = await this.findUserById(id)
     if (!user)
       return null;
-    const userInfo = new UserBasicInfoDto()
-    userInfo.id = user.id;
-    userInfo.username = user.username;
-    userInfo.status = user.status;
-    return userInfo;
+    return UserBasicInfoDto.fromUser(user);
   }
 
   async deleteUser(id: number) {

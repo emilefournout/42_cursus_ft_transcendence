@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id                   Int                      @id @default(autoincrement())
-  intraname            String                   @unique
+  intraname            String                   // Not unique for testing, @unique
   username             String                   @unique
   createdAt            DateTime                 @default(now())
   avatarURL            String? // URL to Avatar
@@ -88,6 +88,7 @@ model ChatMember {
 
 model Chat {
   id         Int            @id @default(autoincrement())
+  name       String?
   visibility ChatVisibility
   password   String?
   members    ChatMember[]
@@ -114,4 +115,5 @@ enum ChatVisibility {
   PUBLIC
   PRIVATE
   PROTECTED
+  DIRECT
 }

@@ -24,7 +24,7 @@ export class GameSocket {
     private socketIo;
 
     private constructor(){
-        this.socketIo = io('http://localhost:3001')
+        this.socketIo = io('http://localhost:3002')
     }
 
     public static getInstance(){

@@ -1,16 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { ChatVisibility } from "@prisma/client";
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class UpdateChatDto {
-  @ApiProperty()
   @IsOptional()
   @IsString()
+  @ApiPropertyOptional()
   password?: String
   
-  @ApiProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsEnum(ChatVisibility)
+  @ApiPropertyOptional()
   chatVisibility?: ChatVisibility;
 }

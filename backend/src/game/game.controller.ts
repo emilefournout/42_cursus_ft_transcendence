@@ -12,15 +12,16 @@ import {
 } from '@nestjs/common';
 import { CreateGameDto } from './dto/game.dto';
 import { GameService } from './game.service';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Game')
 @Controller('game')
 export class GameController {
   constructor(private gameService: GameService) {}
 
-  @ApiParam({name: 'id'})
   @Get(':id')
+  @ApiParam({name: 'id'})
+  @ApiOperation({summary: "Return basic information about a game"})
   findGame(@Param('id', ParseUUIDPipe) id: string) {
     const game = this.gameService.findGameById(id);
     if (game === undefined)
@@ -29,18 +30,21 @@ export class GameController {
   }
 
   @Post()
+  @ApiOperation({summary: "[NOT IMPLEMENTED] Creates a a game."})
   createGame(@Body() createGameDto: CreateGameDto) {
     throw new NotImplementedException();
   }
 
-  @ApiParam({name: 'id'})
   @Patch(':id')
+  @ApiParam({name: 'id'})
+  @ApiOperation({summary: "[NOT IMPLEMENTED] Updates information from a game."})
   updateGame(@Param('id', ParseUUIDPipe) id) {
     throw new NotImplementedException();
   }
 
-  @ApiParam({name: 'id'})
   @Delete(':id')
+  @ApiParam({name: 'id'})
+  @ApiOperation({summary: "[NOT IMPLEMENTED] Deletes information from a game."})
   deleteGame(@Param('id', ParseUUIDPipe) id) {
     throw new NotImplementedException();
   }

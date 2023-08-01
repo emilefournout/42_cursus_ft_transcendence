@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ChatVisibility } from '@prisma/client';
 import {
   IsDefined,
@@ -10,17 +10,20 @@ import {
 } from 'class-validator';
 
 export class CreateChatDto {
-  @ApiProperty()
   @IsDefined()
   @IsInt()
+  @ApiProperty()
   user_id: number;
 
-  @ApiProperty()
   @IsDefined()
   @IsEnum(ChatVisibility)
+  @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
 
-  @ApiProperty()
   @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    type: String
+  })
   password?: string;
 }

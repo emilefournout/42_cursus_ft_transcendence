@@ -4,10 +4,24 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatVisibility } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { ChatBasicInfoDto } from './dto/info-chat.dto';
 
 @Injectable()
 export class ChatService {
   constructor(private prisma: PrismaService) {}
+  
+  async findChatsInfo(id: any) {
+    const chats = await this.prisma.chat.findMany({
+      include: {
+        members: {
+          where: {
+            userId: id
+          }
+        }
+      }
+    })
+    return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
+  }
 
   async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
     if(chatVisibility === 'PROTECTED' && !password)
@@ -47,9 +61,11 @@ export class ChatService {
       throw new BadRequestException('Empty request');
     else if(updateChatDto.chatVisibility === 'PROTECTED' && !updateChatDto.password)
       throw new BadRequestException('Protected chat requires a password');
-    const chat = this.findChatById(id);
+    const chat = await this.findChatById(id);
     if(!chat)
       throw new NotFoundException('Chat not found');
+    else if(chat.visibility === 'DIRECT')
+      throw new ForbiddenException('Direct chat is immutable');
     if(updateChatDto.chatVisibility !== 'PROTECTED')
       updateChatDto.password = null
     Object.assign(chat, updateChatDto)

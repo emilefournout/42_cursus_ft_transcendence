@@ -22,11 +22,24 @@ export function Login() {
   );
 
   function handleLoginWith42() {
-    window.location.href = `https://api.intra.42.fr/oauth/authorize?client_id=${
-      process.env.REACT_APP_INTRA_UID
-    }&redirect_uri=${encodeURI(
+    const jwtToken = localStorage.getItem('access_token');
+    if (jwtToken) {
+      const jwtData = JSON.parse(atob(jwtToken.split('.')[1]));
+      const expirationDate = new Date(jwtData.exp * 1000); 
+      if (expirationDate > new Date()) {
+        window.location.href = "http://localhost:8000/home"
+      } else {
+        localStorage.removeItem('access_token')
+        redirectTo42Api()
+      }
+    } else {
+      redirectTo42Api()
+    }
+  }
+
+  function redirectTo42Api() {
+    window.location.href = `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.REACT_APP_INTRA_UID}&redirect_uri=${encodeURI(
       process.env.REACT_APP_REDIRECT_URI ?? ""
     )}&response_type=code`;
   }
-  
 }
