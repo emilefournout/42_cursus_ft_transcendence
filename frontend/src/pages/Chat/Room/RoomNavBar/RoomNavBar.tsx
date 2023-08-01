@@ -7,7 +7,7 @@ export function RoomNavBar() {
   return (
     <div className="wrapper-row wrapper-room-bar">
       <span>Room Name</span>
-      <img
+      <img // This Image should change depending on whether this is a group or a DM
         className="nav-icons"
         src={RoomParamsIcon}
       ></img>
