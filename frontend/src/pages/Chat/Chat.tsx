@@ -4,6 +4,7 @@ import { NavBar } from "../../components/NavBar/NavBar";
 import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 import SEO from "../../components/Seo";
 import { RoomCreate } from "./Room/RoomCreate/RoomCreate";
+import { Room } from "./Room/Room";
 import "./Chat.css"
 
 export function ChatPage() {
@@ -21,7 +22,8 @@ export function ChatPage() {
 			<NavBar />
 			<div id="chatpage-container">
 				<LeftBar callback={changeBoard} />
-				{board}
+				{/* {board} */}
+				<Room />
 			</div>
 		</>
 	);

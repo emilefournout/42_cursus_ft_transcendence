@@ -1,10 +1,16 @@
 import React from "react";
+import "./RoomNavBar.css"
+import DMParamsIcon from "./DMParamsIcon.svg"
+import RoomParamsIcon from "./RoomParamsIcon.svg"
 
 export function RoomNavBar() {
   return (
-    <>
-      <h1>Room Name</h1>
-      <button>Open RoomParam</button>
-    </>
+    <div className="wrapper-row wrapper-room-bar">
+      <span>Room Name</span>
+      <img
+        className="nav-icons"
+        src={RoomParamsIcon}
+      ></img>
+    </div>
   );
 }
