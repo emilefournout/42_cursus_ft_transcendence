@@ -105,6 +105,22 @@ export class ChatService {
     return chat;
   }
 
+  async findChatByIdWithUserInside(id: number, userId: number) {
+    const chat = await this.prisma.chat.findUnique({
+      include: {
+        members: {
+          where: {
+            userId: id
+          }
+        }
+      },
+      where: {
+        id: id
+      }
+    });
+    return chat;
+  }
+
   async findChatMessagesById(id: number) {
     const messages = await this.prisma.message.findMany({
       where: {
