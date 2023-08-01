@@ -13,6 +13,7 @@ import { GameHomePage } from "./pages/Game/GameHomePage/GameHomePage";
 import { GameMatchmakingPage } from "./pages/Game/GameMatchmakingPage/GameMatchmakingPage";
 import { GamePlayPage } from "./pages/Game/GamePlayPage/GamePlayPage";
 import { Game } from "./pages/Game/Game";
+import { CookieError } from "./pages/Error/CookieError";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path=":id" element={<ChatPage />} />
           </Route>
           <Route path="/settings" element={<Settings />} />
+          <Route path='/cookieError' element={<CookieError />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </HelmetProvider>
