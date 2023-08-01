@@ -22,8 +22,8 @@ export function ChatPage() {
 			<NavBar />
 			<div id="chatpage-container">
 				<LeftBar callback={changeBoard} />
-				{/* {board} */}
-				<Room />
+				{board}
+				{/* <Room /> */}
 			</div>
 		</>
 	);

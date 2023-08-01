@@ -12,8 +12,8 @@ export enum Visibility {
 
 enum passwordStrength {
   EMPTY = "Choose a password",
-  WEAK = "Is Not Strong Password: : 8 characters, 1 lowercase, 1 uppercase, 1 number, 1 symbol",
-  STRONG = "",
+  WEAK = "Not Strong enough!\nPassword must have: 8 characters minimum, 1 lowercase, 1 uppercase, 1 number and 1 symbol.",
+  STRONG = "That's one strong password!",
 }
 export function RoomCreate() {
   const [selected, setSelected] = useState<Visibility>(Visibility.PUBLIC);
@@ -93,8 +93,8 @@ export function RoomCreate() {
 
 	return (
 		<div className="wrapper-new-room">
-			<h2 className="txt-light">Create a new room</h2>
-			<h3 className="txt-light mini-title">Visibility:</h3>
+			<h2>Create a new room</h2>
+			<h3 className="mini-title">Visibility:</h3>
 			<div className="wrapper-row wrapper-vis-btns">
 				<VisibilityButton
 					type={Visibility.PUBLIC}
@@ -129,7 +129,9 @@ export function RoomCreate() {
 							onChange={(e) => setConfirm(e.target.value)}
 						/>
 					</div>
-					{errorMessage}
+					<div id="txt-password-strength">
+						{errorMessage}
+					</div>
 				</>
 			)}
 			<button onClick={() => validateConfirm()}>create room</button>

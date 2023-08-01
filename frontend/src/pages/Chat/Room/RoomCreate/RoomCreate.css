@@ -28,3 +28,9 @@
 	display: grid;
 	grid-gap: 8px;
 }
+
+#txt-password-strength {
+	font-size: 0.5rem;
+	text-align: center;
+	padding: 0.2rem;
+}
