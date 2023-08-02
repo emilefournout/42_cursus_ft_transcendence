@@ -38,7 +38,7 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             game.player2.client.join(game.game)
             this.server.to(game.game).emit('game_found', game.game)
 
-            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 100)
+            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 30)
         }
     }
 
