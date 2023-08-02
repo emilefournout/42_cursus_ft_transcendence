@@ -64,11 +64,9 @@ export function GameCanvas(props: GameCanvasProps) {
       // console.log("BALL", props.ballX, props.ballY);
     }
   });
-  
+
   useEffect(() => {
-    console.log("HEY")
     function handleKeyDown(event: any) {
-    console.log("Evento")
       if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
           playerId: localStorage.getItem("access_token"),
