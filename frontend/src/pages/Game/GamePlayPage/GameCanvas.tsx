@@ -64,21 +64,31 @@ export function GameCanvas(props: GameCanvasProps) {
       // console.log("BALL", props.ballX, props.ballY);
     }
   });
-  function handleKeyDown(event: any) {
+  
+  useEffect(() => {
+    console.log("HEY")
+    function handleKeyDown(event: any) {
+    console.log("Evento")
       if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
-          playerId: localStorage.get("access_token"),
+          playerId: localStorage.getItem("access_token"),
           gameId: id,
           direction: "up",
         });
       } else if (event.key === "ArrowDown") {
         gameSocket.emit("move_user", {
-          playerId: localStorage.get("access_token"),
+          playerId: localStorage.getItem("access_token"),
           gameId: id,
           direction: "down",
         });
       }
     }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
 
   return (
     <>
@@ -87,7 +97,6 @@ export function GameCanvas(props: GameCanvasProps) {
         width={props.width}
         height={props.height}
         style={{ border: "2px solid black" }}
-        onKeyDown={handleKeyDown}
       ></canvas>
     </>
   );
