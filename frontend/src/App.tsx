@@ -19,16 +19,22 @@ import { NavBar } from "./components/NavBar/NavBar";
 
 function App() {
   const navigate = useNavigate();
-  const [isLoggedIn, setisLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Checking if user is not loggedIn
-    if (!isLoggedIn) {
+  const redirection = (event: StorageEvent) => {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
       navigate("/");
     } else {
       navigate("/login");
     }
-  }, [navigate, isLoggedIn]);
+  };
+
+  useEffect(() => {
+    redirection({} as StorageEvent);
+    window.addEventListener("storage", redirection);
+    return () => {
+      window.removeEventListener("storage", redirection);
+    };
+  }, [redirection]);
 
   return (
     <>
@@ -36,10 +42,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route
-            path="/"
-            element={isLoggedIn ? <NavBar /> : <Navigate to={"/login"} />}
-          >
+          <Route path="/" element={<NavBar />}>
             <Route path="home" element={<Home />} />
             <Route path="game" element={<Game />}>
               <Route path="" element={<GameHomePage />} />
