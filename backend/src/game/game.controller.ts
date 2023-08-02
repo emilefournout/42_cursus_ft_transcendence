@@ -28,24 +28,4 @@ export class GameController {
       throw new NotFoundException('Game was not found');
     return game
   }
-
-  @Post()
-  @ApiOperation({summary: "[NOT IMPLEMENTED] Creates a a game."})
-  createGame(@Body() createGameDto: CreateGameDto) {
-    throw new NotImplementedException();
-  }
-
-  @Patch(':id')
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "[NOT IMPLEMENTED] Updates information from a game."})
-  updateGame(@Param('id', ParseUUIDPipe) id) {
-    throw new NotImplementedException();
-  }
-
-  @Delete(':id')
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "[NOT IMPLEMENTED] Deletes information from a game."})
-  deleteGame(@Param('id', ParseUUIDPipe) id) {
-    throw new NotImplementedException();
-  }
 }
