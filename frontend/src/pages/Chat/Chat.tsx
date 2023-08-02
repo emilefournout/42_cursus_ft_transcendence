@@ -12,7 +12,7 @@ export function ChatPage() {
         title="Pong - Chat"
         description="Start a conversation now with a friends or join a channel."
       />
-      <NavBar />
+
       <div id="chatpage-container">
         <LeftBar />
         <Outlet />

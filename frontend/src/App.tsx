@@ -16,34 +16,16 @@ import { Game } from "./pages/Game/Game";
 import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
 import { NavBar } from "./components/NavBar/NavBar";
+import { UserProfilePage } from "./pages/UserProfilePage/UserProfilePage";
 
 function App() {
-  const navigate = useNavigate();
-  const redirection = (event: StorageEvent) => {
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  useEffect(() => {
-    redirection({} as StorageEvent);
-    window.addEventListener("storage", redirection);
-    return () => {
-      window.removeEventListener("storage", redirection);
-    };
-  }, [redirection]);
-
   return (
     <>
       <HelmetProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route path="/" element={<NavBar />}>
-            <Route path="home" element={<Home />} />
+          <Route path="/" element={<Home />}>
             <Route path="game" element={<Game />}>
               <Route path="" element={<GameHomePage />} />
               <Route path=":id" element={<GamePlayPage />} />
@@ -56,6 +38,7 @@ function App() {
               <Route path="room" element={<Room />} />
             </Route>
             <Route path="settings" element={<Settings />} />
+            <Route path="userAccount" element={<UserProfilePage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
