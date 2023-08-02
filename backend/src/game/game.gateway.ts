@@ -42,4 +42,14 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
         }
     }
 
+    @SubscribeMessage('move_user')
+    async handleKeyPressed(client: Socket, @MessageBody() data: any){
+        this.gameService.movePad(data)
+    }
+
 }
+/* gameSocket.emit("move_user", {
+          playerId: localStorage.getItem("access_token"),
+          gameId: id,
+          direction: "down",
+        });*/

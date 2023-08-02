@@ -1,4 +1,6 @@
 export interface IGameData {
+  player1Id: number;
+  player2Id: number;
   width: number;
   height: number;
   padWidth: number;
@@ -10,4 +12,5 @@ export interface IGameData {
   ballY: number;
   velocityX: number;
   velocityY: number;
+  padVelocity: number;
 }

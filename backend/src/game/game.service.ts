@@ -14,6 +14,8 @@ export class GameService {
   ) {}
 
   initState: IGameData = {
+    player1Id: 0,
+    player2Id: 0,
     width: 600,
     height: 350,
     padWidth: 10,
@@ -25,6 +27,7 @@ export class GameService {
     ballY: 150,
     velocityX: 10,
     velocityY: 12,
+    padVelocity: 10,
   }
 
   async findGameById(id: string) {
@@ -63,6 +66,8 @@ export class GameService {
         const game = await this.createGame(player1.user.id, player2.user.id)
 
         const gameState = Object.assign({}, this.initState)
+        gameState.player1Id = player1.user.id
+        gameState.player2Id = player2.user.id
         this.games.set(game, gameState)
         return { game, player1, player2 }
       }
@@ -88,5 +93,29 @@ export class GameService {
     }
 
     return gameState
+  }
+
+  movePad({accessToken, gameId, direction}: any){
+
+    const playerId = JSON.parse(atob(accessToken.split('.')[1])).sub;
+    const gameState = this.games.get(gameId)
+    if(gameState === undefined)
+      return
+    
+    if(gameState.player1Id !== playerId && gameState.player2Id !== playerId)
+      return
+    
+    if(gameState.player1Id === playerId) {
+      if(direction === 'down' && gameState.leftPad + gameState.padVelocity + gameState.padHeight < gameState.height)
+        gameState.leftPad += gameState.padVelocity
+      else if(direction === 'up' && gameState.leftPad - gameState.padVelocity > 0)
+        gameState.leftPad -= gameState.padVelocity
+    }
+    else if(gameState.player2Id === playerId) {
+      if(direction === 'down' && gameState.rightPad + gameState.padVelocity + gameState.padHeight < gameState.height)
+        gameState.rightPad += gameState.padVelocity
+      else if(direction === 'up' && gameState.rightPad - gameState.padVelocity > 0)
+        gameState.rightPad -= gameState.padVelocity
+    }
   }
 }

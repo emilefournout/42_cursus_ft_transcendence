@@ -69,13 +69,13 @@ export function GameCanvas(props: GameCanvasProps) {
     function handleKeyDown(event: any) {
       if (event.key === 'ArrowUp') {
         gameSocket.emit("move_user", {
-          playerId: localStorage.getItem("access_token"),
+          accessToken: localStorage.getItem("access_token"),
           gameId: id,
           direction: "up",
         });
       } else if (event.key === "ArrowDown") {
         gameSocket.emit("move_user", {
-          playerId: localStorage.getItem("access_token"),
+          accessToken: localStorage.getItem("access_token"),
           gameId: id,
           direction: "down",
         });
