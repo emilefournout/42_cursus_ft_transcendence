@@ -19,7 +19,7 @@ export class GameService {
     padWidth: 10,
     padHeight: 60,
     ballRadius: 8,
-    leftPad: 100,
+    leftPad: 0,
     rightPad: 150,
     ballX: 200,
     ballY: 150,
@@ -70,7 +70,10 @@ export class GameService {
       gameState.velocityY = -gameState.velocityY
     }
     // TODO Check pads and points
-    if (gameState.ballX + gameState.ballRadius > gameState.width
+    if((gameState.ballX + gameState.ballRadius > gameState.width - gameState.padWidth*3 && gameState.ballY > gameState.rightPad && gameState.ballY < gameState.rightPad + gameState.padHeight)
+        || gameState.ballX + gameState.ballRadius < gameState.padWidth*3 && gameState.ballY > gameState.leftPad && gameState.ballY < gameState.leftPad + gameState.padHeight)
+        gameState.velocityX = -gameState.velocityX
+    else if (gameState.ballX + gameState.ballRadius > gameState.width
         || gameState.ballX - gameState.ballRadius < 0) {
       gameState.velocityX = -gameState.velocityX
     }
