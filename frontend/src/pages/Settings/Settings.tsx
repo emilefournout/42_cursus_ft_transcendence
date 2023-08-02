@@ -5,7 +5,7 @@ export function Settings() {
   return (
     <>
       settings
-      <Link to="/">
+      <Link to="/login">
         <button
           className="btn btn-fixed-height"
           onClick={() => localStorage.removeItem("access_token")}
