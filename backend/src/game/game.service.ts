@@ -36,9 +36,18 @@ export class GameService {
     return game;
   }
 
-  async createGame(player1: {client: Socket, user: User}, player2: {client: Socket, user: User}) {
-    // TODO create game in database
-    return '123'
+  async createGame(player1Id: number, player2Id: number) : Promise<string> {
+    const game = await this.prisma.game.create({
+      data: {
+        users: {
+            connect: [
+              {id: player1Id},
+              {id: player2Id},
+            ]
+          }
+        }
+    });
+    return game.uuid;
   }
 
   async handleWaitingRoom(client: Socket, username: string | null) {
@@ -51,7 +60,7 @@ export class GameService {
       if (this.waitingRoom.length >= 2) {
         const player1 = this.waitingRoom.shift()
         const player2 = this.waitingRoom.shift()
-        const game = await this.createGame(player1, player2)
+        const game = await this.createGame(player1.user.id, player2.user.id)
 
         const gameState = Object.assign({}, this.initState)
         this.games.set(game, gameState)
