@@ -1,25 +1,20 @@
 import React, { JSX } from "react";
 import "./ChatLeftBar.css";
 import NewChatIcon from "./NewChatIcon.svg";
-import { Room } from "../Room/Room";
-import { RoomCreate } from "../Room/RoomCreate/RoomCreate";
+import { Link } from "react-router-dom";
 
-export interface ChatLeftBarProps {
-  callback: (board: JSX.Element) => void;
-}
-
-export function LeftBar(props: ChatLeftBarProps) {
+export function LeftBar() {
   return (
     <div id="lb-main-wrapper" className="wrapper-col">
       <div id="lb-top-wrapper">
         <span>Chats</span>
-        <img
-          className="nav-icons"
-          src={NewChatIcon}
-          onClick={() => props.callback(<RoomCreate />)}
-        ></img>
+        <Link to="/chats/create">
+          <img className="nav-icons" src={NewChatIcon} />
+        </Link>
       </div>
-      <div id="lb-bot-wrapper" onClick={() => props.callback(<Room />)}></div>
+      {/* <Link to="/chats/room">*/}
+      <div id="lb-bot-wrapper"></div>
+      {/*</Link>*/}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
 import chat from "../../../../components/Chat";
-import "./RoomCreate.css"
+import "./RoomCreate.css";
 
 export enum Visibility {
   PUBLIC = "PUBLIC",
@@ -51,24 +51,30 @@ export function RoomCreate() {
     setPassword(value);
   };
   const fetchCreateRoom = async (chatVisibility: string): Promise<void> => {
+    console.log(
+      "stringify -> " +
+        JSON.stringify({
+          user_id: 1,
+          chatVisibility: chatVisibility,
+        })
+    );
     fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiZW1pbGUiLCJpYXQiOjE2OTAzODUwOTQsImV4cCI6MTY5MDk4OTg5NH0.f4S1hXhx9tum1VQnKHXQtZ0QIgfmOJNzhl2ubPk5koQ",
-        accept: "*/*",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiZW1pbGUiLCJpYXQiOjE2OTA5MTA5NjgsImV4cCI6MTY5MTUxNTc2OH0.bof_TRPWRqGlp74NFKo2RXMrpOvz6m9mMFewn1W6sQw",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: "1",
+        user_id: 1,
         chatVisibility: chatVisibility,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("message ->", data);
+      .then((response) => {
+        console.log("response ->", response);
       })
       .catch((error) => {
-        console.error("Erreur lors de la requête Fetch:", error);
+        console.error("Erreur lors de la requête Fetch:" + error.message);
       });
   };
   const validateConfirm = async (): Promise<void> => {
@@ -91,48 +97,48 @@ export function RoomCreate() {
     await fetchCreateRoom(chatVisibility);
   };
 
-	return (
-		<div className="wrapper-new-room">
-			<h2 className="txt-light">Create a new room</h2>
-			<h3 className="txt-light mini-title">Visibility:</h3>
-			<div className="wrapper-row wrapper-vis-btns">
-				<VisibilityButton
-					type={Visibility.PUBLIC}
-					selected={selected}
-					typeCallback={setSelected}
-					clearCallback={clearState}
-				/>
-				<VisibilityButton
-					type={Visibility.PROTECTED}
-					selected={selected}
-					typeCallback={setSelected}
-					clearCallback={clearState}
-				/>
-				<VisibilityButton
-					type={Visibility.PRIVATE}
-					selected={selected}
-					typeCallback={setSelected}
-					clearCallback={clearState}
-				/>
-			</div>
-			{selected === Visibility.PROTECTED && (
-				<>
-					<div id="wrapper-new-room-pswrd">
-						<input
-							type="password"
-							placeholder="set password"
-							onChange={(e) => validatePassword(e.target.value)}
-						/>
-						<input
-							type="password"
-							placeholder="confirm password"
-							onChange={(e) => setConfirm(e.target.value)}
-						/>
-					</div>
-					{errorMessage}
-				</>
-			)}
-			<button onClick={() => validateConfirm()}>create room</button>
-		</div>
-	);
+  return (
+    <div className="wrapper-new-room">
+      <h2 className="txt-light">Create a new room</h2>
+      <h3 className="txt-light mini-title">Visibility:</h3>
+      <div className="wrapper-row wrapper-vis-btns">
+        <VisibilityButton
+          type={Visibility.PUBLIC}
+          selected={selected}
+          typeCallback={setSelected}
+          clearCallback={clearState}
+        />
+        <VisibilityButton
+          type={Visibility.PROTECTED}
+          selected={selected}
+          typeCallback={setSelected}
+          clearCallback={clearState}
+        />
+        <VisibilityButton
+          type={Visibility.PRIVATE}
+          selected={selected}
+          typeCallback={setSelected}
+          clearCallback={clearState}
+        />
+      </div>
+      {selected === Visibility.PROTECTED && (
+        <>
+          <div id="wrapper-new-room-pswrd">
+            <input
+              type="password"
+              placeholder="set password"
+              onChange={(e) => validatePassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="confirm password"
+              onChange={(e) => setConfirm(e.target.value)}
+            />
+          </div>
+          {errorMessage}
+        </>
+      )}
+      <button onClick={() => validateConfirm()}>create room</button>
+    </div>
+  );
 }
