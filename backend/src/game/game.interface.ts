@@ -13,4 +13,5 @@ export interface IGameData {
   velocityX: number;
   velocityY: number;
   padVelocity: number;
+  padWallSeparation: number;
 }
