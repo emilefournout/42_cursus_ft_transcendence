@@ -10,4 +10,5 @@ export interface IGameData {
   ballY: number;
   velocityX: number;
   velocityY: number;
+  padWallSeparation: number;
 }

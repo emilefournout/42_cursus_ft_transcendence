@@ -23,8 +23,9 @@ export class GameService {
     rightPad: 150,
     ballX: 200,
     ballY: 150,
-    velocityX: 10,
-    velocityY: 12,
+    velocityX: Math.random() * 3 + 10,
+    velocityY: Math.random() * 3 + 10,
+    padWallSeparation: 20,
   }
 
   async findGameById(id: string) {
@@ -74,19 +75,47 @@ export class GameService {
     const gameState = this.games.get(game)
     gameState.ballX += gameState.velocityX
     gameState.ballY += gameState.velocityY
-    if (gameState.ballY + gameState.ballRadius > gameState.height
-        || gameState.ballY - gameState.ballRadius < 0) {
+    if (this.checkOutsideCanva(gameState)) {
       gameState.velocityY = -gameState.velocityY
-    }
-    // TODO Check pads and points
-    if((gameState.ballX + gameState.ballRadius > gameState.width - gameState.padWidth*3 && gameState.ballY > gameState.rightPad && gameState.ballY < gameState.rightPad + gameState.padHeight)
-        || gameState.ballX + gameState.ballRadius < gameState.padWidth*3 && gameState.ballY > gameState.leftPad && gameState.ballY < gameState.leftPad + gameState.padHeight)
-        gameState.velocityX = -gameState.velocityX
-    else if (gameState.ballX + gameState.ballRadius > gameState.width
-        || gameState.ballX - gameState.ballRadius < 0) {
+    } else if (this.checkLeftPadCollision(gameState)) {
       gameState.velocityX = -gameState.velocityX
+      gameState.ballX = gameState.padWallSeparation + gameState.padWidth;
+    } else if (this.checkRightPadCollision(gameState)) {
+      gameState.velocityX = -gameState.velocityX
+      gameState.ballX = gameState.width - gameState.padWallSeparation - gameState.padWidth;;
+    } else if (gameState.ballX + gameState.ballRadius > gameState.width) {
+      // TODO Add points to winner
+      gameState.ballX = 400;
+      gameState.ballY = 150;
+      gameState.velocityX = -(Math.random() * 3 + 10)
+      gameState.velocityY = Math.random() * 3 + 10
+    } else if (gameState.ballX - gameState.ballRadius < 0) {
+      gameState.ballX = 200;
+      gameState.ballY = 150;
+      gameState.velocityX = Math.random() * 3 + 10
+      gameState.velocityY = Math.random() * 3 + 10
+    }
+    return gameState
+  }
+
+  private checkOutsideCanva(gameState: IGameData) {
+    return gameState.ballY + gameState.ballRadius > gameState.height
+      || gameState.ballY - gameState.ballRadius < 0;
+  }
+  
+    private checkLeftPadCollision(gameState: IGameData): boolean {
+      return (gameState.ballX + gameState.ballRadius >= gameState.padWallSeparation // Desde la izquierda
+        && gameState.ballX  - gameState.ballRadius <= gameState.padWallSeparation + gameState.padWidth  // Desde la derecha
+        && gameState.ballY >= gameState.leftPad
+        && gameState.ballY <= gameState.leftPad + gameState.padHeight);
     }
 
-    return gameState
+  private checkRightPadCollision(gameState: IGameData) {
+    return (gameState.ballX + gameState.ballRadius >= gameState.width - gameState.padWallSeparation - gameState.padWidth // Desde la izquierda
+      && gameState.ballX - gameState.ballRadius <= gameState.width - gameState.padWallSeparation // Desde la derecha
+      && (gameState.ballY - gameState.ballRadius >= gameState.rightPad
+        || gameState.ballY + gameState.ballRadius >= gameState.rightPad)
+      && (gameState.ballY + gameState.ballRadius <= gameState.rightPad + gameState.padHeight
+        || gameState.ballY - gameState.ballRadius <= gameState.rightPad + gameState.padHeight));
   }
 }
