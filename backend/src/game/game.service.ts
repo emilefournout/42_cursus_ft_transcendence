@@ -25,9 +25,9 @@ export class GameService {
     rightPad: 150,
     ballX: 200,
     ballY: 150,
-    padVelocity: 10,
-    velocityX: Math.random() * 3 + 10,
-    velocityY: Math.random() * 3 + 10,
+    padVelocity: 30,
+    velocityX: Math.random() + 3,
+    velocityY: Math.random() + 3,
     padWallSeparation: 20,
   }
 
@@ -92,19 +92,18 @@ export class GameService {
       // TODO Add points to winner
       gameState.ballX = 400;
       gameState.ballY = 150;
-      gameState.velocityX = -(Math.random() * 3 + 10)
-      gameState.velocityY = Math.random() * 3 + 10
+      gameState.velocityX = -(Math.random() + 3)
+      gameState.velocityY = Math.random() + 3
     } else if (gameState.ballX - gameState.ballRadius < 0) {
       gameState.ballX = 200;
       gameState.ballY = 150;
-      gameState.velocityX = Math.random() * 3 + 10
-      gameState.velocityY = Math.random() * 3 + 10
+      gameState.velocityX = Math.random() + 3
+      gameState.velocityY = Math.random() + 3
     }
     return gameState
   }
 
   movePad({accessToken, gameId, direction}: any){
-
     const playerId = JSON.parse(atob(accessToken.split('.')[1])).sub;
     const gameState = this.games.get(gameId)
     if(gameState === undefined)
@@ -132,12 +131,12 @@ export class GameService {
       || gameState.ballY - gameState.ballRadius < 0;
   }
   
-    private checkLeftPadCollision(gameState: IGameData): boolean {
-      return (gameState.ballX + gameState.ballRadius >= gameState.padWallSeparation // Desde la izquierda
-        && gameState.ballX  - gameState.ballRadius <= gameState.padWallSeparation + gameState.padWidth  // Desde la derecha
-        && gameState.ballY >= gameState.leftPad
-        && gameState.ballY <= gameState.leftPad + gameState.padHeight);
-    }
+  private checkLeftPadCollision(gameState: IGameData): boolean {
+    return (gameState.ballX + gameState.ballRadius >= gameState.padWallSeparation // Desde la izquierda
+      && gameState.ballX  - gameState.ballRadius <= gameState.padWallSeparation + gameState.padWidth  // Desde la derecha
+      && gameState.ballY >= gameState.leftPad
+      && gameState.ballY <= gameState.leftPad + gameState.padHeight);
+  }
 
   private checkRightPadCollision(gameState: IGameData) {
     return (gameState.ballX + gameState.ballRadius >= gameState.width - gameState.padWallSeparation - gameState.padWidth // Desde la izquierda
