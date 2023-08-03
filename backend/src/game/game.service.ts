@@ -29,6 +29,8 @@ export class GameService {
     velocityX: Math.random() + 3,
     velocityY: Math.random() + 3,
     padWallSeparation: 20,
+    player1Score: 0,
+    player2Score: 0,
   }
 
   async findGameById(id: string) {
@@ -89,12 +91,13 @@ export class GameService {
       gameState.velocityX = -gameState.velocityX
       gameState.ballX = gameState.width - gameState.padWallSeparation - gameState.padWidth;;
     } else if (gameState.ballX + gameState.ballRadius > gameState.width) {
-      // TODO Add points to winner
+      gameState.player1Score += 1
       gameState.ballX = 400;
       gameState.ballY = 150;
       gameState.velocityX = -(Math.random() + 3)
       gameState.velocityY = Math.random() + 3
     } else if (gameState.ballX - gameState.ballRadius < 0) {
+      gameState.player2Score += 1
       gameState.ballX = 200;
       gameState.ballY = 150;
       gameState.velocityX = Math.random() + 3
