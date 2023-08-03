@@ -1,0 +1,21 @@
+.wrapper-room-bar {
+	width: 100%;
+	height: var(--NavBar-Height);
+	padding-right: 32px;
+
+	justify-content: space-between;
+	align-items: center;
+
+	color: var(--Browned-Text);
+	background-color: var(--Honey-Yellow);
+	border-radius: 32px 0 0 32px;
+}
+
+.wrapper-room-bar > span {
+	flex-grow: 1;
+	text-align: center;
+}
+
+.wrapper-room-bar > img {
+	border-radius: var(--Default-BR);
+}

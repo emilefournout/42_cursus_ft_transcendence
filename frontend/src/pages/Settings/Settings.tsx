@@ -1,9 +1,18 @@
 import React from "react";
 import { NavBar } from "../../components/NavBar/NavBar";
+import { Link } from "react-router-dom";
 export function Settings() {
   return (
     <>
-      <NavBar/>
+      settings
+      <Link to="/login">
+        <button
+          className="btn btn-fixed-height"
+          onClick={() => localStorage.removeItem("access_token")}
+        >
+          Disconnect
+        </button>
+      </Link>
       {/*Avatar*/}
       {/*Change avatar button*/}
       {/*separator*/}

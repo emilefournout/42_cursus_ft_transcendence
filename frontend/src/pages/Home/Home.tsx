@@ -1,19 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import React from "react";
-import Chat from "../../components/Chat";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/NavBar/NavBar";
 
 export function Home() {
+  const location = useLocation();
   return (
     <>
-    <SEO title={"Pong - Home"} description={"Home of the user"} />
-      <NavBar/>
-      <h1 className="title">We don't know what to put here</h1>
-      {/* <Chat /> */}
-      <Link to="/">
-        <button className="btn btn-fixed-height" onClick={() => localStorage.removeItem('access_token')}>Disconnect</button>
-      </Link>
+      <SEO title={"Pong - Home"} description={"Home of the user"} />
+      <NavBar />
+      <Outlet />
+      {location.pathname === "/" ? <Navigate to="/settings" /> : <></>}
     </>
   );
 }
