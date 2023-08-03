@@ -10,7 +10,7 @@ export function Home() {
       <SEO title={"Pong - Home"} description={"Home of the user"} />
       <NavBar />
       <Outlet />
-      {location.pathname === "/" ? <Navigate to="/settings" /> : <></>}
+      {location.pathname === "/" ? <Navigate to="/userAccount" /> : <></>}
     </>
   );
 }
