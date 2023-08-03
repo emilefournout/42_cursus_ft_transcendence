@@ -138,12 +138,14 @@ export class GameService {
     return (gameState.ballX + gameState.ballRadius >= gameState.padWallSeparation // Desde la izquierda
       && gameState.ballX  - gameState.ballRadius <= gameState.padWallSeparation + gameState.padWidth  // Desde la derecha
       && gameState.ballY >= gameState.leftPad
-      && gameState.ballY <= gameState.leftPad + gameState.padHeight);
+      && gameState.ballY <= gameState.leftPad + gameState.padHeight
+      && gameState.velocityX < 0);
   }
 
   private checkRightPadCollision(gameState: IGameData) {
     return (gameState.ballX + gameState.ballRadius >= gameState.width - gameState.padWallSeparation - gameState.padWidth // Desde la izquierda
-      && gameState.ballX - gameState.ballRadius <= gameState.width - gameState.padWallSeparation // Desde la derecha
+      && gameState.ballX - gameState.ballRadius <= gameState.width - gameState.padWallSeparation  // Desde la derecha
+      && gameState.velocityX > 0
       && (gameState.ballY - gameState.ballRadius >= gameState.rightPad
         || gameState.ballY + gameState.ballRadius >= gameState.rightPad)
       && (gameState.ballY + gameState.ballRadius <= gameState.rightPad + gameState.padHeight
