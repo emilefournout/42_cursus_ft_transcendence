@@ -31,6 +31,11 @@ export class GameService {
     padWallSeparation: 20,
   }
 
+  findActiveGames(): string[]
+  {
+    return Array.from(this.games.keys());
+  }
+  
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
       where: {
