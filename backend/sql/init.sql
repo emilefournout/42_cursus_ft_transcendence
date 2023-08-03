@@ -74,6 +74,8 @@ CREATE TABLE "ChatMember" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "administrator" BOOLEAN NOT NULL DEFAULT false,
     "owner" BOOLEAN NOT NULL DEFAULT false,
+    "muted" BOOLEAN NOT NULL DEFAULT false,
+    "mutedExpiringDate" TIMESTAMP(3),
 
     CONSTRAINT "ChatMember_pkey" PRIMARY KEY ("chatId","userId")
 );

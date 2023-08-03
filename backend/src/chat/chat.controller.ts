@@ -10,6 +10,8 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 import { GetUser } from 'src/auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { userInfo } from 'os';
+import { MuteUserDto } from './dto/mute-user.dto';
+import { UnmuteUserDto } from './dto/unmute-user.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -96,5 +98,23 @@ export class ChatController {
     @ApiOperation({summary: 'Updates chat member privileges', description: 'In role, owner and administrator are optional, but at least one must be provided'})
     async updateChatMember(@Param('id', ParseIntPipe) chatId, @Body() updateChatMember: UpdateChatMemberDto) {
         await this.memberShipService.updateChatMember(updateChatMember.userId, chatId, updateChatMember.role)
+    }
+
+    @Post(':id/mute')
+    @UseGuards(JwtAuthGuard) // TODO - Check
+    @ApiBearerAuth()
+    @ApiParam({name: 'id'})
+    @ApiOperation({summary: 'Mutes a chat member for a limited time'})
+    async muteChatMember(@Param('id', ParseIntPipe) chatId, @Body() muteUserDto : MuteUserDto) {
+        await this.memberShipService.muteUser(chatId, muteUserDto.userId, muteUserDto.muteTime);
+    }
+
+    @Delete(':id/mute')
+    @UseGuards(JwtAuthGuard) // TODO - Check
+    @ApiBearerAuth()
+    @ApiParam({name: 'id'})
+    @ApiOperation({summary: 'Removes the mutes a chat member for a limited time'})
+    async unmuteChatMember(@Param('id', ParseIntPipe) chatId, @Body() muteUserDto : UnmuteUserDto) {
+        await this.memberShipService.unmuteUser(chatId, muteUserDto.userId);
     }
 }
