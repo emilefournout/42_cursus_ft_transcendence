@@ -12,8 +12,8 @@ export enum Visibility {
 
 enum passwordStrength {
   EMPTY = "Choose a password",
-  WEAK = "Is Not Strong Password: : 8 characters, 1 lowercase, 1 uppercase, 1 number, 1 symbol",
-  STRONG = "",
+  WEAK = "Not Strong enough!\nPassword must have: 8 characters minimum, 1 lowercase, 1 uppercase, 1 number and 1 symbol.",
+  STRONG = "That's one strong password!",
 }
 export function RoomCreate() {
   const [selected, setSelected] = useState<Visibility>(Visibility.PUBLIC);
