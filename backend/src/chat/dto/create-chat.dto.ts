@@ -17,6 +17,13 @@ export class CreateChatDto {
 
   @IsOptional()
   @IsString()
+  @ApiProperty({
+    type: String
+  })
+  name?: string;
+
+  @IsOptional()
+  @IsString()
   @ApiPropertyOptional({
     type: String
   })
