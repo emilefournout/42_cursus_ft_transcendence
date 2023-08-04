@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { UserService } from 'src/user/user.service';
@@ -8,6 +8,7 @@ import { ChatRoleDto } from './dto/update-chat-member.dto';
 
 @Injectable()
 export class MembershipService {
+
   constructor(private prisma: PrismaService, private chatService: ChatService, private userService: UserService){}
 
   async findChatMemberByIds(chatId: number, userId: number) {
@@ -131,5 +132,55 @@ export class MembershipService {
     } catch(error) {
       throw new ForbiddenException('Could not update user');
     }
+  }
+  
+  async muteUser(chatId: number, userId: number, muteTime: number) {
+      const chatMember = await this.prisma.chatMember.findFirst({
+        where: {
+          chatId: chatId,
+          userId: userId
+        }
+      })
+      if (!chatMember)
+        throw new NotFoundException("User not found")
+      if (chatMember.administrator)
+        throw new BadRequestException("User not found")
+      const muteDate = new Date(Date.now())
+      muteDate.setTime(muteDate.getTime() + muteTime)
+      await this.prisma.chatMember.update({
+        data: {
+          muted: true,
+          mutedExpiringDate: muteDate
+        },
+        where: {
+          chatId_userId: {
+            chatId: chatId,
+            userId: userId
+          }
+        }
+      })
+  }
+
+  async unmuteUser(chatId: number, userId: number) {
+    const chatMember = await this.prisma.chatMember.findFirst({
+      where: {
+        chatId: chatId,
+        userId: userId
+      }
+    })
+    if (!chatMember)
+      throw new NotFoundException("User not found")
+    await this.prisma.chatMember.update({
+      data: {
+        muted: false,
+        mutedExpiringDate: null
+      },
+      where: {
+        chatId_userId: {
+          chatId: chatId,
+          userId: userId
+        }
+      }
+    })
   }
 }
