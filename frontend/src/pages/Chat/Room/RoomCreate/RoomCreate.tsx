@@ -12,8 +12,8 @@ export enum Visibility {
 
 enum passwordStrength {
   EMPTY = "Choose a password",
-  WEAK = "Is Not Strong Password: : 8 characters, 1 lowercase, 1 uppercase, 1 number, 1 symbol",
-  STRONG = "",
+  WEAK = "Not Strong enough!\nPassword must have: 8 characters minimum, 1 lowercase, 1 uppercase, 1 number and 1 symbol.",
+  STRONG = "That's one strong password!",
 }
 export function RoomCreate() {
   const [selected, setSelected] = useState<Visibility>(Visibility.PUBLIC);
@@ -61,8 +61,7 @@ export function RoomCreate() {
     fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiZW1pbGUiLCJpYXQiOjE2OTA5MTA5NjgsImV4cCI6MTY5MTUxNTc2OH0.bof_TRPWRqGlp74NFKo2RXMrpOvz6m9mMFewn1W6sQw",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -135,7 +134,9 @@ export function RoomCreate() {
               onChange={(e) => setConfirm(e.target.value)}
             />
           </div>
-          {errorMessage}
+					<div id="txt-password-strength">
+						{errorMessage}
+					</div>
         </>
       )}
       <button onClick={() => validateConfirm()}>create room</button>
