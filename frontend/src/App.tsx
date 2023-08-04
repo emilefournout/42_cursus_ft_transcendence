@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
 import { Home } from "./pages/Home/Home";
 import { Login } from "./pages/Login/Login";
@@ -15,27 +15,31 @@ import { GamePlayPage } from "./pages/Game/GamePlayPage/GamePlayPage";
 import { Game } from "./pages/Game/Game";
 import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
+import { NavBar } from "./components/NavBar/NavBar";
+import { UserProfilePage } from "./pages/UserProfilePage/UserProfilePage";
 
 function App() {
   return (
     <>
       <HelmetProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route path="/game" element={<Game />}>
-            <Route path="" element={<GameHomePage />} />
-            <Route path=":id" element={<GamePlayPage />} />
-            <Route path="matchmaking" element={<GameMatchmakingPage />} />
+          <Route path="/" element={<Home />}>
+            <Route path="game" element={<Game />}>
+              <Route path="" element={<GameHomePage />} />
+              <Route path=":id" element={<GamePlayPage />} />
+              <Route path="matchmaking" element={<GameMatchmakingPage />} />
+            </Route>
+            <Route path="chats" element={<ChatPage />}>
+              <Route path="create" element={<RoomCreate />} />
+              {/*<Route path=":id" element={<Room />} />*/}
+              {/*Temp Route for coding ->*/}
+              <Route path="room" element={<Room />} />
+            </Route>
+            <Route path="settings" element={<Settings />} />
+            <Route path="userAccount" element={<UserProfilePage />} />
           </Route>
-          <Route path="/chats" element={<ChatPage />}>
-            <Route path="create" element={<RoomCreate />} />
-            {/*<Route path=":id" element={<Room />} />*/}
-            {/*Temp Route for coding ->*/}
-            <Route path="room" element={<Room />} />
-          </Route>
-          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HelmetProvider>

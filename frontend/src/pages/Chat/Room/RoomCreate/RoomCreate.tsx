@@ -61,8 +61,7 @@ export function RoomCreate() {
     fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiZW1pbGUiLCJpYXQiOjE2OTA5MTA5NjgsImV4cCI6MTY5MTUxNTc2OH0.bof_TRPWRqGlp74NFKo2RXMrpOvz6m9mMFewn1W6sQw",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

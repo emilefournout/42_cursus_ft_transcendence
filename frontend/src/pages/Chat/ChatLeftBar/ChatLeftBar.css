@@ -37,4 +37,5 @@
     border-bottom-right-radius: 32px;
     border-top: 2px solid;
     border-color: var(--Browned-Text);
+    overflow-y : auto;
 }
