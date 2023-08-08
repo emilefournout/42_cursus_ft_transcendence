@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id                   Int                      @id @default(autoincrement())
-  intraname            String                   // Not unique for testing, @unique
+  intraname            String // Not unique for testing, @unique
   username             String                   @unique
   createdAt            DateTime                 @default(now())
   avatarURL            String? // URL to Avatar
@@ -76,13 +76,16 @@ model Avatar {
 }
 
 model ChatMember {
-  userId        Int
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chatId        Int
-  chat          Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
-  administrator Boolean @default(false)
-  owner         Boolean @default(false)
+  userId            Int
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatId            Int
+  chat              Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  createdAt         DateTime  @default(now())
+  administrator     Boolean   @default(false)
+  owner             Boolean   @default(false)
+  muted             Boolean   @default(false)
+  mutedExpiringDate DateTime?
+
   @@id([chatId, userId])
 }
 

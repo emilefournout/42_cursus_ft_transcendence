@@ -134,7 +134,9 @@ export function RoomCreate() {
               onChange={(e) => setConfirm(e.target.value)}
             />
           </div>
-          {errorMessage}
+					<div id="txt-password-strength">
+						{errorMessage}
+					</div>
         </>
       )}
       <button onClick={() => validateConfirm()}>create room</button>

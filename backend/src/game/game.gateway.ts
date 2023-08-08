@@ -38,8 +38,18 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             game.player2.client.join(game.game)
             this.server.to(game.game).emit('game_found', game.game)
 
-            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 100)
+            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 10)
         }
     }
 
+    @SubscribeMessage('move_user')
+    async handleKeyPressed(client: Socket, @MessageBody() data: any){
+        this.gameService.movePad(data)
+    }
+
 }
+/* gameSocket.emit("move_user", {
+          playerId: localStorage.getItem("access_token"),
+          gameId: id,
+          direction: "down",
+        });*/

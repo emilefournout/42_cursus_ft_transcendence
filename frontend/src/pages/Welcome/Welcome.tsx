@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Welcome.css";
 import iconVect from "./change-icon.svg";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,14 @@ export function Welcome() {
   const [image, setImage] = useState<File>();
   const [code2fa, setCode2fa] = useState("");
   const navigate = useNavigate();
+  const navigateError = useNavigate();
+
+  useEffect(() => {
+    if (!Cookies.get("42token") || Cookies.get("42token") == "j:null") {
+      Cookies.remove("42token");
+      navigateError("/cookieError");
+    }
+  });
 
   function saveImage(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.length) {

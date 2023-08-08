@@ -13,9 +13,9 @@ import { GameHomePage } from "./pages/Game/GameHomePage/GameHomePage";
 import { GameMatchmakingPage } from "./pages/Game/GameMatchmakingPage/GameMatchmakingPage";
 import { GamePlayPage } from "./pages/Game/GamePlayPage/GamePlayPage";
 import { Game } from "./pages/Game/Game";
+import { CookieError } from "./pages/Error/CookieError";
 import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
-import { NavBar } from "./components/NavBar/NavBar";
 
 import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
 
@@ -42,6 +42,8 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="userAccount" element={<UserProfilePage />} />
           </Route>
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/cookieError" element={<CookieError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HelmetProvider>

@@ -17,17 +17,24 @@ export function GamePlayPage() {
   };
 
   const [state, updateGameState] = useState(boardState);
+  const [player1Score, updatePlayer1Score] = useState(0);
+  const [player2Score, updatePlayer2Score] = useState(0);
 
   useEffect(() => {
     gameSocket.off("update");
     gameSocket.on("update", (data: any) => {
       updateGameState(data);
+      updatePlayer1Score(data.player1Score);
+      updatePlayer2Score(data.player2Score);
     });
   }, [])
 
   return (
     <>
       <h1 className="title">Game</h1>
+      <div className="title">
+        {player1Score} - {player2Score}
+      </div>
       <GameCanvas {...state} />
     </>
   );

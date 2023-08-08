@@ -11,11 +11,6 @@ import {
 
 export class CreateChatDto {
   @IsDefined()
-  @IsInt()
-  @ApiProperty()
-  user_id: number;
-
-  @IsDefined()
   @IsEnum(ChatVisibility)
   @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
