@@ -1,5 +1,3 @@
-import React, { JSX, useState } from "react";
-import { NavBar } from "../../components/NavBar/NavBar";
 import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 import SEO from "../../components/Seo";
 import "./Chat.css";

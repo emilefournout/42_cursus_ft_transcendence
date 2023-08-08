@@ -1,10 +1,12 @@
 import React from "react";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { Link } from "react-router-dom";
+import { Avatar } from "./Avatar";
 export function Settings() {
   return (
     <>
       settings
+      <Avatar />
       <Link to="/login">
         <button
           className="btn btn-fixed-height"
@@ -13,7 +15,6 @@ export function Settings() {
           Disconnect
         </button>
       </Link>
-      {/*Avatar*/}
       {/*Change avatar button*/}
       {/*separator*/}
       {/*username*/}

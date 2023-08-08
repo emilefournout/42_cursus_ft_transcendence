@@ -1,7 +1,7 @@
 import React, { JSX, useEffect, useState } from "react";
 import "./ChatLeftBar.css";
 import NewChatIcon from "./NewChatIcon.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Visibility } from "../Room/RoomCreate/RoomCreate";
 
 interface Chat {
@@ -10,20 +10,21 @@ interface Chat {
   visibility: Visibility;
 }
 export function LeftBar() {
+  const navigate = useNavigate();
+
   const [chats, setChats] = useState([]);
   useEffect(() => {
-    return () => {
-      fetch("http://localhost:3000/chat/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setChats(data);
-        });
-    };
+    fetch("http://localhost:3000/chat/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setChats(data);
+      });
+    return () => {};
   }, []);
 
   return (
@@ -37,7 +38,16 @@ export function LeftBar() {
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
         {chats.map((chat: Chat) => {
-          return <div>{chat.id}</div>;
+          return (
+            <div
+              key={chat.id}
+              onClick={() => {
+                navigate(`/chats/${chat.id}`);
+              }}
+            >
+              {chat.id}
+            </div>
+          );
         })}
       </div>
       {/*</Link>*/}

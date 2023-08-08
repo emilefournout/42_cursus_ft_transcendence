@@ -16,7 +16,8 @@ import { Game } from "./pages/Game/Game";
 import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
 import { NavBar } from "./components/NavBar/NavBar";
-import { UserProfilePage } from "./pages/UserProfilePage/UserProfilePage";
+
+import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
 
 function App() {
   return (
@@ -33,9 +34,10 @@ function App() {
             </Route>
             <Route path="chats" element={<ChatPage />}>
               <Route path="create" element={<RoomCreate />} />
-              {/*<Route path=":id" element={<Room />} />*/}
+              <Route path=":id" element={<Room />} />
+              <Route path=":id/param" element={<RoomParam />} />
               {/*Temp Route for coding ->*/}
-              <Route path="room" element={<Room />} />
+              {/*<Route path="room" element={<Room />} />*/}
             </Route>
             <Route path="settings" element={<Settings />} />
             <Route path="userAccount" element={<UserProfilePage />} />

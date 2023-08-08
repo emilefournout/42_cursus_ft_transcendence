@@ -5,7 +5,7 @@ export function UserProfilePage() {
   return (
     <>
       <ProfileLeftBar />
-      <UserProfile />
+      {/*<UserProfile />*/}
     </>
   );
 }
