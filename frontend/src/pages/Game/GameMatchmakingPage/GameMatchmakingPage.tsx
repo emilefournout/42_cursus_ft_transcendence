@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "../../../components/Seo";
 import { GameSocket } from "../../../services/socket";
+import "./GameMatchmakingPage.css"
 
 export function GameMatchmakingPage() {
   const navigate = useNavigate();
@@ -26,11 +27,11 @@ export function GameMatchmakingPage() {
         title="Pong - Matchmaking"
         description="Start a game with someone from the Internet or one of your friends."
       />
-      <div className="container">
-        <div className="loader"></div>
-        <p className="title">Finding new rival for you</p>
+      <div className="wrapper-matchmaking">
+        <div className="matchmaking-loader"></div>
+        <p className="matchmaking-scaling">Finding new rival for you</p>
         <Link to="/game">
-          <button className="btn btn-fixed-height">Cancel</button>
+          <button className="btn btn-fixed-height matchmaking-scaling">Cancel</button>
         </Link>
       </div>
     </>
