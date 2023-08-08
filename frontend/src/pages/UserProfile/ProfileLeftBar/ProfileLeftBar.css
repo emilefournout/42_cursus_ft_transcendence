@@ -1,0 +1,11 @@
+.profileLeftBar {
+    width: 45%;
+    position: absolute;
+    left:0px;
+}
+
+.input-add-friend {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}

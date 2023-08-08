@@ -10,7 +10,10 @@ export function Settings() {
       <Link to="/login">
         <button
           className="btn btn-fixed-height"
-          onClick={() => localStorage.removeItem("access_token")}
+          onClick={() => {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("user_id");
+          }}
         >
           Disconnect
         </button>
