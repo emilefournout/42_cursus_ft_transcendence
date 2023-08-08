@@ -23,7 +23,7 @@ export class ChatService {
     return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
   }
 
-  async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string) {
+  async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string, name?: string) {
     if(chatVisibility === 'PROTECTED' && !password)
       throw  new BadRequestException('No password provided for protected chat');
     else if (chatVisibility === 'PROTECTED' && password)
@@ -34,6 +34,7 @@ export class ChatService {
     data: {
         visibility: chatVisibility,
         password: password,
+        name: name,
         members: {
         create: [{ userId: user_id, administrator: true, owner: true }]
         }

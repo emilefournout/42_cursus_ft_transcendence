@@ -47,7 +47,7 @@ export class ChatController {
     @ApiOperation({summary: "Adds a new chat room", description: 'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'})
     async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto) {
         try {
-            await this.chatService.createChat(user.id, createChatDto.chatVisibility, createChatDto.password);
+            await this.chatService.createChat(user.id, createChatDto.chatVisibility, createChatDto.password, createChatDto.name);
         } catch (error) {
             console.log(error)
             throw new ForbiddenException("Chat could not be created");

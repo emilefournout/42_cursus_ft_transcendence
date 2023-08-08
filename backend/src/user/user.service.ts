@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable, NotAcceptableException, NotFoundExcepti
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AssignAchievementDto } from './dto/assign-achievement.dto';
 
 @Injectable()
 export class UserService {
@@ -177,6 +178,59 @@ export class UserService {
       })
     } catch(error) {
       throw new ForbiddenException('Could not delete friendship user')
+    }
+  }
+
+  async getUserFriendships(user_id: number) {
+    const friendships = await this.prisma.userFriendship.findMany({
+      where: {
+        OR: [
+          {requester_id: user_id},
+          {adressee_id: user_id}
+        ]
+      }
+    })
+    if(!friendships)
+      throw new NotFoundException('No friendships found for user')
+    return friendships
+  }
+
+  async findAchievementByName(name: string){
+    const achievement = await  this.prisma.achievement.findUnique({
+      where: {
+        name: name
+      }
+    })
+    return achievement;
+  }
+
+  async assingAchievementToUser(id: number, achievementName: string){
+    const user = await this.findUserById(id)
+    const achievement = await  this.findAchievementByName(achievementName)
+    if(!user)
+      throw new NotFoundException('User not found')
+    else if(!achievement)
+      throw new NotFoundException('Achievement not found')
+    
+    try {
+      await this.prisma.user.update({
+        where: {id: id},
+        data: {
+          achievements: {
+            connect: [{id: achievement.id}]
+          }
+        }
+      })
+      await this.prisma.achievement.update({
+        where: {id: achievement.id},
+        data: {
+          users: {
+            connect: [{id: id}]
+          }
+        }
+      })
+    } catch (error) {
+      throw new ForbiddenException('Could not add achievement')
     }
   }
 }

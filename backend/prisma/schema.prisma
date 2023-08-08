@@ -22,6 +22,7 @@ model User {
   games                Game[]
   chatMember           ChatMember[]
   messages             Message[]
+  achievements         Achievement[]
 }
 
 model UserFriendship {
@@ -32,6 +33,13 @@ model UserFriendship {
   status       FriendshipStatus @default(PENDING)
 
   @@id([requester_id, adressee_id])
+}
+
+model Achievement {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String
+  users        User[]
 }
 
 model UserBlocked {
