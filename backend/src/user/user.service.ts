@@ -53,6 +53,17 @@ export class UserService {
     return UserBasicInfoDto.fromUser(user);
   }
 
+  async getUserInfoByName(username: string){
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username
+      }
+    })
+    if(!user)
+      throw new NotFoundException('User not found')
+    return UserBasicInfoDto.fromUser(user);
+  }
+
   async deleteUser(id: number) {
     const user = await this.prisma.user.delete({
       where: {

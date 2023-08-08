@@ -49,6 +49,16 @@ export class UserController {
     return this.findUser(user.sub)
   }
 
+
+  @Get(':username')
+  @UseGuards(JwtAuthGuard)
+  @ApiParam({name: 'username'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: 'Returns a basic info about user by its username.'})
+  async getUserInfoByName(@Param('username') username: string) {
+    return await this.userService.getUserInfoByName(username)
+  }
+
   @Delete('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
