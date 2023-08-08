@@ -46,7 +46,7 @@ export class UserController {
   @ApiOperation({ summary: 'Returns a basic info about the user who requested.' })
   @ApiResponse({ type: UserBasicInfoDto })
   async findUserMe(@GetUser() user) {
-    return this.findUser(user.id)
+    return this.findUser(user.sub)
   }
 
   @Delete('me')
@@ -57,7 +57,7 @@ export class UserController {
     let userDeleted;
 
     try {
-      userDeleted = await this.userService.deleteUser(user.id); 
+      userDeleted = await this.userService.deleteUser(user.sub); 
     } catch (error) {
       throw new UserNotDeletedException();
     }
@@ -73,7 +73,7 @@ export class UserController {
     let userUpdated;
     
     try {
-      userUpdated = await this.userService.updateUser(user.id, updateUserDto);
+      userUpdated = await this.userService.updateUser(user.sub, updateUserDto);
     } catch (error) {
       throw new UserNotUpdatedException();
     }
@@ -92,7 +92,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({summary: "Gets user friendships.", description: 'If no friendships are found, 404 will be returned'})
   async getUserFriendships(@GetUser() user) {
-    return await this.userService.getUserFriendships(user.id);
+    return await this.userService.getUserFriendships(user.sub);
   }
 
   @Post('/block/:id')
@@ -101,7 +101,7 @@ export class UserController {
   @ApiOperation({summary: "Blocks the user with id for the sender", description: "The user with the id will be blocked"})
   @UseGuards(JwtAuthGuard)
   async addUserBlocked(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
-    await this.userService.addUserBlocked(user.id, id);
+    await this.userService.addUserBlocked(user.sub, id);
   }
 
   @Delete('/block/:id')
@@ -110,7 +110,7 @@ export class UserController {
   @ApiOperation({summary: "Removes the block to id for the sender", description: "The user with the id will be unblocked"})
   @UseGuards(JwtAuthGuard)
   async deleteUserBlocked(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
-    await this.userService.deleteUserBlocked(user.id, id);
+    await this.userService.deleteUserBlocked(user.sub, id);
   }
 
   @Post('/friends/send/:id')
@@ -119,7 +119,7 @@ export class UserController {
   @ApiOperation({summary: "Invites id to be friends", description: "The user with the id will recieve a friendship request"})
   @UseGuards(JwtAuthGuard)
   async addUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
-    await this.userService.addUserFriends(user.id, id);
+    await this.userService.addUserFriends(user.sub, id);
   }
 
   @Patch('/friends/accept/:id')
@@ -128,7 +128,7 @@ export class UserController {
   @ApiOperation({summary: "Accepts the invitation from id", description: "The user with the id will have its invitation accepted"})
   @UseGuards(JwtAuthGuard)
   async acceptUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
-    await this.userService.acceptUserFriends(user.id, id);;
+    await this.userService.acceptUserFriends(user.sub, id);;
   }
 
   @Delete('/friends/decline/:id')
@@ -137,6 +137,6 @@ export class UserController {
   @ApiOperation({summary: "Declines id user invitation", description: "The user invitation to be friends from id with the will be declined"})
   @UseGuards(JwtAuthGuard)
   async declineUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
-    await this.userService.declineUserFriends(user.id, id);;
+    await this.userService.declineUserFriends(user.sub, id);;
   }
 }
