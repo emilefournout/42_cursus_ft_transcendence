@@ -29,6 +29,12 @@ export class UserController {
   
   constructor(private userService: UserService) {}
 
+  @Get('ranking')
+  @ApiOperation({ summary: 'Returns a the top ranking.' })
+  async getRanking() : Promise<UserBasicInfoDto[]> {
+    return await this.userService.getRanking();
+  }
+
   @Get('info/:id')
   @ApiParam({name: 'id'})
   @ApiOperation({ summary: 'Returns a basic info about a user.' })

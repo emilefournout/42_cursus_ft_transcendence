@@ -15,6 +15,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "intraname" TEXT NOT NULL,
     "username" TEXT NOT NULL,
+    "wins" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "avatarURL" TEXT,
     "status" "OnlineStatus" NOT NULL DEFAULT 'OFFLINE',
