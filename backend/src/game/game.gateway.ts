@@ -6,6 +6,9 @@ import {
 } from "@nestjs/websockets"
 import { Server, Socket } from "socket.io"
 import { GameService } from "./game.service"
+import { JwtService } from "@nestjs/jwt"
+import { JwtPayload } from "src/auth/interface/jwtpayload.dto"
+import { ConfigService } from "@nestjs/config"
 
 @WebSocketGateway(3002, {
     cors: { origin: '*'},
@@ -13,7 +16,9 @@ import { GameService } from "./game.service"
 export class GameGateway 
 implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    constructor (private gameService: GameService) {}
+    constructor (private gameService: GameService,
+        /*private configService: ConfigService,*/
+        private jwtService: JwtService) {}
     
     @WebSocketServer()
     server: Server
@@ -23,10 +28,21 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     }
 
     handleConnection(client: Socket, ...args: any[]) {
-        console.log('Connection game.gateway from ' + client.id)
+        console.log('Connection received from ' + client.id)
+        try {
+            const token = client.handshake.headers.authentication as string
+            const payload: JwtPayload = this.jwtService.verify(token)
+            this.gameService.registerConnection(client.id, client, payload.sub)
+        } catch (error) {
+            console.log('Error when verifying token')
+            client.disconnect()
+            return ;
+        }
+        console.log('Connection stablished game.gateway with ' + client.id)
     }
 
     handleDisconnect(client: Socket) {
+        this.gameService.unregisterConnection(client.id)
         console.log('Disconneted from ' + client.id)
     }
 
@@ -48,8 +64,3 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     }
 
 }
-/* gameSocket.emit("move_user", {
-          playerId: localStorage.getItem("access_token"),
-          gameId: id,
-          direction: "down",
-        });*/

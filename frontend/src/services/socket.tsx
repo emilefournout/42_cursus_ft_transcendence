@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { io, Socket } from 'socket.io-client'
 
 export class ChatSocket {
@@ -24,7 +25,14 @@ export class GameSocket {
     private socketIo;
 
     private constructor(){
-        this.socketIo = io('http://localhost:3002')
+        const access_token = localStorage.getItem('access_token')
+        if (!access_token)
+            throw new Error("Access token not found")
+        this.socketIo = io('http://localhost:3002', {
+            extraHeaders: {
+                authentication: access_token
+            }
+        })
     }
 
     public static getInstance(){
