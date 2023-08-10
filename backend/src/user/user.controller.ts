@@ -29,6 +29,12 @@ export class UserController {
   
   constructor(private userService: UserService) {}
 
+  @Get('ranking')
+  @ApiOperation({ summary: 'Returns a the top ranking.' })
+  async getRanking() : Promise<UserBasicInfoDto[]> {
+    return await this.userService.getRanking();
+  }
+
   @Get('info/:id')
   @ApiParam({name: 'id'})
   @ApiOperation({ summary: 'Returns a basic info about a user.' })
@@ -47,6 +53,16 @@ export class UserController {
   @ApiResponse({ type: UserBasicInfoDto })
   async findUserMe(@GetUser() user) {
     return this.findUser(user.sub)
+  }
+
+
+  @Get(':username')
+  @UseGuards(JwtAuthGuard)
+  @ApiParam({name: 'username'})
+  @ApiBearerAuth()
+  @ApiOperation({summary: 'Returns a basic info about user by its username.'})
+  async getUserInfoByName(@Param('username') username: string) {
+    return await this.userService.getUserInfoByName(username)
   }
 
   @Delete('me')

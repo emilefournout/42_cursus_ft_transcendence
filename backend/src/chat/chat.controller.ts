@@ -23,7 +23,7 @@ export class ChatController {
     @ApiBearerAuth()
     @ApiOperation({summary: 'Find a list of chats from the user'})
     async findChats(@GetUser() user) {
-        const chat = await this.chatService.findChatsInfo(user.id);
+        const chat = await this.chatService.findChatsInfo(user.sub);
         if (!chat)
             throw new NotFoundException('Chats not found')
         return chat;
@@ -35,7 +35,7 @@ export class ChatController {
     @ApiBearerAuth()
     @ApiOperation({summary: 'Get basic info about a chat'})
     async findChat(@GetUser() user, @Param('id', ParseIntPipe) id) {
-        const chat = await this.chatService.findChatByIdWithUserInside(id, user.id);
+        const chat = await this.chatService.findChatByIdWithUserInside(id, user.sub);
         if (!chat)
             throw new NotFoundException('Chat not found')
         return chat;
@@ -47,7 +47,7 @@ export class ChatController {
     @ApiOperation({summary: "Adds a new chat room", description: 'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'})
     async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto) {
         try {
-            await this.chatService.createChat(user.id, createChatDto.chatVisibility, createChatDto.password, createChatDto.name);
+            await this.chatService.createChat(user.sub, createChatDto.chatVisibility, createChatDto.password, createChatDto.name);
         } catch (error) {
             console.log(error)
             throw new ForbiddenException("Chat could not be created");

@@ -11,6 +11,7 @@ model User {
   id                   Int                      @id @default(autoincrement())
   intraname            String // Not unique for testing, @unique
   username             String                   @unique
+  wins                 Int                    @default(0)
   createdAt            DateTime                 @default(now())
   avatarURL            String? // URL to Avatar
   friends_1            UserFriendship[]         @relation("Friendship1")
