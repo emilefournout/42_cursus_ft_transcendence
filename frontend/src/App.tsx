@@ -18,6 +18,8 @@ import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
 
 import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
+import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
+import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
 
 function App() {
   return (
@@ -39,10 +41,12 @@ function App() {
               {/*Temp Route for coding ->*/}
               {/*<Route path="room" element={<Room />} />*/}
             </Route>
-            <Route path="settings" element={<Settings />} />
+            <Route path="settings" element={<Settings />}>
+              <Route path="" element={<SettingsHomePage />} />
+              <Route path="update" element={<ChangeNamePage />} />
+            </Route>
             <Route path="userAccount" element={<UserProfilePage />} />
           </Route>
-          <Route path="/settings" element={<Settings />} />
           <Route path="/cookieError" element={<CookieError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

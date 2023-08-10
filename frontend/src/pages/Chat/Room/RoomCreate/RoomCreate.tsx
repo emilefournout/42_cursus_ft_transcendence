@@ -51,13 +51,6 @@ export function RoomCreate() {
     setPassword(value);
   };
   const fetchCreateRoom = async (chatVisibility: string): Promise<void> => {
-    console.log(
-      "stringify -> " +
-        JSON.stringify({
-          user_id: 1,
-          chatVisibility: chatVisibility,
-        })
-    );
     fetch("http://localhost:3000/chat", {
       method: "POST",
       headers: {
@@ -65,14 +58,23 @@ export function RoomCreate() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: 1,
         chatVisibility: chatVisibility,
+        name: "bonjour",
       }),
     })
       .then((response) => {
+        if (response.status === 200) {
+          clearState();
+          setErrorMessage("Room created!");
+        } else {
+          clearState();
+          setErrorMessage("Error while creating room");
+        }
         console.log("response ->", response);
       })
       .catch((error) => {
+        clearState();
+        setErrorMessage("Erreur lors de la requête");
         console.error("Erreur lors de la requête Fetch:" + error.message);
       });
   };
@@ -92,7 +94,6 @@ export function RoomCreate() {
     } else {
       chatVisibility = "PUBLIC";
     }
-    console.log("chatVisibility", chatVisibility);
     await fetchCreateRoom(chatVisibility);
   };
 
@@ -124,19 +125,19 @@ export function RoomCreate() {
         <>
           <div id="wrapper-new-room-pswrd">
             <input
+              value={password}
               type="password"
               placeholder="set password"
               onChange={(e) => validatePassword(e.target.value)}
             />
             <input
+              value={confirm}
               type="password"
               placeholder="confirm password"
               onChange={(e) => setConfirm(e.target.value)}
             />
           </div>
-					<div id="txt-password-strength">
-						{errorMessage}
-					</div>
+          <div id="txt-password-strength">{errorMessage}</div>
         </>
       )}
       <button onClick={() => validateConfirm()}>create room</button>

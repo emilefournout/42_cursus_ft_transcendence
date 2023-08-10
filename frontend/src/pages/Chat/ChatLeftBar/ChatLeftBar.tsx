@@ -37,18 +37,22 @@ export function LeftBar() {
       </div>
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
-        {chats.map((chat: Chat) => {
-          return (
-            <div
-              key={chat.id}
-              onClick={() => {
-                navigate(`/chats/${chat.id}`);
-              }}
-            >
-              {chat.id}
-            </div>
-          );
-        })}
+        {chats.length === 0 ? (
+          <div>You have no chats</div>
+        ) : (
+          chats.map((chat: Chat) => {
+            return (
+              <div
+                key={chat.id}
+                onClick={() => {
+                  navigate(`/chats/${chat.id}`);
+                }}
+              >
+                {chat.id}
+              </div>
+            );
+          })
+        )}
       </div>
       {/*</Link>*/}
     </div>
