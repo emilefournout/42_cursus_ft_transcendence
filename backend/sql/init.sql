@@ -32,6 +32,15 @@ CREATE TABLE "UserFriendship" (
 );
 
 -- CreateTable
+CREATE TABLE "Achievement" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+
+    CONSTRAINT "Achievement_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "UserBlocked" (
     "user1_id" INTEGER NOT NULL,
     "user2_id" INTEGER NOT NULL,
@@ -102,6 +111,12 @@ CREATE TABLE "Message" (
 );
 
 -- CreateTable
+CREATE TABLE "_AchievementToUser" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_GameToUser" (
     "A" TEXT NOT NULL,
     "B" INTEGER NOT NULL
@@ -111,7 +126,16 @@ CREATE TABLE "_GameToUser" (
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Achievement_name_key" ON "Achievement"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "TwoFactorAuthentication_user_id_key" ON "TwoFactorAuthentication"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_AchievementToUser_AB_unique" ON "_AchievementToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_AchievementToUser_B_index" ON "_AchievementToUser"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_GameToUser_AB_unique" ON "_GameToUser"("A", "B");
@@ -145,6 +169,12 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "Chat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Achievement"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_GameToUser" ADD CONSTRAINT "_GameToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Game"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
