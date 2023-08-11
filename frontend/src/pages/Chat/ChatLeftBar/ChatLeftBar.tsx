@@ -1,31 +1,17 @@
 import React, { JSX, useEffect, useState } from "react";
 import "./ChatLeftBar.css";
 import NewChatIcon from "./NewChatIcon.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { Visibility } from "../Room/RoomCreate/RoomCreate";
+import { ChatInfo } from "../Chat";
 
-interface Chat {
-  id: number;
-  name: string;
-  visibility: Visibility;
+export interface LeftBarProps {
+  chats: Array<ChatInfo>;
+  setChats: any;
 }
-export function LeftBar() {
-  const navigate = useNavigate();
 
-  const [chats, setChats] = useState([]);
-  useEffect(() => {
-    fetch("http://localhost:3000/chat/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setChats(data);
-      });
-    return () => {};
-  }, []);
+export function LeftBar(props: LeftBarProps) {
+  const navigate = useNavigate();
 
   return (
     <div id="lb-main-wrapper" className="wrapper-col">
@@ -37,18 +23,18 @@ export function LeftBar() {
       </div>
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
-        {chats.length === 0 ? (
+        {props.chats.length === 0 ? (
           <div>You have no chats</div>
         ) : (
-          chats.map((chat: Chat) => {
+          props.chats.map((chat: ChatInfo) => {
             return (
               <div
                 key={chat.id}
                 onClick={() => {
-                  navigate(`/chats/${chat.id}`);
+                  navigate(`/chats/${chat.id}`, { state: { chat: chat } });
                 }}
               >
-                {chat.id}
+                {chat.name ? chat.name : "No name"}
               </div>
             );
           })

@@ -20,6 +20,7 @@ import { Room } from "./pages/Chat/Room/Room";
 import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
 import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
 import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
+import { Messages } from "./pages/Chat/Room/Messages/Messages";
 
 function App() {
   return (
@@ -36,8 +37,10 @@ function App() {
             </Route>
             <Route path="chats" element={<ChatPage />}>
               <Route path="create" element={<RoomCreate />} />
-              <Route path=":id" element={<Room />} />
-              <Route path=":id/param" element={<RoomParam />} />
+              <Route path=":id" element={<Room />}>
+                <Route path="" element={<Messages />} />
+                <Route path="param" element={<RoomParam />} />
+              </Route>
               {/*Temp Route for coding ->*/}
               {/*<Route path="room" element={<Room />} />*/}
             </Route>

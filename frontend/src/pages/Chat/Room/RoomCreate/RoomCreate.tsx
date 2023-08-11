@@ -20,17 +20,19 @@ export function RoomCreate() {
   const [passwordSecurity, setPasswordSecurity] = useState(
     passwordStrength.EMPTY
   );
-  const [errorMessage, setErrorMessage] = useState(
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(
     passwordStrength.EMPTY.toString()
   );
+  const [errorMessage, setErrorMessage] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-
+  const [name, setName] = useState("");
   const clearState = (): void => {
     setPasswordSecurity(passwordStrength.EMPTY);
-    setErrorMessage(passwordStrength.EMPTY.toString());
+    setPasswordErrorMessage(passwordStrength.EMPTY.toString());
     setPassword("");
     setConfirm("");
+    setName("");
   };
   const validatePassword = (value: string): void => {
     if (
@@ -46,7 +48,7 @@ export function RoomCreate() {
       setErrorMessage(passwordStrength.STRONG.toString());
     } else {
       setPasswordSecurity(passwordStrength.WEAK);
-      setErrorMessage(passwordStrength.WEAK.toString());
+      setPasswordErrorMessage(passwordStrength.WEAK.toString());
     }
     setPassword(value);
   };
@@ -59,11 +61,12 @@ export function RoomCreate() {
       },
       body: JSON.stringify({
         chatVisibility: chatVisibility,
-        name: "bonjour",
+        ...(name.length > 0 && { name: name }),
+        ...(chatVisibility === "PROTECTED" && { password: password }),
       }),
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           clearState();
           setErrorMessage("Room created!");
         } else {
@@ -82,13 +85,13 @@ export function RoomCreate() {
     let chatVisibility: string;
     if (selected === Visibility.PROTECTED) {
       if (passwordSecurity !== passwordStrength.STRONG) {
-        setErrorMessage(passwordSecurity.toString());
+        setPasswordErrorMessage(passwordSecurity.toString());
         return;
       } else if (password !== confirm) {
-        setErrorMessage("Passwords do not match");
+        setPasswordErrorMessage("Passwords do not match");
         return;
       } else {
-        setErrorMessage(passwordStrength.STRONG.toString());
+        setPasswordErrorMessage(passwordStrength.STRONG.toString());
         chatVisibility = "PROTECTED";
       }
     } else {
@@ -100,6 +103,12 @@ export function RoomCreate() {
   return (
     <div className="wrapper-new-room">
       <h2 className="txt-light">Create a new room</h2>
+      <input
+        type="text"
+        placeholder="Room name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <h3 className="txt-light mini-title">Visibility:</h3>
       <div className="wrapper-row wrapper-vis-btns">
         <VisibilityButton
@@ -137,9 +146,10 @@ export function RoomCreate() {
               onChange={(e) => setConfirm(e.target.value)}
             />
           </div>
-          <div id="txt-password-strength">{errorMessage}</div>
+          <div id="txt-password-strength">{passwordErrorMessage}</div>
         </>
       )}
+      <div>{errorMessage}</div>
       <button onClick={() => validateConfirm()}>create room</button>
     </div>
   );
