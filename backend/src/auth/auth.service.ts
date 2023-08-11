@@ -24,16 +24,13 @@ interface I42_oauth {
 @Injectable()
 export class AuthService {
     constructor (
-        private jwt : JwtService, private config: ConfigService, private prisma: PrismaService,  private userService: UserService
+        private jwtService : JwtService, private config: ConfigService, private prisma: PrismaService,  private userService: UserService
     ) {}
 
     async signToken(userId: number, username: string) : Promise<{access_token: string, userId: number, username: string}>
     {
         const payload = {sub: userId, username};
-        const token = await this.jwt.signAsync(payload, {
-            expiresIn: '7d',
-            secret: this.config.get('JWT_SECRET')
-        })
+        const token = this.jwtService.sign(payload)
         return {
             access_token: token,
             userId,

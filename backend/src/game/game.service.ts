@@ -4,10 +4,18 @@ import { IGameData } from './game.interface';
 import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
 
+interface ConnectedClients {
+  [id: string]: {
+      socket: Socket,
+      userId: number
+  }
+}
+
 @Injectable()
 export class GameService {
   private waitingRoom: Array<{client: Socket, user: User}> = []
   private games = new Map<string, IGameData>()
+  private clientsConnections: ConnectedClients = {}
 
   constructor(
     private prisma: PrismaService,
@@ -155,5 +163,16 @@ export class GameService {
         || gameState.ballY + gameState.ballRadius >= gameState.rightPad)
       && (gameState.ballY + gameState.ballRadius <= gameState.rightPad + gameState.padHeight
         || gameState.ballY - gameState.ballRadius <= gameState.rightPad + gameState.padHeight));
+  }
+
+  public registerConnection(id: string, client: Socket, sub: number) {
+      this.clientsConnections[id] = {
+        socket: client,
+        userId: sub
+      };
+  }
+
+  public unregisterConnection(id: string) {
+    delete this.clientsConnections[id];
   }
 }
