@@ -136,7 +136,8 @@ export class UserService {
     if(!requester || !adressee)
       throw new NotFoundException('User not found');
     const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
-    if(friendship)
+    const friendship2 = await this.findFriendShipByIds(requester_id, adressee_id);
+    if(friendship || friendship2)
       throw new ForbiddenException('Friendship pending')
     else if(requester_id === adressee_id)
       throw new ForbiddenException('Requester and adressee has same id')
