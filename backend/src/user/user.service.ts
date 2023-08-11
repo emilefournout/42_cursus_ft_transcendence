@@ -130,17 +130,29 @@ export class UserService {
     }
   }
 
+  async checkFriendships(requester_id: number, adressee_id: number) {
+    const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
+    const friendship2 = await this.findFriendShipByIds(requester_id, adressee_id);
+    if(friendship)
+      return (friendship.status === 'ENABLED' ? 'Alredy friends' : 'Friendship pending')
+    else if(friendship2)
+      return (friendship2.status === 'ENABLED' ? 'Alredy friends' : 'Friendship pending')
+    return null;
+  }
+
   async addUserFriends(requester_id: number, adressee_id: number){
     const requester = await this.findUserById(requester_id)
     const adressee = await this.findUserById(adressee_id)
     if(!requester || !adressee)
       throw new NotFoundException('User not found');
-    const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
-    const friendship2 = await this.findFriendShipByIds(requester_id, adressee_id);
-    if(friendship || friendship2)
-      throw new ForbiddenException('Friendship pending')
-    else if(requester_id === adressee_id)
+    
+    const checkFriends = await this.checkFriendships(requester_id, adressee_id);
+    if(checkFriends !== null)
+      throw new ForbiddenException(checkFriends)
+
+    if(requester_id === adressee_id)
       throw new ForbiddenException('Requester and adressee has same id')
+    
     try {
       await this.prisma.userFriendship.create({
         data: {
