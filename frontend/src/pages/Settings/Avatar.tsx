@@ -4,7 +4,7 @@ export function Avatar() {
   const [img, setImg] = useState<string>();
   const id = localStorage.getItem("user_id");
   useEffect(() => {
-    fetch(`http://localhost:3000/user/me`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -13,7 +13,7 @@ export function Avatar() {
       .then((response) => response.json())
       .then((data) => data.avatar)
       .then((filename) =>
-        fetch(`http://localhost:3000/profile/${filename}`, {
+        fetch(`${process.env.REACT_APP_BACKEND}/profile/${filename}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

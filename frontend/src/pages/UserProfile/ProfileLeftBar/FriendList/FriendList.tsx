@@ -1,14 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FriendCard } from "./FriendCard";
 import { UserStatus } from "./FriendStatus";
+
+const delay = (ms: number | undefined) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+const API = async () => {
+  await delay(1000);
+  return [
+    {
+      id: 1,
+      name: "John",
+      status: UserStatus.Offline,
+    },
+    {
+      id: 2,
+      name: "Emile",
+      status: UserStatus.Offline,
+    },
+  ];
+};
+
 export function FriendList() {
+  const [friends, setFriends] = useState([{}]);
+
+  const updateFriends = () => {
+    API().then((data) => setFriends(data));
+  };
+  useEffect(() => {
+    updateFriends();
+    return () => {};
+  }, []);
+
   return (
     <>
-      <FriendCard name={"apena-ba"} status={UserStatus.Online} />
-      <FriendCard name={"jarredon"} status={UserStatus.Offline} />
-      <FriendCard name={"josesanc"} status={UserStatus.InGame} />
-      <FriendCard name={"ntamayo"} status={UserStatus.Offline} />
-      <FriendCard name={"efournou"} status={UserStatus.Online} />
+      {friends.map((friend: any) => {
+        return <FriendCard name={friend.name} status={UserStatus.Offline} />;
+      })}
     </>
   );
 }

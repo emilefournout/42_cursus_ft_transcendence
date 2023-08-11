@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./RoomNavBar.css";
-import DMParamsIcon from "./DMParamsIcon.svg";
 import RoomParamsIcon from "./RoomParamsIcon.svg";
 import CloseIcon from "./CloseIcon.svg";
 import {
@@ -9,8 +8,7 @@ import {
   useOutletContext,
   useParams,
 } from "react-router-dom";
-import { ChatInfo } from "../../ChatLeftBar/ChatLeftBar";
-import Chat from "../../../../components/Chat";
+import { ChatInfo } from "../../Chat";
 
 export interface RoomNavBarProps {
   name?: string;
@@ -19,14 +17,14 @@ export function RoomNavBar(props: RoomNavBarProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [chats]: [Array<ChatRoom>] = useOutletContext();
+  const [chats]: [Array<ChatInfo>] = useOutletContext();
   const [name, setName] = useState<string>("");
 
   useEffect(() => {
     if (!id) throw new Error("No id");
-    let chat: ChatRoom | undefined;
+    let chat: ChatInfo | undefined;
     if (location.state && location.state.chat) chat = location.state.chat;
-    else chat = chats.find((chat: ChatRoom) => chat.id === parseInt(id));
+    else chat = chats.find((chat: ChatInfo) => chat.id === parseInt(id));
     if (!chat) return;
     if (chat.name) setName(chat.name);
     else setName("No name");

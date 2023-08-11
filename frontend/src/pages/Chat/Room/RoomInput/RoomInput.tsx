@@ -21,7 +21,7 @@ export function RoomInput() {
 
     const numUserId = parseInt(userId);
 
-    fetch(`http://localhost:3000/chat/${id}/message`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/chat/${id}/message`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

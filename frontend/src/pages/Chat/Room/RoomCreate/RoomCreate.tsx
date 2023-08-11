@@ -53,7 +53,7 @@ export function RoomCreate() {
     setPassword(value);
   };
   const fetchCreateRoom = async (chatVisibility: string): Promise<void> => {
-    fetch("http://localhost:3000/chat", {
+    fetch(`${process.env.REACT_APP_BACKEND}/chat`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

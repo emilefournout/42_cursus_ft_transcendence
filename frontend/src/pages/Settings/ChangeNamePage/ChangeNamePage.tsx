@@ -11,7 +11,7 @@ export function ChangeNamePage() {
     } else if (newUsername !== confirm) {
       setErrorMessage("username and confirmation must match");
     } else {
-      fetch("http://localhost:3000/user/me", {
+      fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,

@@ -3,7 +3,6 @@ import SEO from "../../components/Seo";
 import "./Chat.css";
 import { Outlet, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Chat from "../../components/Chat";
 import { Visibility } from "./Room/RoomCreate/RoomCreate";
 export interface ChatInfo {
   id: number;
@@ -15,7 +14,7 @@ export interface ChatInfo {
 export function ChatPage() {
   const [chats, setChats] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3000/chat/me", {
+    fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

@@ -2,15 +2,12 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-{
-  /*
-    import {Avatar} from "./Avatar";*/
-}
+import { Avatar } from "./Avatar";
 export function SettingsHomePage() {
   return (
     <>
       settings
-      {/*<Avatar/>*/}
+      <Avatar />
       <div>{localStorage.getItem("username")}</div>
       <Link to={"/settings/update"}>
         <button>Change username</button>

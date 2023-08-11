@@ -38,7 +38,7 @@ function App() {
             <Route path="chats" element={<ChatPage />}>
               <Route path="create" element={<RoomCreate />} />
               <Route path=":id" element={<Room />}>
-                <Route path="" element={<Messages />} />
+                x <Route path="" element={<Messages />} />
                 <Route path="param" element={<RoomParam />} />
               </Route>
               {/*Temp Route for coding ->*/}

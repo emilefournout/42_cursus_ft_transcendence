@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AddFriendForm } from "./AddFriendForm";
 import { FriendList } from "./FriendList/FriendList";
 import "./ProfileLeftBar.css";

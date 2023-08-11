@@ -46,7 +46,7 @@ export function Welcome() {
         } else throw new Error();
       })
       .then(() =>
-        fetch("http://localhost:3000/user/me", {
+        fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
