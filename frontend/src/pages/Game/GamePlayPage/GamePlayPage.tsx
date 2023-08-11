@@ -20,6 +20,8 @@ export function GamePlayPage() {
   const [player1Score, updatePlayer1Score] = useState(0);
   const [player2Score, updatePlayer2Score] = useState(0);
 
+  const [showModal, setShowModal] = useState(null);
+
   useEffect(() => {
     gameSocket.off("update");
     gameSocket.on("update", (data: any) => {
@@ -29,6 +31,17 @@ export function GamePlayPage() {
     });
   }, [])
 
+  useEffect(() => {
+    gameSocket.off("end");
+    gameSocket.on("end", (data: any) => {
+        setShowModal(data);
+    });
+  }, [])
+
+  const handleRedirect = () => {
+    window.location.href = "http://localhost:8000/userAccount";
+  };
+
   return (
     <>
       <h1 className="title">Game</h1>
@@ -36,6 +49,14 @@ export function GamePlayPage() {
         {player1Score} - {player2Score}
       </div>
       <GameCanvas {...state} />
+      {showModal !== null && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>{showModal} wins</p>
+            <button onClick={handleRedirect}>HOME</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

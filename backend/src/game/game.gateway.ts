@@ -49,12 +49,35 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     @SubscribeMessage('join_waiting_room')
     async handleJoinWaitingRoom(@ConnectedSocket() client: Socket, @MessageBody() username: string | null) {
         const game = await this.gameService.handleWaitingRoom(client, username)
+        const GOALS = 2
+
         if (game) {
             game.player1.client.join(game.game)
             game.player2.client.join(game.game)
             this.server.to(game.game).emit('game_found', game.game)
+            
+            const gameLoopInterval = setInterval(() => {
+                const gameState = this.gameService.loop(game.game);
+                this.server.to(game.game).emit('update', gameState);
+                if(gameState.player1Score > GOALS || gameState.player2Score > GOALS){
+                    clearInterval(gameLoopInterval);
+                    this.server.to(game.game).emit('end',
+                        gameState.player1Score > GOALS ? game.player1.user.username : game.player2.user.username
+                    );
+                    game.player1.client.disconnect();
+                    game.player2.client.disconnect();
+                }
+            }, 10)
 
-            setInterval(() => this.server.to(game.game).emit('update', this.gameService.loop(game.game)), 10)
+            game.player1.client.on('disconnect', () => {
+                clearInterval(gameLoopInterval);
+                this.server.to(game.game).emit('end', game.player2.user.username);
+            });
+    
+            game.player2.client.on('disconnect', () => {
+                clearInterval(gameLoopInterval);
+                this.server.to(game.game).emit('end', game.player1.user.username);
+            });
         }
     }
 
