@@ -111,7 +111,7 @@ export class ChatService {
       include: {
         members: {
           where: {
-            userId: id
+            userId: userId
           }
         }
       },
@@ -119,6 +119,7 @@ export class ChatService {
         id: id
       }
     });
+    console.log(`Members = ${chat.members}`)
     return chat;
   }
 
