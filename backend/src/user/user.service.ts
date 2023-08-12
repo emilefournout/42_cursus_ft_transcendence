@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserBasicInfoDto, UserRankingInfoDto } from './dto/info-user.dto';
+import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { url } from 'inspector';
@@ -96,7 +96,29 @@ export class UserService {
       },
       take: 10
     })
-    return users.map((chat) => UserRankingInfoDto.fromUser(chat));
+    return users.map((chat) => UserBasicInfoDto.fromUser(chat));
+  }
+
+  async getUserHistory(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        games: {
+          take: 10,
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            users: true
+          }
+        }
+      }
+    });
+    if(!user)
+      throw new NotFoundException('User not found');
+    return user.games;
   }
 
   async addUserBlocked(userId: number, targetId: number){
