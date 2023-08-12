@@ -99,6 +99,25 @@ export class UserService {
     return users.map((chat) => UserBasicInfoDto.fromUser(chat));
   }
 
+  async getUserHistory(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        games: {
+          take: 10,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
+    });
+    if(!user)
+      throw new NotFoundException('User not found');
+    return user;
+  }
+
   async addUserBlocked(userId: number, targetId: number){
     const user = await this.findUserById(userId)
     const target = await this.findUserById(targetId)

@@ -39,6 +39,14 @@ export class UserController {
   async getRanking(): Promise<UserBasicInfoDto[]> {
     return await this.userService.getRanking();
   }
+  
+  @Get('history')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Returns last 10 games of the user.' })
+  async getUserHistory(@GetUser() user) {
+    return this.userService.getUserHistory(user.sub);
+  }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
