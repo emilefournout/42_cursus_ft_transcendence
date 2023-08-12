@@ -109,13 +109,16 @@ export class UserService {
           take: 10,
           orderBy: {
             createdAt: 'desc'
+          },
+          include: {
+            users: true
           }
         }
       }
     });
     if(!user)
       throw new NotFoundException('User not found');
-    return user;
+    return user.games;
   }
 
   async addUserBlocked(userId: number, targetId: number){
