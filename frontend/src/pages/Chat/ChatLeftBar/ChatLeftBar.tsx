@@ -16,7 +16,7 @@ export function LeftBar(props: LeftBarProps) {
     <div id="lb-main-wrapper" className="wrapper-col">
       <div id="lb-top-wrapper">
         <span>Chats</span>
-        <Link to="/chats/create">
+        <Link to="/board/chats/create">
           <img className="nav-icons" src={NewChatIcon} />
         </Link>
       </div>
@@ -30,7 +30,9 @@ export function LeftBar(props: LeftBarProps) {
               <div
                 key={chat.id}
                 onClick={() => {
-                  navigate(`/chats/${chat.id}`, { state: { chat: chat } });
+                  navigate(`/board/chats/${chat.id}`, {
+                    state: { chat: chat },
+                  });
                 }}
               >
                 {chat.name ? chat.name : "No name"}

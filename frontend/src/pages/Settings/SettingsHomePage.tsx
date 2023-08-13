@@ -9,7 +9,7 @@ export function SettingsHomePage() {
       settings
       <Avatar />
       <div>{localStorage.getItem("username")}</div>
-      <Link to={"/settings/update"}>
+      <Link to={"/board/settings/update"}>
         <button>Change username</button>
       </Link>
       <Link to="/login">

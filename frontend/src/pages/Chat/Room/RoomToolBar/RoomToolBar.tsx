@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./RoomNavBar.css";
+import "./RoomToolBar.css";
 import RoomParamsIcon from "./RoomParamsIcon.svg";
 import CloseIcon from "./CloseIcon.svg";
 import {
@@ -13,7 +13,7 @@ import { ChatInfo } from "../../Chat";
 export interface RoomNavBarProps {
   name?: string;
 }
-export function RoomNavBar(props: RoomNavBarProps) {
+export function RoomToolBar(props: RoomNavBarProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,7 +38,7 @@ export function RoomNavBar(props: RoomNavBarProps) {
           className={"nav-icons"}
           src={CloseIcon}
           onClick={() => {
-            navigate(`/chats/${id}`);
+            navigate(`/board/chats/${id}`);
           }}
         ></img>
       ) : (
@@ -46,7 +46,7 @@ export function RoomNavBar(props: RoomNavBarProps) {
           className="nav-icons"
           src={RoomParamsIcon}
           onClick={() => {
-            navigate(`/chats/${id}/param`);
+            navigate(`/board/chats/${id}/param`);
           }}
         ></img>
       )}
