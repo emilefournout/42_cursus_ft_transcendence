@@ -62,6 +62,8 @@ CREATE TABLE "TwoFactorAuthentication" (
 -- CreateTable
 CREATE TABLE "Game" (
     "uuid" TEXT NOT NULL,
+    "user1_id" INTEGER NOT NULL,
+    "user2_id" INTEGER NOT NULL,
     "points_user1" INTEGER NOT NULL DEFAULT 0,
     "points_user2" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -117,12 +119,6 @@ CREATE TABLE "_AchievementToUser" (
     "B" INTEGER NOT NULL
 );
 
--- CreateTable
-CREATE TABLE "_GameToUser" (
-    "A" TEXT NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -138,12 +134,6 @@ CREATE UNIQUE INDEX "_AchievementToUser_AB_unique" ON "_AchievementToUser"("A", 
 -- CreateIndex
 CREATE INDEX "_AchievementToUser_B_index" ON "_AchievementToUser"("B");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_GameToUser_AB_unique" ON "_GameToUser"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_GameToUser_B_index" ON "_GameToUser"("B");
-
 -- AddForeignKey
 ALTER TABLE "UserFriendship" ADD CONSTRAINT "UserFriendship_requester_id_fkey" FOREIGN KEY ("requester_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -158,6 +148,12 @@ ALTER TABLE "UserBlocked" ADD CONSTRAINT "UserBlocked_user2_id_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "TwoFactorAuthentication" ADD CONSTRAINT "TwoFactorAuthentication_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Game" ADD CONSTRAINT "Game_user1_id_fkey" FOREIGN KEY ("user1_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Game" ADD CONSTRAINT "Game_user2_id_fkey" FOREIGN KEY ("user2_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ChatMember" ADD CONSTRAINT "ChatMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -176,10 +172,4 @@ ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_A_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_GameToUser" ADD CONSTRAINT "_GameToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Game"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_GameToUser" ADD CONSTRAINT "_GameToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

@@ -58,13 +58,9 @@ export class GameService {
   async createGame(player1Id: number, player2Id: number) : Promise<string> {
     const game = await this.prisma.game.create({
       data: {
-        users: {
-            connect: [
-              {id: player1Id},
-              {id: player2Id},
-            ]
-          }
-        }
+        user1_id:  player1Id,
+        user2_id: player2Id
+      }
     });
     return game.uuid;
   }
