@@ -48,10 +48,16 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
         console.log('Disconneted from ' + client.id)
     }
 
+    @SubscribeMessage('join_active_room')
+    async handleJoinActiveRoom(@ConnectedSocket() client: Socket, @MessageBody() uuid: string | null) {
+        // TODO ? -> Check if the user should be able to join the room (uuid, finished game, permissions)
+        client.join(uuid)
+    }
+
     @SubscribeMessage('join_waiting_room')
     async handleJoinWaitingRoom(@ConnectedSocket() client: Socket, @MessageBody() username: string | null) {
         const game = await this.gameService.handleWaitingRoom(client, username)
-        const GOALS = 3
+        const GOALS = 25
 
         if (game) {
             game.player1.client.join(game.game)
