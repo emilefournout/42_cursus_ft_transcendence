@@ -18,8 +18,7 @@ export function ProfileLeftBar() {
   );
 
   return (
-    <div className="profileLeftBar">
-      {/* My profile button*/}
+    <>
       <ProfileBarContext.Provider
         value={
           {
@@ -28,9 +27,13 @@ export function ProfileLeftBar() {
           } as ProfileBarContextArgs
         }
       >
-        <ProfileToolBar />
-        <FriendList />
+        <div className="profileLeftBar">
+          {/* My profile button*/}
+
+          <ProfileToolBar />
+          <FriendList />
+        </div>
       </ProfileBarContext.Provider>
-    </div>
+    </>
   );
 }

@@ -1,28 +1,92 @@
 import React from "react";
 import { ProfileLeftBar } from "./ProfileLeftBar/ProfileLeftBar";
-import { FriendRequest } from "./ProfileLeftBar/FriendList/FriendList";
 
 export enum RequestType {
   enabled = "ENABLED",
   pending = "PENDING",
 }
 interface ProfileContextArgs {
-  enabledRequests: FriendRequest[];
-  pendingRequests: FriendRequest[];
+  acceptedFriends: User[] | undefined;
+  pendingFriends: User[] | undefined;
   updateFriends: () => void;
 }
+export interface FriendRequest {
+  requester_id: number;
+  adressee_id: number;
+  status: string;
+}
+export interface User {
+  id: number;
+  username: string;
+  avatar: string;
+  status: string;
+  wins: number;
+}
+
 export const ProfilePageContext = React.createContext<ProfileContextArgs>(
   {} as ProfileContextArgs
 );
 export function UserProfilePage() {
-  const [acceptedRequests, setAcceptedRequests] = React.useState<
-    FriendRequest[] | undefined
+  const [acceptedFriends, setAcceptedFriends] = React.useState<
+    User[] | undefined
   >(undefined);
 
-  const [pendingRequests, setPendingRequests] = React.useState<
-    FriendRequest[] | undefined
-  >(undefined);
-  const updateFriends = () => {
+  const [pendingFriends, setPendingFriends] = React.useState<
+    User[] | undefined
+  >();
+
+  const myId = localStorage.getItem("user_id");
+
+  const getUserInfoFromId = React.useCallback(
+    async (friendId: number): Promise<User> => {
+      return fetch(
+        `${process.env.REACT_APP_BACKEND}/user/info/id/${friendId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data: User) => data as User)
+        .catch((error) => {
+          throw error;
+        });
+    },
+    []
+  );
+
+  const getAllFetchRequests = React.useCallback(
+    (typedFriendsRequests: FriendRequest[]): Promise<User>[] => {
+      return typedFriendsRequests.map((friendRequest) => {
+        const friendId =
+          friendRequest.adressee_id.toString() === myId
+            ? friendRequest.requester_id
+            : friendRequest.adressee_id;
+        return getUserInfoFromId(friendId);
+      });
+    },
+    [myId, getUserInfoFromId]
+  );
+
+  const setFriends = React.useCallback(
+    (type: RequestType, friendRequests: FriendRequest[] | undefined) => {
+      if (friendRequests === undefined) return;
+      const typedFriendsRequests = friendRequests.filter(
+        (request: FriendRequest) => request.status === type
+      );
+      Promise.all(getAllFetchRequests(typedFriendsRequests))
+        .then((users) =>
+          type === RequestType.enabled
+            ? setAcceptedFriends(users)
+            : setPendingFriends(users)
+        )
+        .catch((error) => console.log(error));
+    },
+    [getAllFetchRequests]
+  );
+  const updateFriends = React.useCallback(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/friendships`, {
       method: "GET",
       headers: {
@@ -32,31 +96,24 @@ export function UserProfilePage() {
       .then((response) => response.json())
       .then((data) => {
         const requests = data as FriendRequest[];
-        const acceptedRequestsTmp: FriendRequest[] = requests.filter(
-          (request: FriendRequest) => request.status === RequestType.enabled
-        );
-        const pendingRequestsTmp: FriendRequest[] = requests.filter(
-          (request: FriendRequest) => request.status === RequestType.pending
-        );
-        console.log("acceptedRequestsTmp", acceptedRequestsTmp);
-        console.log("pendingRequestsTmp", pendingRequestsTmp);
-        setAcceptedRequests(acceptedRequestsTmp);
-        setPendingRequests(pendingRequestsTmp);
-      });
-  };
+        setFriends(RequestType.enabled, requests);
+        setFriends(RequestType.pending, requests);
+      })
+      .catch((error) => console.log(error));
+  }, [setFriends]);
 
   React.useEffect(() => {
     updateFriends();
     return () => {};
-  }, []);
+  }, [updateFriends]);
 
   return (
     <>
       <ProfilePageContext.Provider
         value={
           {
-            enabledRequests: acceptedRequests,
-            pendingRequests: pendingRequests,
+            acceptedFriends: acceptedFriends,
+            pendingFriends: pendingFriends,
             updateFriends: updateFriends,
           } as ProfileContextArgs
         }

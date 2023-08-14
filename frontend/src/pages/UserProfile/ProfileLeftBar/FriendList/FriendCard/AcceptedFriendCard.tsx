@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FriendStatus, UserStatus } from "../FriendStatus";
-import { FriendRequest } from "../FriendList";
+import "./FriendCard.css";
+import { User } from "../../../UserProfilePage";
 
-interface AcceptedFriendCard {
-  request: FriendRequest;
+interface AcceptedFriendCardProps {
+  userInfo: User;
 }
-export function AcceptedFriendCard(props: AcceptedFriendCard) {
+export function AcceptedFriendCard(props: AcceptedFriendCardProps) {
   return (
-    <>
+    <div className="friend-card">
       {/*Avatar*/}
-
+      <div>{props.userInfo.username}</div>
+      <div>Accepted</div>
       <FriendStatus status={UserStatus.Offline} />
-    </>
+    </div>
   );
 }

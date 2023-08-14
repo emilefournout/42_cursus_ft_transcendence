@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { FriendStatus, UserStatus } from "../FriendStatus";
-import { FriendRequest } from "../FriendList";
-
+import "./FriendCard.css";
+import { User } from "../../../UserProfilePage";
 interface PendingFriendCard {
-  request: FriendRequest;
+  userInfo: User;
 }
 export function PendingFriendCard(props: PendingFriendCard) {
+  const [userInfo, setUserInfo] = useState({});
   return (
-    <>
-      {/*Avatar*/}
-
+    <div className="friend-card">
+      <div>{props.userInfo.username}</div>
       <FriendStatus status={UserStatus.Offline} />
-    </>
+    </div>
   );
 }
