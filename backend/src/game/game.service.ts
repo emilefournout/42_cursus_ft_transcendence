@@ -71,7 +71,6 @@ export class GameService {
     if(!game)
       throw new NotFoundException('Game not found');
     try {
-      console.log('UUID = ' + uuid)
       await this.prisma.game.update({
         where: {
           uuid: uuid
@@ -79,7 +78,6 @@ export class GameService {
         data: updateGameDto
       })
     } catch (err) {
-      console.log('ERRORRR')
       throw new ForbiddenException('Could not update game')
     }
   }
@@ -100,7 +98,7 @@ export class GameService {
         gameState.player1Id = player1.user.id
         gameState.player2Id = player2.user.id
         this.games.set(game, gameState)
-        return { game, player1, player2 }
+        return { game, player1, player2, finished: false }
       }
     }
     return null

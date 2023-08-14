@@ -51,7 +51,7 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     @SubscribeMessage('join_waiting_room')
     async handleJoinWaitingRoom(@ConnectedSocket() client: Socket, @MessageBody() username: string | null) {
         const game = await this.gameService.handleWaitingRoom(client, username)
-        const GOALS = 2
+        const GOALS = 3
 
         if (game) {
             game.player1.client.join(game.game)
@@ -61,14 +61,15 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             const gameLoopInterval = setInterval(() => {
                 const gameState = this.gameService.loop(game.game);
                 this.server.to(game.game).emit('update', gameState);
-                if(gameState.player1Score > GOALS || gameState.player2Score > GOALS){
+                if(gameState.player1Score >= GOALS || gameState.player2Score >= GOALS){
+                    game.finished = true
                     clearInterval(gameLoopInterval);
                     this.server.to(game.game).emit('end',
-                        gameState.player1Score > GOALS ? game.player1.user.username : game.player2.user.username
+                        gameState.player1Score >= GOALS ? game.player1.user.username : game.player2.user.username
                     );
+                    this.gameService.updateGame(game.game, {points_user1: gameState.player1Score, points_user2: gameState.player2Score})
                     game.player1.client.disconnect();
                     game.player2.client.disconnect();
-                    this.gameService.updateGame(game.game, {points_user1: gameState.player1Score, points_user2: gameState.player2Score})
                     const update_id = gameState.player1Score > gameState.player2Score ? gameState.player1Score : gameState.player2Score;
                     const update_wins = update_id === game.player1.user.id ? game.player1.user.wins: game.player2.user.wins
                     this.userService.updateUser(update_id, {wins: update_wins + 1})
@@ -76,17 +77,21 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             }, 10)
 
             game.player1.client.on('disconnect', () => {
-                clearInterval(gameLoopInterval);
-                this.server.to(game.game).emit('end', game.player2.user.username);
-                this.gameService.updateGame(game.game, {points_user1: -1, points_user2: GOALS + 1})
-                this.userService.updateUser(game.player2.user.id, {wins: game.player2.user.wins + 1})
+                if(game.finished === false) {
+                    clearInterval(gameLoopInterval);
+                    this.server.to(game.game).emit('end', game.player2.user.username);
+                    this.gameService.updateGame(game.game, {points_user1: -1, points_user2: GOALS})
+                    this.userService.updateUser(game.player2.user.id, {wins: game.player2.user.wins + 1})
+                }
             });
-    
+            
             game.player2.client.on('disconnect', () => {
-                clearInterval(gameLoopInterval);
-                this.server.to(game.game).emit('end', game.player1.user.username);
-                this.gameService.updateGame(game.game, {points_user1: GOALS + 1, points_user2: -1})
-                this.userService.updateUser(game.player1.user.id, {wins: game.player1.user.wins + 1})
+                if(game.finished === false) {
+                    clearInterval(gameLoopInterval);
+                    this.server.to(game.game).emit('end', game.player1.user.username);
+                    this.gameService.updateGame(game.game, {points_user1: GOALS, points_user2: -1})
+                    this.userService.updateUser(game.player1.user.id, {wins: game.player1.user.wins + 1})
+                }
             });
         }
     }
