@@ -9,6 +9,7 @@ import { GameService } from "./game.service"
 import { JwtService } from "@nestjs/jwt"
 import { JwtPayload } from "src/auth/interface/jwtpayload.dto"
 import { ConfigService } from "@nestjs/config"
+import { UserService } from "src/user/user.service"
 
 @WebSocketGateway(3002, {
     cors: { origin: '*'},
@@ -17,6 +18,7 @@ export class GameGateway
 implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
     constructor (private gameService: GameService,
+        private userService: UserService,
         /*private configService: ConfigService,*/
         private jwtService: JwtService) {}
     
@@ -66,17 +68,25 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
                     );
                     game.player1.client.disconnect();
                     game.player2.client.disconnect();
+                    this.gameService.updateGame(game.game, {points_user1: gameState.player1Score, points_user2: gameState.player2Score})
+                    const update_id = gameState.player1Score > gameState.player2Score ? gameState.player1Score : gameState.player2Score;
+                    const update_wins = update_id === game.player1.user.id ? game.player1.user.wins: game.player2.user.wins
+                    this.userService.updateUser(update_id, {wins: update_wins + 1})
                 }
             }, 10)
 
             game.player1.client.on('disconnect', () => {
                 clearInterval(gameLoopInterval);
                 this.server.to(game.game).emit('end', game.player2.user.username);
+                this.gameService.updateGame(game.game, {points_user1: -1, points_user2: GOALS + 1})
+                this.userService.updateUser(game.player2.user.id, {wins: game.player2.user.wins + 1})
             });
     
             game.player2.client.on('disconnect', () => {
                 clearInterval(gameLoopInterval);
                 this.server.to(game.game).emit('end', game.player1.user.username);
+                this.gameService.updateGame(game.game, {points_user1: GOALS + 1, points_user2: -1})
+                this.userService.updateUser(game.player1.user.id, {wins: game.player1.user.wins + 1})
             });
         }
     }

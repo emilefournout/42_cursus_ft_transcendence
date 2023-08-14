@@ -4,6 +4,7 @@ import {
   IsDefined,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -17,8 +18,13 @@ export class UpdateUserRelationDto {
 
 export class UpdateUserDto {
   @ApiProperty()
+  @IsOptional()
   @IsString()
-  @IsDefined()
   @IsNotEmpty()
-  username: string
+  username?: string
+  
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  wins?: number
 }

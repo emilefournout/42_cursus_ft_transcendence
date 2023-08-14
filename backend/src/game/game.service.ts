@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IGameData } from './game.interface';
 import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
+import { UpdateGameDto } from './dto/updte-game.dto';
 
 interface ConnectedClients {
   [id: string]: {
@@ -63,6 +64,24 @@ export class GameService {
       }
     });
     return game.uuid;
+  }
+
+  async updateGame(uuid: string, updateGameDto: UpdateGameDto) {
+    const game = await this.findGameById(uuid);
+    if(!game)
+      throw new NotFoundException('Game not found');
+    try {
+      console.log('UUID = ' + uuid)
+      await this.prisma.game.update({
+        where: {
+          uuid: uuid
+        },
+        data: updateGameDto
+      })
+    } catch (err) {
+      console.log('ERRORRR')
+      throw new ForbiddenException('Could not update game')
+    }
   }
 
   async handleWaitingRoom(client: Socket, username: string | null) {

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -75,6 +75,8 @@ export class UserService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
+    if(!updateUserDto.username && (updateUserDto.wins === undefined || updateUserDto.wins === null))
+      throw new BadRequestException('Empty request')
     const user = await this.findUserById(id);
     if (!user)
       return null;
@@ -82,9 +84,7 @@ export class UserService {
       where: {
         id: id
       },
-      data: {
-        username: updateUserDto.username
-      }
+      data: updateUserDto
     })
     return updatedUser;
   }
