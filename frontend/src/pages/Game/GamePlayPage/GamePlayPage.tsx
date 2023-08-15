@@ -33,6 +33,8 @@ export function GamePlayPage() {
   const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
+
+
     fetch(`${process.env.REACT_APP_BACKEND}/game/info/${id}`, {
       method: "GET",
       headers: {
@@ -41,6 +43,11 @@ export function GamePlayPage() {
       },
     }).then((response) => {
       if (response.ok) {
+        var path = window.location.pathname;
+    path = path.substring(path.lastIndexOf('/') + 1);
+    console.log('Path is ' + path);
+
+    gameSocket.emit('join_active_room', path);
         setGameExistState(GameExistState.Play);
       }
       else {

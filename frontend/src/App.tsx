@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages/Home/Home";
+import { Board } from "./pages/Board/Board";
 import { Login } from "./pages/Login/Login";
 import { Welcome } from "./pages/Welcome/Welcome";
 import { ChatPage } from "./pages/Chat/Chat";
@@ -21,15 +21,18 @@ import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
 import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
 import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
 import { Messages } from "./pages/Chat/Room/Messages/Messages";
+import { Root } from "./pages/Root/Root";
 
 function App() {
   return (
     <>
       <HelmetProvider>
         <Routes>
+          <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route path="/" element={<Home />}>
+          <Route path="/board" element={<Board />}>
+            <Route path="" element={<Navigate to={"/board/userAccount"} />} />
             <Route path="game" element={<Game />}>
               <Route path="" element={<GameHomePage />} />
               <Route path=":id" element={<GamePlayPage />} />
@@ -38,7 +41,7 @@ function App() {
             <Route path="chats" element={<ChatPage />}>
               <Route path="create" element={<RoomCreate />} />
               <Route path=":id" element={<Room />}>
-                x <Route path="" element={<Messages />} />
+                <Route path="" element={<Messages />} />
                 <Route path="param" element={<RoomParam />} />
               </Route>
               {/*Temp Route for coding ->*/}

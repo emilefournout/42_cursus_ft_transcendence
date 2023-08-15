@@ -9,3 +9,9 @@
     flex-direction: row;
     gap: 25px;
 }
+
+.request-type-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}

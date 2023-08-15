@@ -3,14 +3,12 @@ import React from "react";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/NavBar/NavBar";
 
-export function Home() {
-  const location = useLocation();
+export function Board() {
   return (
     <>
       <SEO title={"Pong - Home"} description={"Home of the user"} />
       <NavBar />
       <Outlet />
-      {location.pathname === "/" ? <Navigate to="/userAccount" /> : <></>}
     </>
   );
 }

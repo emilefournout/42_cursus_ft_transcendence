@@ -51,7 +51,7 @@ export function ChangeNamePage() {
       <div id="txt-password-strength">{errorMessage}</div>
       <button
         onClick={() => {
-          navigate("/settings");
+          navigate("/board/settings");
         }}
       >
         cancel
