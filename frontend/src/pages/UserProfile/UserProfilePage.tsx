@@ -79,8 +79,6 @@ export function UserProfilePage() {
   const setFriends = React.useCallback(
     (type: RequestType, friendRequests: FriendRequest[] | undefined) => {
       if (friendRequests === undefined) return;
-      console.log(friendRequests);
-      console.log("my id");
       const typedFriendsRequests = friendRequests.filter(
         (request: FriendRequest) => {
           if (type === RequestType.enabled) {
@@ -98,7 +96,6 @@ export function UserProfilePage() {
           }
         }
       );
-      console.log(typedFriendsRequests);
       Promise.all(getAllFetchRequests(typedFriendsRequests))
         .then((users) =>
           type === RequestType.enabled

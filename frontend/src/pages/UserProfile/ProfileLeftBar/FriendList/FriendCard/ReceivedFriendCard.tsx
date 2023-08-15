@@ -11,7 +11,7 @@ export function ReceivedFriendCard(props: ReceivedFriendCardProps) {
     fetch(
       `${process.env.REACT_APP_BACKEND}/user/friends/accept/${props.userInfo.id}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -32,7 +32,7 @@ export function ReceivedFriendCard(props: ReceivedFriendCardProps) {
     fetch(
       `${process.env.REACT_APP_BACKEND}/user/friends/decline/${props.userInfo.id}`,
       {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -50,8 +50,7 @@ export function ReceivedFriendCard(props: ReceivedFriendCardProps) {
       });
   };
   const handleFriendRequest = async (action: () => Promise<void>) => {
-    await action();
-    profilePageContext?.updateFriends();
+    action().then(() => setTimeout(profilePageContext.updateFriends, 500));
   };
 
   return (
@@ -59,8 +58,12 @@ export function ReceivedFriendCard(props: ReceivedFriendCardProps) {
       <Avatar url={props.userInfo.avatar} />
 
       <div>{props.userInfo.username}</div>
-      <button onClick={() => handleFriendRequest(accept)}>Accept</button>
-      <button onClick={() => handleFriendRequest(decline)}>Decline</button>
+      <div>
+        <button onClick={() => handleFriendRequest(accept)}>Accept</button>
+      </div>
+      <div>
+        <button onClick={() => handleFriendRequest(decline)}>Decline</button>
+      </div>
     </div>
   );
 }
