@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IGameData } from './game.interface';
 import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
+import { UpdateGameDto } from './dto/updte-game.dto';
 
 interface ConnectedClients {
   [id: string]: {
@@ -58,15 +59,27 @@ export class GameService {
   async createGame(player1Id: number, player2Id: number) : Promise<string> {
     const game = await this.prisma.game.create({
       data: {
-        users: {
-            connect: [
-              {id: player1Id},
-              {id: player2Id},
-            ]
-          }
-        }
+        user1_id:  player1Id,
+        user2_id: player2Id
+      }
     });
     return game.uuid;
+  }
+
+  async updateGame(uuid: string, updateGameDto: UpdateGameDto) {
+    const game = await this.findGameById(uuid);
+    if(!game)
+      throw new NotFoundException('Game not found');
+    try {
+      await this.prisma.game.update({
+        where: {
+          uuid: uuid
+        },
+        data: updateGameDto
+      })
+    } catch (err) {
+      throw new ForbiddenException('Could not update game')
+    }
   }
 
   async handleWaitingRoom(client: Socket, username: string | null) {
@@ -85,7 +98,7 @@ export class GameService {
         gameState.player1Id = player1.user.id
         gameState.player2Id = player2.user.id
         this.games.set(game, gameState)
-        return { game, player1, player2 }
+        return { game, player1, player2, finished: false }
       }
     }
     return null

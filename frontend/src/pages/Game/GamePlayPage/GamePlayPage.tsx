@@ -23,6 +23,14 @@ export function GamePlayPage() {
   const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
+    var path = window.location.pathname;
+    path = path.substring(path.lastIndexOf('/') + 1);
+    console.log('Path is ' + path);
+  
+    gameSocket.emit('join_active_room', path);
+  }, []);
+
+  useEffect(() => {
     gameSocket.off("update");
     gameSocket.on("update", (data: any) => {
       updateGameState(data);

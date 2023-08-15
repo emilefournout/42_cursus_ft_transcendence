@@ -9,6 +9,7 @@ import { GameService } from "./game.service"
 import { JwtService } from "@nestjs/jwt"
 import { JwtPayload } from "src/auth/interface/jwtpayload.dto"
 import { ConfigService } from "@nestjs/config"
+import { UserService } from "src/user/user.service"
 
 @WebSocketGateway(3002, {
     cors: { origin: '*'},
@@ -17,6 +18,7 @@ export class GameGateway
 implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
     constructor (private gameService: GameService,
+        private userService: UserService,
         /*private configService: ConfigService,*/
         private jwtService: JwtService) {}
     
@@ -46,10 +48,16 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
         console.log('Disconneted from ' + client.id)
     }
 
+    @SubscribeMessage('join_active_room')
+    async handleJoinActiveRoom(@ConnectedSocket() client: Socket, @MessageBody() uuid: string | null) {
+        // TODO ? -> Check if the user should be able to join the room (uuid, finished game, permissions)
+        client.join(uuid)
+    }
+
     @SubscribeMessage('join_waiting_room')
     async handleJoinWaitingRoom(@ConnectedSocket() client: Socket, @MessageBody() username: string | null) {
         const game = await this.gameService.handleWaitingRoom(client, username)
-        const GOALS = 2
+        const GOALS = 25
 
         if (game) {
             game.player1.client.join(game.game)
@@ -59,24 +67,37 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
             const gameLoopInterval = setInterval(() => {
                 const gameState = this.gameService.loop(game.game);
                 this.server.to(game.game).emit('update', gameState);
-                if(gameState.player1Score > GOALS || gameState.player2Score > GOALS){
+                if(gameState.player1Score >= GOALS || gameState.player2Score >= GOALS){
+                    game.finished = true
                     clearInterval(gameLoopInterval);
                     this.server.to(game.game).emit('end',
-                        gameState.player1Score > GOALS ? game.player1.user.username : game.player2.user.username
+                        gameState.player1Score >= GOALS ? game.player1.user.username : game.player2.user.username
                     );
+                    this.gameService.updateGame(game.game, {points_user1: gameState.player1Score, points_user2: gameState.player2Score})
                     game.player1.client.disconnect();
                     game.player2.client.disconnect();
+                    const update_id = gameState.player1Score > gameState.player2Score ? gameState.player1Score : gameState.player2Score;
+                    const update_wins = update_id === game.player1.user.id ? game.player1.user.wins: game.player2.user.wins
+                    this.userService.updateUser(update_id, {wins: update_wins + 1})
                 }
             }, 10)
 
             game.player1.client.on('disconnect', () => {
-                clearInterval(gameLoopInterval);
-                this.server.to(game.game).emit('end', game.player2.user.username);
+                if(game.finished === false) {
+                    clearInterval(gameLoopInterval);
+                    this.server.to(game.game).emit('end', game.player2.user.username);
+                    this.gameService.updateGame(game.game, {points_user1: -1, points_user2: GOALS})
+                    this.userService.updateUser(game.player2.user.id, {wins: game.player2.user.wins + 1})
+                }
             });
-    
+            
             game.player2.client.on('disconnect', () => {
-                clearInterval(gameLoopInterval);
-                this.server.to(game.game).emit('end', game.player1.user.username);
+                if(game.finished === false) {
+                    clearInterval(gameLoopInterval);
+                    this.server.to(game.game).emit('end', game.player1.user.username);
+                    this.gameService.updateGame(game.game, {points_user1: GOALS, points_user2: -1})
+                    this.userService.updateUser(game.player1.user.id, {wins: game.player1.user.wins + 1})
+                }
             });
         }
     }

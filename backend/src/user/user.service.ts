@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -75,6 +75,8 @@ export class UserService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
+    if(!updateUserDto.username && (updateUserDto.wins === undefined || updateUserDto.wins === null))
+      throw new BadRequestException('Empty request')
     const user = await this.findUserById(id);
     if (!user)
       return null;
@@ -82,9 +84,7 @@ export class UserService {
       where: {
         id: id
       },
-      data: {
-        username: updateUserDto.username
-      }
+      data: updateUserDto
     })
     return updatedUser;
   }
@@ -100,25 +100,18 @@ export class UserService {
   }
 
   async getUserHistory(id: number) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        games: {
-          take: 10,
-          orderBy: {
-            createdAt: 'desc'
-          },
-          include: {
-            users: true
-          }
-        }
-      }
-    });
-    if(!user)
-      throw new NotFoundException('User not found');
-    return user.games;
+    const userGames = await this.prisma.$queryRaw`
+      SELECT
+      g.points_user1, g.points_user2, g.user1_id, g.user2_id,
+      u1.username AS user1_username, u2.username AS user2_username
+      FROM "Game" g
+      INNER JOIN "User" u1 ON g.user1_id = u1.id
+      INNER JOIN "User" u2 ON g.user2_id = u2.id
+      WHERE g.user1_id = ${id} OR g.user2_id = ${id}
+      ORDER BY g."createdAt" DESC
+      LIMIT 10;
+    `;
+    return userGames;
   }
 
   async addUserBlocked(userId: number, targetId: number){

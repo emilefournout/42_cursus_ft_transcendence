@@ -20,7 +20,8 @@ model User {
   blockedList_2        UserBlocked[]            @relation("BlockedTarget")
   authenticationFactor TwoFactorAuthentication?
   status               OnlineStatus             @default(OFFLINE)
-  games                Game[]
+  player_1             Game[]                  @relation("Player1")
+  player_2             Game[]                  @relation("Player2")
   chatMember           ChatMember[]
   messages             Message[]
   achievements         Achievement[]
@@ -73,7 +74,10 @@ enum FriendshipStatus {
 
 model Game {
   uuid         String   @id @default(uuid())
-  users        User[]
+  user1_id     Int
+  user1        User     @relation("Player1", fields: [user1_id], references: [id])
+  user2_id     Int
+  user2        User     @relation("Player2", fields: [user2_id], references: [id])
   points_user1 Int      @default(0)
   points_user2 Int      @default(0)
   createdAt    DateTime @default(now())
