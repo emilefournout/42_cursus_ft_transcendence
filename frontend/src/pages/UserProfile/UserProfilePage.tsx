@@ -4,10 +4,12 @@ import { ProfileLeftBar } from "./ProfileLeftBar/ProfileLeftBar";
 export enum RequestType {
   enabled = "ENABLED",
   pending = "PENDING",
+  received = "RECEIVED",
 }
 interface ProfileContextArgs {
   acceptedFriends: User[] | undefined;
   pendingFriends: User[] | undefined;
+  receivedFriends: User[] | undefined;
   updateFriends: () => void;
 }
 export interface FriendRequest {
@@ -33,7 +35,11 @@ export function UserProfilePage() {
 
   const [pendingFriends, setPendingFriends] = React.useState<
     User[] | undefined
-  >();
+  >(undefined);
+
+  const [receivedFriends, setReceivedFriends] = React.useState<
+    User[] | undefined
+  >(undefined);
 
   const myId = localStorage.getItem("user_id");
 
@@ -73,19 +79,39 @@ export function UserProfilePage() {
   const setFriends = React.useCallback(
     (type: RequestType, friendRequests: FriendRequest[] | undefined) => {
       if (friendRequests === undefined) return;
+      console.log(friendRequests);
+      console.log("my id");
       const typedFriendsRequests = friendRequests.filter(
-        (request: FriendRequest) => request.status === type
+        (request: FriendRequest) => {
+          if (type === RequestType.enabled) {
+            return request.status === type;
+          } else if (type === RequestType.pending) {
+            return (
+              request.status === type &&
+              request.requester_id.toString() === myId
+            );
+          } else {
+            return (
+              request.status === RequestType.pending &&
+              request.adressee_id.toString() === myId
+            );
+          }
+        }
       );
+      console.log(typedFriendsRequests);
       Promise.all(getAllFetchRequests(typedFriendsRequests))
         .then((users) =>
           type === RequestType.enabled
             ? setAcceptedFriends(users)
-            : setPendingFriends(users)
+            : type === RequestType.pending
+            ? setPendingFriends(users)
+            : setReceivedFriends(users)
         )
         .catch((error) => console.log(error));
     },
-    [getAllFetchRequests]
+    [getAllFetchRequests, myId]
   );
+
   const updateFriends = React.useCallback(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/friendships`, {
       method: "GET",
@@ -98,6 +124,7 @@ export function UserProfilePage() {
         const requests = data as FriendRequest[];
         setFriends(RequestType.enabled, requests);
         setFriends(RequestType.pending, requests);
+        setFriends(RequestType.received, requests);
       })
       .catch((error) => console.log(error));
   }, [setFriends]);
@@ -114,6 +141,7 @@ export function UserProfilePage() {
           {
             acceptedFriends: acceptedFriends,
             pendingFriends: pendingFriends,
+            receivedFriends: receivedFriends,
             updateFriends: updateFriends,
           } as ProfileContextArgs
         }

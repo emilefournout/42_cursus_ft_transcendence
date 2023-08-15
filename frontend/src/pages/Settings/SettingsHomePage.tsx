@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Avatar } from "./Avatar";
+import { Avatar } from "../../components/Avatar";
 export function SettingsHomePage() {
   return (
     <>

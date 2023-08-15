@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FriendStatus, UserStatus } from "../FriendStatus";
 import "./FriendCard.css";
 import { User } from "../../../UserProfilePage";
+import { Avatar } from "../../../../../components/Avatar";
 
 interface AcceptedFriendCardProps {
   userInfo: User;
@@ -9,10 +10,9 @@ interface AcceptedFriendCardProps {
 export function AcceptedFriendCard(props: AcceptedFriendCardProps) {
   return (
     <div className="friend-card">
-      {/*Avatar*/}
+      <Avatar url={props.userInfo.avatar} />
       <div>{props.userInfo.username}</div>
-      <div>Accepted</div>
-      <FriendStatus status={UserStatus.Offline} />
+      <FriendStatus status={props.userInfo.status} />
     </div>
   );
 }
