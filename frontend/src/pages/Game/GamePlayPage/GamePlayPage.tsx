@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
+import { useNavigate, useParams } from "react-router-dom";
+
+enum GameExistState {
+  Waiting,
+  NotFound,
+  Play
+}
 
 export function GamePlayPage() {
+  const [gameExistState, setGameExistState] = useState(GameExistState.Waiting);
+  const {id} = useParams();
+  const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
   const boardState: GameCanvasProps = {
     width: 600,
@@ -23,12 +33,29 @@ export function GamePlayPage() {
   const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
-    var path = window.location.pathname;
+
+
+    fetch(`${process.env.REACT_APP_BACKEND}/game/info/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        
+      },
+    }).then((response) => {
+      if (response.ok) {
+        var path = window.location.pathname;
     path = path.substring(path.lastIndexOf('/') + 1);
     console.log('Path is ' + path);
-  
+
     gameSocket.emit('join_active_room', path);
-  }, []);
+        setGameExistState(GameExistState.Play);
+      }
+      else {
+        setGameExistState(GameExistState.NotFound);
+      }
+    })
+    
+  }, [id])
 
   useEffect(() => {
     gameSocket.off("update");
@@ -52,18 +79,26 @@ export function GamePlayPage() {
 
   return (
     <>
-      <h1 className="title">Game</h1>
-      <div className="title">
-        {player1Score} - {player2Score}
-      </div>
-      <GameCanvas {...state} />
-      {showModal !== null && (
-        <div className="modal">
-          <div className="modal-content">
-            <p>{showModal} wins</p>
-            <button onClick={handleRedirect}>HOME</button>
+      {gameExistState === GameExistState.Waiting ? (
+        <div>Waiting</div>
+      ) : gameExistState === GameExistState.NotFound ? (
+        <div>Not Found</div>
+      ) : (
+        <>
+          <h1 className="title">Game</h1>
+          <div className="title">
+            {player1Score} - {player2Score}
           </div>
-        </div>
+          <GameCanvas {...state} />
+          {showModal !== null && (
+            <div className="modal">
+              <div className="modal-content">
+                <p>{showModal} wins</p>
+                <button onClick={handleRedirect}>HOME</button>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   );
