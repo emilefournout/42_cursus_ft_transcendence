@@ -15,14 +15,16 @@ interface IMessage {
 }
 
 function getTime(): string {
-  const now = new Date(Date.now())
-  return `${now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()}`
+  const now = new Date(Date.now());
+  return `${now.getHours()}:${
+    now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes()
+  }`;
 }
 
-function ChatWindow({socket, username, room}: IChatWindow) {
-  const [message, setMessage] = useState("")
-  const [messageList, setMessageList] = useState<IMessage[]>([])
-  const lastMessageRef = useRef<null | HTMLDivElement>(null)
+function ChatWindow({ socket, username, room }: IChatWindow) {
+  const [message, setMessage] = useState("");
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
+  const lastMessageRef = useRef<null | HTMLDivElement>(null);
 
   function sendMessage() {
     if (message !== "") {
@@ -30,23 +32,23 @@ function ChatWindow({socket, username, room}: IChatWindow) {
         room,
         author: username,
         message,
-        time: getTime()
-      }
-      socket.emit("send_message", data)
-      setMessage("")
+        time: getTime(),
+      };
+      socket.emit("send_message", data);
+      setMessage("");
     }
   }
 
   useEffect(() => {
-    socket.off("receive_message")
+    socket.off("receive_message");
     socket.on("receive_message", (data: IMessage) => {
-      setMessageList(msgs => [...msgs, data])
-    })
-  }, [])
+      setMessageList((msgs) => [...msgs, data]);
+    });
+  }, []);
 
   useEffect(() => {
-    lastMessageRef.current?.scrollIntoView({behavior: "smooth"})
-  }, [messageList])
+    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messageList]);
 
   return (
     <div className="chat-window">
@@ -71,7 +73,7 @@ function ChatWindow({socket, username, room}: IChatWindow) {
                 </div>
               </div>
             </div>
-          )
+          );
         })}
         <div ref={lastMessageRef} />
       </div>
@@ -80,13 +82,15 @@ function ChatWindow({socket, username, room}: IChatWindow) {
           type="text"
           placeholder="Message..."
           value={message}
-          onChange={event => setMessage(event.target.value)}
-          onKeyDown={event => {event.key === "Enter" && sendMessage()}}
+          onChange={(event) => setMessage(event.target.value)}
+          onKeyDown={(event) => {
+            event.key === "Enter" && sendMessage();
+          }}
         />
         <button onClick={sendMessage}>&#9658;</button>
       </div>
     </div>
-  )
+  );
 }
 
-export default ChatWindow
+export default ChatWindow;

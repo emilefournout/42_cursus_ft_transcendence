@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "../../../components/Seo";
 import { GameSocket } from "../../../services/socket";
-import "./GameMatchmakingPage.css"
+import "./GameMatchmakingPage.css";
 
 export function GameMatchmakingPage() {
   const navigate = useNavigate();
@@ -30,8 +30,10 @@ export function GameMatchmakingPage() {
       <div className="wrapper-matchmaking">
         <div className="matchmaking-loader"></div>
         <p className="matchmaking-scaling">Finding new rival for you</p>
-        <Link to="/game">
-          <button className="btn btn-fixed-height matchmaking-scaling">Cancel</button>
+        <Link to="/board/game">
+          <button className="btn btn-fixed-height matchmaking-scaling">
+            Cancel
+          </button>
         </Link>
       </div>
     </>

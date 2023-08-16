@@ -1,9 +1,10 @@
 import React from "react";
-
+import "./RoomParam.css";
 export function RoomParam() {
   return (
-    <>
-      <h1>RoomParam</h1>
-    </>
+    <div className="room-param">
+      <div>RoomParam1</div>
+      <div>RoomParam2</div>
+    </div>
   );
 }
