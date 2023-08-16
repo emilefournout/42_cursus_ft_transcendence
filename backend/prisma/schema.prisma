@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   Int                      @id @default(autoincrement())
+  intraname            String // Not unique for testing, @unique
+  username             String                   @unique
+  wins                 Int                    @default(0)
+  createdAt            DateTime                 @default(now())
+  avatarURL            String? // URL to Avatar
+  friends_1            UserFriendship[]         @relation("Friendship1")
+  friends_2            UserFriendship[]         @relation("Friendship2")
+  blockedList_1        UserBlocked[]            @relation("BlockedBy")
+  blockedList_2        UserBlocked[]            @relation("BlockedTarget")
+  authenticationFactor TwoFactorAuthentication?
+  status               OnlineStatus             @default(OFFLINE)
+  player_1             Game[]                  @relation("Player1")
+  player_2             Game[]                  @relation("Player2")
+  chatMember           ChatMember[]
+  messages             Message[]
+  achievements         Achievement[]
+}
+
+model UserFriendship {
+  requester_id Int
+  requester    User             @relation("Friendship1", fields: [requester_id], references: [id], onDelete: Cascade)
+  adressee_id  Int
+  addresee     User             @relation("Friendship2", fields: [adressee_id], references: [id], onDelete: Cascade)
+  status       FriendshipStatus @default(PENDING)
+
+  @@id([requester_id, adressee_id])
+}
+
+model Achievement {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String
+  users        User[]
+}
+
+model UserBlocked {
+  user1_id Int
+  user1    User @relation("BlockedBy", fields: [user1_id], references: [id], onDelete: Cascade)
+  user2_id Int
+  user2    User @relation("BlockedTarget", fields: [user2_id], references: [id], onDelete: Cascade)
+
+  @@id([user1_id, user2_id])
+}
+
+model TwoFactorAuthentication {
+  id                            Int                           @id @default(autoincrement())
+  user_id                       Int                           @unique
+  user                          User                          @relation(fields: [user_id], references: [id])
+  status                        TwoFactorAuthenticationStatus @default(DISABLED)
+  twoFactorAuthenticationSecret String
+}
+
+enum TwoFactorAuthenticationStatus {
+  DISABLED
+  PENDING
+  ENABLED
+}
+
+enum FriendshipStatus {
+  PENDING
+  ENABLED
+}
+
+model Game {
+  uuid         String   @id @default(uuid())
+  user1_id     Int
+  user1        User     @relation("Player1", fields: [user1_id], references: [id])
+  user2_id     Int
+  user2        User     @relation("Player2", fields: [user2_id], references: [id])
+  points_user1 Int      @default(0)
+  points_user2 Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Avatar {
+  id    Int   @id @default(autoincrement())
+  image Bytes
+}
+
+model ChatMember {
+  userId            Int
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatId            Int
+  chat              Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  createdAt         DateTime  @default(now())
+  administrator     Boolean   @default(false)
+  owner             Boolean   @default(false)
+  muted             Boolean   @default(false)
+  mutedExpiringDate DateTime?
+
+  @@id([chatId, userId])
+}
+
+model Chat {
+  id         Int            @id @default(autoincrement())
+  name       String?
+  visibility ChatVisibility
+  password   String?
+  members    ChatMember[]
+  messages   Message[]
+}
+
+model Message {
+  uuid      String   @id @default(uuid())
+  text      String
+  createdAt DateTime @default(now())
+  userId    Int
+  chatId    Int
+  writer    User     @relation(fields: [userId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id])
+}
+
+enum OnlineStatus {
+  ONLINE
+  OFFLINE
+  PLAYING
+}
+
+enum ChatVisibility {
+  PUBLIC
+  PRIVATE
+  PROTECTED
+  DIRECT
+}
