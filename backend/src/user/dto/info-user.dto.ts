@@ -21,6 +21,9 @@ export class UserBasicInfoDto {
   @ApiProperty()
   wins: number;
 
+  @ApiProperty()
+  loses: number;
+
   public static fromUser(user) {
     const userInfo = new UserBasicInfoDto();
     userInfo.id = user.id;
@@ -28,6 +31,7 @@ export class UserBasicInfoDto {
     userInfo.status = user.status;
     userInfo.avatar = user.avatarURL;
     userInfo.wins = user.wins;
+    userInfo.loses = user.loses;
     return userInfo;
   }
 }

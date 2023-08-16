@@ -85,14 +85,11 @@ export class GameService {
     const user = await this.prisma.user.findFirst({
       where: { username: username }
     });
-    console.log('before users', user);
 
     if (user) {
       this.waitingRoom.push({ client, user });
-      console.log('before enters');
 
       if (this.waitingRoom.length >= 2) {
-        console.log('after enters');
         const player1 = this.waitingRoom.shift();
         const player2 = this.waitingRoom.shift();
         const game = await this.createGame(player1.user.id, player2.user.id);

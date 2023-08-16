@@ -69,8 +69,7 @@ export class GameGateway
     @MessageBody() username: string | null
   ) {
     const game = await this.gameService.handleWaitingRoom(client, username);
-    const GOALS = 25;
-    console.log('game ->', game);
+    const GOALS = 3;
 
     if (game) {
       game.player1.client.join(game.game);
@@ -100,15 +99,16 @@ export class GameGateway
           });
           game.player1.client.disconnect();
           game.player2.client.disconnect();
-          const update_id =
+        const [winner_id, loser_id] =
             gameState.player1Score > gameState.player2Score
-              ? gameState.player1Score
-              : gameState.player2Score;
-          const update_wins =
-            update_id === game.player1.user.id
-              ? game.player1.user.wins
-              : game.player2.user.wins;
-          this.userService.updateUser(update_id, { wins: update_wins + 1 });
+              ? [gameState.player1Id, gameState.player2Id]
+              : [gameState.player2Id, gameState.player1Id];
+          const [update_wins, update_loses] =
+            winner_id === game.player1.user.id
+              ? [game.player1.user.wins, game.player2.user.loses]
+              : [game.player2.user.wins, game.player1.user.loses];
+          this.userService.updateUser(winner_id, { wins: update_wins + 1 });
+          this.userService.updateUser(loser_id, { loses: update_loses + 1 });
         }
       }, 10);
 
@@ -123,6 +123,9 @@ export class GameGateway
           this.userService.updateUser(game.player2.user.id, {
             wins: game.player2.user.wins + 1
           });
+          this.userService.updateUser(game.player1.user.id, {
+            loses: game.player1.user.loses + 1
+          });
         }
       });
 
@@ -136,6 +139,9 @@ export class GameGateway
           });
           this.userService.updateUser(game.player1.user.id, {
             wins: game.player1.user.wins + 1
+          });
+          this.userService.updateUser(game.player2.user.id, {
+            loses: game.player2.user.loses + 1
           });
         }
       });

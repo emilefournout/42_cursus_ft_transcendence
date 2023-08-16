@@ -101,7 +101,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Updates the user.',
-    description: 'Takes optional username and optional wins. If none are provided, returns 400'
+    description: 'Takes optional username, wins and loses. If none are provided, returns 400'
   })
   async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
     let userUpdated;

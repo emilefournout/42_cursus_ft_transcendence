@@ -75,7 +75,9 @@ export class UserService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
-    if(!updateUserDto.username && (updateUserDto.wins === undefined || updateUserDto.wins === null))
+    if(!updateUserDto.username &&
+        (updateUserDto.wins === undefined || updateUserDto.wins === null) &&
+        (updateUserDto.loses === undefined || updateUserDto.loses === null))
       throw new BadRequestException('Empty request')
     const user = await this.findUserById(id);
     if (!user)

@@ -27,4 +27,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsNumber()
   wins?: number
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  loses?: number
 }
