@@ -220,4 +220,23 @@ export class UserController {
   ) {
     await this.userService.declineUserFriends(user.sub, id);
   }
+
+  @Delete('/friends/delete/:id')
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the friend to delete'
+  })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Deletes a friend or a pending request',
+    description:
+      'If the friend or request is not found, 404 will be returned'
+  })
+  @UseGuards(JwtAuthGuard)
+  async deleteUserFriends(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    await this.userService.declineUserFriends(user.sub, id);
+  }
 }
