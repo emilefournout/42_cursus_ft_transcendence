@@ -4,6 +4,7 @@ import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { url } from 'inspector';
+import { UserNotFoundException } from './exceptions/user-service.exception';
 
 @Injectable()
 export class UserService {
@@ -102,6 +103,10 @@ export class UserService {
   }
 
   async getUserHistory(id: number) {
+    const user = await this.findUserById(id);
+    if(!user)
+      throw new UserNotFoundException();
+    
     const userGames = await this.prisma.$queryRaw`
       SELECT
       g.points_user1, g.points_user2, g.user1_id, g.user2_id,

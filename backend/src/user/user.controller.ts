@@ -48,6 +48,15 @@ export class UserController {
     return this.userService.getUserHistory(user.sub);
   }
 
+  @Get('history/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Returns last 10 games of the user based on the id.' })
+  async getUserHistoryById(@Param('id', ParseIntPipe) id) {
+    return this.userService.getUserHistory(id);
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
