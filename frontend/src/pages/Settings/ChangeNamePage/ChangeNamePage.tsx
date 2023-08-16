@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BoardContext } from "../../Board/Board";
 export function ChangeNamePage() {
   const navigate = useNavigate();
   const [newUsername, setNewUsername] = useState("");
   const [confirm, setConfirm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const boardContext = React.useContext(BoardContext);
   const validateUsername = () => {
     if (confirm.length < 5) {
       setErrorMessage("username must be at least 5 characters long");
@@ -24,6 +26,7 @@ export function ChangeNamePage() {
         if (response.status === 200) {
           localStorage.setItem("username", newUsername);
           setErrorMessage("username changed");
+          boardContext?.updateMe();
         } else {
           setErrorMessage("Error while changing username");
         }

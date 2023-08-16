@@ -1,7 +1,7 @@
 import React, { JSX, useEffect, useState } from "react";
 import "./ChatLeftBar.css";
 import NewChatIcon from "./NewChatIcon.svg";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChatInfo } from "../Chat";
 
 export interface LeftBarProps {

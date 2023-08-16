@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./RoomInput.css";
 import SendIcon from "./SendIcon.svg";
 import { useParams } from "react-router-dom";
+import { BoardContext } from "../../../Board/Board";
 
 export function RoomInput() {
   const [input, setInput] = useState("");
   const { id } = useParams();
-  const userId = localStorage.getItem("user_id");
+  const boardContext = useContext(BoardContext);
+  const userId = boardContext?.me.id;
   const sendMessage = () => {
     if (input.length === 0) {
       alert("Please enter a message.");
@@ -19,8 +21,6 @@ export function RoomInput() {
       return;
     }
 
-    const numUserId = parseInt(userId);
-
     fetch(`${process.env.REACT_APP_BACKEND}/chat/${id}/message`, {
       method: "POST",
       headers: {
@@ -29,7 +29,7 @@ export function RoomInput() {
       },
       body: JSON.stringify({
         text: input,
-        userId: numUserId,
+        userId: userId,
       }),
     })
       .then((response) => {

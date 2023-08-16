@@ -3,6 +3,7 @@ import { Message } from "./Message";
 import { useParams } from "react-router-dom";
 import "./Messages.css";
 import { RoomInput } from "../RoomInput/RoomInput";
+import { BoardContext } from "../../../Board/Board";
 
 export interface MsgProps {
   messages: Array<Msg>;
@@ -36,7 +37,8 @@ export function Messages() {
     }
     return () => {};
   }, [id]);
-  const myUserId = localStorage.getItem("user_id");
+  const boardContext = React.useContext(BoardContext);
+  const myUserId = boardContext?.me.id;
   return (
     <>
       {" "}
@@ -47,9 +49,7 @@ export function Messages() {
           }
           if (!myUserId) throw new Error("No user id");
           const isMyMessage =
-            message.userId === parseInt(myUserId)
-              ? "message-right"
-              : "message-left";
+            message.userId === myUserId ? "message-right" : "message-left";
           return (
             <div className={isMyMessage} key={message.uuid}>
               {message.text}

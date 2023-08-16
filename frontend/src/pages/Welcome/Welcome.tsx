@@ -43,19 +43,8 @@ export function Welcome() {
         if (data.access_token) {
           localStorage.setItem("access_token", data.access_token);
           localStorage.setItem("username", data.username);
+          navigate("/");
         } else throw new Error();
-      })
-      .then(() =>
-        fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        })
-      )
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("user_id", data.id);
-        navigate("/");
       })
       .catch((error) => console.log(error));
   }

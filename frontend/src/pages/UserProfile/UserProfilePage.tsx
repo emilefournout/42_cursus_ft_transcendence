@@ -1,5 +1,8 @@
 import React from "react";
 import { ProfileLeftBar } from "./ProfileLeftBar/ProfileLeftBar";
+import { UserProfile } from "./UserProfile/UserProfile";
+import { Outlet } from "react-router-dom";
+import { BoardContext, User } from "../Board/Board";
 
 export enum RequestType {
   enabled = "ENABLED",
@@ -16,13 +19,6 @@ export interface FriendRequest {
   requester_id: number;
   adressee_id: number;
   status: string;
-}
-export interface User {
-  id: number;
-  username: string;
-  avatar: string;
-  status: string;
-  wins: number;
 }
 
 export const ProfilePageContext = React.createContext<ProfileContextArgs>(
@@ -41,7 +37,8 @@ export function UserProfilePage() {
     User[] | undefined
   >(undefined);
 
-  const myId = localStorage.getItem("user_id");
+  const boardContext = React.useContext(BoardContext);
+  const myId = boardContext?.me.id;
 
   const getUserInfoFromId = React.useCallback(
     async (friendId: number): Promise<User> => {
@@ -67,7 +64,7 @@ export function UserProfilePage() {
     (typedFriendsRequests: FriendRequest[]): Promise<User>[] => {
       return typedFriendsRequests.map((friendRequest) => {
         const friendId =
-          friendRequest.adressee_id.toString() === myId
+          friendRequest.adressee_id === myId
             ? friendRequest.requester_id
             : friendRequest.adressee_id;
         return getUserInfoFromId(friendId);
@@ -84,14 +81,11 @@ export function UserProfilePage() {
           if (type === RequestType.enabled) {
             return request.status === type;
           } else if (type === RequestType.pending) {
-            return (
-              request.status === type &&
-              request.requester_id.toString() === myId
-            );
+            return request.status === type && request.requester_id === myId;
           } else {
             return (
               request.status === RequestType.pending &&
-              request.adressee_id.toString() === myId
+              request.adressee_id === myId
             );
           }
         }
@@ -127,9 +121,10 @@ export function UserProfilePage() {
   }, [setFriends]);
 
   React.useEffect(() => {
+    if (myId === undefined) return;
     updateFriends();
     return () => {};
-  }, [updateFriends]);
+  }, [myId, updateFriends]);
 
   return (
     <>
@@ -144,9 +139,8 @@ export function UserProfilePage() {
         }
       >
         <ProfileLeftBar />
+        <Outlet />
       </ProfilePageContext.Provider>
-
-      {/*<UserProfile />*/}
     </>
   );
 }

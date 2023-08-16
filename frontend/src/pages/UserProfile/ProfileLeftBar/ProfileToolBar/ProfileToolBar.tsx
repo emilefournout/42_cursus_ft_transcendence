@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import "../ProfileLeftBar.css";
 import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { RequestTypeButton } from "./RequestTypeButton";
+import { useNavigate } from "react-router-dom";
 
 export function ProfileToolBar() {
   const [newFriend, setNewFriend] = useState<string>("");
   const profileContext = React.useContext(ProfilePageContext);
-
+  const navigate = useNavigate();
   const addFriend = () => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/info/username/${newFriend}`, {
       method: "GET",
@@ -48,6 +49,11 @@ export function ProfileToolBar() {
 
   return (
     <>
+      <div>
+        <button onClick={() => navigate("/board/userAccount")}>
+          my profil
+        </button>
+      </div>
       <div className="input-add-friend">
         <input
           value={newFriend}

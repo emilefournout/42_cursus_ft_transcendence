@@ -1,65 +1,75 @@
 import React from "react";
-import { AcceptedFriendCard } from "./FriendCard/AcceptedFriendCard";
-import { ProfilePageContext, RequestType, User } from "../../UserProfilePage";
+import {
+  AcceptedFriendCard,
+  FriendCardProps,
+} from "./FriendCard/AcceptedFriendCard";
+import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { ProfileBarContext } from "../ProfileLeftBar";
 import { PendingFriendCard } from "./FriendCard/PendingFriendCard";
 import { ReceivedFriendCard } from "./FriendCard/ReceivedFriendCard";
+import { User } from "../../../Board/Board";
 
 export function FriendList() {
   const profileBarContext = React.useContext(ProfileBarContext);
   const profilePageContext = React.useContext(ProfilePageContext);
+  const isEnabled = () =>
+    profileBarContext.requestsType === RequestType.enabled;
+  const isEnabledUndefined = () =>
+    isEnabled() && profilePageContext.acceptedFriends === undefined;
 
-  if (
-    (profileBarContext.requestsType === RequestType.enabled &&
-      profilePageContext.acceptedFriends === undefined) ||
-    (profileBarContext.requestsType === RequestType.pending &&
-      (profilePageContext.pendingFriends === undefined ||
-        profilePageContext.receivedFriends === undefined))
-  ) {
-    return <>loading</>;
-  } else if (
-    profileBarContext.requestsType === RequestType.enabled &&
-    profilePageContext.acceptedFriends!.length === 0
-  ) {
-    return <>no friends loser</>;
-  } else if (
-    profileBarContext.requestsType === RequestType.pending &&
+  const isPending = () =>
+    profileBarContext.requestsType === RequestType.pending;
+  const isPendingUndefined = () =>
+    isPending() &&
+    (profilePageContext.pendingFriends === undefined ||
+      profilePageContext.receivedFriends === undefined);
+
+  const isEnabledEmpty = () =>
+    isEnabled() && profilePageContext.acceptedFriends!.length === 0;
+
+  const isPendingEmpty = () =>
+    isPending() &&
     profilePageContext.pendingFriends!.length === 0 &&
-    profilePageContext.receivedFriends!.length === 0
-  ) {
-    return <>no pending requests</>;
-  } else if (profileBarContext.requestsType === RequestType.enabled) {
+    profilePageContext.receivedFriends!.length === 0;
+
+  const buildFriendList = (
+    FriendCard: (props: FriendCardProps) => React.JSX.Element,
+    friends: User[]
+  ) => {
     return (
       <>
-        {profilePageContext.acceptedFriends!.map((userInfo: User, index) => {
-          return (
-            <div key={index}>
-              <AcceptedFriendCard userInfo={userInfo} />
-            </div>
-          );
+        {friends.map((userInfo: User, index) => {
+          return <div key={index}>{<FriendCard userInfo={userInfo} />}</div>;
         })}
       </>
+    );
+  };
+
+  if (isEnabledUndefined() || isPendingUndefined()) {
+    return <>loading</>;
+  } else if (isEnabledEmpty()) {
+    return <>no friends loser</>;
+  } else if (isPendingEmpty()) {
+    return <>no pending requests</>;
+  } else if (isEnabled()) {
+    return buildFriendList(
+      AcceptedFriendCard,
+      profilePageContext.acceptedFriends!
     );
   } else {
     return (
       <>
         <div>
-          {profilePageContext.pendingFriends!.map((userInfo: User, index) => {
-            return (
-              <div key={index}>
-                <PendingFriendCard userInfo={userInfo} />
-              </div>
-            );
-          })}
+          {buildFriendList(
+            ReceivedFriendCard,
+            profilePageContext.receivedFriends!
+          )}
         </div>
         <div>
-          {profilePageContext.receivedFriends!.map((userInfo: User, index) => {
-            return (
-              <div key={index}>
-                <ReceivedFriendCard userInfo={userInfo} />
-              </div>
-            );
-          })}
+          {buildFriendList(
+            PendingFriendCard,
+            profilePageContext.pendingFriends!
+          )}
         </div>
       </>
     );

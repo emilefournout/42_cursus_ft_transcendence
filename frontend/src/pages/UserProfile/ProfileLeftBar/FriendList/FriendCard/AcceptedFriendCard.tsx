@@ -1,15 +1,20 @@
 import React from "react";
 import { FriendStatus, UserStatus } from "../FriendStatus";
 import "./FriendCard.css";
-import { User } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
+import { User } from "../../../../Board/Board";
+import { Link, useNavigate } from "react-router-dom";
 
-interface AcceptedFriendCardProps {
+export interface FriendCardProps {
   userInfo: User;
 }
-export function AcceptedFriendCard(props: AcceptedFriendCardProps) {
+export function AcceptedFriendCard(props: FriendCardProps) {
+  const navigate = useNavigate();
   return (
-    <div className="friend-card">
+    <div
+      className="friend-card"
+      onClick={() => navigate("/board/userAccount/" + props.userInfo.id)}
+    >
       <Avatar url={props.userInfo.avatar} />
       <div>{props.userInfo.username}</div>
       <FriendStatus status={props.userInfo.status} />

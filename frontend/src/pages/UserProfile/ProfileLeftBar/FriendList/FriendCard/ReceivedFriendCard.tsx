@@ -1,11 +1,9 @@
 import React from "react";
 import "./FriendCard.css";
-import { ProfilePageContext, User } from "../../../UserProfilePage";
+import { ProfilePageContext } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
-interface ReceivedFriendCardProps {
-  userInfo: User;
-}
-export function ReceivedFriendCard(props: ReceivedFriendCardProps) {
+import { FriendCardProps } from "./AcceptedFriendCard";
+export function ReceivedFriendCard(props: FriendCardProps) {
   const profilePageContext = React.useContext(ProfilePageContext);
   const accept = async () => {
     fetch(

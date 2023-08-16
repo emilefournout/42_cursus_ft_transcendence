@@ -1,7 +1,7 @@
 import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 import SEO from "../../components/Seo";
 import "./Chat.css";
-import { Outlet, useOutletContext } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Visibility } from "./Room/RoomCreate/RoomCreate";
 export interface ChatInfo {

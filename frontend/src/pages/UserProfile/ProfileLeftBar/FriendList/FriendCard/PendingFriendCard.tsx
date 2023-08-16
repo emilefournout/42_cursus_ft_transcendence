@@ -1,11 +1,9 @@
 import React from "react";
 import "./FriendCard.css";
-import { User } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
-interface PendingFriendCardProps {
-  userInfo: User;
-}
-export function PendingFriendCard(props: PendingFriendCardProps) {
+import { FriendCardProps } from "./AcceptedFriendCard";
+
+export function PendingFriendCard(props: FriendCardProps) {
   return (
     <div className="friend-card">
       <Avatar url={props.userInfo.avatar} />

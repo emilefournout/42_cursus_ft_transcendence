@@ -22,6 +22,7 @@ import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
 import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
 import { Messages } from "./pages/Chat/Room/Messages/Messages";
 import { Root } from "./pages/Root/Root";
+import { UserProfile } from "./pages/UserProfile/UserProfile/UserProfile";
 
 function App() {
   return (
@@ -51,7 +52,10 @@ function App() {
               <Route path="" element={<SettingsHomePage />} />
               <Route path="update" element={<ChangeNamePage />} />
             </Route>
-            <Route path="userAccount" element={<UserProfilePage />} />
+            <Route path="userAccount" element={<UserProfilePage />}>
+              <Route path="" element={<UserProfile />} />
+              <Route path=":id" element={<UserProfile />} />
+            </Route>
           </Route>
           <Route path="/cookieError" element={<CookieError />} />
           <Route path="*" element={<NotFound />} />
