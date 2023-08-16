@@ -3,35 +3,29 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
-  NotImplementedException,
   Param,
-  ParseUUIDPipe,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
 import { CreateGameDto } from './dto/game.dto';
 import { GameService } from './game.service';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Game')
 @Controller('game')
 export class GameController {
   constructor(private gameService: GameService) {}
-  
-  @Get('info/:id')
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Return basic information about a game"})
-  findGame(@Param('id', ParseUUIDPipe) id: string) {
-    const game = this.gameService.findGameById(id);
-    if (game === undefined)
-    throw new NotFoundException('Game was not found');
-    return game
+
+  @Get(':id')
+  findGame(@Param('id', ParseIntPipe) id) {
+    return this.gameService.findGameById(id);
   }
 
-  @Get('active-plays')
-  @ApiOperation({summary: "Return the games that can be watched"})
-  getActiveGame() {
-    return this.gameService.findActiveGames();
-  }
+  @Post()
+  createGame(@Body() createGameDto: CreateGameDto) {}
+
+  @Patch(':id')
+  updateGame(@Param('id', ParseIntPipe) id) {}
+
+  @Delete(':id')
+  deleteGame(@Param('id', ParseIntPipe) id) {}
 }

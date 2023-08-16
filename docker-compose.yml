@@ -1,27 +1,25 @@
-version: '3.8'
+version: '3.1'
 
-name: transcendence
 services:
+
   db:
     container_name: database
-    image: postgres:15.3-alpine3.18
+    image: postgres
     restart: unless-stopped
-    env_file: ./backend/sql/.env
-    ports:
-      - 5432:5432
+    environment:
+      #POSTGRES_DB: postgres
+      #POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - transcendence_network
+      - ./data:/var/lib/postgresql/data
+
   adminer:
     container_name: adminer
     image: adminer
     restart: unless-stopped
     ports:
       - 5000:8080
-    networks:
-      - transcendence_network
+
   backend:
     container_name: backend
     build: ./backend/.
@@ -31,10 +29,7 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
-    networks:
-      - transcendence_network
-    depends_on:
-      - db
+
   frontend:
     container_name: frontend
     build: ./frontend/.
@@ -44,13 +39,4 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    networks:
-      - transcendence_network
 
-volumes:
-  db-data:
-
-networks:
-  transcendence_network:
-    name: transcendence_network
-    driver: bridge

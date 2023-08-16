@@ -2,14 +2,6 @@
 /dist
 /node_modules
 
-# Database
-/prisma/migrations
-
-# Database
-uploads/*.png
-uploads/*.jpg
-uploads/*.jpeg
-
 # Logs
 logs
 *.log
@@ -41,9 +33,3 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-# Enviroment
-.env
-
-# apena-ba test
-docker-compose.yml

@@ -1,286 +1,95 @@
-import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException, NotImplementedException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { UserBasicInfoDto } from './dto/info-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AssignAchievementDto } from './dto/assign-achievement.dto';
-import { url } from 'inspector';
-
+const bcrypt = require('bcrypt');
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Avatar, OnlineStatus, User } from './user.entity';
+import { CreateUserDto, UserBasicInfoDto } from './dto/user.dto';
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  private users: User[] = [
+    {
+      id: 1,
+      username: 'efournou',
+      password: '',
+      salt: '',
+      status: OnlineStatus.ONLINE,
+      email: '',
+      avatar: null,
+    },
+    {
+      id: 2,
+      username: 'jarredon',
+      password: '',
+      salt: '',
+      status: OnlineStatus.OFFLINE,
+      email: '',
+      avatar: null,
+    },
+    {
+      id: 3,
+      username: 'apena-ba',
+      password: '',
+      salt: '',
+      status: OnlineStatus.ONLINE,
+      email: '',
+      avatar: null,
+    },
+    {
+      id: 4,
+      username: 'n-tamayo',
+      password: '',
+      salt: '',
+      status: OnlineStatus.PLAYING,
+      email: '',
+      avatar: null,
+    },
+    {
+      id: 5,
+      username: 'josesanc',
+      password: '',
+      salt: '',
+      status: OnlineStatus.PLAYING,
+      email: '',
+      avatar: null,
+    },
+  ];
 
-  async createUser(intraname: string, username: string, avatar: string) {
-      const user = await this.prisma.user.create({
-        data: {
-          intraname: intraname,
-          username: username,
-          avatarURL: avatar
-        }
-      });
-      return user;
-  }
-
-  async findUserById(id: number) {
-    const user = await this.prisma.user.findFirst({
-      where:{
-        id: id
-      }
-    });
-    return user;
-  }
-
-  async findUserByName(username: string) {
-    const user = await this.prisma.user.findFirst({
-      where:{
-        username: username
-      }
-    });
-    return user;
-  }
-
-  async findUserByIntraname(intraname: string) {
-    const user = await this.prisma.user.findFirst({
-      where:{
-        intraname: intraname
-      }
-    });
-    return user;
-  }
-
-  async getUserInfoById(id: number)  : Promise<UserBasicInfoDto> {
-    const user = await this.findUserById(id)
-    if (!user)
-      return null;
-    return UserBasicInfoDto.fromUser(user);
-  }
-
-  async getUserInfoByName(username: string){
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: username
-      }
-    })
-    if(!user)
-      throw new NotFoundException('User not found')
-    return UserBasicInfoDto.fromUser(user);
-  }
-
-  async deleteUser(id: number) {
-    const user = await this.prisma.user.delete({
-      where: {
-        id: id
-      }
-    })
-    return user;
-  }
-
-  async updateUser(id: number, updateUserDto: UpdateUserDto){
-    if(!updateUserDto.username && (updateUserDto.wins === undefined || updateUserDto.wins === null))
-      throw new BadRequestException('Empty request')
-    const user = await this.findUserById(id);
-    if (!user)
-      return null;
-    const updatedUser = await this.prisma.user.update({
-      where: {
-        id: id
-      },
-      data: updateUserDto
-    })
-    return updatedUser;
-  }
-
-  async getRanking() {
-    const users = await this.prisma.user.findMany({
-      orderBy: {
-        wins: 'desc'
-      },
-      take: 10
-    })
-    return users.map((chat) => UserBasicInfoDto.fromUser(chat));
-  }
-
-  async getUserHistory(id: number) {
-    const userGames = await this.prisma.$queryRaw`
-      SELECT
-      g.points_user1, g.points_user2, g.user1_id, g.user2_id,
-      u1.username AS user1_username, u2.username AS user2_username
-      FROM "Game" g
-      INNER JOIN "User" u1 ON g.user1_id = u1.id
-      INNER JOIN "User" u2 ON g.user2_id = u2.id
-      WHERE g.user1_id = ${id} OR g.user2_id = ${id}
-      ORDER BY g."createdAt" DESC
-      LIMIT 10;
-    `;
-    return userGames;
-  }
-
-  async addUserBlocked(userId: number, targetId: number){
-    const user = await this.findUserById(userId)
-    const target = await this.findUserById(targetId)
-    if (!user || !target)
-      throw new NotFoundException('User not found');
-    try {
-      await this.prisma.userBlocked.create({
-        data: {
-        user1_id: userId,
-        user2_id: targetId
-      }})
-    } catch(error) {
-      throw new ForbiddenException('Could not create blocked user')
+  createUser(username: string, password: string, email: string, avatar: Avatar) {
+    if (
+      this.users.find(
+        (elem) =>
+          elem.username == username ||
+          elem.email == email,
+      ) != undefined
+    ) {
+      throw new ForbiddenException('Repeated username or email');
     }
+    const maxID = this.users.reduce((a, b) => Math.max(a, b.id), -Infinity);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    let newUser = new User();
+    newUser.id = maxID + 1;
+    newUser.password = hash;
+    newUser.salt = salt;
+    newUser.username = username
+    newUser.email = email;
+    newUser.status = OnlineStatus.OFFLINE;
+    newUser.avatar = null;
+    this.users.push(newUser);
   }
 
-  async deleteUserBlocked(userId: number, blockedId: number){
-    try {
-      await this.prisma.userBlocked.delete({
-        where: {
-          user1_id_user2_id: {
-            user1_id: userId,
-            user2_id: blockedId
-          }
-        }
-      })
-    } catch(error) {
-      throw new ForbiddenException('Could not remove blocked user')
+  findUserById(id: number): User {
+    return this.users.find((elem) => elem.id == id);
+  }
+
+  getUserInfoById(id: number): UserBasicInfoDto {
+    const user = this.findUserById(id);
+    if (user === undefined) {
+      return undefined;
     }
-  }
-
-  async checkFriendships(requester_id: number, adressee_id: number) {
-    const friendship = await this.findFriendShipByIds(adressee_id, requester_id);
-    const friendship2 = await this.findFriendShipByIds(requester_id, adressee_id);
-    if(friendship)
-      return (friendship.status === 'ENABLED' ? 'Alredy friends' : 'Friendship pending')
-    else if(friendship2)
-      return (friendship2.status === 'ENABLED' ? 'Alredy friends' : 'Friendship pending')
-    return null;
-  }
-
-  async addUserFriends(requester_id: number, adressee_id: number){
-    const requester = await this.findUserById(requester_id)
-    const adressee = await this.findUserById(adressee_id)
-    if(!requester || !adressee)
-      throw new NotFoundException('User not found');
-    
-    const checkFriends = await this.checkFriendships(requester_id, adressee_id);
-    if(checkFriends !== null)
-      throw new ForbiddenException(checkFriends)
-
-    if(requester_id === adressee_id)
-      throw new ForbiddenException('Requester and adressee has same id')
-    
-    try {
-      await this.prisma.userFriendship.create({
-        data: {
-          requester_id: requester_id,
-          adressee_id: adressee_id
-      }})
-    } catch(error) {
-      throw new ForbiddenException('Could not add friend')
-    }
-  }
-
-  private async findFriendShipByIds(requester_id: number, adressee_id: number){
-    const friendship = await this.prisma.userFriendship.findUnique({
-      where: {
-        requester_id_adressee_id : {
-          requester_id: requester_id,
-          adressee_id: adressee_id
-        }
-      }
-    });
-    return friendship;
-  }
-
-  async acceptUserFriends(adressee_id: number, requester_id: number) {
-    const friendship = await this.findFriendShipByIds(requester_id, adressee_id)
-    if(!friendship)
-      throw new NotFoundException('Friendship not found');
-    else if(friendship.status === 'ENABLED')
-      throw new ForbiddenException('Friend alredy accepted');
-    await this.prisma.userFriendship.update({
-      where: {
-        requester_id_adressee_id : {
-          requester_id: requester_id,
-          adressee_id: adressee_id
-        }
-      },
-      data: {
-        status: 'ENABLED'
-      }
-    })
-  }
-
-  async declineUserFriends(adressee_id: number, requester_id: number) {
-    const friendship = await this.findFriendShipByIds(requester_id, adressee_id);
-    const request = await this.findFriendShipByIds(adressee_id, requester_id);
-    if(!friendship && !request)
-      throw new NotFoundException('Friendship not found');
-    if(!friendship)
-      [requester_id, adressee_id] = [adressee_id, requester_id]
-    try {
-      await this.prisma.userFriendship.delete({
-        where: {
-          requester_id_adressee_id: {
-            requester_id: requester_id,
-            adressee_id: adressee_id
-          }
-        }
-      })
-    } catch(error) {
-      throw new ForbiddenException('Could not delete friendship user')
-    }
-  }
-
-  async getUserFriendships(user_id: number) {
-    const friendships = await this.prisma.userFriendship.findMany({
-      where: {
-        OR: [
-          {requester_id: user_id},
-          {adressee_id: user_id}
-        ]
-      }
-    })
-    if(!friendships)
-      throw new NotFoundException('No friendships found for user')
-    return friendships
-  }
-
-  async findAchievementByName(name: string){
-    const achievement = await  this.prisma.achievement.findUnique({
-      where: {
-        name: name
-      }
-    })
-    return achievement;
-  }
-
-  async assingAchievementToUser(id: number, achievementName: string){
-    const user = await this.findUserById(id)
-    const achievement = await  this.findAchievementByName(achievementName)
-    if(!user)
-      throw new NotFoundException('User not found')
-    else if(!achievement)
-      throw new NotFoundException('Achievement not found')
-    
-    try {
-      await this.prisma.user.update({
-        where: {id: id},
-        data: {
-          achievements: {
-            connect: [{id: achievement.id}]
-          }
-        }
-      })
-      await this.prisma.achievement.update({
-        where: {id: achievement.id},
-        data: {
-          users: {
-            connect: [{id: id}]
-          }
-        }
-      })
-    } catch (error) {
-      throw new ForbiddenException('Could not add achievement')
-    }
+    let userInfo = new UserBasicInfoDto();
+    userInfo.id = user.id;
+    userInfo.username = user.username;
+    userInfo.status = user.status;
+    userInfo.avatar = user.avatar;
+    return userInfo;
   }
 }

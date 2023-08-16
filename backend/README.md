@@ -68,16 +68,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## Environment Variables needed
-- DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_HOST}:5432/${POSTGRES_DB}?schema=public", for prisma connection.
-- INTRA_UID, for the 42 intra app.
-- JWT_SECRET, for signing JWT tokens.
-
-## Database Environment Variables needed (inside sql folder)
-- POSTGRES_DB
-- POSTGRES_USER
-- POSTGRES_PASSWORD
-
 ## License
 
 Nest is [MIT licensed](LICENSE).
