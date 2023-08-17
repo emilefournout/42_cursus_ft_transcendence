@@ -41,13 +41,19 @@ nav > a {
 	width: var(--nav-icon-size);
 	height: var(--nav-icon-size);
 
+	border-style: solid;
 	border-radius: 50px;
+	border-width: 0;
+	border-color: var(--Cosmic-Purple);
 
-    cursor: pointer;
+	cursor: pointer;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	transition: border 0.15s ease;
+
 }
 
 .nav-icons > img {
@@ -56,11 +62,10 @@ nav > a {
 }
 
 .nav-icons:hover {
-    border-style: solid;
-    border-width: 4px;
+	border-width: 4px;
 	border-color: var(--Mooned-Teal);
 }
 
 .nav-responsive-text {
-    font-size: clamp(0.7rem, calc(1vw + 2vh), 1.2rem);
+	font-size: clamp(0.7rem, calc(1vw + 2vh), 1.2rem);
 }
