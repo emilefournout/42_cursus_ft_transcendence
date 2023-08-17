@@ -9,26 +9,27 @@ interface History {
   user1_username: string;
   user2_username: string;
 }
-export function MatchHistory() {
+
+interface MatchHistoryProps {
+  userId: number;
+}
+export function MatchHistory(props: MatchHistoryProps) {
   const [history, setHistory] = React.useState<History[]>([]);
   React.useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/user/history/${1}`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/user/history/${props.userId}`)
       .then((res) => res.json())
       .then((data) => setHistory(data));
-  }, []);
+  }, [props.userId]);
   return (
     <>
-      <MatchHistoryCard
-        result={MatchResult.victory}
-        opponentName={"Apena-ba"}
-      />
-      <MatchHistoryCard
-        result={MatchResult.victory}
-        opponentName={"Apena-ba"}
-      />
-      <MatchHistoryCard result={MatchResult.defeat} opponentName={"efournou"} />
-      <MatchHistoryCard result={MatchResult.defeat} opponentName={"efournou"} />
-      <MatchHistoryCard result={MatchResult.defeat} opponentName={"efournou"} />
+      {history.map((match) => {
+        return (
+          <MatchHistoryCard
+            result={MatchResult.defeat}
+            opponentName={match.user1_username}
+          />
+        );
+      })}
     </>
   );
 }

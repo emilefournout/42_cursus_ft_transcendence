@@ -1,9 +1,9 @@
-import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 import SEO from "../../components/Seo";
 import "./Chat.css";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Visibility } from "./Room/RoomCreate/RoomCreate";
+import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 export interface ChatInfo {
   id: number;
   name?: string;
@@ -13,7 +13,7 @@ export interface ChatInfo {
 }
 export function ChatPage() {
   const [chats, setChats] = useState([]);
-  useEffect(() => {
+  const updateChats = () => {
     fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
       method: "GET",
       headers: {
@@ -24,8 +24,11 @@ export function ChatPage() {
       .then((data) => {
         setChats(data);
       });
+  }
+  useEffect(() => {
+    updateChats();
     return () => {};
-  }, [setChats]);
+  }, []);
   return (
     <>
       <SEO
@@ -34,7 +37,7 @@ export function ChatPage() {
       />
 
       <div id="chatpage-container">
-        <LeftBar chats={chats} setChats={setChats} />
+        <LeftBar chats={chats} updateChats={updateChats} />
         <Outlet context={[chats, setChats]} />
         {/*<Room />*/}
       </div>

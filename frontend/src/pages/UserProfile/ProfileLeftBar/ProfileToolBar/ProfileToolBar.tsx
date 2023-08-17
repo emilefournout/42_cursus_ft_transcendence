@@ -3,7 +3,7 @@ import "../ProfileLeftBar.css";
 import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { RequestTypeButton } from "./RequestTypeButton";
 import { useNavigate } from "react-router-dom";
-
+import ReloadBlackIcon from '../../../../common/reload_honey.svg'
 export function ProfileToolBar() {
   const [newFriend, setNewFriend] = useState<string>("");
   const profileContext = React.useContext(ProfilePageContext);
@@ -63,7 +63,7 @@ export function ProfileToolBar() {
         />
         <button onClick={addFriend}>+</button>
         <div>
-          <button onClick={profileContext.updateFriends}>reload</button>
+            <img className="nav-icons" src={ReloadBlackIcon} onClick={profileContext.updateFriends}/>
         </div>
       </div>
       <div className="request-type-buttons">

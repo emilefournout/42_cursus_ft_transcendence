@@ -19,9 +19,11 @@ export function Profile(props: ProfileProps) {
       <>
         <Avatar url={userInfo.avatar} />
         <div>{userInfo.username}</div>
-        <Stats wins={userInfo.wins} />
-        {/*<Achievements />
-      <MatchHistory />*/}
+        <div>
+          <Stats wins={userInfo.wins} />
+          {/*<Achievements />*/}
+          <MatchHistory userId={userInfo.id} />
+        </div>
       </>
     );
   }
