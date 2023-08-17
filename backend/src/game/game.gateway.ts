@@ -95,7 +95,8 @@ export class GameGateway
             );
           this.gameService.updateGame(game.game, {
             points_user1: gameState.player1Score,
-            points_user2: gameState.player2Score
+            points_user2: gameState.player2Score,
+            status: 'FINISHED'
           });
           game.player1.client.disconnect();
           game.player2.client.disconnect();
@@ -118,7 +119,8 @@ export class GameGateway
           this.server.to(game.game).emit('end', game.player2.user.username);
           this.gameService.updateGame(game.game, {
             points_user1: -1,
-            points_user2: GOALS
+            points_user2: GOALS,
+            status: 'FINISHED'
           });
           this.userService.updateUser(game.player2.user.id, {
             wins: game.player2.user.wins + 1
@@ -135,7 +137,8 @@ export class GameGateway
           this.server.to(game.game).emit('end', game.player1.user.username);
           this.gameService.updateGame(game.game, {
             points_user1: GOALS,
-            points_user2: -1
+            points_user2: -1,
+            status: 'FINISHED'
           });
           this.userService.updateUser(game.player1.user.id, {
             wins: game.player1.user.wins + 1

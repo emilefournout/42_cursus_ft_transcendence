@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 enum GameExistState {
   Waiting,
@@ -12,7 +12,6 @@ enum GameExistState {
 export function GamePlayPage() {
   const [gameExistState, setGameExistState] = useState(GameExistState.Waiting);
   const {id} = useParams();
-  const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
   const boardState: GameCanvasProps = {
     width: 600,
@@ -43,19 +42,25 @@ export function GamePlayPage() {
       },
     }).then((response) => {
       if (response.ok) {
-        var path = window.location.pathname;
-    path = path.substring(path.lastIndexOf('/') + 1);
-    console.log('Path is ' + path);
-
-    gameSocket.emit('join_active_room', path);
-        setGameExistState(GameExistState.Play);
+        return response.json();
       }
       else {
         setGameExistState(GameExistState.NotFound);
       }
+    }).then((body) => {
+      if(body && body.status !== 'PLAYING')
+        setGameExistState(GameExistState.NotFound);
+      else {
+        var path = window.location.pathname;
+        path = path.substring(path.lastIndexOf('/') + 1);
+        console.log('Path is ' + path);
+        
+        gameSocket.emit('join_active_room', path);
+        setGameExistState(GameExistState.Play);
+      }
     })
     
-  }, [id])
+  }, [id, gameSocket])
 
   useEffect(() => {
     gameSocket.off("update");
@@ -64,14 +69,14 @@ export function GamePlayPage() {
       updatePlayer1Score(data.player1Score);
       updatePlayer2Score(data.player2Score);
     });
-  }, [])
+  }, [gameSocket])
 
   useEffect(() => {
     gameSocket.off("end");
     gameSocket.on("end", (data: any) => {
         setShowModal(data);
     });
-  }, [])
+  }, [gameSocket])
 
   const handleRedirect = () => {
     window.location.href = "http://localhost:8000/userAccount";

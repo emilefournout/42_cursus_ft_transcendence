@@ -62,26 +62,16 @@ model TwoFactorAuthentication {
   twoFactorAuthenticationSecret String
 }
 
-enum TwoFactorAuthenticationStatus {
-  DISABLED
-  PENDING
-  ENABLED
-}
-
-enum FriendshipStatus {
-  PENDING
-  ENABLED
-}
-
 model Game {
-  uuid         String   @id @default(uuid())
+  uuid         String     @id @default(uuid())
   user1_id     Int
-  user1        User     @relation("Player1", fields: [user1_id], references: [id])
+  user1        User       @relation("Player1", fields: [user1_id], references: [id])
   user2_id     Int
-  user2        User     @relation("Player2", fields: [user2_id], references: [id])
-  points_user1 Int      @default(0)
-  points_user2 Int      @default(0)
-  createdAt    DateTime @default(now())
+  user2        User       @relation("Player2", fields: [user2_id], references: [id])
+  points_user1 Int        @default(0)
+  points_user2 Int        @default(0)
+  status       GameStatus @default(PLAYING)
+  createdAt    DateTime   @default(now())
 }
 
 model Avatar {
@@ -122,15 +112,31 @@ model Message {
   chat      Chat     @relation(fields: [chatId], references: [id])
 }
 
+enum ChatVisibility {
+  PUBLIC
+  PRIVATE
+  PROTECTED
+  DIRECT
+}
+
+enum TwoFactorAuthenticationStatus {
+  DISABLED
+  PENDING
+  ENABLED
+}
+
+enum FriendshipStatus {
+  PENDING
+  ENABLED
+}
+
 enum OnlineStatus {
   ONLINE
   OFFLINE
   PLAYING
 }
 
-enum ChatVisibility {
-  PUBLIC
-  PRIVATE
-  PROTECTED
-  DIRECT
+enum GameStatus {
+  FINISHED
+  PLAYING
 }
