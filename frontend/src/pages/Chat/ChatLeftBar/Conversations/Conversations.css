@@ -1,11 +1,11 @@
 .wrapper-conversation {
 	width: 100%;
-	height: clamp(1rem, 2vw, 3rem);
+	height: var(--NavBar-Height);
 
 	align-items: center;
 
 	color: var(--Browned-Text);
-	font-size: clamp(0.4rem, 2vw, 1.2rem);
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
 
 	padding-right: 8px;
 	border-bottom: 2px solid var(--Browned-Text);

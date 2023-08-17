@@ -1,5 +1,6 @@
 import React, { JSX, useEffect, useState } from "react";
 import "./ChatLeftBar.css";
+import "./Conversations/Conversations.css"
 import NewChatIcon from "./NewChatIcon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { ChatInfo } from "../Chat";
@@ -30,6 +31,7 @@ export function LeftBar(props: LeftBarProps) {
 					props.chats.map((chat: ChatInfo) => {
 						return (
 							<div
+								className="wrapper-conversation wrapper-row"
 								key={chat.id}
 								onClick={() => {
 									navigate(`/board/chats/${chat.id}`, {
