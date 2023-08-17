@@ -13,18 +13,28 @@
 
 .message {
 	width: fit-content;
+	max-width: 65%;
+	min-width: 1em;
 
 	margin-bottom: 8px;
+	padding: 4px;
 
 	color: var(--Browned-Text);
 	border-radius: var(--Default-BR);
 	background-color: var(--Light-Text);
+
+	font-size: 0.5rem;
 }
 
 .message-right {
 	margin-left: auto;
+	padding-right: 16px;
+
+	border-bottom-right-radius: 24px;
 }
 
 .message-left {
+	padding-left: 16px;
 
+	border-bottom-left-radius: 24px;
 }
