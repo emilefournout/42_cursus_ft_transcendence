@@ -17,7 +17,7 @@
 	color: var(--Light-Text);
 }
 
-/*  Based on the code by https://blog.hubspot.com/website/css-loading-animation  */
+/* Based on the code by https://blog.hubspot.com/website/css-loading-animation */
 .matchmaking-loader {
 	--mm-loader-size: clamp(2rem, 10vw, 5rem);
 	--mm-border-width: clamp(4px, 2vw, 20px);
@@ -26,13 +26,13 @@
 	border-radius: 50%;
 	border-top: var(--mm-border-width) solid var(--Honey-Yellow);
 
-	width: var(--mm-loader-size);
-	height: var(--mm-loader-size);
+	min-width: var(--mm-loader-size);
+	min-height: var(--mm-loader-size);
 
 	animation: spinner 4s linear infinite;
 }
 
 @keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }

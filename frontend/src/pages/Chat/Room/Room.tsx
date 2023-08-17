@@ -6,10 +6,10 @@ import "./Room.css";
 import { Outlet, useLocation, useParams } from "react-router-dom";
 
 export function Room() {
-  return (
-    <div className="wrapper-col wrapper-room">
-      <RoomToolBar />
-      <Outlet />
-    </div>
-  );
+	return (
+		<div className="wrapper-col wrapper-room">
+			<RoomToolBar />
+			<Outlet />
+		</div>
+	);
 }
