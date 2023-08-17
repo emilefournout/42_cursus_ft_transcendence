@@ -1,14 +1,30 @@
-.messages{
+.wrapper-msgs {
 	width: 100%;
+	padding: 0 32px;
+
+	flex-grow: 1;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
 	overflow-y: auto;
 }
 
-.message-right{
-	 color : green;
-	justify-content: right;
+.message {
+	width: fit-content;
+
+	margin-bottom: 8px;
+
+	color: var(--Browned-Text);
+	border-radius: var(--Default-BR);
+	background-color: var(--Light-Text);
 }
 
-.message-left{
-	color : cornflowerblue;
-	justify-content: left;
+.message-right {
+	margin-left: auto;
+}
+
+.message-left {
+
 }
