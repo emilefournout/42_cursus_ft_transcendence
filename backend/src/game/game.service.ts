@@ -74,7 +74,11 @@ export class GameService {
         where: {
           uuid: uuid
         },
-        data: updateGameDto
+        data: {
+          points_user1: updateGameDto.points_user1,
+          points_user2: updateGameDto.points_user2,
+          status: updateGameDto.status
+        }
       });
     } catch (err) {
       throw new ForbiddenException('Could not update game');

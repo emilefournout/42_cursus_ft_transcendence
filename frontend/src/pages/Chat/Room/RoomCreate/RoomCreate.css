@@ -8,6 +8,10 @@
 	font-size: 0.7rem;
 }
 
+.wrapper-new-room > input {
+	width: 620px;
+}
+
 .wrapper-new-room > button {
 	margin-top: 8px;
 	font-size: clamp(0.4rem, 2.5vw, 0.8rem);
@@ -17,7 +21,6 @@
 .wrapper-vis-btns {
 	align-items: center;
 
-	min-width: fit-content;
 	width: 620px;
 	height: 1.2rem;
 }

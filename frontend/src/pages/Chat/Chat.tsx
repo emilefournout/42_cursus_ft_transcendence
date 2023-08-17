@@ -24,7 +24,7 @@ export function ChatPage() {
       .then((data) => {
         setChats(data);
       });
-  }
+  };
   useEffect(() => {
     updateChats();
     return () => {};
