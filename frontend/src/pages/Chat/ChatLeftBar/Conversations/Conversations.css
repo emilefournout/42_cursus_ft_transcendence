@@ -11,8 +11,11 @@
 	border-bottom: 2px solid var(--Browned-Text);
 }
 
-#selected-conversation {
-	border-right: 6px solid var(--Mooned-Teal);
+#selected-conversation::after {
+	width: 6px;
+	height: 100%;
+
+	background-color: var(--Mooned-Teal);
 }
 
 .wrapper-conversation:hover {
