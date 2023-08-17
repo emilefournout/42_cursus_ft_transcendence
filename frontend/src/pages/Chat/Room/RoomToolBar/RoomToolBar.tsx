@@ -31,7 +31,7 @@ export function RoomToolBar(props: RoomNavBarProps) {
   }, [chats, id, location.state]);
 
   return (
-    <div className="wrapper-row wrapper-room-bar">
+    <div className="wrapper-room-bar">
       <span>{name}</span>
       {location.pathname.includes("param") ? (
         <img
