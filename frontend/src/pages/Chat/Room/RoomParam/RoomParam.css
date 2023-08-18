@@ -1,7 +1,10 @@
 .room-param{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+
+    width: 100%;
     gap: 25px;
     height: 100%;
     background-color: #2e7d32;
+    overflow-y : scroll;
 }

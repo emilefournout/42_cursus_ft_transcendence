@@ -23,6 +23,7 @@ import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
 import { Messages } from "./pages/Chat/Room/Messages/Messages";
 import { Root } from "./pages/Root/Root";
 import { UserProfile } from "./pages/UserProfile/UserProfile/UserProfile";
+import { Ranking } from "./pages/UserProfile/UserProfile/Profile/Ranking/Ranking";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="userAccount" element={<UserProfilePage />}>
               <Route path="" element={<UserProfile />} />
               <Route path=":id" element={<UserProfile />} />
+              <Route path="ranking" element={<Ranking />} />
             </Route>
           </Route>
           <Route path="/cookieError" element={<CookieError />} />

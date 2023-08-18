@@ -2,7 +2,7 @@ import React from "react";
 
 export enum StatType {
   win = "Wins",
-  lose = "Losses",
+  lose = "Loses",
   rank = "Rank",
 }
 
@@ -13,8 +13,9 @@ interface Props {
 export function StatCards({ statType, statValue }: Props) {
   return (
     <>
-      <div>{statValue}</div>
-      <div>{statType}</div>
+      <div>
+        {statType}: {statValue}
+      </div>
     </>
   );
 }

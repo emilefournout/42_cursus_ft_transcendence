@@ -8,6 +8,7 @@ export interface User {
   avatar: string;
   status: string;
   wins: number;
+  loses: number;
 }
 
 export interface BoardContextArgs {

@@ -18,12 +18,11 @@ export function Profile(props: ProfileProps) {
     return (
       <>
         <Avatar url={userInfo.avatar} />
-        <div>{userInfo.username}</div>
-        <div>
-          <Stats wins={userInfo.wins} />
-          {/*<Achievements />*/}
-          <MatchHistory userId={userInfo.id} />
-        </div>
+        <div>@{userInfo.username}</div>
+
+        <Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
+        <MatchHistory userId={userInfo.id} username={userInfo.username} />
+        <Achievements />
       </>
     );
   }

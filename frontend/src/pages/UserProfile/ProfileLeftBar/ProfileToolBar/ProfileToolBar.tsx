@@ -3,7 +3,7 @@ import "../ProfileLeftBar.css";
 import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { RequestTypeButton } from "./RequestTypeButton";
 import { useNavigate } from "react-router-dom";
-import ReloadBlackIcon from '../../../../common/reload_honey.svg'
+import ReloadBlackIcon from "../../../../common/reload_honey.svg";
 export function ProfileToolBar() {
   const [newFriend, setNewFriend] = useState<string>("");
   const profileContext = React.useContext(ProfilePageContext);
@@ -48,11 +48,24 @@ export function ProfileToolBar() {
   };
 
   return (
-    <>
-      <div>
-        <button onClick={() => navigate("/board/userAccount")}>
-          my profil
-        </button>
+    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "10px",
+        }}
+      >
+        <div>
+          <button onClick={() => navigate("/board/userAccount")}>
+            my profil
+          </button>
+        </div>
+        <div>
+          <button onClick={() => navigate("/board/userAccount/ranking")}>
+            ranking
+          </button>
+        </div>
       </div>
       <div className="input-add-friend">
         <input
@@ -63,7 +76,11 @@ export function ProfileToolBar() {
         />
         <button onClick={addFriend}>+</button>
         <div>
-            <img className="nav-icons" src={ReloadBlackIcon} onClick={profileContext.updateFriends}/>
+          <img
+            className="nav-icons"
+            src={ReloadBlackIcon}
+            onClick={profileContext.updateFriends}
+          />
         </div>
       </div>
       <div className="request-type-buttons">
@@ -74,6 +91,6 @@ export function ProfileToolBar() {
           <RequestTypeButton type={RequestType.pending} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -33,7 +33,7 @@ export function RoomInput() {
       }),
     })
       .then((response) => {
-        console.log("response ->", response);
+        setInput("");
       })
       .catch((error) => {
         console.log("error ->", error);
@@ -41,7 +41,7 @@ export function RoomInput() {
   };
   return (
     <div className="wrapper-room-input">
-      <input onChange={(e) => setInput(e.target.value)}></input>
+      <input value={input} onChange={(e) => setInput(e.target.value)}></input>
       <div>
         <img
           className="nav-icons"

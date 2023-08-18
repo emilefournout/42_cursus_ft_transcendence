@@ -1,7 +1,12 @@
 import React from "react";
 import { MatchHistoryCard, MatchResult } from "./MatchHistoryCard";
+export interface UserScore {
+  username: string;
+  score: number;
+  user_id: number;
+}
 
-interface History {
+interface UserMatchHistory {
   points_user1: number;
   points_user2: number;
   user1_id: number;
@@ -9,27 +14,72 @@ interface History {
   user1_username: string;
   user2_username: string;
 }
-
 interface MatchHistoryProps {
   userId: number;
+  username: string;
 }
 export function MatchHistory(props: MatchHistoryProps) {
-  const [history, setHistory] = React.useState<History[]>([]);
+  const [history, setHistory] = React.useState<UserMatchHistory[]>([]);
+
   React.useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/user/history/${props.userId}`)
+    fetch(`${process.env.REACT_APP_BACKEND}/user/history/${props.userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
       .then((res) => res.json())
-      .then((data) => setHistory(data));
+      .then((data) => {
+        setHistory(data);
+      })
+      .catch((e) => console.log(e));
   }, [props.userId]);
+
   return (
-    <>
-      {history.map((match) => {
-        return (
-          <MatchHistoryCard
-            result={MatchResult.defeat}
-            opponentName={match.user1_username}
-          />
-        );
-      })}
-    </>
+    <div style={{ border: "5px solid" }}>
+      <h1>History:</h1>
+      {history === undefined ? (
+        <>loading</>
+      ) : history.length === 0 ? (
+        <>no matches</>
+      ) : (
+        history.map((match, index) => {
+          let opponent: UserScore;
+          let me: UserScore;
+          let matchResult: MatchResult;
+          let userScore_1: UserScore = {
+            username: match.user1_username,
+            score: match.points_user1,
+            user_id: match.user1_id,
+          };
+          let userScore_2: UserScore = {
+            username: match.user2_username,
+            score: match.points_user2,
+            user_id: match.user2_id,
+          };
+          if (match.user1_id === props.userId) {
+            me = userScore_1;
+            opponent = userScore_2;
+            if (match.points_user1 > match.points_user2)
+              matchResult = MatchResult.victory;
+            else matchResult = MatchResult.defeat;
+          } else {
+            opponent = userScore_1;
+            me = userScore_2;
+            if (match.points_user1 > match.points_user2)
+              matchResult = MatchResult.defeat;
+            else matchResult = MatchResult.victory;
+          }
+          return (
+            <MatchHistoryCard
+              result={matchResult}
+              me={me}
+              opponent={opponent}
+              key={index}
+            />
+          );
+        })
+      )}
+    </div>
   );
 }

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ProfileLeftBar } from "./ProfileLeftBar/ProfileLeftBar";
-import { UserProfile } from "./UserProfile/UserProfile";
 import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../Board/Board";
 
@@ -14,6 +13,7 @@ interface ProfileContextArgs {
   pendingFriends: User[] | undefined;
   receivedFriends: User[] | undefined;
   updateFriends: () => void;
+  ranking: User[] | undefined;
 }
 export interface FriendRequest {
   requester_id: number;
@@ -36,6 +36,8 @@ export function UserProfilePage() {
   const [receivedFriends, setReceivedFriends] = React.useState<
     User[] | undefined
   >(undefined);
+
+  const [ranking, setRanking] = useState<User[] | undefined>(undefined);
 
   const boardContext = React.useContext(BoardContext);
   const myId = boardContext?.me.id;
@@ -126,6 +128,20 @@ export function UserProfilePage() {
     return () => {};
   }, [myId, updateFriends]);
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/ranking`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setRanking(data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <>
       <ProfilePageContext.Provider
@@ -135,11 +151,23 @@ export function UserProfilePage() {
             pendingFriends: pendingFriends,
             receivedFriends: receivedFriends,
             updateFriends: updateFriends,
+            ranking: ranking,
           } as ProfileContextArgs
         }
       >
         <ProfileLeftBar />
-        <Outlet />
+        <div
+          style={{
+            border: "5px solid",
+            position: "absolute",
+            left: "45%",
+            top: "20%",
+            overflowY: "scroll",
+            padding: "5px ",
+          }}
+        >
+          <Outlet />
+        </div>
       </ProfilePageContext.Provider>
     </>
   );

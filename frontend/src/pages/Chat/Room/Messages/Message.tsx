@@ -1,5 +1,18 @@
 import React from "react";
+import { Msg } from "./Messages";
 
-export function Message() {
-  return <div>This is a message</div>;
+interface MessageProps {
+  message: Msg;
+  isMyMessage: string;
+  key: string;
+}
+
+export function Message(props: MessageProps) {
+  const date = new Date(props.message.createdAt).toLocaleString();
+  return (
+    <div className={props.isMyMessage}>
+      {date + " | "}
+      {props.message.text}
+    </div>
+  );
 }
