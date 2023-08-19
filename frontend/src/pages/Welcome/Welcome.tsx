@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Welcome.css";
 import iconVect from "./change-icon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export function Welcome() {
@@ -10,8 +10,12 @@ export function Welcome() {
   const [code2fa, setCode2fa] = useState("");
   const navigate = useNavigate();
   const navigateError = useNavigate();
+  // Guest mode for no 42-students
+  const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
+    if (searchParams.get('guest'))
+      return
     if (!Cookies.get("42token") || Cookies.get("42token") == "j:null") {
       Cookies.remove("42token");
       navigateError("/cookieError");
@@ -26,7 +30,8 @@ export function Welcome() {
   }
 
   function register() {
-    const token: string | undefined = Cookies.get("42token");
+    console.log(searchParams.get('guest'))
+    const token: string | undefined = searchParams.get('guest') ? 'guest' : Cookies.get("42token");
     const formData = new FormData();
     formData.append("username", username);
     formData.append("image", image as File);

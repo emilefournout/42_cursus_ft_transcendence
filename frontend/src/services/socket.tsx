@@ -6,7 +6,7 @@ export class ChatSocket {
     private socketIo;
 
     private constructor(){
-        this.socketIo = io('http://localhost:3001')
+        this.socketIo = io(`${process.env.REACT_APP_CHAT_SOCKET}`)
     }
 
     public static getInstance(){
@@ -28,7 +28,7 @@ export class GameSocket {
         const access_token = localStorage.getItem('access_token')
         if (!access_token)
             throw new Error("Access token not found")
-        this.socketIo = io('http://localhost:3002', {
+        this.socketIo = io(`${process.env.REACT_APP_GAME_SOCKET}`, {
             extraHeaders: {
                 authentication: access_token
             }

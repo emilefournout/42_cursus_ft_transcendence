@@ -10,7 +10,7 @@ function Chat() {
   const chatSocket = ChatSocket.getInstance().socket;
   function joinRoom() {
     if (room !== "") {
-      chatSocket.emit("join_room", {roomId: Number(room)})
+      chatSocket.emit("join_room", {chatId: Number(room)})
       setShowChat(true)
     }
   }

@@ -77,7 +77,7 @@ export function RoomCreate() {
         }
         return response.json()
       })
-      .then(newChat => chatSocket.emit("join_room", { roomId: newChat.id }))
+      .then(newChat => chatSocket.emit("join_room", { chatId: newChat.id }))
       .catch((error) => {
         clearState();
         setErrorMessage("Erreur lors de la requête");

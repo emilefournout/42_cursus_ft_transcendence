@@ -27,7 +27,7 @@ export function RoomInput({chatSocket}: InputProps) {
     }
 
     const data = {
-      roomId: id,
+      chatId: id,
       userId,
       text: input,
     }

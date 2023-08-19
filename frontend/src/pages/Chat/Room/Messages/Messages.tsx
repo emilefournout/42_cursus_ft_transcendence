@@ -15,7 +15,7 @@ export interface Msg {
   text: string;
   createdAt: string;
   userId: number;
-  roomId: number;
+  chatId: number;
 }
 
 export function Messages() {
@@ -23,8 +23,8 @@ export function Messages() {
   const chatSocket = ChatSocket.getInstance().socket;
   const { id } = useParams();
   useEffect(() => {
-    chatSocket.emit("join_room", { roomId: id })
-    fetch(`http://localhost:3000/chat/${id}/messages`, {
+    chatSocket.emit("join_room", { chatId: id })
+    fetch(`${process.env.REACT_APP_BACKEND}/chat/${id}/messages`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -41,7 +41,8 @@ export function Messages() {
   useEffect(() => {
     chatSocket.off("receive_message");
     chatSocket.on("receive_message", (data) => {
-      setMessages((msgs) => [...msgs, data]);
+      if (data.chatId === Number(id))
+        setMessages((msgs) => [...msgs, data]);
     });
   }, []);
 

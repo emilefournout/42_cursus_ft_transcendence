@@ -31,22 +31,22 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     }
 
     @SubscribeMessage('join_room')
-    async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() data: {roomId: number}) {
-        client.join(data.roomId.toString())
-        return this.chatService.findChatMessagesById(Number(data.roomId));
+    async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() data: {chatId: number}) {
+        client.join(data.chatId.toString())
+        return this.chatService.findChatMessagesById(Number(data.chatId));
     }
 
     @SubscribeMessage('send_message')
     async handleMessage(@MessageBody() data: any) {
-        // data -> { roomId: number, userId: number, author: string, message: string}
-        // if (!data.roomId || !data.userId || data.message)
+        // data -> { chatId: number, userId: number, author: string, message: string}
+        // if (!data.chatId || !data.userId || data.message)
         //     return "Message properties invalid"
-        const msg = await this.chatService.createChatMessages(Number(data.roomId), data.userId, data.text)
-        this.server.to(data.roomId.toString()).emit('receive_message', msg)
+        const msg = await this.chatService.createChatMessages(Number(data.chatId), data.userId, data.text)
+        this.server.to(data.chatId.toString()).emit('receive_message', msg)
     }
 
     @SubscribeMessage('leave_room')
-    handleLeaveRoom(client: Socket, @MessageBody() roomId: number) {
-        client.leave(roomId.toString())
+    handleLeaveRoom(client: Socket, @MessageBody() chatId: number) {
+        client.leave(chatId.toString())
     }
 }

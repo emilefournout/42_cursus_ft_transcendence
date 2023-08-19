@@ -41,7 +41,7 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     try {
-      const intraname = await this.authService.getIntraLogin(token)
+      const intraname = token === 'guest' ? 'guest' : await this.authService.getIntraLogin(token)
       let url: string;
       if (image !== undefined) {
         url = this.profileService.saveImage(image);
