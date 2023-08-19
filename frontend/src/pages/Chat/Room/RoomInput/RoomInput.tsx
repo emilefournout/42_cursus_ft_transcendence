@@ -3,8 +3,13 @@ import "./RoomInput.css";
 import SendIcon from "./SendIcon.svg";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../../Board/Board";
+import { Socket } from "socket.io-client";
 
-export function RoomInput() {
+interface InputProps {
+  chatSocket: Socket;
+}
+
+export function RoomInput({chatSocket}: InputProps) {
   const [input, setInput] = useState("");
   const { id } = useParams();
   const boardContext = useContext(BoardContext);
@@ -21,27 +26,23 @@ export function RoomInput() {
       return;
     }
 
-    fetch(`${process.env.REACT_APP_BACKEND}/chat/${id}/message`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: input,
-        userId: userId,
-      }),
-    })
-      .then((response) => {
-        setInput("");
-      })
-      .catch((error) => {
-        console.log("error ->", error);
-      });
+    const data = {
+      roomId: id,
+      userId,
+      text: input,
+    }
+    chatSocket.emit("send_message", data);
+    setInput("")
   };
   return (
     <div className="wrapper-room-input">
-      <input value={input} onChange={(e) => setInput(e.target.value)}></input>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(event) => {
+          event.key === "Enter" && sendMessage();
+        }}
+      />
       <div>
         <img
           className="nav-icons"

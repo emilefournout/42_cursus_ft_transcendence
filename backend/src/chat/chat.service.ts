@@ -5,6 +5,7 @@ import { ChatVisibility } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
+import { ChatDto } from './dto';
 
 @Injectable()
 export class ChatService {
@@ -23,14 +24,14 @@ export class ChatService {
     return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
   }
 
-  async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string, name?: string) {
+  async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string, name?: string): Promise<ChatDto> {
     if(chatVisibility === 'PROTECTED' && !password)
       throw  new BadRequestException('No password provided for protected chat');
     else if (chatVisibility === 'PROTECTED' && password)
       password = await argon2.hash(password);
     else
       password = null
-    await this.prisma.chat.create({
+    return await this.prisma.chat.create({
     data: {
         visibility: chatVisibility,
         password: password,
@@ -84,14 +85,13 @@ export class ChatService {
 
   async createChatMessages(chat_id: number, user_id: number, text: string) {
     try {
-        await this.prisma.message.create({
+        return await this.prisma.message.create({
           data: {
             chatId: chat_id,
             userId: user_id,
             text: text
           }
         });
-        return true;
     } catch (error) {
         return false;
     }

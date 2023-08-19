@@ -3,6 +3,7 @@ import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
 import chat from "../../../../components/Chat";
 import "./RoomCreate.css";
+import { ChatSocket } from "../../../../services/socket";
 
 export enum Visibility {
   PUBLIC = "PUBLIC",
@@ -16,6 +17,7 @@ enum passwordStrength {
   STRONG = "That's one strong password!",
 }
 export function RoomCreate() {
+  const chatSocket = ChatSocket.getInstance().socket;
   const [selected, setSelected] = useState<Visibility>(Visibility.PUBLIC);
   const [passwordSecurity, setPasswordSecurity] = useState(
     passwordStrength.EMPTY
@@ -73,8 +75,9 @@ export function RoomCreate() {
           clearState();
           setErrorMessage("Error while creating room");
         }
-        console.log("response ->", response);
+        return response.json()
       })
+      .then(newChat => chatSocket.emit("join_room", { roomId: newChat.id }))
       .catch((error) => {
         clearState();
         setErrorMessage("Erreur lors de la requête");

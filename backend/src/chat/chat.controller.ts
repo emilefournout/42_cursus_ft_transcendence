@@ -12,7 +12,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateChatDto, CreateMessageDto } from './dto';
+import { ChatDto, CreateChatDto, CreateMessageDto } from './dto';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { DeleteChatMemberDto } from './dto/delete-chat-member.dto';
 import { MembershipService } from './membership.service';
@@ -70,14 +70,15 @@ export class ChatController {
     description:
       'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'
   })
-  async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto) {
+  async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto): Promise<ChatDto> {
     try {
-      await this.chatService.createChat(
+      const newChat = await this.chatService.createChat(
         user.sub,
         createChatDto.chatVisibility,
         createChatDto.password,
         createChatDto.name
       );
+      return newChat;
     } catch (error) {
       console.log(error);
       throw new ForbiddenException('Chat could not be created');
@@ -176,12 +177,14 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() createMessageDto: CreateMessageDto
   ) {
-    const created: boolean = await this.chatService.createChatMessages(
+    const created = await this.chatService.createChatMessages(
       chatId,
       createMessageDto.userId,
       createMessageDto.text
     );
     if (!created) throw new ForbiddenException('Message not created');
+    const messages = await this.chatService.findChatMessagesById(chatId);
+    return messages;
   }
 
   @Post(':id/mute')

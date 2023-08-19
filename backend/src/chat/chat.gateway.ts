@@ -33,7 +33,7 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
     @SubscribeMessage('join_room')
     async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() data: {roomId: number}) {
         client.join(data.roomId.toString())
-        return this.chatService.findChatMessagesByIdSortedByDate(data.roomId);
+        return this.chatService.findChatMessagesById(Number(data.roomId));
     }
 
     @SubscribeMessage('send_message')
@@ -41,9 +41,8 @@ implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
         // data -> { roomId: number, userId: number, author: string, message: string}
         // if (!data.roomId || !data.userId || data.message)
         //     return "Message properties invalid"
-        this.chatService.createChatMessages(Number(data.roomId), data.userId, data.message)
-        data.time = new Date(Date.now());
-        this.server.to(data.room.toString()).emit('receive_message', data)
+        const msg = await this.chatService.createChatMessages(Number(data.roomId), data.userId, data.text)
+        this.server.to(data.roomId.toString()).emit('receive_message', msg)
     }
 
     @SubscribeMessage('leave_room')

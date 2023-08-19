@@ -29,3 +29,10 @@ export class CreateChatDto {
   })
   password?: string;
 }
+
+export interface ChatDto {
+  id: number;
+  visibility: ChatVisibility;
+  name?: string;
+  password?: string
+}

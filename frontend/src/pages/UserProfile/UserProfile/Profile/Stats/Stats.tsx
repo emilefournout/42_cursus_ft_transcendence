@@ -21,8 +21,8 @@ export function Stats(props: StatsProps) {
   return (
     <div style={{ border: "5px solid" }}>
       <h1>Stats:</h1>
-      <StatCards statType={StatType.win} statValue={props.wins.toString()} />
-      <StatCards statType={StatType.lose} statValue={props.loses.toString()} />
+      <StatCards statType={StatType.win} statValue={props.wins?.toString()} />
+      <StatCards statType={StatType.lose} statValue={props.loses?.toString()} />
       {rank && <StatCards statType={StatType.rank} statValue={rank} />}
     </div>
   );

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import "./Messages.css";
 import { RoomInput } from "../RoomInput/RoomInput";
 import { BoardContext } from "../../../Board/Board";
+import { ChatSocket } from "../../../../services/socket";
 
 export interface MsgProps {
   messages: Array<Msg>;
@@ -14,13 +15,15 @@ export interface Msg {
   text: string;
   createdAt: string;
   userId: number;
-  chatId: number;
+  roomId: number;
 }
 
 export function Messages() {
   const [messages, setMessages] = useState<Array<Msg>>([]);
+  const chatSocket = ChatSocket.getInstance().socket;
   const { id } = useParams();
   useEffect(() => {
+    chatSocket.emit("join_room", { roomId: id })
     fetch(`http://localhost:3000/chat/${id}/messages`, {
       method: "GET",
       headers: {
@@ -31,14 +34,17 @@ export function Messages() {
       .then((data) => {
         setMessages(data);
       });
-    // setMessages([
-    // 	{ uuid: "1", text: "hello", userId: 1, chatId: 1 },
-    // 	{ uuid: "2", text: "how are you ?", userId: 2, chatId: 1 },
-    // 	{ uuid: "3", text: "I am fine and you ?", userId: 1, chatId: 1 },
-    // ]);
 
     return () => {};
   }, [id]);
+
+  useEffect(() => {
+    chatSocket.off("receive_message");
+    chatSocket.on("receive_message", (data) => {
+      setMessages((msgs) => [...msgs, data]);
+    });
+  }, []);
+
   const boardContext = React.useContext(BoardContext);
   const myUserId = boardContext?.me.id;
   if (boardContext === undefined) return <>loading</>;
@@ -60,7 +66,7 @@ export function Messages() {
             );
           })}
         </div>
-        <RoomInput />
+        <RoomInput chatSocket={chatSocket} />
       </>
     );
   }
