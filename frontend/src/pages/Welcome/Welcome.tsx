@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Welcome.css";
-import iconVect from "./change-icon.svg";
+import iconVect from "../../common/change-icon.svg";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
