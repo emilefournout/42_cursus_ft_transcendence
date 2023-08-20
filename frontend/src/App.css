@@ -53,6 +53,22 @@ body {
 	margin: 0;
 	font-family: Bungee;
 	background-color: var(--Darks-Back);
+
+	scrollbar-color: var(--Trans-Light-Text) transparent;
+}
+
+::-webkit-scrollbar {
+	width: 12px;
+	height: 100%;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--Trans-Light-Text);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
 }
 
 /* Wrappers */
