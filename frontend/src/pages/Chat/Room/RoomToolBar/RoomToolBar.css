@@ -1,6 +1,6 @@
 .wrapper-room-bar {
 	width: 100%;
-	height: var(--NavBar-Height);
+	min-height: var(--NavBar-Height);
 	padding-right: 32px;
 
 	display: flex;

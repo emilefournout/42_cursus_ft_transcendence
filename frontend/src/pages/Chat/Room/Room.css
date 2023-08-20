@@ -1,6 +1,6 @@
 .wrapper-room {
+	width: 85%;
 	height: 85%;
 
-	flex-grow: 1;
 	justify-content: space-between;
 }
