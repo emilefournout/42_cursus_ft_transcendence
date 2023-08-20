@@ -1,65 +1,67 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BoardContext } from "../../Board/Board";
+import "./ChangeNamePage.css"
+
 export function ChangeNamePage() {
-  const navigate = useNavigate();
-  const [newUsername, setNewUsername] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const boardContext = React.useContext(BoardContext);
-  const validateUsername = () => {
-    if (confirm.length < 5) {
-      setErrorMessage("username must be at least 5 characters long");
-    } else if (newUsername !== confirm) {
-      setErrorMessage("username and confirmation must match");
-    } else {
-      fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: newUsername,
-        }),
-      }).then((response) => {
-        if (response.status === 200) {
-          localStorage.setItem("username", newUsername);
-          setErrorMessage("username changed");
-          boardContext?.updateMe();
-        } else {
-          setErrorMessage("Error while changing username");
-        }
-      });
-    }
-    setNewUsername("");
-    setConfirm("");
-  };
-  return (
-    <>
-      <div id="wrapper-change-username">
-        <input
-          value={newUsername}
-          type="text"
-          placeholder="set new username"
-          onChange={(e) => setNewUsername(e.target.value)}
-        />
-        <input
-          value={confirm}
-          type="text"
-          placeholder="confirm new username"
-          onChange={(e) => setConfirm(e.target.value)}
-        />
-      </div>
-      <div id="txt-password-strength">{errorMessage}</div>
-      <button
-        onClick={() => {
-          navigate("/board/settings");
-        }}
-      >
-        cancel
-      </button>
-      <button onClick={() => validateUsername()}>change username</button>
-    </>
-  );
+	const navigate = useNavigate();
+	const [newUsername, setNewUsername] = useState("");
+	const [confirm, setConfirm] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
+	const boardContext = React.useContext(BoardContext);
+	const validateUsername = () => {
+		if (confirm.length < 5) {
+			setErrorMessage("username must be at least 5 characters long");
+		} else if (newUsername !== confirm) {
+			setErrorMessage("username and confirmation must match");
+		} else {
+			fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
+				method: "PATCH",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: newUsername,
+				}),
+			}).then((response) => {
+				if (response.status === 200) {
+					localStorage.setItem("username", newUsername);
+					setErrorMessage("username changed");
+					boardContext?.updateMe();
+				} else {
+					setErrorMessage("Error while changing username");
+				}
+			});
+		}
+		setNewUsername("");
+		setConfirm("");
+	};
+	return (
+		<div className="change-user-name-container">
+			<input
+				id="unc-in1"
+				value={newUsername}
+				type="text"
+				placeholder="new username"
+				onChange={(e) => setNewUsername(e.target.value)}
+			/>
+			<input
+				id="unc-in2"
+				value={confirm}
+				type="text"
+				placeholder="confirm new username"
+				onChange={(e) => setConfirm(e.target.value)}
+			/>
+		<div id="unc-msg" className="wrapper-col">{errorMessage}</div>
+		<button id="unc-cancel" className="btn btn-bottom-left"
+			onClick={() => {
+				navigate("/board/settings");
+			}}
+		>
+			Cancel
+		</button>
+		<button className="btn btn-bottom-right" onClick={() => validateUsername()}>Change Username</button>
+		</div>
+	);
 }
