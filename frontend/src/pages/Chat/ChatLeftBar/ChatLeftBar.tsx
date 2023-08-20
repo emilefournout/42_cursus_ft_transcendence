@@ -14,6 +14,17 @@ export interface LeftBarProps {
 export function LeftBar(props: LeftBarProps) {
 	const navigate = useNavigate();
 
+	const [isActive, setIsActive] = useState(false);
+
+	const handleClick = (chat: ChatInfo) => {
+		document.getElementById("selected-conversation")?.removeAttribute("selected-conversation");
+		setIsActive(current => !current);
+
+		navigate(`/board/chats/${chat.id}`, {
+			state: { chat: chat },
+		});
+	}
+
 	return (
 		<div id="lb-main-wrapper" className="wrapper-col">
 			<div id="lb-top-wrapper">
@@ -35,13 +46,10 @@ export function LeftBar(props: LeftBarProps) {
 					props.chats.map((chat: ChatInfo) => {
 						return (
 							<div
+								id={isActive ? "selected-conversation" : ""}
 								className="wrapper-row wrapper-conversation"
 								key={chat.id}
-								onClick={() => {
-									navigate(`/board/chats/${chat.id}`, {
-										state: { chat: chat },
-									});
-								}}
+								onClick={() => handleClick(chat)}
 							>
 								{chat.name ? chat.name : "No name"}
 							</div>

@@ -7,11 +7,11 @@
 	color: var(--Browned-Text);
 	font-size: clamp(0.4rem, 2vw, 0.8rem);
 
-	padding-right: 8px;
 	border-bottom: 2px solid var(--Browned-Text);
 }
 
 #selected-conversation::after {
+	content: "";
 	width: 6px;
 	height: 100%;
 
