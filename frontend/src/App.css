@@ -389,3 +389,9 @@ input:focus {
 	background-color: var(--Trans-Cosmic-Purple);
 	border-width: 4px;
 }
+
+input:autofill, input:-webkit-autofill, input:-internal-autofill-selected {
+	color: var(--Browned-Text);
+	-webkit-text-fill-color: var(--Browned-Text);
+	background-color: var(--Trans-Light-Text);
+}
