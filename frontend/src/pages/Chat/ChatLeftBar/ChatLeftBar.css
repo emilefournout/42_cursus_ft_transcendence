@@ -3,30 +3,32 @@
 	min-width: 190px;
 	height: 85%;
 
+	align-items: flex-start;
+
 	padding-right: 1rem;
 }
 
 #lb-top-wrapper {
-	width: calc(100% + var(--nav-icon-size) + 18px);
+	width: calc(100% + var(--nav-icon-size) / 1.5);
 	min-height: var(--NavBar-Height);
 
 	background-color: var(--Honey-Yellow);
 	border-top-right-radius: 32px;
 	border-bottom-right-radius: 32px;
 
-	text-align: center;
 	color: var(--Browned-Text);
 
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 
-	padding-right: 10px;
+	padding: 0 10px;
 }
 
 #lb-top-wrapper > span {
 	flex-grow: 1;
-	font-size: clamp(0.7rem, 2vw, 1rem);
+	font-size: clamp(0.3rem, calc(0.8vh + 0.8vw), 0.8rem);
+	text-align: center;
 }
 
 #lb-bot-wrapper {
