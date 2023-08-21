@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { ProfileLeftBar } from "./ProfileLeftBar/ProfileLeftBar";
 import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../Board/Board";
+import "./UserProfilePage.css";
 
 export enum RequestType {
 	enabled = "ENABLED",
 	pending = "PENDING",
 	received = "RECEIVED",
 }
+
 interface ProfileContextArgs {
 	acceptedFriends: User[] | undefined;
 	pendingFriends: User[] | undefined;
@@ -15,6 +17,7 @@ interface ProfileContextArgs {
 	updateFriends: () => void;
 	ranking: User[] | undefined;
 }
+
 export interface FriendRequest {
 	requester_id: number;
 	adressee_id: number;
@@ -24,6 +27,7 @@ export interface FriendRequest {
 export const ProfilePageContext = React.createContext<ProfileContextArgs>(
 	{} as ProfileContextArgs
 );
+
 export function UserProfilePage() {
 	const [acceptedFriends, setAcceptedFriends] = React.useState<
 		User[] | undefined
@@ -155,17 +159,8 @@ export function UserProfilePage() {
 					} as ProfileContextArgs
 				}
 			>
-				<ProfileLeftBar />
-				<div
-					style={{
-						border: "5px solid",
-						position: "absolute",
-						left: "45%",
-						top: "20%",
-						overflowY: "scroll",
-						padding: "5px ",
-					}}
-				>
+				<div id="user-page-container">
+					<ProfileLeftBar />
 					<Outlet />
 				</div>
 			</ProfilePageContext.Provider>
