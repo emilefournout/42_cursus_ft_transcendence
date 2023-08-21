@@ -21,8 +21,8 @@ model User {
   blockedList_2        UserBlocked[]            @relation("BlockedTarget")
   authenticationFactor TwoFactorAuthentication?
   status               OnlineStatus             @default(OFFLINE)
-  player_1             Game[]                  @relation("Player1")
-  player_2             Game[]                  @relation("Player2")
+  player_1             Game[]                   @relation("Player1")
+  player_2             Game[]                   @relation("Player2")
   chatMember           ChatMember[]
   messages             Message[]
   achievements         Achievement[]
@@ -39,10 +39,10 @@ model UserFriendship {
 }
 
 model Achievement {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int    @id @default(autoincrement())
+  name        String @unique
   description String
-  users        User[]
+  users       User[]
 }
 
 model UserBlocked {
@@ -109,7 +109,7 @@ model Message {
   userId    Int
   chatId    Int
   writer    User     @relation(fields: [userId], references: [id])
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
 
 enum ChatVisibility {

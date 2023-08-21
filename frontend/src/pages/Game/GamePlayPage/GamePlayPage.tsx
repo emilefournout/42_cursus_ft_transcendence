@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 enum GameExistState {
   Waiting,
   NotFound,
-  Play
+  Play,
 }
 
 export function GamePlayPage() {
   const [gameExistState, setGameExistState] = useState(GameExistState.Waiting);
-  const {id} = useParams();
+  const { id } = useParams();
   const gameSocket = GameSocket.getInstance().socket;
+  const navigate = useNavigate();
   const boardState: GameCanvasProps = {
     width: 600,
     height: 350,
@@ -32,35 +33,32 @@ export function GamePlayPage() {
   const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
-
-
     fetch(`${process.env.REACT_APP_BACKEND}/game/info/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        
       },
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      else {
-        setGameExistState(GameExistState.NotFound);
-      }
-    }).then((body) => {
-      if(body && body.status !== 'PLAYING')
-        setGameExistState(GameExistState.NotFound);
-      else {
-        var path = window.location.pathname;
-        path = path.substring(path.lastIndexOf('/') + 1);
-        console.log('Path is ' + path);
-        
-        gameSocket.emit('join_active_room', path);
-        setGameExistState(GameExistState.Play);
-      }
     })
-    
-  }, [id, gameSocket])
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          setGameExistState(GameExistState.NotFound);
+        }
+      })
+      .then((body) => {
+        if (body && body.status !== "PLAYING")
+          setGameExistState(GameExistState.NotFound);
+        else {
+          var path = window.location.pathname;
+          path = path.substring(path.lastIndexOf("/") + 1);
+          console.log("Path is " + path);
+
+          gameSocket.emit("join_active_room", path);
+          setGameExistState(GameExistState.Play);
+        }
+      });
+  }, [id, gameSocket]);
 
   useEffect(() => {
     gameSocket.off("update");
@@ -69,18 +67,14 @@ export function GamePlayPage() {
       updatePlayer1Score(data.player1Score);
       updatePlayer2Score(data.player2Score);
     });
-  }, [gameSocket])
+  }, [gameSocket]);
 
   useEffect(() => {
     gameSocket.off("end");
     gameSocket.on("end", (data: any) => {
-        setShowModal(data);
+      setShowModal(data);
     });
-  }, [gameSocket])
-
-  const handleRedirect = () => {
-    window.location.href = "http://localhost:8000/userAccount";
-  };
+  }, [gameSocket]);
 
   return (
     <>
@@ -99,7 +93,7 @@ export function GamePlayPage() {
             <div className="modal">
               <div className="modal-content">
                 <p>{showModal} wins</p>
-                <button onClick={handleRedirect}>HOME</button>
+                <button onClick={() => navigate("/board")}>HOME</button>
               </div>
             </div>
           )}
