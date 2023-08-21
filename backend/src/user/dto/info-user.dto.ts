@@ -24,6 +24,9 @@ export class UserBasicInfoDto {
   @ApiProperty()
   loses: number;
 
+  @ApiProperty()
+  currentGame?: string;
+
   public static fromUser(user) {
     const userInfo = new UserBasicInfoDto();
     userInfo.id = user.id;

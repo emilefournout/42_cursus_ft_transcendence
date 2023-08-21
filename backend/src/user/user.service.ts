@@ -1,14 +1,17 @@
-import { BadRequestException, ForbiddenException, Injectable, NotAcceptableException, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { url } from 'inspector';
 import { UserNotFoundException } from './exceptions/user-service.exception';
+import { OnlineStatus } from '@prisma/client';
+import { GameService } from 'src/game/game.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+    private gameService: GameService) {}
 
   async createUser(intraname: string, username: string, avatar: string) {
       const user = await this.prisma.user.create({
@@ -52,7 +55,10 @@ export class UserService {
     const user = await this.findUserById(id)
     if (!user)
       return null;
-    return UserBasicInfoDto.fromUser(user);
+    const userInfo = UserBasicInfoDto.fromUser(user)
+    if (user.status == OnlineStatus.PLAYING)
+      userInfo.currentGame = this.gameService.findActiveGameByUserId(user.id);
+    return userInfo
   }
 
   async getUserInfoByName(username: string){
