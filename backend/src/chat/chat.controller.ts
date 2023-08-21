@@ -52,7 +52,10 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiParam({ name: 'id' })
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get basic info about a chat' })
+  @ApiOperation({
+    summary: 'Get basic info about a chat',
+    description: 'If the user is not in the chat, members will be empty'
+  })
   async findChat(@GetUser() user, @Param('id', ParseIntPipe) id) {
     const chat = await this.chatService.findChatByIdWithUserInside(
       id,

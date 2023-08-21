@@ -109,17 +109,16 @@ export class ChatService {
   async findChatByIdWithUserInside(id: number, userId: number) {
     const chat = await this.prisma.chat.findUnique({
       include: {
-        members: {
-          where: {
-            userId: userId
-          }
-        }
+        members: true
       },
       where: {
         id: id
       }
     });
-    console.log(`Members = ${chat.members}`)
+
+    if(chat && !chat.members.some(member => member.userId === userId)) {
+      chat.members = [];
+    }
     return chat;
   }
 
