@@ -90,12 +90,8 @@ export function ProfileToolBar() {
 				/>
 			</div>
 			<div className="request-type-buttons">
-				<div>
-					<RequestTypeButton type={RequestType.enabled} />
-				</div>
-				<div>
-					<RequestTypeButton type={RequestType.pending} />
-				</div>
+				<RequestTypeButton type={RequestType.enabled} />
+				<RequestTypeButton type={RequestType.pending} />
 			</div>
 		</div>
 	);
