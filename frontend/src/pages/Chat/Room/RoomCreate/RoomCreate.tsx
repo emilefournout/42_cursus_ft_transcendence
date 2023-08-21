@@ -51,7 +51,7 @@ export function RoomCreate() {
       })
     ) {
       setPasswordSecurity(passwordStrength.STRONG);
-      setErrorMessage(passwordStrength.STRONG.toString());
+      setPasswordErrorMessage(passwordStrength.STRONG.toString());
     } else {
       setPasswordSecurity(passwordStrength.WEAK);
       setPasswordErrorMessage(passwordStrength.WEAK.toString());

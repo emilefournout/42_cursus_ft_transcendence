@@ -2,7 +2,7 @@ import React from "react";
 import "./FriendCard.css";
 import { ProfilePageContext } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
-import { FriendCardProps } from "./AcceptedFriendCard";
+import { FriendCardProps } from "./AcceptedFriendCard/AcceptedFriendCard";
 export function ReceivedFriendCard(props: FriendCardProps) {
   const profilePageContext = React.useContext(ProfilePageContext);
   const accept = async () => {

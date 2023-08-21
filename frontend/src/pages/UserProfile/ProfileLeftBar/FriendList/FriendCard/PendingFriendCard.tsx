@@ -1,7 +1,7 @@
 import React from "react";
 import "./FriendCard.css";
 import { Avatar } from "../../../../../components/Avatar";
-import { FriendCardProps } from "./AcceptedFriendCard";
+import { FriendCardProps } from "./AcceptedFriendCard/AcceptedFriendCard";
 
 export function PendingFriendCard(props: FriendCardProps) {
   return (
