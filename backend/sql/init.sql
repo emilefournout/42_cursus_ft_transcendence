@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED', 'DIRECT');
+
+-- CreateEnum
 CREATE TYPE "TwoFactorAuthenticationStatus" AS ENUM ('DISABLED', 'PENDING', 'ENABLED');
 
 -- CreateEnum
@@ -8,7 +11,7 @@ CREATE TYPE "FriendshipStatus" AS ENUM ('PENDING', 'ENABLED');
 CREATE TYPE "OnlineStatus" AS ENUM ('ONLINE', 'OFFLINE', 'PLAYING');
 
 -- CreateEnum
-CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED', 'DIRECT');
+CREATE TYPE "GameStatus" AS ENUM ('FINISHED', 'PLAYING');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -67,6 +70,7 @@ CREATE TABLE "Game" (
     "user2_id" INTEGER NOT NULL,
     "points_user1" INTEGER NOT NULL DEFAULT 0,
     "points_user2" INTEGER NOT NULL DEFAULT 0,
+    "status" "GameStatus" NOT NULL DEFAULT 'PLAYING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("uuid")
