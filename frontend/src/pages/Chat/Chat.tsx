@@ -14,27 +14,27 @@ export interface ChatInfo {
 }
 
 interface ChatPageContextArgs {
-  updateChat: () => void;
+  updateChat: () => Promise<void>;
 }
 
 export const ChatPageContext = React.createContext({} as ChatPageContextArgs);
 export function ChatPage() {
   const [chats, setChats] = useState([]);
 
-  const updateChats = () => {
-    fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
+  const updateChats = async () => {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setChats(data);
-      });
+    });
+    const data = await response.json();
+    setChats(data);
   };
   useEffect(() => {
-    updateChats();
+    updateChats().catch((error) => {
+      console.log(error);
+    });
     return () => {};
   }, []);
   return (

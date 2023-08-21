@@ -19,8 +19,14 @@ export function DeleteRoom() {
         if (response.ok) {
           alert("Room deleted");
           setTimeout(() => {
-            navigate("/board/chats");
-            chatPageContext.updateChat();
+            chatPageContext
+              .updateChat()
+              .then(() => {
+                navigate("/board/chats");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }, 500);
         }
       })
