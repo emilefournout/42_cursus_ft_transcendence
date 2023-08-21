@@ -4,6 +4,8 @@ import validator from "validator";
 import chat from "../../../../components/Chat";
 import "./RoomCreate.css";
 import { ChatSocket } from "../../../../services/socket";
+import { ChatInfo, ChatPageContext } from "../../Chat";
+import { useNavigate } from "react-router-dom";
 
 export enum Visibility {
   PUBLIC = "PUBLIC",
@@ -29,6 +31,8 @@ export function RoomCreate() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [name, setName] = useState("");
+  const chatPageContext = React.useContext(ChatPageContext);
+  const navigate = useNavigate();
   const clearState = (): void => {
     setPasswordSecurity(passwordStrength.EMPTY);
     setPasswordErrorMessage(passwordStrength.EMPTY.toString());
@@ -68,16 +72,22 @@ export function RoomCreate() {
       }),
     })
       .then((response) => {
-        if (response.ok) {
-          clearState();
-          setErrorMessage("Room created!");
-        } else {
-          clearState();
+        clearState();
+        if (!response.ok) {
           setErrorMessage("Error while creating room");
+          throw new Error("Error while creating room");
         }
-        return response.json()
+        return response.json();
       })
-      .then(newChat => chatSocket.emit("join_room", { chatId: newChat.id }))
+      .then((newChat: ChatInfo) => {
+        alert("Room created");
+        setTimeout(() => {
+          chatPageContext.updateChat();
+          console.log("new chat -> ", newChat.id);
+          navigate(`/board/chats/${newChat.id.toString()}`);
+        }, 500);
+        chatSocket.emit("join_room", { chatId: newChat.id });
+      })
       .catch((error) => {
         clearState();
         setErrorMessage("Erreur lors de la requête");

@@ -18,7 +18,7 @@ export function RoomToolBar(props: RoomNavBarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [chats]: [Array<ChatInfo>] = useOutletContext();
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!id) throw new Error("No id");
@@ -30,26 +30,28 @@ export function RoomToolBar(props: RoomNavBarProps) {
     else setName("No name");
   }, [chats, id, location.state]);
 
-  return (
-    <div className="wrapper-room-bar">
-      <span>{name}</span>
-      {location.pathname.includes("param") ? (
-        <img
-          className={"nav-icons"}
-          src={CloseIcon}
-          onClick={() => {
-            navigate(`/board/chats/${id}`);
-          }}
-        ></img>
-      ) : (
-        <img // This Image should change depending on whether this is a group or a DM
-          className="nav-icons"
-          src={RoomParamsIcon}
-          onClick={() => {
-            navigate(`/board/chats/${id}/param`);
-          }}
-        ></img>
-      )}
-    </div>
-  );
+  if (name === undefined) return <></>;
+  else
+    return (
+      <div className="wrapper-room-bar">
+        <span>{name}</span>
+        {location.pathname.includes("param") ? (
+          <img
+            className={"nav-icons"}
+            src={CloseIcon}
+            onClick={() => {
+              navigate(`/board/chats/${id}`);
+            }}
+          ></img>
+        ) : (
+          <img // This Image should change depending on whether this is a group or a DM
+            className="nav-icons"
+            src={RoomParamsIcon}
+            onClick={() => {
+              navigate(`/board/chats/${id}/param`);
+            }}
+          ></img>
+        )}
+      </div>
+    );
 }

@@ -1,4 +1,5 @@
 import SEO from "../../components/Seo";
+import React from "react";
 import "./Chat.css";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,8 +12,15 @@ export interface ChatInfo {
   password?: string;
   members: [];
 }
+
+interface ChatPageContextArgs {
+  updateChat: () => void;
+}
+
+export const ChatPageContext = React.createContext({} as ChatPageContextArgs);
 export function ChatPage() {
   const [chats, setChats] = useState([]);
+
   const updateChats = () => {
     fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
       method: "GET",
@@ -37,8 +45,10 @@ export function ChatPage() {
       />
 
       <div id="chatpage-container">
-        <LeftBar chats={chats} updateChats={updateChats} />
-        <Outlet context={[chats, setChats]} />
+        <ChatPageContext.Provider value={{ updateChat: updateChats }}>
+          <LeftBar chats={chats} />
+          <Outlet context={[chats, setChats]} />
+        </ChatPageContext.Provider>
         {/*<Room />*/}
       </div>
     </>

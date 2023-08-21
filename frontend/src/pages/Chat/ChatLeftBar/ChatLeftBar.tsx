@@ -5,15 +5,16 @@ import NewChatIcon from "./NewChatIcon.svg";
 import ReloadBlackIcon from "../../../common/reload_black.svg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChatInfo } from "../Chat";
+import { ChatPageContext } from "../Chat";
 
 export interface LeftBarProps {
   chats: Array<ChatInfo>;
-  updateChats: () => void;
 }
 
 export function LeftBar(props: LeftBarProps) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const chatPageContext = React.useContext(ChatPageContext);
 
   const handleClick = (chat: ChatInfo) => {
     navigate(`/board/chats/${chat.id}`, {
@@ -31,7 +32,7 @@ export function LeftBar(props: LeftBarProps) {
         <img
           className="nav-icons"
           src={ReloadBlackIcon}
-          onClick={props.updateChats}
+          onClick={chatPageContext.updateChat}
         />
       </div>
       {/* <Link to="/chats/room">*/}

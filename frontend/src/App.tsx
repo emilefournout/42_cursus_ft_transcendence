@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 import "./App.css";
 import { Board } from "./pages/Board/Board";
 import { Login } from "./pages/Login/Login";
@@ -24,6 +24,8 @@ import { Messages } from "./pages/Chat/Room/Messages/Messages";
 import { Root } from "./pages/Root/Root";
 import { UserProfile } from "./pages/UserProfile/UserProfile/UserProfile";
 import { Ranking } from "./pages/UserProfile/UserProfile/Profile/Ranking/Ranking";
+import { DeleteRoom } from "./pages/Chat/Room/RoomParam/DeleteRoom";
+import { ChangePassword } from "./pages/Chat/Room/RoomParam/ChangePassword";
 
 function App() {
   return (
@@ -44,7 +46,11 @@ function App() {
               <Route path="create" element={<RoomCreate />} />
               <Route path=":id" element={<Room />}>
                 <Route path="" element={<Messages />} />
-                <Route path="param" element={<RoomParam />} />
+                <Route path="param" element={<Outlet />}>
+                  <Route path="" element={<RoomParam />} />
+                  <Route path="delete" element={<DeleteRoom />} />
+                  <Route path="changePassword" element={<ChangePassword />} />
+                </Route>
               </Route>
               {/*Temp Route for coding ->*/}
               {/*<Route path="room" element={<Room />} />*/}
