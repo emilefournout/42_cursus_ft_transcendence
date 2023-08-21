@@ -1,11 +1,18 @@
 .wrapper-new-room {
+	height: 100%;
+
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	flex-grow: 1;
 
 	color: var(--Light-Text);
 	font-size: 0.7rem;
+
+	background-color: var(--Darks-Back);
+
+	z-index: 1;
 }
 
 .wrapper-new-room > input {
