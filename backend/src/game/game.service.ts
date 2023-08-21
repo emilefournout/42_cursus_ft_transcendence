@@ -47,6 +47,14 @@ export class GameService {
     return Array.from(this.games.keys());
   }
 
+  findActiveGameByUserId(userId: number): string | undefined {
+    for (const [gameId, gameData] of this.games.entries()) {
+      if (gameData.player1Id == userId
+        || gameData.player2Id == userId)
+        return gameId;
+    }
+  }
+
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
       where: {
