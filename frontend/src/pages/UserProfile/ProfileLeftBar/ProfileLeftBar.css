@@ -20,6 +20,8 @@
 
 	justify-content: space-between;
 	align-items: flex-start;
+
+	color: var(--Light-Text);
 }
 
 #prof-tool-bar-container {
@@ -55,7 +57,7 @@
 
 	font-size: clamp(0.25rem, 1vw, 0.6rem);
 
-	transition: all 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out;
 }
 
 .request-type-buttons > button:hover {
