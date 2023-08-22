@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import iconVect from "../common/change-icon.svg"
 
 interface AvatarProps {
 	url?: string;
@@ -38,8 +39,18 @@ export function Avatar(props: AvatarProps) {
 	}, [downloadAvatar]);
 
 	return (
-		<>
-			<img src={img} className="user-avatar" alt="Avatar of the user"/>
-		</>
+		<div className="wrapper-img">
+			<img
+				src={img}
+				style={{"--img-size": "72px"} as React.CSSProperties}
+				className="user-avatar"
+				alt="Avatar of the user"
+			/>
+			<img
+				id="change-img"
+				src={iconVect}
+				alt="Selecting the avatar icon"
+			/>
+		</div>
 	);
 }

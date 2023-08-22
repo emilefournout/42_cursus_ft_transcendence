@@ -332,10 +332,11 @@ button {
 
 	border-radius: var(--Default-BR);
 
-	transition: border-radius .3s ease;
-	transition: opacity .3s ease;
+	transition: opacity .3s ease, border-radius .3s ease;
 
 	cursor: pointer;
+
+	object-fit: cover;
 }
 
 .wrapper-img:hover .user-avatar {
