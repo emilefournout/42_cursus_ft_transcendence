@@ -1,10 +1,11 @@
 import * as argon2 from 'argon2';
-import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException, UnauthorizedException, forwardRef } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException, UnauthorizedException, forwardRef } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
 import { ChatRoleDto } from './dto/update-chat-member.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MembershipService {
@@ -39,7 +40,13 @@ export class MembershipService {
         }
       });
     } catch (error) {
-      throw new ForbiddenException('Could not create chat member');
+      if (error instanceof Prisma.PrismaClientKnownRequestError)
+      {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('There is a unique constraint violation, this user id cannot be assigned again to this chat');
+        }
+      }
+      throw new ForbiddenException('Could not save chat member');
     }
   }
 
