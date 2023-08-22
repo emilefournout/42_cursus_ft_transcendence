@@ -120,6 +120,21 @@ export class ChatController {
     await this.chatService.updateChat(chatId, updateChatDto);
   }
 
+  @Get(':id/users')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({
+    summary: 'Gets chat member',
+  })
+  async getChatMember(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId,
+  ) {
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
+    return await this.membershipService.findChatMemberByChatId(chatId);
+  }
+
   @Post(':id/user')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
