@@ -1,6 +1,8 @@
 import React from "react";
 import { UserScore } from "./MatchHistory";
 import "../Profile.css";
+import SkullIcon from "./SkullIcon.svg";
+import SwordsIcon from "./SwordsIcon.svg";
 
 export enum MatchResult {
 	victory = "Victory",
@@ -17,11 +19,11 @@ interface MatchHistoryCardProps {
 export function MatchHistoryCard(props: MatchHistoryCardProps) {
 	return (
 		<div>
-			<div>@{props.me.username}</div>
-			<div>{props.me.score}</div>
-			<div>{props.result}</div>
-			<div>{props.opponent.score}</div>
-			<div>@{props.opponent.username}</div>
+			<div className="history-user-name">@{props.me.username}</div>
+			<div className={props.result === "Victory" ? "history-txt-win" : "history-txt-loose"}>{props.me.score}</div>
+			<img src={props.result === "Victory" ? SwordsIcon : SkullIcon}/>
+			<div className={props.result === "Defeat" ? "history-txt-win" : "history-txt-loose"}>{props.opponent.score}</div>
+			<div className="history-user-name">@{props.opponent.username}</div>
 		</div>
 	);
 }

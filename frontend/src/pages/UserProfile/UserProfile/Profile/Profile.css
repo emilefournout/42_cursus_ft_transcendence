@@ -79,10 +79,40 @@
 	padding: 8px;
 
 	text-align: center;
-	font-size: clamp(0.5rem, 2vw, 1.2rem);
+}
+
+#history-values * {
+	font-size: clamp(0.3rem, 2vw, 0.5rem);
 }
 
 #history-values > div {
+	width: 100%;
+
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+}
+
+#history-values > div > img {
+	width: clamp(32px, 3vw, 64px);
+}
+
+.history-user-name {
+	max-width: 15vw;
+
+	flex-grow: 1;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow-x: auto;
+}
+
+.history-txt-win {
+	font-size: clamp(0.4rem, 2vw, 0.8rem) !important;
+	color: var(--Mooned-Teal);
+}
+
+.history-txt-loose {
+	font-size: clamp(0.3rem, 2vw, 0.6rem) !important;
+	color: var(--Cosmic-Purple);
 }
