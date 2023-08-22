@@ -5,6 +5,7 @@ import {
   Navigate,
   Outlet,
   useLocation,
+  useNavigate,
   useOutletContext,
 } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
@@ -12,9 +13,11 @@ import NoMsgsImg from "../ChatLeftBar/NoMsgs.png";
 
 export function Room() {
   const location = useLocation();
-  const [chats]: [Array<ChatInfo>] = useOutletContext();
+  const [chats]: [Array<ChatInfo> | undefined] = useOutletContext();
+  const navigate = useNavigate();
 
-  if (location.pathname === "/board/chats" && chats.length === 0) {
+  if (chats === undefined) return <></>;
+  else if (location.pathname === "/board/chats" && chats.length === 0) {
     return (
       <>
         <div id="chat-no-messages">No messages?</div>
@@ -22,7 +25,8 @@ export function Room() {
       </>
     );
   } else if (location.pathname === "/board/chats") {
-    return <Navigate to={`/board/chats/${chats[0].id}`} />;
+    navigate(`/board/chats/${chats[0].id}`);
+    return <></>;
   } else
     return (
       <div className="wrapper-col wrapper-room">

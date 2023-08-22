@@ -17,11 +17,11 @@ export function RoomToolBar(props: RoomNavBarProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [chats]: [Array<ChatInfo>] = useOutletContext();
+  const [chats]: [Array<ChatInfo> | undefined] = useOutletContext();
   const [name, setName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!id) throw new Error("No id");
+    if (chats === undefined || id === undefined) return;
     let chat: ChatInfo | undefined;
     if (location.state && location.state.chat) chat = location.state.chat;
     else chat = chats.find((chat: ChatInfo) => chat.id === parseInt(id));
@@ -30,11 +30,12 @@ export function RoomToolBar(props: RoomNavBarProps) {
     else setName("No name");
   }, [chats, id, location.state]);
 
-  if (name === undefined) return <></>;
+  if (name === undefined || chats === undefined || id === undefined)
+    return <></>;
   else
     return (
       <div className="wrapper-room-bar">
-        <span>{name}</span>
+        <span>{name && name}</span>
         {location.pathname.includes("param") ? (
           <img
             className={"nav-icons"}

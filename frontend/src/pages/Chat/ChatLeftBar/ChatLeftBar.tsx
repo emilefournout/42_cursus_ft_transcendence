@@ -9,7 +9,7 @@ import { Visibility } from "../Room/RoomCreate/RoomCreate";
 import { Conversations } from "./Conversations/Conversations";
 
 export interface LeftBarProps {
-  chats: Array<ChatInfo>;
+  chats: Array<ChatInfo> | undefined;
 }
 
 export function LeftBar(props: LeftBarProps) {
@@ -38,9 +38,10 @@ export function LeftBar(props: LeftBarProps) {
       </div>
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
-        {props.chats.map((chat: ChatInfo) => {
-          return <Conversations chat={chat} key={chat.id} />;
-        })}
+        {props.chats &&
+          props.chats.map((chat: ChatInfo) => {
+            return <Conversations chat={chat} key={chat.id} />;
+          })}
       </div>
       {/*</Link>*/}
     </div>
