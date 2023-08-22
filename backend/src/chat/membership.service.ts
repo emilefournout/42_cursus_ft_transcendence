@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException, UnauthorizedException, forwardRef } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { UserService } from 'src/user/user.service';
@@ -9,7 +9,9 @@ import { ChatRoleDto } from './dto/update-chat-member.dto';
 @Injectable()
 export class MembershipService {
 
-  constructor(private prisma: PrismaService, private chatService: ChatService, private userService: UserService){}
+  constructor(private prisma: PrismaService,
+    private chatService: ChatService,
+    private userService: UserService){}
 
   async findChatMemberByIds(chatId: number, userId: number) {
     const chatMember = await this.prisma.chatMember.findUnique({
@@ -183,4 +185,18 @@ export class MembershipService {
       }
     })
   }
+  
+  async isUserMemberOfChat(userId: number, chatId: number) : Promise<boolean> {
+    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    if (!chatMember) return false
+    return true;
+  }
+
+  async isUserAllowedToTextOnChat(userId: number, chatId: number) : Promise<boolean> {
+    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    if (!chatMember) return false
+    if (chatMember.muted && chatMember.mutedExpiringDate > new Date(Date.now())) return false
+    return true;
+  }
+
 }

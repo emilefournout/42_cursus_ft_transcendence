@@ -9,7 +9,8 @@ import {
   ForbiddenException,
   Delete,
   Patch,
-  UseGuards
+  UseGuards,
+  UnauthorizedException
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { ChatDto, CreateChatDto, CreateMessageDto } from './dto';
@@ -167,19 +168,29 @@ export class ChatController {
   }
 
   @Get(':id/messages')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: 'id' })
-  async findChatMessages(@Param('id', ParseIntPipe) id) {
-    const messages = await this.chatService.findChatMessagesById(id);
+  async findChatMessages(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId
+  ) {
+    if (!await this.memberShipService.isUserMemberOfChat(user.sub, chatId)) throw new UnauthorizedException("User is not part of this chat")
+    const messages = await this.chatService.findChatMessagesById(chatId);
     if (!messages) throw new NotFoundException('Chat not found');
     return messages;
   }
 
   @Post(':id/message')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   async createChatMessage(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() createMessageDto: CreateMessageDto
   ) {
+    if (!await this.memberShipService.isUserAllowedToTextOnChat(user.sub, chatId)) throw new UnauthorizedException("User cannot text in this chat")
     const created = await this.chatService.createChatMessages(
       chatId,
       createMessageDto.userId,

@@ -8,8 +8,9 @@ import { UserModule } from 'src/user/user.module';
 import { GameModule } from 'src/game/game.module';
 
 @Module({
-  imports: [GameModule],
+  imports: [UserModule],
   controllers: [ChatController],
-  providers: [ChatService, MembershipService, UserService, ChatGateway],
+  providers: [ChatService, MembershipService, ChatGateway],
+  exports: [ChatService]
 })
 export class ChatModule {}
