@@ -39,10 +39,9 @@ export function Avatar(props: AvatarProps) {
 	}, [downloadAvatar]);
 
 	return (
-		<div className="wrapper-img">
+		<div className="wrapper-img" style={{"--img-size": "128px"} as React.CSSProperties}>
 			<img
 				src={img}
-				style={{"--img-size": "72px"} as React.CSSProperties}
 				className="user-avatar"
 				alt="Avatar of the user"
 			/>
