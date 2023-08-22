@@ -98,8 +98,8 @@ export class GameGateway
             points_user2: gameState.player2Score,
             status: 'FINISHED'
           });
-          game.player1.client.disconnect();
-          game.player2.client.disconnect();
+          //game.player1.client.disconnect(); TODO -> Handle clients disconnections
+          //game.player2.client.disconnect();
         const [winner_id, loser_id] =
             gameState.player1Score > gameState.player2Score
               ? [gameState.player1Id, gameState.player2Id]
