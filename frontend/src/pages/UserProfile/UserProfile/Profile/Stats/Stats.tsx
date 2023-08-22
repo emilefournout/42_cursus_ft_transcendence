@@ -21,10 +21,14 @@ export function Stats(props: StatsProps) {
 
 	return (
 		<div id="stats-card">
-			<h1>Stats:</h1>
-			<StatCards statType={StatType.win} statValue={props.wins?.toString()} />
-			<StatCards statType={StatType.lose} statValue={props.loses?.toString()} />
-			{rank && <StatCards statType={StatType.rank} statValue={rank} />}
+			<div className="window-title card-title">
+				Stats
+			</div>
+			<div id="stats-values">
+				<StatCards statType={StatType.win} statValue={props.wins?.toString()} />
+				<StatCards statType={StatType.lose} statValue={props.loses?.toString()} />
+				{rank && <StatCards statType={StatType.rank} statValue={rank} />}
+			</div>
 		</div>
 	);
 }

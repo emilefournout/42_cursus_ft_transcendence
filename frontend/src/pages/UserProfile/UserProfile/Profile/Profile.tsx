@@ -19,7 +19,7 @@ export function Profile(props: ProfileProps) {
 		return (
 			<div className="prof-cards-wrapper">
 				<Avatar url={userInfo.avatar} />
-				{"@" + userInfo.username}
+				<div id="prof-user-name" className="ellipsed-txt">{"@" + userInfo.username}</div>
 
 				<div className="cards-container">
 					<Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
