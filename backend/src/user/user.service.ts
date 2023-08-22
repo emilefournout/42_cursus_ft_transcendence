@@ -296,4 +296,14 @@ export class UserService {
       throw new ForbiddenException('Could not add achievement')
     }
   }
+
+  async updateProfilePhoto(userId: number, url: string) {
+    this.prisma.user.update({
+      where: {
+        id: userId
+      }, data: {
+        avatarURL: url
+      }
+    })
+  }
 }
