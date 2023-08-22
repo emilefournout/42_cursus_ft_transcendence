@@ -4,5 +4,4 @@ VALUES
     ('Name 2', 'Description 2'),
     ('Name 3', 'Description 3');
 
-INSERT INTO "User" (id, username, intraname)
-VALUES (1, 'User Deleted', 'User Deleted')
+INSERT INTO "User" (username, intraname) VALUES ('User Deleted', 'User Deleted')
