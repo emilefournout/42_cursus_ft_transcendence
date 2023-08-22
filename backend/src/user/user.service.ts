@@ -72,11 +72,21 @@ export class UserService {
     return UserBasicInfoDto.fromUser(user);
   }
 
-  async deleteUser(id: number) {
-    const user = await this.prisma.user.delete({
-      where: {
-        id: id
-      }
+  async deleteUser(userId: number) {
+    const user = await this.prisma.$transaction(async () => {
+      await this.prisma.message.updateMany({
+        where: {
+          userId: userId
+        },
+        data: {
+          userId: 1
+        }
+      })
+      return await this.prisma.user.delete({
+        where: {
+          id: userId
+        }
+      })
     })
     return user;
   }

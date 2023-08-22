@@ -100,6 +100,7 @@ export class UserController {
     try {
       userDeleted = await this.userService.deleteUser(user.sub);
     } catch (error) {
+      console.log(error)
       throw new UserNotDeletedException();
     }
     if (!userDeleted) throw new UserNotDeletedException();

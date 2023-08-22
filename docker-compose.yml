@@ -12,6 +12,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/sql/insertions.sql:/docker-entrypoint-initdb.d/insertions.sql
     networks:
       - transcendence_network
   adminer:
