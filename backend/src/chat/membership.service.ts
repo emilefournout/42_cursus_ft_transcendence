@@ -9,7 +9,6 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MembershipService {
-
   constructor(private prisma: PrismaService,
     private chatService: ChatService,
     private userService: UserService){}
@@ -204,6 +203,18 @@ export class MembershipService {
     if (!chatMember) return false
     if (chatMember.muted && chatMember.mutedExpiringDate > new Date(Date.now())) return false
     return true;
+  }
+
+  async isOwnerOfTheChat(userId: number, chatId: number) : Promise<boolean> {
+    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    if (!chatMember) return false
+    return chatMember.owner
+  }
+
+  async isAdministratorOfTheChat(userId: number, chatId: number) : Promise<boolean> {
+    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    if (!chatMember) return false
+    return chatMember.administrator
   }
 
 }

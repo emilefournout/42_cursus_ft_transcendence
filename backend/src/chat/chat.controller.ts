@@ -36,7 +36,7 @@ import { UnmuteUserDto } from './dto/unmute-user.dto';
 export class ChatController {
   constructor(
     private chatService: ChatService,
-    private memberShipService: MembershipService
+    private membershipService: MembershipService
   ) {}
 
   @Get('me')
@@ -90,16 +90,20 @@ export class ChatController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Deletes a chat only if owner' })
-  async deleteChat(@Param('id', ParseIntPipe) id) {
-    await this.chatService.deleteChat(id);
+  async deleteChat(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId
+    ) {
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not allowed to delete this chat")
+    await this.chatService.deleteChat(chatId);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
@@ -108,14 +112,16 @@ export class ChatController {
       'Password and chatVisibility are optional. If neither of them are provided, a bad request error will be returned. If chatVisibility changes to PROTECTED, a password is required. If the chat to be updated has DIRECT visibility, a forbidden error will be returned'
   })
   async updateChat(
-    @Param('id', ParseIntPipe) id,
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId,
     @Body() updateChatDto: UpdateChatDto
   ) {
-    await this.chatService.updateChat(id, updateChatDto);
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not update information from this chat")
+    await this.chatService.updateChat(chatId, updateChatDto);
   }
 
   @Post(':id/user')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
@@ -123,14 +129,16 @@ export class ChatController {
     description: 'Password is optional'
   })
   async createChatMember(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() createChatMemberDto: CreateChatMemberDto
   ) {
-    await this.memberShipService.createChatMember(chatId, createChatMemberDto);
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    await this.membershipService.createChatMember(chatId, createChatMemberDto);
   }
 
   @Delete(':id/user')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
@@ -138,17 +146,19 @@ export class ChatController {
     description: 'Password is optional'
   })
   async deleteChatMember(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() deleteChatMemberDto: DeleteChatMemberDto
   ) {
-    await this.memberShipService.deleteChatMember(
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    await this.membershipService.deleteChatMember(
       chatId,
       deleteChatMemberDto.id
     );
   }
 
   @Patch(':id/user')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
@@ -157,10 +167,12 @@ export class ChatController {
       'In role, owner and administrator are optional, but at least one must be provided'
   })
   async updateChatMember(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() updateChatMember: UpdateChatMemberDto
   ) {
-    await this.memberShipService.updateChatMember(
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not update information from this chat")
+    await this.membershipService.updateChatMember(
       updateChatMember.userId,
       chatId,
       updateChatMember.role
@@ -175,7 +187,7 @@ export class ChatController {
     @GetUser() user,
     @Param('id', ParseIntPipe) chatId
   ) {
-    if (!await this.memberShipService.isUserMemberOfChat(user.sub, chatId)) throw new UnauthorizedException("User is not part of this chat")
+    if (!await this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new UnauthorizedException("User is not part of this chat")
     const messages = await this.chatService.findChatMessagesById(chatId);
     if (!messages) throw new NotFoundException('Chat not found');
     return messages;
@@ -190,7 +202,7 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() createMessageDto: CreateMessageDto
   ) {
-    if (!await this.memberShipService.isUserAllowedToTextOnChat(user.sub, chatId)) throw new UnauthorizedException("User cannot text in this chat")
+    if (!await this.membershipService.isUserAllowedToTextOnChat(user.sub, chatId)) throw new UnauthorizedException("User cannot text in this chat")
     const created = await this.chatService.createChatMessages(
       chatId,
       createMessageDto.userId,
@@ -202,15 +214,17 @@ export class ChatController {
   }
 
   @Post(':id/mute')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Mutes a chat member for a limited time' })
   async muteChatMember(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: MuteUserDto
   ) {
-    await this.memberShipService.muteUser(
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    await this.membershipService.muteUser(
       chatId,
       muteUserDto.userId,
       muteUserDto.muteTime
@@ -218,16 +232,18 @@ export class ChatController {
   }
 
   @Delete(':id/mute')
-  @UseGuards(JwtAuthGuard) // TODO - Check
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
     summary: 'Removes the mutes a chat member for a limited time'
   })
   async unmuteChatMember(
+    @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: UnmuteUserDto
   ) {
-    await this.memberShipService.unmuteUser(chatId, muteUserDto.userId);
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    await this.membershipService.unmuteUser(chatId, muteUserDto.userId);
   }
 }
