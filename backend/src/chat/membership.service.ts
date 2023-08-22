@@ -9,6 +9,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MembershipService {
+  
   constructor(private prisma: PrismaService,
     private chatService: ChatService,
     private userService: UserService){}
@@ -24,6 +25,16 @@ export class MembershipService {
     });
     return chatMember;
   }
+  
+  async findChatMemberByChatId(chatId: any) {
+    const chatMembers = await this.prisma.chatMember.findMany({
+      where: {
+        chatId: chatId
+      }
+    });
+    return chatMembers;
+  }
+
   
   async createChatMember(chatId: number, createChatMemberDto: CreateChatMemberDto) {
     const chat = await this.chatService.findChatById(chatId)
