@@ -344,6 +344,10 @@ button {
 	border-radius: 8px;
 }
 
+.user-avatar-no-edit {
+	pointer-events: none;
+}
+
 #change-img {
 	--icon-size: calc(var(--img-size) / 2);
 	--icon-offset: calc(var(--img-size) / 4);

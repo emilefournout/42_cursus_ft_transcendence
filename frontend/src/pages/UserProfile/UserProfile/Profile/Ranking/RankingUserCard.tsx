@@ -12,7 +12,7 @@ export function RankingUserCard(props: RankingUserCardProps) {
   const navigate = useNavigate();
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: "15px" }}>
-      <Avatar url={props.user.avatar} />
+      <Avatar url={props.user.avatar} size="64px" upload={false} />
       <div>#{props.position}</div>
       <div>{props.user.username}</div>
       <div>win:{props.user.wins}</div>

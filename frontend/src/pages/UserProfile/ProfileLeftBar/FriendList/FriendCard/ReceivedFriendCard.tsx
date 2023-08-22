@@ -53,7 +53,7 @@ export function ReceivedFriendCard(props: FriendCardProps) {
 
   return (
     <div className="friend-card">
-      <Avatar url={props.userInfo.avatar} />
+      <Avatar url={props.userInfo.avatar} size="32px" upload={false} />
 
       <div>{props.userInfo.username}</div>
       <div>

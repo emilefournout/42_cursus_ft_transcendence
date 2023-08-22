@@ -3,10 +3,13 @@ import iconVect from "../common/change-icon.svg"
 
 interface AvatarProps {
 	url?: string;
+	size: string;
+	upload: boolean;
 }
 
 export function Avatar(props: AvatarProps) {
 	const [img, setImg] = useState<string>();
+	const [image, setImage] = useState<File>();
 	const downloadAvatar = useCallback(async () => {
 		const avatarUrl: string | null =
 			props.url !== undefined
@@ -38,18 +41,43 @@ export function Avatar(props: AvatarProps) {
 		return () => {};
 	}, [downloadAvatar]);
 
+	function saveImage(event: React.ChangeEvent<HTMLInputElement>) {
+		if (event.target.files?.length) {
+			// setImage(URL.createObjectURL(event.target.files[0]))
+			setImage(event.target.files[0]);
+		}
+	}
+
 	return (
-		<div className="wrapper-img" style={{"--img-size": "128px"} as React.CSSProperties}>
+		<>{ props.upload ? (
+			<div className="wrapper-img" style={{"--img-size": props.size} as React.CSSProperties}>
+				<label htmlFor="upload">
+					<img
+						src={img}
+						className="user-avatar"
+						alt="Avatar of the user"
+					/>
+					<img
+						id="change-img"
+						src={iconVect}
+						alt="Selecting the avatar icon"
+					/>
+					<input
+						type="file"
+						id="upload"
+						name="avatar"
+						style={{ display: "none" }}
+						onChange={saveImage}
+					/>
+				</label>
+			</div>
+		) : (
 			<img
 				src={img}
-				className="user-avatar"
+				style={{"--img-size": props.size} as React.CSSProperties}
+				className="user-avatar user-avatar-no-edit"
 				alt="Avatar of the user"
 			/>
-			<img
-				id="change-img"
-				src={iconVect}
-				alt="Selecting the avatar icon"
-			/>
-		</div>
+		)}</>
 	);
 }
