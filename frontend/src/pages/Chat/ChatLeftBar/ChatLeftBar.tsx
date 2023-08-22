@@ -1,12 +1,12 @@
-import React, { JSX, useEffect, useState } from "react";
+import React from "react";
 import "./ChatLeftBar.css";
 import "./Conversations/Conversations.css";
 import NewChatIcon from "./NewChatIcon.svg";
 import ReloadBlackIcon from "../../../common/reload_black.svg";
-import NoMsgsImg from "./NoMsgs.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChatInfo } from "../Chat";
-import { ChatPageContext } from "../Chat";
+import { ChatInfo, ChatPageContext } from "../Chat";
+import { Visibility } from "../Room/RoomCreate/RoomCreate";
+import { Conversations } from "./Conversations/Conversations";
 
 export interface LeftBarProps {
   chats: Array<ChatInfo>;
@@ -42,18 +42,7 @@ export function LeftBar(props: LeftBarProps) {
           <div id="chat-no-messages">No messages?</div>
         ) : (
           props.chats.map((chat: ChatInfo) => {
-            return (
-              <div
-                id={
-                  id && chat.id === parseInt(id) ? "selected-conversation" : ""
-                }
-                className="wrapper-row wrapper-conversation"
-                key={chat.id}
-                onClick={() => handleClick(chat)}
-              >
-                {chat.name ? chat.name : "No name"}
-              </div>
-            );
+            return <Conversations chat={chat} key={chat.id} />;
           })
         )}
       </div>
