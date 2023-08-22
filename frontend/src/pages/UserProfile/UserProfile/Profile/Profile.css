@@ -10,9 +10,20 @@
 	align-items: center;
 
 	color: var(--Light-Text);
-	font-size: 0.75rem;
 
 	gap: 32px;
+}
+
+#prof-user-name {
+	max-width: 90%;
+	text-align: center;
+	font-size: clamp(0.5rem, 3vw, 0.75rem);
+}
+
+.ellipsed-txt {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .cards-container {
@@ -101,10 +112,6 @@
 	max-width: 15vw;
 
 	flex-grow: 1;
-
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow-x: auto;
 }
 
 .history-txt-win {
