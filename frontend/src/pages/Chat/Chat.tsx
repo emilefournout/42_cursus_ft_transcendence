@@ -28,6 +28,7 @@ export function ChatPage() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
+    if (!response.ok) throw new Error("Error getting chats");
     const data = await response.json();
     setChats(data);
   };

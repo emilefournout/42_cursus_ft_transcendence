@@ -11,9 +11,9 @@ export interface ConversationsProps {
 export function Conversations(props: ConversationsProps) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const handleClick = (chat: ChatInfo) => {
-    navigate(`/board/chats/${chat.id}`, {
-      state: { chat: chat },
+  const handleClick = () => {
+    navigate(`/board/chats/${props.chat.id}`, {
+      state: { chat: props.chat },
     });
   };
   return (
@@ -21,7 +21,7 @@ export function Conversations(props: ConversationsProps) {
       id={id && props.chat.id === parseInt(id) ? "selected-conversation" : ""}
       className="wrapper-row wrapper-conversation"
       key={props.chat.id}
-      onClick={() => handleClick(props.chat)}
+      onClick={() => handleClick()}
     >
       {props.chat.name ? props.chat.name : "No name"}
       {props.chat.visibility === Visibility.PRIVATE ||

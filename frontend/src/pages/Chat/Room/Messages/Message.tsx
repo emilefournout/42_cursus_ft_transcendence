@@ -24,7 +24,10 @@ export function Message(props: MessageProps) {
           },
         }
       )
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.ok) return response.json();
+          else throw new Error("Error getting user info");
+        })
         .then((data) => {
           setUserName(data.username);
         })

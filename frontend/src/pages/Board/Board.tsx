@@ -26,7 +26,10 @@ export function Board() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error("Error getting user info");
+        return response.json();
+      })
       .then((data) => {
         setMyUser(data as User);
       })

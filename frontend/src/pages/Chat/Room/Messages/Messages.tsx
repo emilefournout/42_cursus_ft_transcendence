@@ -20,7 +20,7 @@ export interface Msg {
 
 export function Messages() {
   const [messages, setMessages] = useState<Array<Msg> | undefined>(undefined);
-  const [hasError, setHasError] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean | undefined>(undefined);
   const chatSocket = ChatSocket.getInstance().socket;
   const { id } = useParams();
   const navigate = useNavigate();
@@ -39,13 +39,14 @@ export function Messages() {
       .then((data) => data as Msg[])
       .then((data) => {
         setMessages(data);
+        setHasError(false);
       })
       .catch((error) => {
         setHasError(true);
         console.log(error);
       });
     return () => {};
-  }, [chatSocket, id, messages, navigate]);
+  }, [chatSocket, id]);
 
   useEffect(() => {
     if (messages === undefined) return;
@@ -65,8 +66,12 @@ export function Messages() {
         <button onClick={() => navigate("/board/chats")}>back</button>
       </>
     );
-  else if (messages === undefined) return <div>loading</div>;
-  else if (boardContext === undefined) return <>loading</>;
+  else if (
+    messages === undefined ||
+    boardContext === undefined ||
+    hasError === undefined
+  )
+    return <div>loading</div>;
   else {
     return (
       <>

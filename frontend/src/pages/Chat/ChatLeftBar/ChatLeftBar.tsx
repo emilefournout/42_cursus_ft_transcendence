@@ -38,13 +38,9 @@ export function LeftBar(props: LeftBarProps) {
       </div>
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
-        {props.chats.length === 0 ? (
-          <div id="chat-no-messages">No messages?</div>
-        ) : (
-          props.chats.map((chat: ChatInfo) => {
-            return <Conversations chat={chat} key={chat.id} />;
-          })
-        )}
+        {props.chats.map((chat: ChatInfo) => {
+          return <Conversations chat={chat} key={chat.id} />;
+        })}
       </div>
       {/*</Link>*/}
     </div>

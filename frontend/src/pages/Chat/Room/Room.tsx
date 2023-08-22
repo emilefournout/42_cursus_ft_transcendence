@@ -13,8 +13,14 @@ import NoMsgsImg from "../ChatLeftBar/NoMsgs.png";
 export function Room() {
   const location = useLocation();
   const [chats]: [Array<ChatInfo>] = useOutletContext();
+
   if (location.pathname === "/board/chats" && chats.length === 0) {
-    return <img src={NoMsgsImg}></img>;
+    return (
+      <>
+        <div id="chat-no-messages">No messages?</div>
+        <img src={NoMsgsImg}></img>
+      </>
+    );
   } else if (location.pathname === "/board/chats") {
     return <Navigate to={`/board/chats/${chats[0].id}`} />;
   } else
