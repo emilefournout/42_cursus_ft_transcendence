@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/NavBar/NavBar";
@@ -20,6 +20,7 @@ export const BoardContext = React.createContext<BoardContextArgs | undefined>(
 );
 export function Board() {
   const [myUser, setMyUser] = useState<User | undefined>();
+  const navigate = useNavigate();
   const updateMe = React.useCallback(async () => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
       headers: {
@@ -40,6 +41,23 @@ export function Board() {
     updateMe().then((r) => console.log(r));
     return () => {};
   }, [updateMe]);
+
+
+  useEffect(() => {
+    const jwtToken = localStorage.getItem("access_token");
+    if (jwtToken) {
+      const jwtData = JSON.parse(atob(jwtToken.split(".")[1]));
+      const expirationDate = new Date(jwtData.exp * 1000);
+      if (expirationDate < new Date(Date.now())) {
+        alert("Your token has expired")
+        localStorage.removeItem("access_token");
+        navigate('/login');
+      }
+    } else {
+      alert("No token available")
+      navigate('/login');
+    }
+  })
 
   return (
     <>
