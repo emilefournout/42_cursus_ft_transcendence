@@ -20,7 +20,6 @@ interface ChatPageContextArgs {
 export const ChatPageContext = React.createContext({} as ChatPageContextArgs);
 export function ChatPage() {
   const [chats, setChats] = useState<ChatInfo[] | undefined>(undefined);
-
   const updateChats = async () => {
     const response = await fetch(`${process.env.REACT_APP_BACKEND}/chat/me`, {
       method: "GET",
