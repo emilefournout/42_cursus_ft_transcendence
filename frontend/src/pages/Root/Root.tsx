@@ -17,12 +17,12 @@ export function Root() {
       if (expirationDate < new Date(Date.now())) {
         navigate("/login");
         localStorage.removeItem("access_token");
-        setDialog("Your token has expired");
+        setDialog("Your session has expired, please sign in again");
         return;
       }
     } else {
       navigate("/login");
-      setDialog("No token available");
+      setDialog("Sign in to access this page");
       return;
     }
   }, [location.pathname, navigate]);
