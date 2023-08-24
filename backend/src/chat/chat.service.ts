@@ -25,24 +25,39 @@ export class ChatService {
     return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
   }
 
-  async createChat(user_id: number, chatVisibility: ChatVisibility, password?: string, name?: string): Promise<ChatDto> {
-    if(chatVisibility === 'PROTECTED' && !password)
-      throw  new BadRequestException('No password provided for protected chat');
-    else if (chatVisibility === 'PROTECTED' && password)
-      password = await argon2.hash(password);
-    else
-      password = null
-    return await this.prisma.chat.create({
-    data: {
-        visibility: chatVisibility,
-        password: password,
-        name: name,
-        members: {
-        create: [{ userId: user_id, administrator: true, owner: true }]
-        }
-    }
-    });
+async createChat(
+  user_id: number,
+  chatVisibility: ChatVisibility,
+  password?: string,
+  name?: string,
+  invitedId?: number
+): Promise<ChatDto> {
+  if (chatVisibility === 'PROTECTED' && !password) {
+    throw new BadRequestException('No password provided for protected chat');
   }
+
+  let hashedPassword: string | null = null;
+  if (chatVisibility === 'PROTECTED' && password) {
+    hashedPassword = await argon2.hash(password);
+  }
+
+  const chatData = {
+    visibility: chatVisibility,
+    password: hashedPassword,
+    name: name,
+    members: {
+      create: [{ userId: user_id, administrator: true, owner: true }]
+    }
+  };
+
+  if (invitedId) {
+    chatData.members.create.push({ userId: invitedId, administrator: false, owner: false });
+  }
+
+  return await this.prisma.chat.create({
+    data: chatData
+  });
+}
 
   async deleteChat(chatId: number){
     const chat = await this.findChatById(chatId);

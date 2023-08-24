@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString
 } from 'class-validator';
@@ -14,7 +15,14 @@ export class CreateChatDto {
   @IsEnum(ChatVisibility)
   @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
-
+  
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({
+    type: Number
+  })
+  invitedId?: number;
+  
   @IsOptional()
   @IsString()
   @ApiProperty({
