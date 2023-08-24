@@ -32,42 +32,43 @@ function App() {
     <>
       <HelmetProvider>
         <Routes>
-          <Route path="/" element={<Root />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/board" element={<Board />}>
-            <Route path="" element={<Navigate to={"/board/userAccount"} />} />
-            <Route path="game" element={<Game />}>
-              <Route path="" element={<GameHomePage />} />
-              <Route path=":id" element={<GamePlayPage />} />
-              <Route path="matchmaking" element={<GameMatchmakingPage />} />
-            </Route>
-            <Route path="chats" element={<ChatPage />}>
-              <Route path="create" element={<RoomCreate />} />
-              <Route path="" element={<Room />} />
-              <Route path=":id" element={<Room />}>
-                <Route path="" element={<Messages />} />
-                <Route path="param" element={<Outlet />}>
-                  <Route path="" element={<RoomParam />} />
-                  <Route path="delete" element={<DeleteRoom />} />
-                  <Route path="changePassword" element={<ChangePassword />} />
+          <Route path="/" element={<Root />}>
+            <Route path="" element={<Navigate to={"/board"} />} />
+            <Route path="login" element={<Login />} />
+            <Route path="welcome" element={<Welcome />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="board" element={<Board />}>
+              <Route path="" element={<Navigate to={"/board/userAccount"} />} />
+              <Route path="game" element={<Game />}>
+                <Route path="" element={<GameHomePage />} />
+                <Route path=":id" element={<GamePlayPage />} />
+                <Route path="matchmaking" element={<GameMatchmakingPage />} />
+              </Route>
+              <Route path="chats" element={<ChatPage />}>
+                <Route path="create" element={<RoomCreate />} />
+                <Route path="" element={<Room />} />
+                <Route path=":id" element={<Room />}>
+                  <Route path="" element={<Messages />} />
+                  <Route path="param" element={<Outlet />}>
+                    <Route path="" element={<RoomParam />} />
+                    <Route path="delete" element={<DeleteRoom />} />
+                    <Route path="changePassword" element={<ChangePassword />} />
+                  </Route>
                 </Route>
               </Route>
-              {/*Temp Route for coding ->*/}
-              {/*<Route path="room" element={<Room />} />*/}
+              <Route path="settings" element={<Settings />}>
+                <Route path="" element={<SettingsHomePage />} />
+                <Route path="update" element={<ChangeNamePage />} />
+              </Route>
+              <Route path="userAccount" element={<UserProfilePage />}>
+                <Route path="" element={<UserProfile />} />
+                <Route path=":id" element={<UserProfile />} />
+                <Route path="ranking" element={<Ranking />} />
+              </Route>
             </Route>
-            <Route path="settings" element={<Settings />}>
-              <Route path="" element={<SettingsHomePage />} />
-              <Route path="update" element={<ChangeNamePage />} />
-            </Route>
-            <Route path="userAccount" element={<UserProfilePage />}>
-              <Route path="" element={<UserProfile />} />
-              <Route path=":id" element={<UserProfile />} />
-              <Route path="ranking" element={<Ranking />} />
-            </Route>
+            <Route path="cookieError" element={<CookieError />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/cookieError" element={<CookieError />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </HelmetProvider>
     </>
