@@ -5,11 +5,12 @@ interface DialogProps {
   setDialog: (dialog: string | undefined) => void;
 }
 export function Dialog(props: DialogProps) {
+  const closeDialog = () => props.setDialog(undefined);
   return (
     <dialog open={!!props.dialog}>
       {props.dialog}
       <div>
-        <button onClick={() => props.setDialog(undefined)}>close</button>
+        <button onClick={closeDialog}>close</button>
       </div>
     </dialog>
   );
