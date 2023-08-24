@@ -4,53 +4,55 @@ import SendIcon from "./SendIcon.svg";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../../Board/Board";
 import { Socket } from "socket.io-client";
+import { Dialog } from "../../../../components/Dialog";
 
 interface InputProps {
   chatSocket: Socket;
 }
 
-export function RoomInput({chatSocket}: InputProps) {
+export function RoomInput({ chatSocket }: InputProps) {
   const [input, setInput] = useState("");
   const { id } = useParams();
   const boardContext = useContext(BoardContext);
   const userId = boardContext?.me.id;
+  const [dialog, setDialog] = useState<string | undefined>(undefined);
   const sendMessage = () => {
     if (input.length === 0) {
-      alert("Please enter a message.");
-      return;
+      setDialog("Please enter a message.");
     } else if (!userId) {
-      alert("no user id");
-      return;
+      setDialog("no user id");
     } else if (!id) {
-      alert("no chat id");
-      return;
+      setDialog("no chat id");
     }
 
     const data = {
       chatId: id,
       userId,
       text: input,
-    }
+    };
     chatSocket.emit("send_message", data);
-    setInput("")
+    setInput("");
   };
   return (
-    <div className="wrapper-room-input">
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(event) => {
-          event.key === "Enter" && sendMessage();
-        }}
-      />
-      <div>
-        <img
-          className="nav-icons"
-          src={SendIcon}
-          onClick={sendMessage}
-          alt={"Send message"}
-        ></img>
+    <>
+      <Dialog dialog={dialog} setDialog={setDialog} />
+      <div className="wrapper-room-input">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(event) => {
+            event.key === "Enter" && sendMessage();
+          }}
+        />
+        <div>
+          <img
+            className="nav-icons"
+            src={SendIcon}
+            onClick={sendMessage}
+            alt={"Send message"}
+          ></img>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

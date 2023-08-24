@@ -1,10 +1,13 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Dialog } from "../../components/Dialog";
 
 export function Root() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [dialog, setDialog] = useState<string | undefined>(undefined);
   useEffect(() => {
+    console.log("useEffect");
     if (location.pathname === "/login" || location.pathname === "/welcome")
       return;
     const jwtToken = localStorage.getItem("access_token");
@@ -12,19 +15,21 @@ export function Root() {
       const jwtData = JSON.parse(atob(jwtToken.split(".")[1]));
       const expirationDate = new Date(jwtData.exp * 1000);
       if (expirationDate < new Date(Date.now())) {
-        alert("Your token has expired");
-        localStorage.removeItem("access_token");
         navigate("/login");
+        localStorage.removeItem("access_token");
+        setDialog("Your token has expired");
         return;
       }
     } else {
-      alert("No token available");
       navigate("/login");
+      setDialog("No token available");
       return;
     }
-  });
+  }, [location.pathname, navigate]);
   return (
     <>
+      <Dialog dialog={dialog} setDialog={setDialog} />
+
       <Outlet />
     </>
   );

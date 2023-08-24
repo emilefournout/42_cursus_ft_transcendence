@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { Dialog } from "./Dialog";
+import { set } from "js-cookie";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [dialog, setDialog] = useState<string | undefined>(undefined);
 
   function register() {
     fetch(`${process.env.REACT_APP_BACKEND}/user`, {
@@ -20,37 +23,40 @@ function Register() {
       .then((response: Response) => {
         if (!response.ok) throw new Error("Error creating user");
         if (response.status === 201) {
-          window.alert("User created correctly");
+          setDialog("User created correctly");
         }
         return response.json();
       })
       .then((data) => {
         if (data.error) {
-          window.alert(data.message);
+          setDialog(data.message);
         }
       })
       .catch((error) => console.log(error));
   }
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Username"
-        onChange={(event) => setUsername(event.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Password"
-        onChange={(event) => setPassword(event.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        onChange={(event) => setEmail(event.target.value)}
-      />
-      <button onClick={register}>Register</button>
-    </div>
+    <>
+      <Dialog dialog={dialog} setDialog={setDialog} />
+      <div>
+        <input
+          type="text"
+          placeholder="Username"
+          onChange={(event) => setUsername(event.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Password"
+          onChange={(event) => setPassword(event.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <button onClick={register}>Register</button>
+      </div>
+    </>
   );
 }
 

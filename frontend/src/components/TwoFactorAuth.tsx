@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { Dialog } from "./Dialog";
 
 function TwoFactorAuth({ username }: { username: string }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret
   const [code, setCode] = useState("");
   const [qrImage, setQrImage] = useState("");
+  const [dialog, setDialog] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/auth/qr-image?user=${username}`)
@@ -24,13 +26,14 @@ function TwoFactorAuth({ username }: { username: string }) {
         return response.text();
       })
       .then((data: string) => {
-        data === "OK" ? window.alert("Good") : window.alert("Incorrect code");
+        data === "OK" ? setDialog("Good") : setDialog("Incorrect code");
       })
       .catch((error) => console.log(error));
   }
 
   return (
     <>
+      <Dialog dialog={dialog} setDialog={setDialog} />
       <img src={qrImage} />
       <br></br>
       <input

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate, Outlet } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import "./App.css";
 import { Board } from "./pages/Board/Board";
 import { Login } from "./pages/Login/Login";
@@ -36,7 +36,6 @@ function App() {
             <Route path="" element={<Navigate to={"/board"} />} />
             <Route path="login" element={<Login />} />
             <Route path="welcome" element={<Welcome />} />
-            <Route path="*" element={<NotFound />} />
             <Route path="board" element={<Board />}>
               <Route path="" element={<Navigate to={"/board/userAccount"} />} />
               <Route path="game" element={<Game />}>

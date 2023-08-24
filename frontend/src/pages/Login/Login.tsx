@@ -16,6 +16,7 @@ export function Login() {
       <h2 id="login-h2" className="txt txt-shadow-bot txt-shadow-blu">
         A Transcendence Project for 42
       </h2>
+
       <button
         className="btn btn-bottom btn-fixed-height responsive-button"
         onClick={handleLoginWith42}
