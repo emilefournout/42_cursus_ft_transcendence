@@ -204,7 +204,7 @@ export class MembershipService {
   }
   
   async isUserMemberOfChat(userId: number, chatId: number) : Promise<boolean> {
-    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    const chatMember = await this.findChatMemberByIds(chatId, userId);
     if (!chatMember) return false
     return true;
   }
