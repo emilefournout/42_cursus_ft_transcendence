@@ -9,7 +9,7 @@ import {
     UseGuards
   } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import * as path from 'path';
 import { GetUser } from 'src/auth/decorator';
@@ -33,6 +33,18 @@ export class ProfileController {
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
     @ApiBearerAuth()
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        schema: {
+          type: 'object',
+          properties: {
+            image: {
+              type: 'string',
+              format: 'binary',
+            },
+          },
+        },
+      })
     @ApiOperation({ summary: 'Updates user image profile' })
     async updateImage(@GetUser() user, @UploadedFile() image: Express.Multer.File) {
         let url: string;

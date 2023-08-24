@@ -80,7 +80,8 @@ export class ChatController {
         user.sub,
         createChatDto.chatVisibility,
         createChatDto.password,
-        createChatDto.name
+        createChatDto.name,
+        createChatDto.invitedId
       );
       return newChat;
     } catch (error) {
