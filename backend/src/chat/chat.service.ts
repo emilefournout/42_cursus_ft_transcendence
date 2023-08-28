@@ -1,7 +1,7 @@
 import * as argon2 from 'argon2';
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ChatVisibility, User } from '@prisma/client';
+import { Chat, ChatVisibility, User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
@@ -13,15 +13,13 @@ export class ChatService {
   constructor(private prisma: PrismaService) {}
   
   async findChatsInfo(id: any) {
-    const chats = await this.prisma.chat.findMany({
-      include: {
-        members: {
-          where: {
-            userId: id
-          }
-        }
-      }
-    })
+    const chats : Chat[] = await this.prisma.$queryRaw`
+    SELECT
+    *
+    FROM "Chat" chat
+    INNER JOIN "ChatMember" chatMem ON chat.id = chatMem."chatId"
+    WHERE chatMem."userId" = ${id}
+  `;
     return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
   }
 
