@@ -13,6 +13,7 @@
 }
 
 .wrapper-room-bar > span {
+	padding: 0 16px;
 	flex-grow: 1;
 	text-align: center;
 }
