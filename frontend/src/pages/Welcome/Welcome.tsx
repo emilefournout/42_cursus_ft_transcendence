@@ -8,7 +8,6 @@ import { Avatar } from "../../components/Avatar";
 export function Welcome() {
   const [username, setUsername] = useState("");
   const [image, setImage] = useState<File>();
-  const [code2fa, setCode2fa] = useState("");
   const navigate = useNavigate();
   const navigateError = useNavigate();
   // Guest mode for no 42-students
@@ -29,7 +28,6 @@ export function Welcome() {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("image", image as File);
-    formData.append("code2fa", code2fa);
     fetch(`${process.env.REACT_APP_BACKEND}/auth/register`, {
       method: "POST",
       body: formData,
@@ -72,13 +70,6 @@ export function Welcome() {
             placeholder="User Name"
             onChange={(event) => setUsername(event.target.value)}
             required
-          />
-          <input
-            id="wp-2fa-input"
-            className="wp-responsive-txt"
-            type="text"
-            placeholder="2FA Code"
-            onChange={(event) => setCode2fa(event.target.value)}
           />
           <button
             id="wp-submit"
