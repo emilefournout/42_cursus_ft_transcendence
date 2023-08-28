@@ -1,0 +1,20 @@
+.dialog-window {
+	background-color: var(--Light-Text);
+	border-radius: 4px;
+	color: var(--Browned-Text);
+
+	text-align: center;
+	font-size: clamp(0.5rem, 3vw, 1rem);
+}
+
+.dialog-window > button {
+	padding: 0.2rem;
+
+	font-size: clamp(0.5rem, 3vw, 1rem);
+
+	transition: background .2s ease;
+}
+
+.dialog-window > button:hover {
+	background: var(--Crisped-Orange);
+}
