@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
         const user = await this.userService.findUserById(payload.sub)
         if (!user) 
             throw new UnauthorizedException('Token id not valid')
-        if (user.username != payload.username) 
+        if (user.intraname != payload.intraname) 
             throw new UnauthorizedException('Username does not correspond to user identified by id');
         return payload
     }
