@@ -20,7 +20,6 @@ export function CardAction(props: CardActionProps) {
     )
       .then((response) => {
         if (response.ok) {
-          alert("Friend deleted");
           setTimeout(profilePageContext.updateFriends, 500);
         } else {
           throw new Error("Error deleting friend");

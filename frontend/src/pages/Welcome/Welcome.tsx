@@ -23,7 +23,6 @@ export function Welcome() {
   });
 
   function register() {
-    console.log(searchParams.get("guest"));
     const token: string | undefined = searchParams.get("guest")
       ? "guest"
       : Cookies.get("42token");
@@ -65,7 +64,7 @@ export function Welcome() {
       </div>
       <div className="window-body-centered">
         <div className="wrapper-welcome-grid">
-          <Avatar size="128px" upload={true} />
+          <Avatar size="128px" upload={true} download={false} setImg={setImage}/>
           <input
             id="wp-username-input"
             className="wp-responsive-txt"
