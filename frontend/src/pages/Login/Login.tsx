@@ -35,6 +35,7 @@ export function Login() {
         window.location.href = "http://localhost:8000/";
       } else {
         localStorage.removeItem("access_token");
+        localStorage.removeItem("username");
         redirectTo42Api();
       }
     } else {

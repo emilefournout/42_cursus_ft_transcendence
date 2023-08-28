@@ -19,6 +19,7 @@ export function SettingsHomePage() {
 				<Link className="settings-fixed-height btn settings-disconnect settings-btn-txt" to="/login"
 					onClick={() => {
 						localStorage.removeItem("access_token");
+						localStorage.removeItem("username");
 					}}>
 					Disconnect
 				</Link>

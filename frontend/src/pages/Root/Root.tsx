@@ -16,6 +16,7 @@ export function Root() {
       if (expirationDate < new Date(Date.now())) {
         navigate("/login");
         localStorage.removeItem("access_token");
+        localStorage.removeItem("username");
         setDialog("Your session has expired, please sign in again");
         return;
       }
