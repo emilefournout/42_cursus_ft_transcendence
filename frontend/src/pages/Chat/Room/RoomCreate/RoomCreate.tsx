@@ -86,7 +86,6 @@ export function RoomCreate() {
         setDialog("Room created");
         setTimeout(() => {
           chatPageContext.updateChat();
-          console.log("new chat -> ", newChat.id);
           navigate(`/board/chats/${newChat.id.toString()}`);
         }, 500);
         chatSocket.emit("join_room", { chatId: newChat.id });
