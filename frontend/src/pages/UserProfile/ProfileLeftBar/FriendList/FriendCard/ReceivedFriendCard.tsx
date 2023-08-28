@@ -58,7 +58,7 @@ export function ReceivedFriendCard(props: FriendCardProps) {
     <>
       <Dialog dialog={dialog} setDialog={setDialog} />
       <div className="friend-card">
-        <Avatar url={props.userInfo.avatar} size="32px" upload={false} />
+        <Avatar url={props.userInfo.avatar} size="32px" upload={false} download={true}/>
 
         <div>{props.userInfo.username}</div>
         <div>

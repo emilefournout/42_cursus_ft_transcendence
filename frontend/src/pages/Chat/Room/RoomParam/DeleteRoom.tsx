@@ -17,7 +17,6 @@ export function DeleteRoom() {
     })
       .then((response) => {
         if (response.ok) {
-          alert("Room deleted");
           setTimeout(() => {
             chatPageContext
               .updateChat()

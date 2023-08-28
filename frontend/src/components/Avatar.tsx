@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import iconVect from "../common/change-icon.svg";
 
-interface AvatarProps {
+type AvatarProps = {
   url?: string;
   size: string;
   upload: boolean;
+  setImg?: React.Dispatch<React.SetStateAction<File | undefined>>
+  download: boolean;
 }
 
 export function Avatar(props: AvatarProps) {
   const [img, setImg] = useState<string>();
-  const [image, setImage] = useState<File>();
   const downloadAvatar = useCallback(async () => {
     const avatarUrl: string | null =
       props.url !== undefined
@@ -43,14 +44,16 @@ export function Avatar(props: AvatarProps) {
   }, [props.url]);
 
   useEffect(() => {
-    downloadAvatar().catch((e) => console.log("Error when downloading the avatar"));
-    return () => {};
+    if (props.download) {
+      downloadAvatar().catch((e) => console.log("Error when downloading the avatar"));
+      return () => {};
+    }
   }, [downloadAvatar]);
 
   function saveImage(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.length) {
-      // setImage(URL.createObjectURL(event.target.files[0]))
-      setImage(event.target.files[0]);
+      setImg(URL.createObjectURL(event.target.files[0]));
+      if (props.setImg) props.setImg(event.target.files[0])
     }
   }
 
