@@ -24,14 +24,4 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @MinLength(5)
   username?: string
-  
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  wins?: number
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  loses?: number
 }
