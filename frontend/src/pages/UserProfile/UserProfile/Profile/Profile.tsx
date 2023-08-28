@@ -9,6 +9,7 @@ import "./Profile.css";
 interface ProfileProps {
 	userInfo?: User;
 }
+
 export function Profile(props: ProfileProps) {
 	const boardContext = React.useContext(BoardContext);
 	const userInfo = props.userInfo ?? boardContext?.me;

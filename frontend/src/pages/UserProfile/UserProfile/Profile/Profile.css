@@ -60,10 +60,27 @@
 	flex-grow: 1;
 
 	display: grid;
+	justify-items: center;
 	grid-template-columns: 1fr 1fr 1fr;
+	gap: 8px;
 
 	white-space: pre-line;
 	text-align: center;
+}
+
+#stats-values > button {
+	grid-column: 1 / 4;
+
+	width: 40%;
+	padding: 8px;
+
+	font-size: clamp(0.2rem, 2vw, 0.6rem);
+
+	transition: background .2s ease;
+}
+
+#stats-values > button:hover {
+	background: var(--Crisped-Orange);
 }
 
 #stats-values > div {
