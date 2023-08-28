@@ -100,7 +100,7 @@ CREATE TABLE "ChatMember" (
 -- CreateTable
 CREATE TABLE "Chat" (
     "id" SERIAL NOT NULL,
-    "name" TEXT,
+    "name" TEXT NOT NULL,
     "visibility" "ChatVisibility" NOT NULL,
     "password" TEXT,
 

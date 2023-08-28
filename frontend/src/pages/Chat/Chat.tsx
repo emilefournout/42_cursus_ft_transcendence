@@ -5,9 +5,10 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Visibility } from "./Room/RoomCreate/RoomCreate";
 import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
+
 export interface ChatInfo {
   id: number;
-  name?: string;
+  name: string;
   visibility: Visibility;
   password?: string;
   members: [];

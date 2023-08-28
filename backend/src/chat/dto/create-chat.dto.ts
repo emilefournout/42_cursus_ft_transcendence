@@ -16,31 +16,30 @@ export class CreateChatDto {
   @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
   
-  @IsOptional()
-  @IsNumber()
-  @ApiProperty({
-    type: Number
-  })
-  invitedId?: number;
-  
-  @IsOptional()
   @IsString()
   @ApiProperty({
     type: String
   })
-  name?: string;
-
+  name: string;
+  
   @IsOptional()
   @IsString()
   @ApiPropertyOptional({
     type: String
   })
   password?: string;
+  
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({
+    type: Number
+  })
+  invitedId?: number;
 }
 
 export interface ChatDto {
   id: number;
   visibility: ChatVisibility;
-  name?: string;
+  name: string;
   password?: string
 }

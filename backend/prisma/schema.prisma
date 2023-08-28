@@ -95,7 +95,7 @@ model ChatMember {
 
 model Chat {
   id         Int            @id @default(autoincrement())
-  name       String?
+  name       String
   visibility ChatVisibility
   password   String?
   members    ChatMember[]

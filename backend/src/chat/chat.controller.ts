@@ -79,8 +79,8 @@ export class ChatController {
       const newChat = await this.chatService.createChat(
         user.sub,
         createChatDto.chatVisibility,
-        createChatDto.password,
         createChatDto.name,
+        createChatDto.password,
         createChatDto.invitedId
       );
       return newChat;

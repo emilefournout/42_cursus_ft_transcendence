@@ -26,8 +26,8 @@ export class ChatService {
 async createChat(
   user_id: number,
   chatVisibility: ChatVisibility,
+  name: string,
   password?: string,
-  name?: string,
   invitedId?: number
 ): Promise<ChatDto> {
   if (chatVisibility === 'PROTECTED' && !password) {
@@ -41,8 +41,8 @@ async createChat(
 
   const chatData = {
     visibility: chatVisibility,
-    password: hashedPassword,
     name: name,
+    password: hashedPassword,
     members: {
       create: [{ userId: user_id, administrator: true, owner: true }]
     }

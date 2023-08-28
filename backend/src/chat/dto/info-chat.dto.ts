@@ -12,7 +12,7 @@ export class ChatBasicInfoDto {
     type: String,
     description: "Name of the chat"
   })
-  name?: string;
+  name: string;
   
   @ApiProperty({
     type: ChatVisibility,
