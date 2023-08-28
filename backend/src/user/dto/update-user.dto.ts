@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MinLength,
 } from 'class-validator';
 
 export class UpdateUserRelationDto {
@@ -21,6 +22,7 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @MinLength(5)
   username?: string
   
   @ApiProperty()
