@@ -25,7 +25,8 @@ export function Avatar(props: AvatarProps) {
 							if (response.ok) return response.json();
 							else throw new Error("Error fetching avatar");
 						})
-						.then((data) => data.avatar);
+						.then((data) => data.avatar)
+            .catch((e) => {});
 
 		fetch(`${process.env.REACT_APP_BACKEND}/profile/${avatarUrl}`, {
 			method: "GET",
@@ -40,7 +41,8 @@ export function Avatar(props: AvatarProps) {
 			.then((blob) => {
 				const url = URL.createObjectURL(blob);
 				setImg(url);
-			});
+			})
+      .catch((e) => {});
 	}, [props.url]);
 
 	useEffect(() => {
