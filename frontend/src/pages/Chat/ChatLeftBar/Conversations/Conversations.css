@@ -4,9 +4,6 @@
 
 	align-items: center;
 
-	color: var(--Browned-Text);
-	font-size: clamp(0.4rem, 2vw, 0.8rem);
-
 	border-bottom: 2px solid var(--Browned-Text);
 }
 
@@ -20,6 +17,14 @@
 
 .wrapper-conversation:hover {
 	background-color: var(--Trans-Mooned-Teal-Strong);
+}
+
+.conversation-name {
+	max-width: 90%;
+
+	color: var(--Browned-Text);
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+
 }
 
 .conversation-icons {
