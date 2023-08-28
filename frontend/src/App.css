@@ -71,6 +71,11 @@ body {
 	background: transparent;
 }
 
+img {
+	color: var(--Light-Text);
+	font-size: 0.4rem;
+}
+
 /* Wrappers */
 .wrapper-col {
 	display: flex;
@@ -95,7 +100,7 @@ body {
 
 	display: grid;
 	grid-gap: var(--gap-size);
-	grid-template-columns: var(--img-size) 1fr 1fr;
+	grid-template-columns: var(--img-size) 1fr;
 	grid-template-rows: var(--row-size) var(--row-size);
 }
 
