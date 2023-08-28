@@ -7,7 +7,6 @@ export function Root() {
   const location = useLocation();
   const [dialog, setDialog] = useState<string | undefined>(undefined);
   useEffect(() => {
-    console.log("useEffect");
     if (location.pathname === "/login" || location.pathname === "/welcome")
       return;
     const jwtToken = localStorage.getItem("access_token");

@@ -43,7 +43,7 @@ export function Avatar(props: AvatarProps) {
   }, [props.url]);
 
   useEffect(() => {
-    downloadAvatar().catch((e) => console.log(e));
+    downloadAvatar().catch((e) => console.log("Error when downloading the avatar"));
     return () => {};
   }, [downloadAvatar]);
 

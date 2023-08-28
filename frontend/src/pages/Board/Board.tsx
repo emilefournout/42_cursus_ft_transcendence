@@ -40,12 +40,11 @@ export function Board() {
       .then((data) => {
         setMyUser(data as User);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log("Error updating user"));
   }, []);
 
   useEffect(() => {
-    updateMe().then((r) => console.log(r));
-    return () => {};
+    updateMe();
   }, [updateMe]);
 
   return (
