@@ -27,6 +27,7 @@ export function Conversations(props: ConversationsProps) {
 			<p className="conversation-name ellipsed-txt">
 				{props.chat.name ? props.chat.name : "No name"}
 			</p>
+			<div style={{flexGrow: 1}}></div>
 			{props.chat.visibility === Visibility.PRIVATE ||
 			props.chat.visibility === Visibility.PROTECTED ? (
 				<img className="conversation-icons" src={LockChatIcon} />
