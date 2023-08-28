@@ -1,6 +1,7 @@
 .wrapper-room-input {
 	width: 100%;
 	min-height: 1.2rem;
+	max-height: 1.2rem;
 
 	padding-right: 32px;
 
