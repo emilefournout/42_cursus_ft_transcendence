@@ -10,6 +10,8 @@
 	align-items: center;
 
 	color: var(--Light-Text);
+
+	overflow: auto;
 }
 
 #prof-user-name {
