@@ -48,7 +48,7 @@ function App() {
                 <Route path="" element={<Room />} />
                 <Route path=":id" element={<Room />}>
                   <Route path="" element={<Messages />} />
-                  <Route path="param" element={<Outlet />}>
+                  <Route path="param">
                     <Route path="" element={<RoomParam />} />
                     <Route path="delete" element={<DeleteRoom />} />
                     <Route path="changePassword" element={<ChangePassword />} />

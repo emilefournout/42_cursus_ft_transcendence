@@ -78,7 +78,10 @@ export function RoomCreate() {
         clearState();
         if (!response.ok) {
           setErrorMessage("Error while creating room");
-          throw new Error("Error while creating room");
+          response.json().then((data) => {
+            setErrorMessage(data.message[0]);
+          });
+          throw new Error();
         }
         return response.json();
       })
@@ -92,7 +95,7 @@ export function RoomCreate() {
       })
       .catch((error) => {
         clearState();
-        setErrorMessage("Erreur lors de la requête");
+        //setErrorMessage(error.message);
         console.error("Erreur lors de la requête Fetch:" + error.message);
       });
   };

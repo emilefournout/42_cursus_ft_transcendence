@@ -17,12 +17,6 @@ export function LeftBar(props: LeftBarProps) {
   const { id } = useParams();
   const chatPageContext = React.useContext(ChatPageContext);
 
-  const handleClick = (chat: ChatInfo) => {
-    navigate(`/board/chats/${chat.id}`, {
-      state: { chat: chat },
-    });
-  };
-
   return (
     <div id="lb-main-wrapper" className="wrapper-col">
       <div id="lb-top-wrapper">
