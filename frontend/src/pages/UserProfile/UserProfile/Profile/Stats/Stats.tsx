@@ -25,7 +25,7 @@ export function Stats(props: StatsProps) {
 	return (
 		<div id="stats-card">
 			<div className="window-title card-title">Stats</div>
-			<div id="stats-values">
+			<div id="stats-values" className="card-body">
 				<button onClick={() => navigate("/board/userAccount/ranking")}>
 					Ranking
 				</button>

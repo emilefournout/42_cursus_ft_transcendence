@@ -53,6 +53,13 @@
 	border-width: 2px;
 }
 
+.card-body {
+	padding: 8px;
+
+	font-size: clamp(0.2rem, 2vw, 1rem);
+	text-align: center;
+}
+
 .card-title {
 	border-top: none;
 }
@@ -111,10 +118,6 @@
 
 	display: flex;
 	flex-direction: column;
-
-	padding: 8px;
-
-	text-align: center;
 }
 
 #history-values * {
