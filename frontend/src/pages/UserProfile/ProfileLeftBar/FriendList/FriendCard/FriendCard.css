@@ -1,5 +1,84 @@
 .friend-card{
-    display: flex;
-    flex-direction: row;
-    gap: 25px;
+	width: 100%;
+	height: 48px;
+
+	padding: 4px;
+
+	display: grid;
+	grid-template-columns: 48px 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	gap: 4px;
+}
+
+.friend-card > img {
+	grid-column: 1;
+	grid-row: 1 / 3;
+}
+
+.friend-card > button {
+	min-height: 0.4rem;
+
+	font-size: 0.25rem;
+
+	transition: color .25s ease;
+}
+
+.friend-card > button:hover {
+	color: var(--Cosmic-Purple);
+}
+
+.friend-card-username {
+	font-size: 0.3rem;
+
+	grid-column: 2 / 4;
+	grid-row: 1
+}
+
+.friend-card-subtitle {
+	font-size: 0.2rem;
+
+	grid-column: 2 / 4;
+	grid-row: 2;
+}
+
+.friend-card-subtitle-2 {
+	font-size: 0.2rem;
+
+	grid-column: 3 / 4;
+	grid-row: 2;
+}
+
+.friend-card-status {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+	gap: 2px;
+}
+
+.friend-card-status-marker {
+	width: 8px;
+	height:8px;
+
+	border-radius: 2px;
+}
+
+.friend-card-delete-txt {
+	font-size: 0.2rem;
+
+	display: flex;
+
+	justify-content: flex-start;
+	align-items: center;
+	gap: 4px;
+}
+
+.friend-card-delete-txt > button {
+	min-height: 0.3rem;
+
+	font-size: 0.2rem;
+}
+
+.friend-card-delete-txt > button:first-child {
+	background: var(--Crisped-Orange);
 }
