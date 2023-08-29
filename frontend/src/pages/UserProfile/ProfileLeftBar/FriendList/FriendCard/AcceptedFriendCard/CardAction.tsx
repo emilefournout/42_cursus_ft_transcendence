@@ -33,7 +33,7 @@ export function CardAction(props: CardActionProps) {
 	return (
 		<>
 			{deleteIsSelected ? (
-				<div className="friend-card-subtitle-2 friend-card-delete-txt">
+				<div className="friend-card-delete-txt">
 					You sure?
 					<button onClick={deleteUser}>yes</button>
 					<button onClick={() => setDeleteIsSelected((isSelected) => !isSelected)}>no</button>

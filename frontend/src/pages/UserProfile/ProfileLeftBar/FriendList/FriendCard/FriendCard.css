@@ -37,7 +37,7 @@
 .friend-card-subtitle {
 	font-size: 0.2rem;
 
-	grid-column: 2 / 4;
+	grid-column: 2 / 3;
 	grid-row: 2;
 }
 
@@ -66,11 +66,16 @@
 .friend-card-delete-txt {
 	font-size: 0.2rem;
 
+	grid-column: 2 / 4;
+	grid-row: 2;
+
 	display: flex;
 
 	justify-content: flex-start;
 	align-items: center;
 	gap: 4px;
+
+	background-color: var(--Darks-Back);
 }
 
 .friend-card-delete-txt > button {
