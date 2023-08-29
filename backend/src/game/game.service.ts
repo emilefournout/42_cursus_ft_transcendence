@@ -4,10 +4,11 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { IGameData } from './game.interface';
+import { IGameData } from './types/game.interface';
 import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { UpdateGameDto } from './dto/updte-game.dto';
+import { AchievementService } from 'src/achievement/achievement.service';
 
 interface ConnectedClients {
   [id: string]: {
@@ -21,6 +22,7 @@ export class GameService {
   initState: IGameData = {
     player1Id: 0,
     player2Id: 0,
+    maxGoals: 3,
     width: 600,
     height: 350,
     padWidth: 10,
@@ -181,6 +183,7 @@ export class GameService {
   }
 
   public registerConnection(id: string, client: Socket, sub: number) {
+    if (this.clientsConnections[id] !== undefined) throw new Error("Error registering connection")
     this.clientsConnections[id] = {
       socket: client,
       userId: sub

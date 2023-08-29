@@ -123,7 +123,16 @@ async createChat(
   async findChatByIdWithUserInside(id: number, userId: number) {
     const chat = await this.prisma.chat.findUnique({
       include: {
-        members: true
+        members: {
+          select: {
+            userId: true,
+            createdAt: true,
+            administrator: true,
+            owner: true,
+            muted: true,
+            mutedExpiringDate: true,
+          }
+        }
       },
       where: {
         id: id
