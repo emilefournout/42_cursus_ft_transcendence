@@ -5,11 +5,13 @@ import { GameGateway } from './game.gateway';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserService } from 'src/user/user.service';
+import { AchievementsModule } from 'src/achievement/achievement.module';
+import { AchievementService } from 'src/achievement/achievement.service';
 
 @Module({
+  imports: [AchievementsModule, forwardRef(() =>AuthModule)],
+  providers: [GameService, GameGateway, UserService, AchievementService],
   controllers: [GameController],
-  providers: [GameService, GameGateway, UserService],
-  imports: [forwardRef(() =>AuthModule)],
   exports: [GameService]
 })
 export class GameModule {}

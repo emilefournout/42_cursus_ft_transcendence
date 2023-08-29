@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProfileModule } from './profile/profile.module';
+import { AchievementsModule } from './achievement/achievement.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -16,6 +17,7 @@ import { ProfileModule } from './profile/profile.module';
     GameModule,
     AuthModule,
     PrismaModule,
-    ProfileModule]
+    ProfileModule,
+    AchievementsModule]
   })
 export class AppModule {}

@@ -3,6 +3,7 @@ export interface IGameData {
   player2Id: number;
   player1Score: number;
   player2Score: number;
+  maxGoals: number;
   width: number;
   height: number;
   padWidth: number;
