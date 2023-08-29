@@ -8,10 +8,20 @@ import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 
 export interface ChatInfo {
   id: number;
-  name: string;
+  name?: string;
   visibility: Visibility;
   password?: string;
-  members: [];
+  members?: Array<member>;
+}
+
+export interface member {
+  userId: number;
+  chatId: number;
+  createdAt: string;
+  administrator: boolean;
+  owner: boolean;
+  muted: boolean;
+  mutedExpiringDate: string;
 }
 
 interface ChatPageContextArgs {
