@@ -1,12 +1,14 @@
 import React from "react";
 import "./RoomParam.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { AddUser } from "./AddUser";
-import { ChatMembers } from "./ChatMembers";
+import { AddUser } from "./ChatMembers/AddUser";
+import { ChatMembers } from "./ChatMembers/ChatMembers";
+import { ChatInfo } from "../../Chat";
+import { RoomContextArgs } from "../Room";
 export function RoomParam() {
   const navigate = useNavigate();
-  const chat = useOutletContext();
-  if (chat === undefined) return <>undefined {}</>;
+  const roomContextArgs = useOutletContext<RoomContextArgs>();
+  if (roomContextArgs.chat === undefined) return <></>;
   else
     return (
       <div className="room-param">

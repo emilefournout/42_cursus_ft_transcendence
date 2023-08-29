@@ -10,20 +10,7 @@ export interface ChatInfo {
   id: number;
   name?: string;
   visibility: Visibility;
-  password?: string;
-  members?: Array<member>;
 }
-
-export interface member {
-  userId: number;
-  chatId: number;
-  createdAt: string;
-  administrator: boolean;
-  owner: boolean;
-  muted: boolean;
-  mutedExpiringDate: string;
-}
-
 interface ChatPageContextArgs {
   updateChat: () => Promise<void>;
 }
@@ -54,11 +41,10 @@ export function ChatPage() {
         title="Pong - Chat"
         description="Start a conversation now with a friends or join a channel."
       />
-
       <div id="chatpage-container">
         <ChatPageContext.Provider value={{ updateChat: updateChats }}>
           <LeftBar chats={chats} />
-          <Outlet context={[chats, setChats]} />
+          <Outlet context={chats} />
         </ChatPageContext.Provider>
         {/*<Room />*/}
       </div>

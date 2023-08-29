@@ -9,22 +9,56 @@ import {
   useOutletContext,
   useParams,
 } from "react-router-dom";
-import { ChatInfo, ChatPageContext } from "../Chat";
+import { ChatInfo } from "../Chat";
 import NoMsgsImg from "../ChatLeftBar/NoMsgs.png";
+import { User } from "../../Board/Board";
+
+export interface ChatFullInfo extends ChatInfo {
+  password?: string;
+  members?: Array<Member>;
+}
+export interface Member {
+  userId: number;
+  chatId: number;
+  createdAt: string;
+  administrator: boolean;
+  owner: boolean;
+  muted: boolean;
+  mutedExpiringDate: string;
+}
+
+export interface RoomContextArgs {
+  chat: ChatFullInfo;
+  getChatInfo: (chat: ChatInfo) => void;
+}
 export function Room() {
   const location = useLocation();
-  const [chats]: [Array<ChatInfo> | undefined] = useOutletContext();
+  const chats: Array<ChatInfo> | undefined = useOutletContext();
   const { id } = useParams();
-  const [chat, setChat] = useState<ChatInfo | undefined>(undefined);
+  const [chat, setChat] = useState<ChatFullInfo | undefined>(undefined);
+
+  const getChatInfo = async (chat: ChatInfo) =>
+    fetch(`${process.env.REACT_APP_BACKEND}/chat/${chat.id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Error getting chat");
+        return response.json();
+      })
+      .then((chat: ChatFullInfo) => setChat(chat));
 
   useEffect(() => {
     if (chats === undefined || id === undefined) return;
     let chat: ChatInfo | undefined;
     if (location.state && location.state.chat) chat = location.state.chat;
     else chat = chats.find((chat: ChatInfo) => chat.id === parseInt(id));
-    if (!chat) return;
-    console.log("chat: ", chat);
-    setChat(chat);
+    if (chat === undefined) return;
+    getChatInfo(chat).catch((error) => {
+      console.log(error);
+    });
   }, [chats, id, location.state]);
 
   if (chats === undefined) return <></>;
@@ -32,16 +66,19 @@ export function Room() {
     return (
       <>
         <div id="chat-no-messages">No messages?</div>
-        <img src={NoMsgsImg}></img>
+        <img src={NoMsgsImg} />
       </>
     );
   } else if (location.pathname === "/board/chats") {
     return <Navigate to={`/board/chats/${chats[0].id}`} />;
-  } else
+  } else if (chat === undefined) return <>Chat not found</>;
+  else
     return (
       <div className="wrapper-col wrapper-room">
         <RoomToolBar chat={chat} />
-        <Outlet context={chat} />
+        <Outlet
+          context={{ chat: chat, getChatInfo: getChatInfo } as RoomContextArgs}
+        />
       </div>
     );
 }

@@ -13,8 +13,6 @@ export interface LeftBarProps {
 }
 
 export function LeftBar(props: LeftBarProps) {
-  const navigate = useNavigate();
-  const { id } = useParams();
   const chatPageContext = React.useContext(ChatPageContext);
 
   return (
