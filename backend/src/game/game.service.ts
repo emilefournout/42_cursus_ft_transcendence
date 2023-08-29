@@ -8,6 +8,7 @@ import { IGameData } from './game.interface';
 import { Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { UpdateGameDto } from './dto/updte-game.dto';
+import { AchievementService } from 'src/achievement/achievement.service';
 
 interface ConnectedClients {
   [id: string]: {
@@ -21,6 +22,7 @@ export class GameService {
   initState: IGameData = {
     player1Id: 0,
     player2Id: 0,
+    maxGoals: 3,
     width: 600,
     height: 350,
     padWidth: 10,

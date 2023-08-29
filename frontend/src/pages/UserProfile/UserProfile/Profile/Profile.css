@@ -11,13 +11,18 @@
 
 	color: var(--Light-Text);
 
-	gap: 32px;
+	overflow: auto;
 }
 
 #prof-user-name {
 	max-width: 90%;
+	min-height: 1.2em;
+
+	margin-top: 8px;
+	margin-bottom: 12px;
+
 	text-align: center;
-	font-size: clamp(0.5rem, 3vw, 0.75rem);
+	font-size: clamp(0.5rem, calc(1.5vw + 1vh), 0.75rem);
 }
 
 .ellipsed-txt {
@@ -28,7 +33,8 @@
 
 .cards-container {
 	width: 100%;
-	height: 80%;
+
+	flex-grow: 1;
 
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -74,7 +80,7 @@
 	width: 40%;
 	padding: 8px;
 
-	font-size: clamp(0.2rem, 2vw, 0.6rem);
+	font-size: clamp(0.2rem, 1.5vw, 0.6rem);
 
 	transition: background .2s ease;
 }
