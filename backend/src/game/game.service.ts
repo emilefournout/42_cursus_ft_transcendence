@@ -182,11 +182,12 @@ export class GameService {
     }
   }
 
-  public registerConnection(id: string, client: Socket, sub: number) {
-    if (this.clientsConnections[id] !== undefined) throw new Error("Error registering connection")
+  public registerConnection(id: string, client: Socket, userId: number) {
+    // Disable duplicated user - Commented for development
+    // this.checkAndRemoveUserConnection(userId)
     this.clientsConnections[id] = {
       socket: client,
-      userId: sub
+      userId
     };
   }
 
@@ -226,5 +227,16 @@ export class GameService {
         gameState.ballY - gameState.ballRadius <=
           gameState.rightPad + gameState.padHeight)
     );
+  }
+
+  private checkAndRemoveUserConnection(userId: number) {
+    for (const socketId of Object.keys(this.clientsConnections)) {
+      if (this.clientsConnections[socketId].userId === userId)
+      {
+        this.clientsConnections[socketId].socket.disconnect();
+        this.unregisterConnection(socketId)
+        break ;
+      }
+    }
   }
 }
