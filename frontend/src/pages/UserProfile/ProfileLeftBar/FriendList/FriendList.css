@@ -9,6 +9,8 @@
 
 	font-size: clamp(0.4rem, 1.5vw, 1rem);
 	text-align: center;
+
+	overflow-y: auto;
 }
 
 .friendlist-wrapper > img {

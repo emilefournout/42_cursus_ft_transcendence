@@ -19,7 +19,7 @@ export function Profile(props: ProfileProps) {
 	} else {
 		return (
 			<div className="prof-cards-wrapper">
-				<Avatar url={userInfo.avatar} size="128px" upload={false} download={true} />
+				<Avatar url={userInfo.avatar} upload={false} download={true} />
 				<div id="prof-user-name" className="ellipsed-txt">{"@" + userInfo.username}</div>
 
 				<div className="cards-container">
