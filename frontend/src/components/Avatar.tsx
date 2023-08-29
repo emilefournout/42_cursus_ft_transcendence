@@ -3,7 +3,7 @@ import iconVect from "../common/change-icon.svg";
 
 type AvatarProps = {
 	url?: string;
-	size: string;
+	size?: string;
 	upload: boolean;
 	setImg?: React.Dispatch<React.SetStateAction<File | undefined>>
 	download: boolean;

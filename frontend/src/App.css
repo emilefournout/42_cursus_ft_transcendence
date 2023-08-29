@@ -332,6 +332,8 @@ button {
 
 /* Avatar */
 .user-avatar {
+	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
+
 	width: var(--img-size);
 	height: var(--img-size);
 
