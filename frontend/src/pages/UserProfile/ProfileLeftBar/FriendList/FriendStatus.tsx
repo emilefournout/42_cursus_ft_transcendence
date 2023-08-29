@@ -1,5 +1,6 @@
 import React from "react";
 import "./FriendCard/FriendCard.css";
+import ingameIcon from "./FriendCard/AcceptedFriendCard/ingameIcon.svg";
 
 export enum UserStatus {
 	Online = "ONLINE",
@@ -24,7 +25,7 @@ export function FriendStatus({ status }: Props) {
 				</div>;
 	} else if (status === UserStatus.InGame) {
 		return <div className="friend-card-status friend-card-subtitle">
-				<div className="friend-card-status-marker" style={{background: "var(--Mooned-Teal)"}}></div>
+				<img src={ingameIcon} />
 				In-game
 				</div>;
 	} else {
