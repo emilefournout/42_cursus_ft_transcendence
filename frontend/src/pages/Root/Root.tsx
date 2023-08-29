@@ -29,7 +29,6 @@ export function Root() {
   return (
     <>
       <Dialog dialog={dialog} setDialog={setDialog} />
-
       <Outlet />
     </>
   );
