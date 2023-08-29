@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { GamePlayPage } from "../GamePlayPage/GamePlayPage";
 
 export function GameHomePage() {
-  console.log("HEY");
   return (
     <>
       <SEO

@@ -1,6 +1,7 @@
 .wrapper-room-bar {
 	width: 100%;
 	min-height: var(--NavBar-Height);
+	max-height: var(--NavBar-Height);
 	padding-right: 32px;
 
 	display: flex;
@@ -13,8 +14,12 @@
 }
 
 .wrapper-room-bar > span {
+	padding: 0 16px;
+
 	flex-grow: 1;
+
 	text-align: center;
+	font-size: clamp(0.6rem, 4vw, 1rem);
 }
 
 .wrapper-room-bar > img {

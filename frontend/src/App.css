@@ -71,6 +71,11 @@ body {
 	background: transparent;
 }
 
+img {
+	color: var(--Light-Text);
+	font-size: 0.4rem;
+}
+
 /* Wrappers */
 .wrapper-col {
 	display: flex;
@@ -95,7 +100,7 @@ body {
 
 	display: grid;
 	grid-gap: var(--gap-size);
-	grid-template-columns: var(--img-size) 1fr 1fr;
+	grid-template-columns: var(--img-size) 1fr;
 	grid-template-rows: var(--row-size) var(--row-size);
 }
 
@@ -327,6 +332,8 @@ button {
 
 /* Avatar */
 .user-avatar {
+	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
+
 	width: var(--img-size);
 	height: var(--img-size);
 
@@ -383,7 +390,7 @@ input {
 	font-family: inherit;
 	font-size: 24px;
 	color: var(--Light-Text);
-	padding: 0.4em 0.2em;
+	padding: 0 0.4em;
 	cursor: pointer;
 	display: block;
 	width: 100%;

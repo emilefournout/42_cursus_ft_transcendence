@@ -7,6 +7,7 @@ import { url } from 'inspector';
 import { UserNotFoundException } from './exceptions/user-service.exception';
 import { OnlineStatus } from '@prisma/client';
 import { GameService } from 'src/game/game.service';
+import { ScoreField } from './types/scorefield.enum';
 
 @Injectable()
 export class UserService {
@@ -92,9 +93,7 @@ export class UserService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto){
-    if(!updateUserDto.username &&
-        (updateUserDto.wins === undefined || updateUserDto.wins === null) &&
-        (updateUserDto.loses === undefined || updateUserDto.loses === null))
+    if (!updateUserDto.username)
       throw new BadRequestException('Empty request')
     const user = await this.findUserById(id);
     if (!user)
@@ -107,6 +106,16 @@ export class UserService {
     })
     return updatedUser;
   }
+  
+  async updateScore(userId: number, field: ScoreField) {
+    const updateField = field === ScoreField.Wins ? { wins: { increment: 1 } } : { loses: { increment: 1 } };
+  
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: updateField,
+    });
+  }
+ 
 
   async getRanking() {
     const users = await this.prisma.user.findMany({

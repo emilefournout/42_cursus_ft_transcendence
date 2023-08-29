@@ -18,7 +18,7 @@ export function AcceptedFriendCard(props: FriendCardProps) {
         className="friend-card"
         onClick={() => navigate("/board/userAccount/" + props.userInfo.id)}
       >
-        <Avatar url={props.userInfo.avatar} size="32px" upload={false} />
+        <Avatar url={props.userInfo.avatar} size="32px" upload={false} download={true}/>
         <div>{props.userInfo.username}</div>
         <FriendStatus status={props.userInfo.status} />
       </div>

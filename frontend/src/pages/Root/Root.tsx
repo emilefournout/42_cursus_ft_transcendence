@@ -7,7 +7,6 @@ export function Root() {
   const location = useLocation();
   const [dialog, setDialog] = useState<string | undefined>(undefined);
   useEffect(() => {
-    console.log("useEffect");
     if (location.pathname === "/login" || location.pathname === "/welcome")
       return;
     const jwtToken = localStorage.getItem("access_token");
@@ -17,6 +16,7 @@ export function Root() {
       if (expirationDate < new Date(Date.now())) {
         navigate("/login");
         localStorage.removeItem("access_token");
+        localStorage.removeItem("username");
         setDialog("Your session has expired, please sign in again");
         return;
       }

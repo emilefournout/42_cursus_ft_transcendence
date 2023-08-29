@@ -86,7 +86,6 @@ export function RoomCreate() {
         setDialog("Room created");
         setTimeout(() => {
           chatPageContext.updateChat();
-          console.log("new chat -> ", newChat.id);
           navigate(`/board/chats/${newChat.id.toString()}`);
         }, 500);
         chatSocket.emit("join_room", { chatId: newChat.id });
@@ -98,7 +97,6 @@ export function RoomCreate() {
       });
   };
   const validateConfirm = async (): Promise<void> => {
-    let chatVisibility: string;
     if (selected === Visibility.PROTECTED) {
       if (passwordSecurity !== passwordStrength.STRONG) {
         setPasswordErrorMessage(passwordSecurity.toString());
@@ -108,12 +106,9 @@ export function RoomCreate() {
         return;
       } else {
         setPasswordErrorMessage(passwordStrength.STRONG.toString());
-        chatVisibility = "PROTECTED";
       }
-    } else {
-      chatVisibility = "PUBLIC";
     }
-    await fetchCreateRoom(chatVisibility);
+    await fetchCreateRoom(selected);
   };
 
   return (

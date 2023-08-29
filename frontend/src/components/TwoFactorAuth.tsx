@@ -28,7 +28,7 @@ function TwoFactorAuth({ username }: { username: string }) {
       .then((data: string) => {
         data === "OK" ? setDialog("Good") : setDialog("Incorrect code");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("Error on setting 2FA"));
   }
 
   return (

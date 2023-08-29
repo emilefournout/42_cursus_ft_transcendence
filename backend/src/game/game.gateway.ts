@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
+import { ScoreField } from 'src/user/types/scorefield.enum';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' }
@@ -108,8 +109,8 @@ export class GameGateway
             winner_id === game.player1.user.id
               ? [game.player1.user.wins, game.player2.user.loses]
               : [game.player2.user.wins, game.player1.user.loses];
-          this.userService.updateUser(winner_id, { wins: update_wins + 1 });
-          this.userService.updateUser(loser_id, { loses: update_loses + 1 });
+          this.userService.updateScore(winner_id, ScoreField.Wins);
+          this.userService.updateScore(loser_id, ScoreField.Loses);
         }
       }, 10);
 
@@ -122,12 +123,8 @@ export class GameGateway
             points_user2: GOALS,
             status: 'FINISHED'
           });
-          this.userService.updateUser(game.player2.user.id, {
-            wins: game.player2.user.wins + 1
-          });
-          this.userService.updateUser(game.player1.user.id, {
-            loses: game.player1.user.loses + 1
-          });
+          this.userService.updateScore(game.player2.user.id, ScoreField.Wins);
+          this.userService.updateScore(game.player1.user.id, ScoreField.Loses);
         }
       });
 
@@ -140,12 +137,8 @@ export class GameGateway
             points_user2: -1,
             status: 'FINISHED'
           });
-          this.userService.updateUser(game.player1.user.id, {
-            wins: game.player1.user.wins + 1
-          });
-          this.userService.updateUser(game.player2.user.id, {
-            loses: game.player2.user.loses + 1
-          });
+          this.userService.updateScore(game.player1.user.id, ScoreField.Wins);
+          this.userService.updateScore(game.player2.user.id, ScoreField.Loses);
         }
       });
     }

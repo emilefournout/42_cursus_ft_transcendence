@@ -2,12 +2,18 @@
 	width: 100%;
 	height: var(--NavBar-Height);
 
+	justify-content: safe;
 	align-items: center;
 
-	color: var(--Browned-Text);
-	font-size: clamp(0.4rem, 2vw, 0.8rem);
-
 	border-bottom: 2px solid var(--Browned-Text);
+}
+
+.wrapper-conversation::after {
+	content: "";
+	width: 6px;
+	height: 100%;
+
+	background-color: transparent;
 }
 
 #selected-conversation::after {
@@ -22,7 +28,17 @@
 	background-color: var(--Trans-Mooned-Teal-Strong);
 }
 
+.conversation-name {
+	max-width: 65%;
+
+	color: var(--Browned-Text);
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+
+}
+
 .conversation-icons {
 	width: var(--nav-icon-size);
 	height: var(--nav-icon-size);
+
+	padding: 4px;
 }

@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MinLength,
   isString
 } from 'class-validator';
 
@@ -13,5 +14,6 @@ export class CreateUserDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
+  @MinLength(5)
   username: string;
 }

@@ -32,7 +32,7 @@ function Register() {
           setDialog(data.message);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("Error on registration a user"));
   }
 
   return (

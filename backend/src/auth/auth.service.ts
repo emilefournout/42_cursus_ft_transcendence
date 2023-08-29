@@ -27,15 +27,10 @@ export class AuthService {
         private jwtService : JwtService, private config: ConfigService, private prisma: PrismaService,  private userService: UserService
     ) {}
 
-    async signToken(userId: number, username: string) : Promise<{access_token: string, userId: number, username: string}>
+    async signToken(userId: number, intraname: string) : Promise<string>
     {
-        const payload = {sub: userId, username};
-        const token = this.jwtService.sign(payload)
-        return {
-            access_token: token,
-            userId,
-            username,
-        };
+        const payload = {sub: userId, intraname};
+        return this.jwtService.sign(payload)
     }
 
     async register(intraname: string, username: string, avatarURL: string)
@@ -44,13 +39,15 @@ export class AuthService {
         if (!user) {
             user = await this.userService.createUser(intraname, username, avatarURL)
         }
-        return await this.signToken(user.id, user.username);
+        const access_token = await this.signToken(user.id, user.intraname);
+        return {access_token, id: user.id, username: user.username}
     }
 
     async login(username: string)
     {
-        let user = await this.userService.findUserByIntraname(username);
-        return await this.signToken(user.id, user.username);
+        let user = await this.userService.findUserByName(username);
+        const access_token = await this.signToken(user.id, user.intraname);
+        return {access_token, id: user.id, username: user.username}
     }
 
     async getQR(user: string) {

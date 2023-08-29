@@ -1,6 +1,7 @@
 .wrapper-room-input {
 	width: 100%;
 	min-height: 1.2rem;
+	max-height: 1.2rem;
 
 	padding-right: 32px;
 
@@ -11,6 +12,7 @@
 
 .wrapper-room-input > div {
 	width: 1.2rem;
+	height: 1.2rem;
 
 	background-color: var(--Honey-Yellow);
 	border-radius: var(--Default-BR);
