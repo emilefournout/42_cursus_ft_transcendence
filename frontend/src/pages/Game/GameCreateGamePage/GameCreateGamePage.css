@@ -42,3 +42,7 @@ input[type="checkbox"] {
 input[type="range"] {
 	accent-color: var(--Honey-Yellow)
 }
+
+.btn-padded {
+	padding: 1rem;
+}

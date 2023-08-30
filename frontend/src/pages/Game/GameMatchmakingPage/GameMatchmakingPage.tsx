@@ -11,14 +11,14 @@ export function GameMatchmakingPage() {
   let waiting = false;
 
   useEffect(() => {
-    if (!waiting) {
-      gameSocket.emit("join_waiting_room", username);
-      waiting = true;
-    }
-    gameSocket.off("game_found");
+    gameSocket.emit("join_waiting_room");
     gameSocket.on("game_found", (gameId) => {
       navigate(`../${gameId}`);
     });
+    return (() => {
+      gameSocket.emit("leave_waiting_room");
+      gameSocket.off("game_found");
+    })
   }, []);
 
   return (
@@ -31,7 +31,7 @@ export function GameMatchmakingPage() {
         <div className="matchmaking-loader"></div>
         <p className="matchmaking-scaling">Finding new rival for you</p>
         <Link to="/board/game">
-          <button className="btn btn-fixed-height matchmaking-scaling">
+          <button className="btn btn-fixed-height matchmaking-scaling" onClick={() => gameSocket.emit("leave_waiting_room")}> 
             Cancel
           </button>
         </Link>

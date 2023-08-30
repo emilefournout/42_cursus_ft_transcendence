@@ -17,6 +17,59 @@ interface ConnectedClients {
   };
 }
 
+export class GameState {
+  private gameId: string;
+  private player1: {
+    socket: Socket;
+    id: number;
+  };
+  private player2: {
+    socket: Socket;
+    id: number;
+  };
+  private maxGoals: number;
+  private finished: boolean;
+  constructor(id: string, player1: { socket: Socket; id: number; }, player2: { socket: Socket; id: number; })
+  {
+    this.gameId = id;
+    this.player1 = player1
+    this.player2 = player2
+    this.finished = false
+    this.maxGoals = 3
+  }
+
+  public finish() {
+  }
+  
+
+  public get id() :  string{
+    return this.gameId;
+  }
+
+  public get goalsLimit() :  number{
+    return this.maxGoals;
+  }
+
+  public get firstPlayer() :  {
+    socket: Socket;
+    id: number;
+  } {
+    return this.player1;
+  }
+
+  public get secondPlayer() :  {
+    socket: Socket;
+    id: number;
+  } {
+    return this.player2;
+  }
+
+  public get isFinished() :  boolean {
+    return this.finished;
+  }
+  
+};
+
 @Injectable()
 export class GameService {
   initState: IGameData = {
@@ -39,7 +92,7 @@ export class GameService {
     player1Score: 0,
     player2Score: 0
   };
-  private waitingRoom: Array<{ client: Socket; user: User }> = [];
+  private waitingRoom: Set<Socket> = new Set();
   private games = new Map<string, IGameData>();
   private clientsConnections: ConnectedClients = {};
 
@@ -55,6 +108,10 @@ export class GameService {
         || gameData.player2Id == userId)
         return gameId;
     }
+  }
+
+  getUserIdFromSocket(socketId: string): number | undefined {
+    return this.clientsConnections[socketId].userId
   }
 
   async findGameById(id: string) {
@@ -95,27 +152,41 @@ export class GameService {
     }
   }
 
-  async handleWaitingRoom(client: Socket, username: string | null) {
+  async handleWaitingRoom(client: Socket): Promise<GameState> {
     const user = await this.prisma.user.findFirst({
-      where: { username: username }
+      where: {
+        id: this.clientsConnections[client.id].userId
+      }
     });
 
     if (user) {
-      this.waitingRoom.push({ client, user });
+      this.waitingRoom.add(client);
 
-      if (this.waitingRoom.length >= 2) {
-        const player1 = this.waitingRoom.shift();
-        const player2 = this.waitingRoom.shift();
-        const game = await this.createGame(player1.user.id, player2.user.id);
+      if (this.waitingRoom.size >= 2) {
+        const setIterator = this.waitingRoom.values()
+        const player1:Socket = setIterator.next().value;
+        const player2:Socket = setIterator.next().value;
+        const player1Id = this.getUserIdFromSocket(player1.id);
+        const player2Id = this.getUserIdFromSocket(player2.id);
+        this.waitingRoom.delete(player1)
+        this.waitingRoom.delete(player2)
+        const game = await this.createGame(player1Id, player2Id);
 
         const gameState = Object.assign({}, this.initState);
-        gameState.player1Id = player1.user.id;
-        gameState.player2Id = player2.user.id;
+        gameState.player1Id = player1Id;
+        gameState.player2Id = player2Id;
         this.games.set(game, gameState);
-        return { game, player1, player2, finished: false };
+        return new GameState(game,
+          {socket: player1, id: player1Id},
+          {socket: player2, id: player2Id},
+        );
       }
     }
     return null;
+  }
+
+  leaveWaitingRoom(client: Socket) {
+    this.waitingRoom.delete(client)
   }
 
   loop(game: string) {
