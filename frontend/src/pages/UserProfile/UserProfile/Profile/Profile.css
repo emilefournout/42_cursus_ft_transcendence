@@ -11,7 +11,7 @@
 
 	color: var(--Light-Text);
 	text-align: center;
-	font-size: clamp(0.5rem, 2vw, 1rem);
+	font-size: clamp(0.4rem, 2vw, 1rem);
 
 	overflow: auto;
 }
