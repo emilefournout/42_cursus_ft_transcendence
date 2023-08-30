@@ -9,8 +9,8 @@ export function GameCreateGamePage() {
   return (
     <>
       <SEO
-        title="Pong - Matchmaking"
-        description="Start a game with someone from the Internet or one of your friends."
+        title="Pong - Create a game"
+        description="Customize your game and start playing."
       />
       <div className="wrapper-matchmaking">
         <p className="matchmaking-scaling">Create a new game for you</p>
