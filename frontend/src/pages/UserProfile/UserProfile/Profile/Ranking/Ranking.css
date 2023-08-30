@@ -2,9 +2,6 @@
 	width: 90%;
 
 	flex-grow: 1;
-
-	white-space: nowrap;
-	overflow: auto;
 }
 
 .ranking-title {
@@ -21,6 +18,13 @@
 	border-right: none;
 }
 
+.ranking-positions-container {
+	flex-grow: 1;
+
+	white-space: nowrap;
+	overflow-y: auto;
+}
+
 .ranking-position-wrapper {
 	width: 100%;
 
@@ -30,9 +34,6 @@
 	justify-content: flex-start;
 	align-items: center;
 	gap: clamp(4px, 1vw, 16px);
-/* 
- *     white-space: nowrap;
- *     overflow-x: auto; */
 }
 
 .ranking-position-wrapper > div {

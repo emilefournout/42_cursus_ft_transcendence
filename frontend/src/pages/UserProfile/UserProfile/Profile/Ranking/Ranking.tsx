@@ -17,15 +17,17 @@ export function Ranking() {
 					<div className="ranking-title">
 						Ranking
 					</div>
-					{profilePageContext.ranking.map((user, index) => {
-						return (
-							<RankingUserCard
-								position={index + 1}
-								key={user.id.toString()}
-								user={user}
-							/>
-						);
-					})}
+					<div className="ranking-positions-container">
+						{profilePageContext.ranking.map((user, index) => {
+							return (
+								<RankingUserCard
+									position={index + 1}
+									key={user.id.toString()}
+									user={user}
+								/>
+							);
+						})}
+					</div>
 				</div>
 			</div>
 		);
