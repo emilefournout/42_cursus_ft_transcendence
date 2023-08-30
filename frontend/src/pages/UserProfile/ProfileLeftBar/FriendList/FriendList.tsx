@@ -59,9 +59,14 @@ export function FriendList() {
 	} else if (isPendingEmpty()) {
 		return <div className="friendlist-wrapper">No Pending Requests!</div>;
 	} else if (isEnabled()) {
-		return buildFriendList(
-			AcceptedFriendCard,
-			profilePageContext.acceptedFriends!
+		return (
+			<div className="friendlist-wrapper">
+				{
+					buildFriendList(
+						AcceptedFriendCard,
+						profilePageContext.acceptedFriends!
+				)}
+			</div>
 		);
 	} else {
 		return (
