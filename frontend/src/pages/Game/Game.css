@@ -1,11 +1,11 @@
 .game-creation-btn {
 	width: clamp(200px, 30vw, 512px);
-	min-height: 2em;
-	max-height: 3em;
 
-	padding: 0 24px;
+	padding: 16px 24px;
 
 	font-size: clamp(0.4rem, 2vw, 1rem);
+
+	border: none 0;
 }
 
 .game-creation-divider {
