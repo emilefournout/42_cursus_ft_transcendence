@@ -1,0 +1,28 @@
+.game-creation-btn {
+	width: clamp(200px, 30vw, 512px);
+	min-height: 2em;
+	max-height: 3em;
+
+	padding: 0 24px;
+
+	font-size: clamp(0.4rem, 2vw, 1rem);
+}
+
+.game-creation-divider {
+	margin: clamp(16px, 2vw, 48px) 0;
+
+	align-items: center;
+	gap: 16px;
+
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+}
+
+.game-creation-divider::after, .game-creation-divider::before {
+	width: clamp(64px, 20vw, 512px);
+	height: 2px;
+
+	display: block;
+	content: "";
+
+	background: var(--Cornered-Honey-Crisped);
+}

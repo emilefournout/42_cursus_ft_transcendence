@@ -232,6 +232,8 @@ button {
 	color: var(--colour-text);
 
 	padding: 0.32em 0.72em;
+
+	text-decoration: none;
 }
 
 .btn-fixed-height {
