@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar } from "../../../../../components/Avatar";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../../Board/Board";
+import "./Ranking.css";
 
 interface RankingUserCardProps {
 	user: User;
@@ -12,12 +13,12 @@ interface RankingUserCardProps {
 export function RankingUserCard(props: RankingUserCardProps) {
 	const navigate = useNavigate();
 	return (
-		<div style={{ display: "flex", flexDirection: "row", gap: "15px" }}>
-			<Avatar url={props.user.avatar} size="64px" upload={false} download={true}/>
-			<div>#{props.position}</div>
-			<div>{props.user.username}</div>
-			<div>win:{props.user.wins}</div>
-			<div>lose:{props.user.loses}</div>
+		<div className="ranking-position-wrapper">
+			<Avatar url={props.user.avatar} size="clamp(32px, 4vw, 64px)" upload={false} download={true}/>
+			<div className="ranking-position-rank">#{props.position}</div>
+			<div className="ranking-position-user-name">{props.user.username}</div>
+			<div className="ranking-position-wins">W: {props.user.wins}</div>
+			<div className="ranking-position-looses">L: {props.user.loses}</div>
 		</div>
 	);
 }
