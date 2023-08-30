@@ -16,7 +16,6 @@ import { Game } from "./pages/Game/Game";
 import { CookieError } from "./pages/Error/CookieError";
 import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
 import { Room } from "./pages/Chat/Room/Room";
-
 import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
 import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
 import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
@@ -26,6 +25,7 @@ import { UserProfile } from "./pages/UserProfile/UserProfile/UserProfile";
 import { Ranking } from "./pages/UserProfile/UserProfile/Profile/Ranking/Ranking";
 import { DeleteRoom } from "./pages/Chat/Room/RoomParam/DeleteRoom";
 import { ChangePassword } from "./pages/Chat/Room/RoomParam/ChangePassword";
+import { GameCreateGamePage } from "./pages/Game/GameCreateGamePage/GameCreateGamePage";
 
 function App() {
   return (
@@ -40,8 +40,9 @@ function App() {
               <Route path="" element={<Navigate to={"/board/userAccount"} />} />
               <Route path="game" element={<Game />}>
                 <Route path="" element={<GameHomePage />} />
-                <Route path=":id" element={<GamePlayPage />} />
                 <Route path="matchmaking" element={<GameMatchmakingPage />} />
+                <Route path="newGame" element={<GameCreateGamePage />} />
+                <Route path=":id" element={<GamePlayPage />} />
               </Route>
               <Route path="chats" element={<ChatPage />}>
                 <Route path="create" element={<RoomCreate />} />
