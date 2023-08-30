@@ -119,6 +119,11 @@ export class UserService {
 
   async getRanking() {
     const users = await this.prisma.user.findMany({
+      where: {
+        NOT: {
+          id: 1
+        }
+      },
       orderBy: {
         wins: 'desc'
       },

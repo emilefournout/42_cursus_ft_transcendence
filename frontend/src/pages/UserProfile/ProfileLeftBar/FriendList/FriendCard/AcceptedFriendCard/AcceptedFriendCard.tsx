@@ -8,23 +8,22 @@ import { ProfilePageContext } from "../../../../UserProfilePage";
 import { CardAction } from "./CardAction";
 
 export interface FriendCardProps {
-  userInfo: User;
+	userInfo: User;
 }
+
 export function AcceptedFriendCard(props: FriendCardProps) {
-  const navigate = useNavigate();
-  return (
-    <>
-      <div
-        className="friend-card"
-        onClick={() => navigate("/board/userAccount/" + props.userInfo.id)}
-      >
-        <Avatar url={props.userInfo.avatar} size="32px" upload={false} download={true}/>
-        <div>{props.userInfo.username}</div>
-        <FriendStatus status={props.userInfo.status} />
-      </div>
-      <div>
-        <CardAction userId={props.userInfo.id} />
-      </div>
-    </>
-  );
+	const navigate = useNavigate();
+	return (
+		<>
+			<div
+				className="friend-card"
+				onClick={() => navigate("/board/userAccount/" + props.userInfo.id)}
+			>
+				<Avatar url={props.userInfo.avatar} size="48px" upload={false} download={true}/>
+				<div className="friend-card-username ellipsed-txt">{props.userInfo.username}</div>
+				<FriendStatus status={props.userInfo.status} />
+				<CardAction userId={props.userInfo.id} />
+			</div>
+		</>
+	);
 }

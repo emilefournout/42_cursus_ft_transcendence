@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 import { ChatInfo } from "../Chat";
 import NoMsgsImg from "../ChatLeftBar/NoMsgs.png";
-import { User } from "../../Board/Board";
 
 export interface ChatFullInfo extends ChatInfo {
   password?: string;

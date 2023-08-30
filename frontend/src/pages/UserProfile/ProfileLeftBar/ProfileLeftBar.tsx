@@ -12,6 +12,7 @@ export interface ProfileBarContextArgs {
 export const ProfileBarContext = React.createContext<ProfileBarContextArgs>(
 	{} as ProfileBarContextArgs
 );
+
 export function ProfileLeftBar() {
 	const [requestsType, setRequestsType] = useState<RequestType>(
 		RequestType.enabled

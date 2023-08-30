@@ -23,6 +23,9 @@ services:
       - 5000:8080
     networks:
       - transcendence_network
+    depends_on:
+      db:
+        condition: service_started
   backend:
     container_name: backend
     build: ./backend/.
@@ -35,7 +38,8 @@ services:
     networks:
       - transcendence_network
     depends_on:
-      - db
+      db:
+        condition: service_started
   frontend:
     container_name: frontend
     build: ./frontend/.

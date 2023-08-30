@@ -38,7 +38,7 @@
 
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 200px 2fr;
+	grid-template-rows: clamp(100px, calc(10vw + 10vh), 200px) 2fr;
 
 	gap: 32px;
 }
@@ -51,6 +51,13 @@
 	border-image: var(--Cornered-Honey-Crisped) 1;
 	border-style: solid;
 	border-width: 2px;
+}
+
+.card-body {
+	padding: 8px;
+
+	font-size: clamp(0.2rem, 2vw, 1rem);
+	text-align: center;
 }
 
 .card-title {
@@ -69,6 +76,8 @@
 	justify-items: center;
 	grid-template-columns: 1fr 1fr 1fr;
 	gap: 8px;
+
+	padding: 8px;
 
 	white-space: pre-line;
 	text-align: center;
@@ -109,10 +118,6 @@
 
 	display: flex;
 	flex-direction: column;
-
-	padding: 8px;
-
-	text-align: center;
 }
 
 #history-values * {

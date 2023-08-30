@@ -43,29 +43,3 @@
 	border-color: var(--Browned-Text);
 	overflow-y : auto;
 }
-
-#chat-no-messages {
-	--no-msgs-size: clamp(100px, 40vw, 1000px);
-
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-
-	position: absolute;
-	left: calc(50% - var(--no-msgs-size) / 2);
-	top: 25%;
-
-	text-align: center;
-	color: var(--Light-Text);
-	font-size: clamp(0.4rem, 4vw, 1rem);
-}
-
-#chat-no-messages > img {
-	width: var(--no-msgs-size);
-
-	position: relative;
-	bottom: 20px;
-
-	z-index: -1;
-}

@@ -54,12 +54,13 @@ body {
 	font-family: Bungee;
 	background-color: var(--Darks-Back);
 
+	scrollbar-width: 12px;
 	scrollbar-color: var(--Trans-Light-Text) transparent;
 }
 
 ::-webkit-scrollbar {
 	width: 12px;
-	height: 100%;
+	height: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -69,6 +70,11 @@ body {
 
 ::-webkit-scrollbar-track {
 	background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+	background: var(--Light-Text);
+	border-radius: 4px;
 }
 
 img {

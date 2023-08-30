@@ -41,7 +41,7 @@ export function FriendList() {
     return (
       <>
         {friends.map((userInfo: User, index) => {
-          return <div key={index}>{<FriendCard userInfo={userInfo} />}</div>;
+          return <div className="friendcard-container" key={index}>{<FriendCard userInfo={userInfo} />}</div>;
         })}
       </>
     );
@@ -66,18 +66,14 @@ export function FriendList() {
   } else {
     return (
       <>
-        <div>
-          {buildFriendList(
-            ReceivedFriendCard,
-            profilePageContext.receivedFriends!
-          )}
-        </div>
-        <div>
-          {buildFriendList(
-            PendingFriendCard,
-            profilePageContext.pendingFriends!
-          )}
-        </div>
+        {buildFriendList(
+          ReceivedFriendCard,
+          profilePageContext.receivedFriends!
+        )}
+        {buildFriendList(
+          PendingFriendCard,
+          profilePageContext.pendingFriends!
+        )}
       </>
     );
   }
