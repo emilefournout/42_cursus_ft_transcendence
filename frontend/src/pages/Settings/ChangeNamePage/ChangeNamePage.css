@@ -1,7 +1,13 @@
 .change-user-name-container {
 	width: 40%;
-	min-width: 400px;
-	height: 400px;
+	min-width: 350px;
+	height: 30%;
+	min-height: 300px;
+
+	padding: 8px;
+
+	position: absolute;
+	top: calc(30% + var(--NavBar-Height));
 
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -11,7 +17,7 @@
 }
 
 .change-user-name-container > button {
-	font-size: 0.6rem;
+	font-size: clamp(0.4rem, calc(1vw + 1vh), 0.7rem);
 }
 
 #unc-in1 {
@@ -31,5 +37,6 @@
 }
 
 #unc-cancel {
-	background-color: var(--Crisped-Orange);
+	--colour-fill: var(--Crisped-Orange);
+	background-color: var(--colour-fill);
 }
