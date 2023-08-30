@@ -9,7 +9,7 @@ import {
   WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { GameService } from './game.service';
+import { GameService, GameState } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
 import { ConfigService } from '@nestjs/config';
@@ -49,12 +49,17 @@ export class GameGateway
       client.disconnect();
       return;
     }
-    console.log('Connection stablished game.gateway with ' + client.id);
+    console.log('Connection stablished with ' + client.id);
   }
 
   handleDisconnect(client: Socket) {
     this.gameService.unregisterConnection(client.id);
     console.log('Disconneted from ' + client.id);
+  }
+  
+  @SubscribeMessage('create_room')
+  async handleCreateRoom(@ConnectedSocket() client: Socket) {
+    // client.join(uuid);
   }
 
   @SubscribeMessage('join_active_room')
@@ -69,44 +74,47 @@ export class GameGateway
   @SubscribeMessage('join_waiting_room')
   async handleJoinWaitingRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() username: string | null
   ) {
-    const game = await this.gameService.handleWaitingRoom(client, username);
+    const game = await this.gameService.handleWaitingRoom(client);
 
     if (game) {
-      game.player1.client.join(game.game);
-      game.player2.client.join(game.game);
-      this.server.to(game.game).emit('game_found', game.game);
-
+      game.firstPlayer.socket.join(game.id);
+      game.secondPlayer.socket.join(game.id);
+      this.server.to(game.id).emit('game_found', game.id);
       const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
-      game.player1.client.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
-      game.player2.client.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
+      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
     }
   }
 
-  private gameLoop(game, gameLoopInterval: NodeJS.Timer) {
-    const gameState = this.gameService.loop(game.game);
+  @SubscribeMessage('leave_waiting_room')
+  handleLeaveWaitingRoom(
+    @ConnectedSocket() client: Socket,
+  ) {
+    this.gameService.leaveWaitingRoom(client);
+  }
+
+  private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
+    const gameState = this.gameService.loop(game.id);
     
-    this.server.to(game.game).emit('update', gameState);
+    this.server.to(game.id).emit('update', gameState);
     if (gameState.player1Score >= gameState.maxGoals
       || gameState.player2Score >= gameState.maxGoals)
     {
-      game.finished = true;
+      game.finish();
       clearInterval(gameLoopInterval);
-      this.server
-        .to(game.game)
-        .emit(
+      this.server.to(game.id).emit(
           'end',
           gameState.player1Score >= gameState.maxGoals
-            ? game.player1.user.username
-            : game.player2.user.username
+            ? (await this.userService.findUserById(game.firstPlayer.id)).username
+            : (await this.userService.findUserById(game.secondPlayer.id)).username
         );
       //game.player1.client.disconnect(); TODO -> Handle clients disconnections
       //game.player2.client.disconnect();
       const [winner_id, loser_id] = gameState.player1Score > gameState.player2Score
         ? [gameState.player1Id, gameState.player2Id]
         : [gameState.player2Id, gameState.player1Id];
-      this.gameService.updateGame(game.game, {
+      this.gameService.updateGame(game.id, {
         points_user1: gameState.player1Score,
         points_user2: gameState.player2Score,
         status: 'FINISHED'
@@ -120,38 +128,38 @@ export class GameGateway
     }
   }
 
-  private disconnectPlayer2(game, gameLoopInterval: NodeJS.Timer) {
-    if (game.finished === false) {
+  private async disconnectPlayer2(game:GameState, gameLoopInterval: NodeJS.Timer) {
+    if (!game.isFinished) {
       clearInterval(gameLoopInterval);
-      this.server.to(game.game).emit('end', game.player1.user.username);
-      this.gameService.updateGame(game.game, {
-        points_user1: game.maxGoals,
+      this.server.to(game.id).emit('end', (await this.userService.findUserById(game.firstPlayer.id)).username);
+      this.gameService.updateGame(game.id, {
+        points_user1: game.goalsLimit,
         points_user2: -1,
         status: 'FINISHED'
       })
-      .then(() => this.userService.updateScore(game.player1.user.id, ScoreField.Wins))
-      .then(() => this.userService.updateScore(game.player2.user.id, ScoreField.Loses))
+      .then(() => this.userService.updateScore(game.firstPlayer.id, ScoreField.Wins))
+      .then(() => this.userService.updateScore(game.secondPlayer.id, ScoreField.Loses))
       .then(() => {
-        this.achievementsService.checkAndGrantGameAchievements(game.player1.user.id)
-        this.achievementsService.checkAndGrantGameAchievements(game.player2.user.id)
+        this.achievementsService.checkAndGrantGameAchievements(game.firstPlayer.id)
+        this.achievementsService.checkAndGrantGameAchievements(game.secondPlayer.id)
       })
     }
   }
 
-  private disconnectPlayer1(game, gameLoopInterval: NodeJS.Timer) {
-    if (game.finished === false) {
+  private async disconnectPlayer1(game: GameState, gameLoopInterval: NodeJS.Timer) {
+    if (!game.isFinished) {
       clearInterval(gameLoopInterval);
-      this.server.to(game.game).emit('end', game.player2.user.username);
-      this.gameService.updateGame(game.game, {
+      this.server.to(game.id).emit('end', (await this.userService.findUserById(game.secondPlayer.id)).username);
+      this.gameService.updateGame(game.id, {
         points_user1: -1,
-        points_user2: game.maxGoals,
+        points_user2: game.goalsLimit,
         status: 'FINISHED'
       })
-      .then(() => this.userService.updateScore(game.player2.user.id, ScoreField.Wins))
-      .then(() => this.userService.updateScore(game.player1.user.id, ScoreField.Loses))
+      .then(() => this.userService.updateScore(game.secondPlayer.id, ScoreField.Wins))
+      .then(() => this.userService.updateScore(game.firstPlayer.id, ScoreField.Loses))
       .then(() => {
-        this.achievementsService.checkAndGrantGameAchievements(game.player1.user.id)
-        this.achievementsService.checkAndGrantGameAchievements(game.player2.user.id)
+        this.achievementsService.checkAndGrantGameAchievements(game.firstPlayer.id)
+        this.achievementsService.checkAndGrantGameAchievements(game.secondPlayer.id)
       })
     }
   }

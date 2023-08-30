@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SEO from "../../../components/Seo";
 import "./GameCreateGamePage.css";
+import { GameSocket } from "../../../services/socket";
+import { useNavigate } from "react-router-dom";
 
 export function GameCreateGamePage() {
   const [numberValue, setValue] = useState(10)
+  const navigate = useNavigate();
+  const gameSocket = GameSocket.getInstance().socket;
+  const username: string | null = localStorage.getItem("username");
+  let waiting = false;
   const MAX_GOALS = 25;
   const MIN_GOALS = 5;
+
+  useEffect(() => {
+    if (!waiting) {
+      gameSocket.emit("create_room");
+      waiting = true;
+    }
+    gameSocket.off("game_found");
+    gameSocket.on("game_found", (gameId) => {
+      navigate(`../${gameId}`);
+    });
+  }, []);
+
   return (
     <>
       <SEO
@@ -24,9 +42,11 @@ export function GameCreateGamePage() {
             <input id="powerUp" type="checkbox"/>
           </div>
         </fieldset>
-        <button className="btn btn-fixed-height">
+        <button className="btn btn-padded">
           Create (TODO)
         </button>
+        <br></br>
+        <div className="matchmaking-loader"></div>
       </div>
     </>
   );
