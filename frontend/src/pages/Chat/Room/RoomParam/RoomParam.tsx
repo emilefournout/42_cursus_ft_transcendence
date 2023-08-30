@@ -5,6 +5,7 @@ import { AddUser } from "./ChatMembers/AddUser";
 import { ChatMembers } from "./ChatMembers/ChatMembers";
 import { ChatInfo } from "../../Chat";
 import { RoomContextArgs } from "../Room";
+import { Visibility } from "../RoomCreate/RoomCreate";
 export function RoomParam() {
   const navigate = useNavigate();
   const roomContextArgs = useOutletContext<RoomContextArgs>();
@@ -13,9 +14,11 @@ export function RoomParam() {
     return (
       <div className="room-param">
         <div style={{ padding: "10px" }}>
-          <button onClick={() => navigate("changePassword")}>
-            change password
-          </button>
+          {roomContextArgs.chat.visibility === Visibility.PROTECTED && (
+            <button onClick={() => navigate("changePassword")}>
+              change password
+            </button>
+          )}
         </div>
         <div style={{ padding: "10px" }}>
           <button onClick={() => navigate("delete")}>delete room</button>

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Member } from "../../Room";
+import { Member, RoomContextArgs } from "../../Room";
 import { Slider } from "@mui/material";
 import { MuteDialog } from "./MuteDialog";
 import { set } from "js-cookie";
+import { useOutletContext } from "react-router-dom";
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -10,30 +11,72 @@ export interface ChatMembersCardProps {
 }
 export function ChatMembersCard(props: ChatMembersCardProps) {
   const [isMuteDialogOpen, setIsMuteDialogOpen] = useState(false);
-  const promote = () => {
-    console.log("promote");
-  };
-  const demote = () => {
-    console.log("demote");
-  };
-  const mute = (time: number) =>
-    fetch(`${process.env.REACT_APP_BACKEND}/chat/${props.member.chatId}/mute`, {
-      method: "POST",
+  const roomContextArgs = useOutletContext<RoomContextArgs>();
+
+  const action = (route: string, method: string, body: string) =>
+    fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
+      method: method,
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        userId: props.member.userId,
-        muteTime: time,
-      }),
+      body: body,
+    }).then((response) => {
+      if (!response.ok) throw new Error("Error while muting");
+      roomContextArgs.getChatInfo(roomContextArgs.chat);
     });
+
+  const promote = () =>
+    action(
+      `chat/${props.member.chatId}/user`,
+      "PATCH",
+      JSON.stringify({
+        userId: props.member.userId,
+        role: {
+          owner: false,
+          administrator: true,
+        },
+      })
+    ).catch((error) => console.log(error));
+
+  const demote = () =>
+    action(
+      `chat/${props.member.chatId}/user`,
+      "PATCH",
+      JSON.stringify({
+        userId: props.member.userId,
+        role: {
+          owner: false,
+          administrator: false,
+        },
+      })
+    ).catch((error) => console.log(error));
+
+  const mute = (time: number) =>
+    action(
+      `chat/${props.member.chatId}/mute`,
+      "POST",
+      JSON.stringify({ userId: props.member.userId, muteTime: time })
+    )
+      .then(() => {
+        setIsMuteDialogOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   const unmute = () => {
-    console.log("unmute");
+    action(
+      `chat/${props.member.chatId}/mute`,
+      "DELETE",
+      JSON.stringify({ userId: props.member.userId })
+    ).catch((error) => console.log(error));
   };
-  const kickOut = () => {
-    console.log("kick out");
-  };
+  const kickOut = () =>
+    action(
+      `chat/${props.member.chatId}/user`,
+      "DELETE",
+      JSON.stringify({ id: props.member.userId })
+    ).catch((error) => console.log(error));
 
   return (
     <div>
@@ -44,16 +87,16 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       />
       <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
         {props.member.userId}
-        {props.member.administrator
-          ? " : admin"
-          : props.member.owner
+        {props.member.owner
           ? " : owner"
+          : props.member.administrator
+          ? " : admin"
           : " : user"}
-        {props.member.administrator ? (
+        {props.member.owner ? (
           <></>
         ) : (
           <>
-            {props.member.owner ? (
+            {props.member.administrator ? (
               <button onClick={demote}>demote</button>
             ) : (
               <button onClick={promote}>promote</button>

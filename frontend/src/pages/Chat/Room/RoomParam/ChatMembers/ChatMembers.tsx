@@ -5,26 +5,25 @@ import { ChatMembersCard } from "./ChatMembersCard";
 export function ChatMembers() {
   const roomContextArgs = useOutletContext<RoomContextArgs>();
 
-  const admin: Member | undefined = roomContextArgs.chat.members?.find(
-    (member) => member.administrator
+  const owner: Member | undefined = roomContextArgs.chat.members?.find(
+    (member) => member.owner
   );
-  const owners: Array<Member> | undefined =
+  const admins: Array<Member> | undefined =
     roomContextArgs.chat.members?.filter(
-      (member) => member.owner && !member.administrator
+      (member) => !member.owner && member.administrator
     );
   const members: Array<Member> | undefined =
     roomContextArgs.chat.members?.filter(
       (member) => !member.owner && !member.administrator
     );
-
-  if (roomContextArgs.chat.members === undefined || admin === undefined)
+  if (roomContextArgs.chat.members === undefined || owner === undefined)
     return <></>;
   else
     return (
       <>
-        <ChatMembersCard member={admin} key={admin.userId} />
-        {owners &&
-          owners.map((member) => (
+        <ChatMembersCard member={owner} key={owner.userId} />
+        {admins &&
+          admins.map((member) => (
             <ChatMembersCard member={member} key={member.userId} />
           ))}
         {members &&
