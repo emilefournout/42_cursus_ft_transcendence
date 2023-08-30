@@ -16,7 +16,11 @@ export function UserProfile() {
 				);
 
 	if (userInfo === undefined) {
-		return <>user not found</>;
+		return (
+			<div className="prof-cards-wrapper">
+				User not found!
+			</div>
+		);
 	} else {
 		return (
 			<>
