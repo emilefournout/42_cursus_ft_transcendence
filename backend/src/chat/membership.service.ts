@@ -30,6 +30,13 @@ export class MembershipService {
     const chatMembers = await this.prisma.chatMember.findMany({
       where: {
         chatId: chatId
+      },
+      include: {
+        user: {
+          select: {
+            username: true
+          }
+        }
       }
     });
     return chatMembers;

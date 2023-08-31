@@ -22,6 +22,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags
 } from '@nestjs/swagger';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -30,6 +31,7 @@ import { JwtAuthGuard } from 'src/auth/guard';
 import { userInfo } from 'os';
 import { MuteUserDto } from './dto/mute-user.dto';
 import { UnmuteUserDto } from './dto/unmute-user.dto';
+import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -126,14 +128,16 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Gets chat member',
+    summary: 'Gets chat members from a given chat',
   })
+  @ApiResponse({ type: [ChatMemberBasicInfoDto] })
   async getChatMember(
     @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
-  ) {
+  ) : Promise<ChatMemberBasicInfoDto[]>{
     if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
-    return await this.membershipService.findChatMemberByChatId(chatId);
+    const members = await this.membershipService.findChatMemberByChatId(chatId);
+    return members.map((chatMember) => ChatMemberBasicInfoDto.fromChatMember(chatMember))
   }
 
   @Post(':id/user')
