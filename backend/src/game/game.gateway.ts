@@ -17,6 +17,7 @@ import { UserService } from 'src/user/user.service';
 import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
+import { GameData } from './types/game-info.class';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' }
@@ -27,7 +28,6 @@ export class GameGateway
   constructor(
     private gameService: GameService,
     private userService: UserService,
-    /*private configService: ConfigService,*/
     private jwtService: JwtService,
     private achievementsService: AchievementService
   ) {}
@@ -97,29 +97,25 @@ export class GameGateway
     this.gameService.leaveWaitingRoom(client);
   }
 
+  @SubscribeMessage('move_user')
+  async handleKeyPressed(client: Socket, @MessageBody() data: {gameId: string, direction: string}) {
+    this.gameService.movePad(client, data.gameId, data.direction);
+  }
+
   private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
-    const gameState = this.gameService.loop(game.id);
-    
+    const gameState: GameData = this.gameService.updateGameState(game.id);
     this.server.to(game.id).emit('update', gameState);
-    if (gameState.player1Score >= gameState.maxGoals
-      || gameState.player2Score >= gameState.maxGoals)
+    if (gameState.isFinished)
     {
-      game.finish();
       clearInterval(gameLoopInterval);
-      this.server.to(game.id).emit(
-          'end',
-          gameState.player1Score >= gameState.maxGoals
-            ? (await this.userService.findUserById(game.firstPlayer.id)).username
-            : (await this.userService.findUserById(game.secondPlayer.id)).username
-        );
+      const winnerUser = await this.userService.findUserById(gameState.winner);
+      this.server.to(game.id).emit('end', winnerUser.username);
       //game.player1.client.disconnect(); TODO -> Handle clients disconnections
       //game.player2.client.disconnect();
-      const [winner_id, loser_id] = gameState.player1Score > gameState.player2Score
-        ? [gameState.player1Id, gameState.player2Id]
-        : [gameState.player2Id, gameState.player1Id];
+      const [winner_id, loser_id] = [gameState.winner, gameState.loser];
       this.gameService.updateGame(game.id, {
-        points_user1: gameState.player1Score,
-        points_user2: gameState.player2Score,
+        points_user1: gameState.firstPlayerScore,
+        points_user2: gameState.secondPlayerScore,
         status: 'FINISHED'
       })
         .then(() => this.userService.updateScore(winner_id, ScoreField.Wins))
@@ -165,10 +161,5 @@ export class GameGateway
         this.achievementsService.checkAndGrantGameAchievements(game.secondPlayer.id)
       })
     }
-  }
-
-  @SubscribeMessage('move_user')
-  async handleKeyPressed(client: Socket, @MessageBody() data: any) {
-    this.gameService.movePad(data);
   }
 }

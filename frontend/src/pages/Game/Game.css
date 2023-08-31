@@ -6,6 +6,8 @@
 	font-size: clamp(0.4rem, 2vw, 1rem);
 
 	border: none 0;
+
+	white-space: initial;
 }
 
 .game-creation-divider {

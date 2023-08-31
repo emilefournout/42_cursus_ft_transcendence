@@ -1,18 +1,27 @@
 .wrapper-room-input {
-	width: 100%;
-	min-height: 1.2rem;
-	max-height: 1.2rem;
+	--chat-room-gap: clamp(8px, calc(1vh + 1vw), 32px);
+	--chat-room-input-size: clamp(0.5rem, calc(2vh + 1vw), 1.2rem);
 
-	padding-right: 32px;
+	width: 100%;
+	min-height: var(--chat-room-input-size);
+	max-height: var(--chat-room-input-size);
+
+	padding-right: var(--chat-room-gap);
 
 	display: grid;
-	grid-template-columns: 1fr 1.2rem;
-	gap: 32px;
+	grid-template-columns: 1fr var(--chat-room-input-size);
+	gap: var(--chat-room-gap);
+}
+
+.wrapper-room-input > input {
+	height: var(--chat-room-input-size);
+
+	font-size: clamp(0.3rem, calc(1vh + 1vw), 0.8rem);
 }
 
 .wrapper-room-input > div {
-	width: 1.2rem;
-	height: 1.2rem;
+	width: var(--chat-room-input-size);
+	height: var(--chat-room-input-size);
 
 	background-color: var(--Honey-Yellow);
 	border-radius: var(--Default-BR);
@@ -23,7 +32,7 @@
 }
 
 .wrapper-room-input > div > img {
-	--send-icon-size: calc(var(--nav-icon-size) - 8px);
+	--send-icon-size: calc(var(--chat-room-input-size) - 8px);
 	width: var(--send-icon-size);
 	height: var(--send-icon-size);
 

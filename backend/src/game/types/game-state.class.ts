@@ -1,17 +1,12 @@
 import { Socket } from 'socket.io';
+import { GameData } from './game-info.class';
 
 export class GameState {
   private gameId: string;
-  private player1: {
-    socket: Socket;
-    id: number;
-  };
-  private player2: {
-    socket: Socket;
-    id: number;
-  };
-  private maxGoals: number;
-  private finished: boolean;
+  private gameState: GameData;
+  private player1 : { socket: Socket; id: number };
+  private player2 : { socket: Socket; id: number };
+  
   constructor(
     id: string,
     player1: { socket: Socket; id: number },
@@ -20,35 +15,53 @@ export class GameState {
     this.gameId = id;
     this.player1 = player1;
     this.player2 = player2;
-    this.finished = false;
-    this.maxGoals = 3;
+    this.gameState = new GameData(player1.id, player2.id)
   }
 
-  public finish() {}
+  public finish() {
+    this.gameState.finish()
+  }
 
   public get id(): string {
     return this.gameId;
   }
 
-  public get goalsLimit(): number {
-    return this.maxGoals;
-  }
-
-  public get firstPlayer(): {
-    socket: Socket;
-    id: number;
-  } {
+  public get firstPlayer(): { socket: Socket; id: number }
+  {
     return this.player1;
   }
 
-  public get secondPlayer(): {
-    socket: Socket;
-    id: number;
-  } {
+  public get secondPlayer(): { socket: Socket; id: number }
+  {
     return this.player2;
   }
 
+  public get winnerId(): number
+  {
+    return this.gameState.winner;
+  }
+
+
+  public get goalsLimit(): number
+  {
+    return this.gameState.goalsLimit;
+  }
+
+  public get firstPlayerScore() : number {
+    return this.gameState.firstPlayerScore
+  }
+  
+  public get secondPlayerScore() : number {
+    return this.gameState.secondPlayerScore
+  }
+
+
+  public get loserId(): number
+  {
+    return this.gameState.loser;
+  }
+
   public get isFinished(): boolean {
-    return this.finished;
+    return this.gameState.isFinished;
   }
 }

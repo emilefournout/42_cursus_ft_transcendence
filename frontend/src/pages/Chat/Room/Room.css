@@ -2,6 +2,8 @@
 	width: 85%;
 	height: 85%;
 
+	padding-left: clamp(0.8rem, 4vw, 1.5rem);
+
 	justify-content: space-between;
 }
 
