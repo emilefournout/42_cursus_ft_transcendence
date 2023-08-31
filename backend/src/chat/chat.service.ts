@@ -13,7 +13,7 @@ import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 export class ChatService {
   constructor(private prisma: PrismaService) {}
   
-  async findChatsInfo(id: any) : Promise<ChatShortInfoDto[]> {
+  async findChatsInfoById(id: number) : Promise<ChatShortInfoDto[]> {
     const chats : Chat[] = await this.prisma.$queryRaw`
     SELECT
     *
@@ -23,6 +23,27 @@ export class ChatService {
   `;
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
+
+  async findChatsInfoContainingName(name: string) : Promise<ChatShortInfoDto[]> {
+    const chats : Chat[] = await this.prisma.chat.findMany({
+      where: {
+        name: {
+          contains: name
+        },
+        OR:[
+          {
+            visibility: "PROTECTED",
+          },
+          {
+            visibility: "PUBLIC",
+          },
+        ]
+        }
+    })
+    return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
+  }
+
+  
 
 async createChat(
   user_id: number,

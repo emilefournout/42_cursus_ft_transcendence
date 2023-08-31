@@ -8,8 +8,7 @@ import { ChatRoleDto } from './dto/update-chat-member.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class MembershipService {
-  
+export class MembershipService { 
   constructor(private prisma: PrismaService,
     private chatService: ChatService,
     private userService: UserService){}
@@ -235,4 +234,9 @@ export class MembershipService {
     return chatMember.administrator
   }
 
+  async isOpenToUsers(chatId: number) : Promise<boolean> {
+    const chatMember = await this.chatService.findChatById(chatId);
+    if (!chatMember) return false
+    return chatMember.visibility === "PUBLIC";
+}
 }
