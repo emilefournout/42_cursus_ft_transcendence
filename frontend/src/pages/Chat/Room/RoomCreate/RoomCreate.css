@@ -8,39 +8,69 @@
 	flex-grow: 1;
 
 	color: var(--Light-Text);
-	font-size: 0.7rem;
+	font-size: clamp(0.3rem, 2.5vw, 0.6rem);
 
-	background-color: var(--Darks-Back);
+	overflow-y: auto;
+}
 
-	z-index: 1;
+.wrapper-new-room > h2, .wrapper-new-room > h3 {
+	text-align: center;
+	font-size: clamp(0.4rem, 2.5vw, 0.8rem);
+}
+
+.wrapper-new-room > h3 {
+	margin-top: 16px;
+
+	font-size: inherit;
 }
 
 .wrapper-new-room > input {
-	width: 620px;
+	width: 60%;
+	height: 2em;
+
+	padding: 0.4em;
+
+	font-size: clamp(0.3rem, 2.5vw, 0.6rem);
 }
 
 .wrapper-new-room > button {
-	margin-top: 8px;
-	font-size: clamp(0.4rem, 2.5vw, 0.8rem);
+	font-size: inherit;
 	padding: 0.2rem 0.3rem;
+
+	transition: color .2s ease;
+}
+
+.wrapper-new-room > button:hover {
+	color: var(--Light-Text);
 }
 
 .wrapper-vis-btns {
-	align-items: center;
+	min-width: 60%;
+	height: 2em;
 
-	width: 620px;
-	height: 1.2rem;
+	margin-bottom: 16px;
+
+	align-items: center;
+	gap: clamp(4px, 1vw, 16px);
+
+	font-size: inherit;
 }
 
 #wrapper-new-room-pswrd {
-	margin-top: 2rem;
-
 	display: grid;
 	grid-gap: 8px;
 }
 
+#wrapper-new-room-pswrd > input {
+	height: 1.6em;
+
+	padding: 0.4em;
+
+	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
+}
+
 #txt-password-strength {
-	font-size: 0.5rem;
+	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
 	text-align: center;
 	padding: 0.2rem;
 }
