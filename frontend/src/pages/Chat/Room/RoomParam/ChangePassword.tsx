@@ -89,7 +89,7 @@ export function ChangePassword() {
         />
       </div>
       <div id="txt-password-strength">{passwordErrorMessage}</div>
-      <button onClick={() => validateConfirm()}>change password</button>
+      <button onClick={() => validateConfirm()}>set password</button>
       <button
         onClick={() =>
           navigate(location.pathname.replace("changePassword", ""))

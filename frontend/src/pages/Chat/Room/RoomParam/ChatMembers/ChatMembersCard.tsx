@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Member, RoomContextArgs } from "../../Room";
 import { Slider } from "@mui/material";
 import { MuteDialog } from "./MuteDialog";
 import { set } from "js-cookie";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { BoardContext } from "../../../../Board/Board";
 
 export interface ChatMembersCardProps {
   member: Member;
+  showButtons: boolean;
   key: number;
 }
 export function ChatMembersCard(props: ChatMembersCardProps) {
@@ -14,6 +16,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
   const roomContextArgs = useOutletContext<RoomContextArgs>();
   const chadId = roomContextArgs.chat.id;
   const navigate = useNavigate();
+
   const action = (route: string, method: string, body: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
@@ -93,7 +96,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
           : props.member.administrator
           ? " : admin"
           : " : user"}
-        {props.member.owner ? (
+        {props.member.owner || !props.showButtons ? (
           <></>
         ) : (
           <>
@@ -108,13 +111,13 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
               <button onClick={() => setIsMuteDialogOpen(true)}>mute</button>
             )}
             <button onClick={kickOut}>kick out</button>
-            <button
-              onClick={() => navigate(`/userAccount/${props.member.userId}`)}
-            >
-              profile
-            </button>
           </>
         )}
+        <button
+          onClick={() => navigate(`/board/userAccount/${props.member.userId}`)}
+        >
+          profile
+        </button>
       </div>
     </div>
   );
