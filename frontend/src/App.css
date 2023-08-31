@@ -148,11 +148,13 @@ input[type="range"] {
 
 	display: grid;
 	grid-gap: var(--gap-size);
-	grid-template-columns: var(--img-size) 1fr;
+	grid-template-columns: var(--img-size) 1fr 1fr;
 	grid-template-rows: var(--row-size) var(--row-size);
 }
 
 .wrapper-img {
+	--img-size: clamp(64px, calc(8vw + 2vh), 128px);
+
 	width: var(--img-size);
 	height: var(--img-size);
 

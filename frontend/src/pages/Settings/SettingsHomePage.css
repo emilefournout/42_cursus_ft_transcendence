@@ -4,7 +4,7 @@
 	width: 100%;
 	height: 100%;
 
-	font-size: calc(var(--settings-iso-height) * 0.8);
+	font-size: calc(var(--settings-iso-height) * 0.6);
 
 	text-decoration: none;
 }
@@ -14,18 +14,41 @@
 }
 
 .settings-user-name {
+	width: 50%;
+	min-width: 200px;
+
 	color: var(--Light-Text);
 	font-size: clamp(0.4rem, 2vw, 0.8rem);
+	text-align: center;
 }
 
 .settings-change-user-name {
 	width: 25%;
+	min-width: fit-content;
+	height: 2.5em;
 
 	margin-top: 16px;
+	padding: 1.5em;
+}
+
+.settings-bottom-container {
+	width: 25%;
+	min-width: 256px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+}
+
+.settings-bottom-container > button {
+	width: 50%;
+
+	border-bottom-left-radius: 32px;
 }
 
 .settings-disconnect {
-	width: 12%;
+	width: 50%;
 	min-width: fit-content;
 
 	border-bottom-right-radius: 32px;
@@ -33,5 +56,31 @@
 }
 
 .settings-line-margin {
-	margin: 64px 0;
+	margin: clamp(8px, 8vh, 64px) 0;
+}
+
+.settings-2fa-wrapper {
+	width: 256px;
+
+	padding: 8px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+
+.settings-2fa-wrapper > input {
+	padding: 4px;
+
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+}
+
+.settings-2fa-wrapper > button {
+	height: 1.4em;
+	max-height: fit-content;
+
+	padding: 0.8em;
+
+	font-size: clamp(0.5rem, 3vw, 1rem);
 }
