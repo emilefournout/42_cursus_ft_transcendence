@@ -148,7 +148,7 @@ input[type="range"] {
 
 	display: grid;
 	grid-gap: var(--gap-size);
-	grid-template-columns: var(--img-size) 1fr;
+	grid-template-columns: var(--img-size) 1fr 1fr;
 	grid-template-rows: var(--row-size) var(--row-size);
 }
 
