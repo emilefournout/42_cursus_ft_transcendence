@@ -1,16 +1,21 @@
 import React from "react";
 
-interface Props {
+interface AchievementCardProps {
   title: String;
   description: String;
-  image: String;
+  //image: String;
 }
-export function AchievementCard({ title, description, image }: Props) {
+export function AchievementCard(props: AchievementCardProps) {
   return (
-    <div>
-      <div>{title}</div>
-      <div>{description}</div>
-      <img src={image.toString()} />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        gap: "25px",
+      }}
+    >
+      <div>{props.title}</div>
+      <div> {props.description}</div>
     </div>
   );
 }

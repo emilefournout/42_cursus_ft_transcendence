@@ -6,7 +6,7 @@ export class UpdateChatDto {
   @IsOptional()
   @IsString()
   @ApiPropertyOptional()
-  password?: String
+  password?: string
   
   @IsOptional()
   @IsNotEmpty()

@@ -26,6 +26,7 @@ import { Ranking } from "./pages/UserProfile/UserProfile/Profile/Ranking/Ranking
 import { DeleteRoom } from "./pages/Chat/Room/RoomParam/DeleteRoom";
 import { ChangePassword } from "./pages/Chat/Room/RoomParam/ChangePassword";
 import { GameCreateGamePage } from "./pages/Game/GameCreateGamePage/GameCreateGamePage";
+import { FullAchievements } from "./pages/UserProfile/UserProfile/FullAchievements/FullAchievement";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
                 <Route path="update" element={<ChangeNamePage />} />
               </Route>
               <Route path="userAccount" element={<UserProfilePage />}>
+                <Route path="achievements" element={<FullAchievements />} />
                 <Route path="" element={<UserProfile />} />
                 <Route path=":id" element={<UserProfile />} />
                 <Route path="ranking" element={<Ranking />} />

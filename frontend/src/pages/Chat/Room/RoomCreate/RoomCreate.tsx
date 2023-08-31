@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
-import chat from "../../../../components/Chat";
 import "./RoomCreate.css";
 import { ChatSocket } from "../../../../services/socket";
 import { ChatInfo, ChatPageContext } from "../../Chat";
