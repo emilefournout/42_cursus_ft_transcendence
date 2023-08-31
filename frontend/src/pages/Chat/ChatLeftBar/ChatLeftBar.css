@@ -4,8 +4,6 @@
 	height: 85%;
 
 	align-items: flex-start;
-
-	margin-right: clamp(0.8rem, 4vw, 1.5rem);
 }
 
 #lb-top-wrapper {
