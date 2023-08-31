@@ -116,8 +116,8 @@ export class GameService {
     return gameInfo;
   }
 
-  movePad({ accessToken, gameId, direction }: any) {
-    const playerId: number = JSON.parse(atob(accessToken.split('.')[1])).sub;
+  movePad(socket: Socket, gameId: string, direction: string) {
+    const playerId = this.getUserIdFromSocket(socket)
     const gameState = this.games.get(gameId);
     if (gameState === undefined) return;
 

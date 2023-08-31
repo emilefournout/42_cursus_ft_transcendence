@@ -98,8 +98,8 @@ export class GameGateway
   }
 
   @SubscribeMessage('move_user')
-  async handleKeyPressed(client: Socket, @MessageBody() data: any) {
-    this.gameService.movePad(data);
+  async handleKeyPressed(client: Socket, @MessageBody() data: {gameId: string, direction: string}) {
+    this.gameService.movePad(client, data.gameId, data.direction);
   }
 
   private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
