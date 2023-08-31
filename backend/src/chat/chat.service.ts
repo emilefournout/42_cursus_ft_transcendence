@@ -6,12 +6,14 @@ import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
 import { MembershipService } from './membership.service';
+import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
+import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 
 @Injectable()
 export class ChatService {
   constructor(private prisma: PrismaService) {}
   
-  async findChatsInfo(id: any) {
+  async findChatsInfo(id: any) : Promise<ChatShortInfoDto[]> {
     const chats : Chat[] = await this.prisma.$queryRaw`
     SELECT
     *
@@ -19,7 +21,7 @@ export class ChatService {
     INNER JOIN "ChatMember" chatMem ON chat.id = chatMem."chatId"
     WHERE chatMem."userId" = ${id}
   `;
-    return chats.map((chat) => ChatBasicInfoDto.fromChat(chat));
+    return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
 
 async createChat(
@@ -122,12 +124,18 @@ async createChat(
     return chat;
   }
 
-  async findChatByIdWithUserInside(id: number, userId: number) {
+  async findChatByIdWithUserInside(id: number): Promise<ChatBasicInfoDto> {
     const chat = await this.prisma.chat.findUnique({
       include: {
         members: {
           select: {
             userId: true,
+            user: {
+              select: 
+              {
+                username: true
+              }
+            },
             createdAt: true,
             administrator: true,
             owner: true,
@@ -140,11 +148,7 @@ async createChat(
         id: id
       }
     });
-
-    if(chat && !chat.members.some(member => member.userId === userId)) {
-      chat.members = [];
-    }
-    return chat;
+    return ChatBasicInfoDto.fromChat(chat)
   }
 
   async findChatMessagesById(id: number) {

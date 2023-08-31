@@ -2,8 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { ChatMember, ChatVisibility } from "@prisma/client";
 
 export class ChatMemberBasicInfoDto {
-
-
   @ApiProperty({
     type: Number,
     description: "User identificator"
@@ -48,8 +46,6 @@ export class ChatMemberBasicInfoDto {
   })
   mutedExpiringDate: Date;
   
-  
-
   public static fromChatMember(chatMember) {
     const chatMemberInfo = new ChatMemberBasicInfoDto();
     chatMemberInfo.userId = chatMember.userId;

@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { ChatVisibility } from "@prisma/client";
 import { ChatMemberBasicInfoDto } from "./info-chat-member.dto";
 
-export class ChatBasicInfoDto {
+export class ChatShortInfoDto {
   @ApiProperty({
     type: Number,
     description: "Identification number of the chat"
@@ -15,12 +15,6 @@ export class ChatBasicInfoDto {
   })
   name: string;
   
-  @ApiPropertyOptional({
-    type: [ChatMemberBasicInfoDto],
-    description: "Members of the chat"
-  })
-  members: ChatMemberBasicInfoDto[];
-
   @ApiProperty({
     enum: ChatVisibility,
     description: "Visibility of the chat"
@@ -28,12 +22,10 @@ export class ChatBasicInfoDto {
   visibility: ChatVisibility;
 
   public static fromChat(chat) {
-    const chatInfo = new ChatBasicInfoDto();
+    const chatInfo = new ChatShortInfoDto();
     chatInfo.id = chat.id;
     chatInfo.name = chat.name;
     chatInfo.visibility = chat.visibility;
-    if (chat.members)
-      chatInfo.members = chat.members.map(chatMember => ChatMemberBasicInfoDto.fromChatMember(chatMember))
     return chatInfo;
   }
 }

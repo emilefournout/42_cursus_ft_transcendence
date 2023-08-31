@@ -28,11 +28,11 @@ import {
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { GetUser } from 'src/auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
-import { userInfo } from 'os';
 import { MuteUserDto } from './dto/mute-user.dto';
 import { UnmuteUserDto } from './dto/unmute-user.dto';
 import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
+import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -46,8 +46,8 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a list of chats from the user' })
-  @ApiResponse({type: [ChatBasicInfoDto]})
-  async findChats(@GetUser() user) : Promise<ChatBasicInfoDto[]>{
+  @ApiResponse({type: [ChatShortInfoDto]})
+  async findChats(@GetUser() user) : Promise<ChatShortInfoDto[]>{
     const chat = await this.chatService.findChatsInfo(user.sub);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
@@ -59,15 +59,13 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get basic info about a chat',
-    description: 'If the user is not in the chat, members will be empty'
+    description: 'If the user is not in the chat, response will throw an exception'
   })
   @ApiResponse({type: ChatBasicInfoDto})
-  async findChat(@GetUser() user, @Param('id', ParseIntPipe) id) : Promise<ChatBasicInfoDto>
+  async findChat(@GetUser() user, @Param('id', ParseIntPipe) chatId) : Promise<ChatBasicInfoDto>
   {
-    const chat = await this.chatService.findChatByIdWithUserInside(
-      id,
-      user.sub
-    );
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
+    const chat = await this.chatService.findChatByIdWithUserInside(chatId);
     if (!chat) throw new NotFoundException('Chat not found');
     return chat;
   }
