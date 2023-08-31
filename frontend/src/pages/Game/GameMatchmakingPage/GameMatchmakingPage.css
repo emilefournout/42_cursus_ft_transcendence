@@ -1,6 +1,12 @@
+.wrapper-col-centered {
+    display: flex;
+	align-items: center;
+    flex-direction: column;
+}
+
 .wrapper-matchmaking {
 	width: 100%;
-	height: calc(100% - var(--NavBar-Height));
+	min-height: calc(100% - var(--NavBar-Height));
 
 	position: absolute;
 	top: var(--NavBar-Height);
@@ -10,6 +16,9 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	white-space: nowrap;
+	overflow-y: hidden;
 }
 
 .matchmaking-scaling {

@@ -1,7 +1,7 @@
 /* Set root container to center all the stuff */
 #root {
     width: 100%;
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;

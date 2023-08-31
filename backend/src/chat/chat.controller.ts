@@ -13,7 +13,7 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { ChatDto, CreateChatDto, CreateMessageDto } from './dto';
+import { CreateChatDto, CreateMessageDto } from './dto';
 import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { DeleteChatMemberDto } from './dto/delete-chat-member.dto';
 import { MembershipService } from './membership.service';
@@ -22,6 +22,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags
 } from '@nestjs/swagger';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -30,6 +31,8 @@ import { JwtAuthGuard } from 'src/auth/guard';
 import { userInfo } from 'os';
 import { MuteUserDto } from './dto/mute-user.dto';
 import { UnmuteUserDto } from './dto/unmute-user.dto';
+import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
+import { ChatBasicInfoDto } from './dto/info-chat.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -43,7 +46,8 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a list of chats from the user' })
-  async findChats(@GetUser() user) {
+  @ApiResponse({type: [ChatBasicInfoDto]})
+  async findChats(@GetUser() user) : Promise<ChatBasicInfoDto[]>{
     const chat = await this.chatService.findChatsInfo(user.sub);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
@@ -57,7 +61,9 @@ export class ChatController {
     summary: 'Get basic info about a chat',
     description: 'If the user is not in the chat, members will be empty'
   })
-  async findChat(@GetUser() user, @Param('id', ParseIntPipe) id) {
+  @ApiResponse({type: ChatBasicInfoDto})
+  async findChat(@GetUser() user, @Param('id', ParseIntPipe) id) : Promise<ChatBasicInfoDto>
+  {
     const chat = await this.chatService.findChatByIdWithUserInside(
       id,
       user.sub
@@ -74,7 +80,8 @@ export class ChatController {
     description:
       'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'
   })
-  async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto): Promise<ChatDto> {
+  @ApiResponse({type: ChatBasicInfoDto})
+  async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto): Promise<ChatBasicInfoDto> {
     try {
       const newChat = await this.chatService.createChat(
         user.sub,
@@ -126,14 +133,16 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Gets chat member',
+    summary: 'Gets chat members from a given chat',
   })
+  @ApiResponse({ type: [ChatMemberBasicInfoDto] })
   async getChatMember(
     @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
-  ) {
+  ) : Promise<ChatMemberBasicInfoDto[]>{
     if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
-    return await this.membershipService.findChatMemberByChatId(chatId);
+    const members = await this.membershipService.findChatMemberByChatId(chatId);
+    return members.map((chatMember) => ChatMemberBasicInfoDto.fromChatMember(chatMember))
   }
 
   @Post(':id/user')

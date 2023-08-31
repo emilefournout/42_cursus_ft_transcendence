@@ -83,6 +83,7 @@ export class UserController {
   @ApiParam({ name: 'username' })
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Returns a basic info about user by its username.' })
+  @ApiResponse({ type: UserBasicInfoDto })
   async getUserInfoByName(@Param('username') username: string) {
     return await this.userService.getUserInfoByName(username);
   }

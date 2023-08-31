@@ -1,0 +1,59 @@
+.ranking-window {
+	width: 90%;
+
+	flex-grow: 1;
+}
+
+.ranking-title {
+	padding: clamp(0.1rem, 1vh, 0.3rem) 0;
+
+	font-size: clamp(0.4rem, 2vw, 0.9rem);
+	text-align: center;
+
+	border-color: var(--Honey-Yellow);
+	border-width: 2px;
+	border-style: solid;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.ranking-positions-container {
+	flex-grow: 1;
+
+	white-space: nowrap;
+	overflow-y: auto;
+}
+
+.ranking-position-wrapper {
+	width: 100%;
+
+	padding: 8px;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: clamp(4px, 1vw, 16px);
+}
+
+.ranking-position-wrapper > div {
+	font-size: clamp(0.24rem, calc(0.6vh + 1vw), 0.8rem);
+}
+
+.ranking-position-rank {
+	color: var(--Honey-Yellow);
+
+	transform: scale(1.2);
+}
+
+.ranking-position-user-name {
+}
+
+.ranking-position-wins {
+	color: var(--Mooned-Teal);
+}
+
+.ranking-position-looses {
+	color: var(--Cosmic-Purple);
+}
+
