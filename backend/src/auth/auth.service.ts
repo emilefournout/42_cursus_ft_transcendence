@@ -82,7 +82,7 @@ export class AuthService {
     const image = await qrcode.toDataURL(uri);
 
     const user = await this.userService.findUserByName(username);
-    await this.prisma.twoFactorAuthentication.delete({
+    await this.prisma.twoFactorAuthentication.deleteMany({
       where: { user_id: user.id }
     });
     await this.prisma.twoFactorAuthentication.create({
@@ -105,7 +105,7 @@ export class AuthService {
       code,
       tfa.twoFactorAuthenticationSecret
     );
-    // if (!verified) throw new UnauthorizedException();
+    if (!verified) throw new UnauthorizedException();
     await this.prisma.twoFactorAuthentication.update({
       where: { user_id: user.id },
       data: { status: TwoFactorAuthenticationStatus.ENABLED }

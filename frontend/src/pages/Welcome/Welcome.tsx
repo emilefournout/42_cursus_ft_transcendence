@@ -57,7 +57,7 @@ export function Welcome() {
 				}
 			})
 			.catch((error) => {
-				setErrorMessage("bad username");
+				setErrorMessage("bad 2fa code");
 				console.log(error);
 			});
 	}
@@ -82,6 +82,9 @@ export function Welcome() {
 						type="text"
 						placeholder="User Name"
 						onChange={(event) => setUsername(event.target.value)}
+						onKeyDown={(event) => {
+							event.key === "Enter" && register();
+						}}
 						required
 					/>
 					{(show2fa &&
@@ -91,6 +94,9 @@ export function Welcome() {
 							type="text"
 							placeholder="2FA Code"
 							onChange={(event) => setCode2fa(event.target.value)}
+							onKeyDown={(event) => {
+								event.key === "Enter" && register();
+							}}
 						/>
 					)}
 					<button

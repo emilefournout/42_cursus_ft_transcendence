@@ -38,6 +38,9 @@ function TwoFactorAuth({ username }: { username: string | null }) {
 				type="text"
 				placeholder="Code"
 				onChange={(event) => setCode(event.target.value)}
+				onKeyDown={(event) => {
+					event.key === "Enter" && set2FA();
+				}}
 			/>
 			<button className="btn btn-bottom" onClick={set2FA}>Send</button>
 		</div>
