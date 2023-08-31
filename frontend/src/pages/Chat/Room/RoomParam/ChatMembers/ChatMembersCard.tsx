@@ -3,7 +3,7 @@ import { Member, RoomContextArgs } from "../../Room";
 import { Slider } from "@mui/material";
 import { MuteDialog } from "./MuteDialog";
 import { set } from "js-cookie";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -13,6 +13,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
   const [isMuteDialogOpen, setIsMuteDialogOpen] = useState(false);
   const roomContextArgs = useOutletContext<RoomContextArgs>();
   const chadId = roomContextArgs.chat.id;
+  const navigate = useNavigate();
   const action = (route: string, method: string, body: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
@@ -107,6 +108,11 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
               <button onClick={() => setIsMuteDialogOpen(true)}>mute</button>
             )}
             <button onClick={kickOut}>kick out</button>
+            <button
+              onClick={() => navigate(`/userAccount/${props.member.userId}`)}
+            >
+              profile
+            </button>
           </>
         )}
       </div>
