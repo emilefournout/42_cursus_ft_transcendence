@@ -5,7 +5,7 @@
 
 	align-items: flex-start;
 
-	padding-right: 1rem;
+	margin-right: clamp(0.8rem, 4vw, 1.5rem);
 }
 
 #lb-top-wrapper {
