@@ -4,7 +4,7 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { IGameData } from './types/game-data.interface';
+import { GameData } from './types/game-info.class';
 import { Socket } from 'socket.io';
 import { UpdateGameDto } from './dto/updte-game.dto';
 import { GameState } from './types/game-state.class';
@@ -12,47 +12,14 @@ import { ConnectionStorage } from './types/connection-storage.class';
 
 @Injectable()
 export class GameService {
-  initState: IGameData = {
-    player1Id: 0,
-    player2Id: 0,
-    maxGoals: 3,
-    width: 600,
-    height: 350,
-    padWidth: 10,
-    padHeight: 60,
-    ballRadius: 8,
-    leftPad: 0,
-    rightPad: 150,
-    ballX: 200,
-    ballY: 150,
-    padVelocity: 30,
-    velocityX: Math.random() + 3,
-    velocityY: Math.random() + 3,
-    padWallSeparation: 20,
-    player1Score: 0,
-    player2Score: 0
-  };
+
   private userConnections = new ConnectionStorage();
   private waitingRoom: Set<Socket> = new Set<Socket>();
-  private games: Map<string, IGameData> = new Map<string, IGameData>();
+  private createdRoom: Map<Socket, GameData> = new Map<Socket, GameData>();
+  private privateRoom: Map<Socket, GameData> = new Map<Socket, GameData>();
+  private games: Map<string, GameData> = new Map<string, GameData>();
 
   constructor(private prisma: PrismaService) {}
-
-  findActiveGames(): string[] {
-    return Array.from(this.games.keys());
-  }
-
-  findActiveGameByUserId(userId: number): string | undefined {
-    for (const [gameId, gameData] of this.games.entries()) {
-      if (gameData.player1Id == userId
-        || gameData.player2Id == userId)
-        return gameId;
-    }
-  }
-
-  getUserIdFromSocket(socket: Socket): number | undefined {
-    return this.userConnections.getUserIdFromSocket(socket)
-  }
 
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
@@ -61,6 +28,22 @@ export class GameService {
       }
     });
     return game;
+  }
+
+  findActiveGames(): string[] {
+    return Array.from(this.games.keys());
+  }
+
+  findActiveGameByUserId(userId: number): string | undefined {
+    for (const [gameId, gameData] of this.games.entries()) {
+      if (gameData.firstPlayerId == userId
+        || gameData.secondPlayerId == userId)
+        return gameId;
+    }
+  }
+
+  getUserIdFromSocket(socket: Socket): number | undefined {
+    return this.userConnections.getUserIdFromSocket(socket)
   }
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
@@ -104,18 +87,16 @@ export class GameService {
 
       if (this.waitingRoom.size >= 2) {
         const setIterator = this.waitingRoom.values()
-        const player1:Socket = setIterator.next().value;
-        const player2:Socket = setIterator.next().value;
+        const player1: Socket = setIterator.next().value;
+        const player2: Socket = setIterator.next().value;
         const player1Id = this.getUserIdFromSocket(player1);
         const player2Id = this.getUserIdFromSocket(player2);
         this.waitingRoom.delete(player1)
         this.waitingRoom.delete(player2)
         const game = await this.createGame(player1Id, player2Id);
 
-        const gameState = Object.assign({}, this.initState);
-        gameState.player1Id = player1Id;
-        gameState.player2Id = player2Id;
-        this.games.set(game, gameState);
+        const gameData = new GameData(player1Id, player2Id)
+        this.games.set(game, gameData);
         return new GameState(game,
           {socket: player1, id: player1Id},
           {socket: player2, id: player2Id},
@@ -129,68 +110,21 @@ export class GameService {
     this.waitingRoom.delete(client)
   }
 
-  loop(game: string) {
-    const gameState = this.games.get(game);
-    gameState.ballX += gameState.velocityX;
-    gameState.ballY += gameState.velocityY;
-    if (this.checkOutsideCanva(gameState)) {
-      gameState.velocityY = -gameState.velocityY;
-    } else if (this.checkLeftPadCollision(gameState)) {
-      gameState.velocityX = -gameState.velocityX;
-      gameState.ballX = gameState.padWallSeparation + gameState.padWidth;
-    } else if (this.checkRightPadCollision(gameState)) {
-      gameState.velocityX = -gameState.velocityX;
-      gameState.ballX =
-        gameState.width - gameState.padWallSeparation - gameState.padWidth;
-    } else if (gameState.ballX + gameState.ballRadius > gameState.width) {
-      gameState.player1Score += 1;
-      gameState.ballX = 400;
-      gameState.ballY = 150;
-      gameState.velocityX = -(Math.random() + 3);
-      gameState.velocityY = Math.random() + 3;
-    } else if (gameState.ballX - gameState.ballRadius < 0) {
-      gameState.player2Score += 1;
-      gameState.ballX = 200;
-      gameState.ballY = 150;
-      gameState.velocityX = Math.random() + 3;
-      gameState.velocityY = Math.random() + 3;
-    }
-    return gameState;
+  updateGameState(gameId: string) : GameData {
+    const gameInfo = this.games.get(gameId);
+    gameInfo.updateBall()
+    return gameInfo;
   }
 
-  movePad({ accessToken, gameId, direction }: any) {
-    const playerId = JSON.parse(atob(accessToken.split('.')[1])).sub;
+  movePad(socket: Socket, gameId: string, direction: string) {
+    const playerId = this.getUserIdFromSocket(socket)
     const gameState = this.games.get(gameId);
     if (gameState === undefined) return;
 
-    if (gameState.player1Id !== playerId && gameState.player2Id !== playerId)
+    if (gameState.firstPlayerId !== playerId && gameState.secondPlayerId !== playerId)
       return;
 
-    if (gameState.player1Id === playerId) {
-      if (
-        direction === 'down' &&
-        gameState.leftPad + gameState.padVelocity + gameState.padHeight <
-          gameState.height
-      )
-        gameState.leftPad += gameState.padVelocity;
-      else if (
-        direction === 'up' &&
-        gameState.leftPad - gameState.padVelocity > 0
-      )
-        gameState.leftPad -= gameState.padVelocity;
-    } else if (gameState.player2Id === playerId) {
-      if (
-        direction === 'down' &&
-        gameState.rightPad + gameState.padVelocity + gameState.padHeight <
-          gameState.height
-      )
-        gameState.rightPad += gameState.padVelocity;
-      else if (
-        direction === 'up' &&
-        gameState.rightPad - gameState.padVelocity > 0
-      )
-        gameState.rightPad -= gameState.padVelocity;
-    }
+    gameState.move(direction, playerId)
   }
 
   public registerConnection(client: Socket, userId: number) {
@@ -209,39 +143,5 @@ export class GameService {
   public unregisterConnection(socket: Socket) {
     this.userConnections.removeUserBySocket(socket)
     this.waitingRoom.delete(socket)
-  }
-
-  private checkOutsideCanva(gameState: IGameData) {
-    return (
-      gameState.ballY + gameState.ballRadius > gameState.height ||
-      gameState.ballY - gameState.ballRadius < 0
-    );
-  }
-
-  private checkLeftPadCollision(gameState: IGameData): boolean {
-    return (
-      gameState.ballX + gameState.ballRadius >= gameState.padWallSeparation && // Desde la izquierda
-      gameState.ballX - gameState.ballRadius <=
-        gameState.padWallSeparation + gameState.padWidth && // Desde la derecha
-      gameState.ballY >= gameState.leftPad &&
-      gameState.ballY <= gameState.leftPad + gameState.padHeight &&
-      gameState.velocityX < 0
-    );
-  }
-
-  private checkRightPadCollision(gameState: IGameData) {
-    return (
-      gameState.ballX + gameState.ballRadius >=
-        gameState.width - gameState.padWallSeparation - gameState.padWidth && // Desde la izquierda
-      gameState.ballX - gameState.ballRadius <=
-        gameState.width - gameState.padWallSeparation && // Desde la derecha
-      gameState.velocityX > 0 &&
-      (gameState.ballY - gameState.ballRadius >= gameState.rightPad ||
-        gameState.ballY + gameState.ballRadius >= gameState.rightPad) &&
-      (gameState.ballY + gameState.ballRadius <=
-        gameState.rightPad + gameState.padHeight ||
-        gameState.ballY - gameState.ballRadius <=
-          gameState.rightPad + gameState.padHeight)
-    );
   }
 }

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SettingsHomePage.css"
 
 import { Link } from "react-router-dom";
 
 import { Avatar } from "../../components/Avatar";
+import TwoFactorAuth from "../../components/TwoFactorAuth";
 export function SettingsHomePage() {
+	const [showQr, setShowQr] = useState(false);
+
 	return (
 		<div className="wrapper-matchmaking">
 			<Avatar upload={true} download={true}/>
@@ -15,7 +18,8 @@ export function SettingsHomePage() {
 			</Link>
 			<div className="underline settings-line-margin"></div>
 			<div className="wrapper-row">
-				(2FA thing here)
+        <button onClick={() => setShowQr(!showQr)}>Set 2FA</button>
+				{(showQr && <TwoFactorAuth username={localStorage.getItem("username")}/>)}
 				<Link className="settings-fixed-height btn settings-disconnect settings-btn-txt" to="/login"
 					onClick={() => {
 						localStorage.removeItem("access_token");
