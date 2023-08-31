@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Dialog } from "./Dialog";
+import Cookies from "js-cookie";
 
-function TwoFactorAuth({ username }: { username: string }) {
+function TwoFactorAuth({ username }: { username: string | null }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret
   const [code, setCode] = useState("");
   const [qrImage, setQrImage] = useState("");
@@ -18,15 +19,13 @@ function TwoFactorAuth({ username }: { username: string }) {
   }, [username]);
 
   function set2FA() {
-    fetch(
-      `${process.env.REACT_APP_BACKEND}/auth/set-2fa?user=${username}&code=${code}`
-    )
+    fetch(`${process.env.REACT_APP_BACKEND}/auth/set-2fa?user=${username}&code=${code}`, {
+			headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+			},
+    })
       .then((response: Response) => {
-        if (!response.ok) throw new Error("Error setting 2fa");
-        return response.text();
-      })
-      .then((data: string) => {
-        data === "OK" ? setDialog("Good") : setDialog("Incorrect code");
+        response.ok ? setDialog("Good") : setDialog("Incorrect code");
       })
       .catch((error) => console.log("Error on setting 2FA"));
   }

@@ -25,12 +25,19 @@ import { UserService } from 'src/user/user.service';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService, private userService: UserService,private profileService: ProfileService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private profileService: ProfileService
+  ) {}
 
   @Post('register')
   @UseInterceptors(FileInterceptor('image'))
   @ApiOperation({ summary: 'Registers a new user' })
-  @ApiResponse({description: "Returns an access token if the user logged in or throws an exception if not authorized."})
+  @ApiResponse({
+    description:
+      'Returns an access token if the user logged in or throws an exception if not authorized.'
+  })
   async registerAuth(
     @Req() request: Request,
     @Body() loginUser: RegisterUserDto,
@@ -41,23 +48,33 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     try {
-      const intraname = token === 'guest' ? 'guest' : await this.authService.getIntraLogin(token)
+      const intraname =
+        token === 'guest'
+          ? 'guest'
+          : await this.authService.getIntraLogin(token);
       let url: string;
       if (image !== undefined) {
         url = this.profileService.saveImage(image);
       } else {
         url = this.profileService.generateNewIcon();
-      }  
-      return this.authService.register(intraname, loginUser.username,  url);
+      }
+      return this.authService.register(
+        intraname,
+        loginUser.username,
+        url,
+        loginUser.code2fa
+      );
     } catch (error) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
   }
 
-
   @Get('qr-image')
   @ApiOperation({ summary: 'Returns a qr image for the 2FA' })
-  @ApiResponse({description: "Renders and return a qr image given the secret for a given username."})
+  @ApiResponse({
+    description:
+      'Renders and return a qr image given the secret for a given username.'
+  })
   qrImage(@Query('user') user: string) {
     return this.authService.getQR(user);
   }
@@ -82,18 +99,18 @@ export class AuthController {
     }
     try {
       // const intraname = await this.authService.getIntraLogin(token);
-      const user = null // await this.userService.findUserByIntraname(intraname)
-      if (!user)
-      {
+      const user = null; // await this.userService.findUserByIntraname(intraname)
+      if (!user) {
         return res
           .cookie('42token', token)
           .redirect('http://localhost:8000/welcome');
       } else {
-        return res
-        // .send(await this.authService.signToken(user.id, user.username))
-        .redirect('http://localhost:8000/home')
+        return (
+          res
+            // .send(await this.authService.signToken(user.id, user.username))
+            .redirect('http://localhost:8000/home')
+        );
       }
-      
     } catch (error) {
       return res
         .cookie('42token', token)
@@ -107,5 +124,4 @@ function extractTokenFromRequest(request) {
     request.header('Authorization').split(' ').length > 1
     ? request.header('Authorization').split(' ')[1]
     : '';
-
 }
