@@ -12,7 +12,7 @@ export interface ChatMembersCardProps {
 export function ChatMembersCard(props: ChatMembersCardProps) {
   const [isMuteDialogOpen, setIsMuteDialogOpen] = useState(false);
   const roomContextArgs = useOutletContext<RoomContextArgs>();
-
+  const chadId = roomContextArgs.chat.id;
   const action = (route: string, method: string, body: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
@@ -28,7 +28,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 
   const promote = () =>
     action(
-      `chat/${props.member.chatId}/user`,
+      `chat/${chadId}/user`,
       "PATCH",
       JSON.stringify({
         userId: props.member.userId,
@@ -41,7 +41,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 
   const demote = () =>
     action(
-      `chat/${props.member.chatId}/user`,
+      `chat/${chadId}/user`,
       "PATCH",
       JSON.stringify({
         userId: props.member.userId,
@@ -54,7 +54,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 
   const mute = (time: number) =>
     action(
-      `chat/${props.member.chatId}/mute`,
+      `chat/${chadId}/mute`,
       "POST",
       JSON.stringify({ userId: props.member.userId, muteTime: time })
     )
@@ -66,14 +66,14 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       });
   const unmute = () => {
     action(
-      `chat/${props.member.chatId}/mute`,
+      `chat/${chadId}/mute`,
       "DELETE",
       JSON.stringify({ userId: props.member.userId })
     ).catch((error) => console.log(error));
   };
   const kickOut = () =>
     action(
-      `chat/${props.member.chatId}/user`,
+      `chat/${chadId}/user`,
       "DELETE",
       JSON.stringify({ id: props.member.userId })
     ).catch((error) => console.log(error));
@@ -86,7 +86,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
         mute={mute}
       />
       <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-        {props.member.userId}
+        {props.member.username}
         {props.member.owner
           ? " : owner"
           : props.member.administrator

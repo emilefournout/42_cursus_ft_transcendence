@@ -5,7 +5,6 @@ import {
   Navigate,
   Outlet,
   useLocation,
-  useNavigate,
   useOutletContext,
   useParams,
 } from "react-router-dom";
@@ -18,8 +17,8 @@ export interface ChatFullInfo extends ChatInfo {
 }
 export interface Member {
   userId: number;
-  chatId: number;
   createdAt: string;
+  username: string;
   administrator: boolean;
   owner: boolean;
   muted: boolean;
