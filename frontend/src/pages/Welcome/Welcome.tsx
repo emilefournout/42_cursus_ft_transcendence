@@ -7,6 +7,8 @@ import { Avatar } from "../../components/Avatar";
 export function Welcome() {
 	const [username, setUsername] = useState("");
 	const [image, setImage] = useState<File>();
+  const [code2fa, setCode2fa] = useState("");
+	const [show2fa, setShow2fa] = useState(false);
 	const navigate = useNavigate();
 	const navigateError = useNavigate();
 	// Guest mode for no 42-students
@@ -31,6 +33,7 @@ export function Welcome() {
 		const formData = new FormData();
 		formData.append("username", username);
 		formData.append("image", image as File);
+    formData.append("code2fa", code2fa);
 		fetch(`${process.env.REACT_APP_BACKEND}/auth/register`, {
 			method: "POST",
 			body: formData,
@@ -47,7 +50,9 @@ export function Welcome() {
 					localStorage.setItem("access_token", data.access_token);
 					localStorage.setItem("username", data.username);
 					navigate("/");
-				} else throw new Error();
+				} else {
+					setShow2fa(true);
+				};
 			})
 			.catch((error) => console.log(error));
 	}
@@ -74,6 +79,13 @@ export function Welcome() {
 						onChange={(event) => setUsername(event.target.value)}
 						required
 					/>
+          {(show2fa && <input
+            id="wp-2fa-input"
+            className="wp-responsive-txt"
+            type="text"
+            placeholder="2FA Code"
+            onChange={(event) => setCode2fa(event.target.value)}
+          />)}
 					<button
 						id="wp-submit"
 						className="btn btn-bottom-right wp-responsive-txt"
