@@ -36,6 +36,7 @@
 
 .input-add-friend > input {
 	font-size: clamp(0.3rem, 1vw, 0.6rem);
+	padding: 8px;
 }
 
 .request-type-buttons{
