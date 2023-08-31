@@ -70,7 +70,12 @@ export function Avatar(props: AvatarProps) {
 					style={{ "--img-size": props.size } as React.CSSProperties}
 				>
 					<label htmlFor="upload">
-						<img src={img} className="user-avatar" alt="Avatar of the user" />
+						<img
+							src={img}
+							className="user-avatar"
+							alt="Avatar of the user"
+							style={{ "--img-size": props.size } as React.CSSProperties}
+						/>
 						<img
 							id="change-img"
 							src={iconVect}
