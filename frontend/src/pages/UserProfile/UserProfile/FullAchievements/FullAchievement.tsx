@@ -1,25 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AchievementCard } from "../Profile/Achievements/AchievementCard";
+export interface Achievement {
+  name: string;
+  description: string;
+}
 export function FullAchievements() {
-  return (
-    <>
-      <div>Achievements</div>
-      {/*Friend Name*/}
-      <AchievementCard
-        title={"You are the boss"}
-        description={"Be in the first place in the ranking"}
-        image={"https://i.imgur.com/3QXVhGw.png"}
-      />
-      <AchievementCard
-        title={"Wow what a player"}
-        description={"Win a game without losing any point"}
-        image={"https://i.imgur.com/3QXVhGw.png"}
-      />
-      <AchievementCard
-        title={"Pro pong certified"}
-        description={"Be in the first place in the ranking"}
-        image={"Win a game in 1 minute"}
-      />
-    </>
-  );
+  const [achievements, setAchievements] = useState<
+    Array<Achievement> | undefined
+  >(undefined);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BACKEND}/achievements/all`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Error getting achievements");
+        return response.json();
+      })
+      .then((data) => {
+        setAchievements(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  if (achievements === undefined) {
+    return <>loading</>;
+  } else {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "25px",
+          overflowY: "scroll",
+        }}
+      >
+        Achievements
+        <div>
+          {achievements.map((achievement: Achievement) => {
+            return (
+              <AchievementCard
+                title={achievement.name}
+                description={achievement.description}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 }

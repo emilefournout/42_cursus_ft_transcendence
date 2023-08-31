@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import validator from "validator";
 import { Dialog } from "../../../../components/Dialog";
 import chat from "../../../../components/Chat";
-import { useLocation, useNavigate } from "react-router-dom";
-
-export enum Visibility {
-  PUBLIC = "PUBLIC",
-  PRIVATE = "PRIVATE",
-  PROTECTED = "PROTECTED",
-}
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { RoomContextArgs } from "../Room";
+import { Visibility } from "../RoomCreate/RoomCreate";
 
 enum passwordStrength {
   EMPTY = "Choose a password",
@@ -24,7 +20,10 @@ export function ChangePassword() {
   );
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
+  const roomContextArgs = useOutletContext<RoomContextArgs>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backroute = location.pathname.replace("changePassword", "");
 
   const clearState = (): void => {
     setPasswordSecurity(passwordStrength.EMPTY);
@@ -51,9 +50,27 @@ export function ChangePassword() {
     setPassword(value);
   };
 
-  const changePassword = () => {
-    console.log("changePassword");
-  };
+  const fetchChangePassword = async () =>
+    fetch(`${process.env.REACT_APP_BACKEND}/chat/${roomContextArgs.chat.id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chatVisibility: Visibility.PROTECTED,
+        password: password,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          roomContextArgs.getChatInfo(roomContextArgs.chat);
+          navigate(backroute);
+        } else throw new Error("Error changing password");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
   const validateConfirm = async (): Promise<void> => {
     if (passwordSecurity !== passwordStrength.STRONG) {
@@ -65,15 +82,11 @@ export function ChangePassword() {
     } else {
       setPasswordErrorMessage(passwordStrength.STRONG.toString());
     }
-    await changePassword();
+    await fetchChangePassword();
   };
-
-  const navigate = useNavigate();
-  const location = useLocation();
 
   return (
     <>
-      <Dialog dialog={dialog} setDialog={setDialog} />
       <div id="wrapper-new-room-pswrd">
         <input
           value={password}
@@ -90,13 +103,7 @@ export function ChangePassword() {
       </div>
       <div id="txt-password-strength">{passwordErrorMessage}</div>
       <button onClick={() => validateConfirm()}>set password</button>
-      <button
-        onClick={() =>
-          navigate(location.pathname.replace("changePassword", ""))
-        }
-      >
-        back
-      </button>
+      <button onClick={() => navigate(backroute)}>back</button>
     </>
   );
 }
