@@ -15,7 +15,7 @@ export class ChatBasicInfoDto {
   name: string;
   
   @ApiProperty({
-    type: ChatVisibility,
+    enum: ChatVisibility,
     description: "Visibility of the chat"
   })
   visibility: ChatVisibility;

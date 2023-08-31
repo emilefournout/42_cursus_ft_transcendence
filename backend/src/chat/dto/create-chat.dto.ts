@@ -36,10 +36,3 @@ export class CreateChatDto {
   })
   invitedId?: number;
 }
-
-export interface ChatDto {
-  id: number;
-  visibility: ChatVisibility;
-  name: string;
-  password?: string
-}

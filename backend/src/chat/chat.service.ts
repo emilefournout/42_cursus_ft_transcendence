@@ -5,7 +5,6 @@ import { Chat, ChatVisibility, User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
-import { ChatDto } from './dto';
 import { MembershipService } from './membership.service';
 
 @Injectable()
@@ -29,7 +28,7 @@ async createChat(
   name: string,
   password?: string,
   invitedId?: number
-): Promise<ChatDto> {
+): Promise<ChatBasicInfoDto> {
   if (chatVisibility === 'PROTECTED' && !password) {
     throw new BadRequestException('No password provided for protected chat');
   }
@@ -52,9 +51,12 @@ async createChat(
     chatData.members.create.push({ userId: invitedId, administrator: false, owner: false });
   }
 
-  return await this.prisma.chat.create({
+  const chat = await this.prisma.chat.create({
     data: chatData
-  });
+  })
+  if (chat)
+    return ChatBasicInfoDto.fromChat(chat)
+  return null;
 }
 
   async deleteChat(chatId: number){

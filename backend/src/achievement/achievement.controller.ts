@@ -14,12 +14,14 @@ export class AchievementController {
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Finds the achievements from a given user' })
+    @ApiResponse({type: [AchievementDto]})
     async getUserAchievements(@GetUser() user) : Promise<AchievementDto[]>{
         return this.achievementService.findAchievementsFromUser(user.sub)
     }
 
     @Get("all")
     @ApiOperation({ summary: 'Finds all the achievements available' })
+    @ApiResponse({type: [AchievementDto]})
     async getAllAchievements() : Promise<AchievementDto[]>{
         return this.achievementService.findAllAchievements()
     }

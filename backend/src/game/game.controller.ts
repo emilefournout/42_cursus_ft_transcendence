@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { CreateGameDto } from './dto/game.dto';
 import { GameService } from './game.service';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Game')
 @Controller('game')
@@ -31,7 +31,8 @@ export class GameController {
 
   @Get('active-plays')
   @ApiOperation({summary: "Return the games that can be watched"})
-  getActiveGame() {
+  @ApiResponse({type: [String]})
+  getActiveGame() : string[] {
     return this.gameService.findActiveGames();
   }
 }
