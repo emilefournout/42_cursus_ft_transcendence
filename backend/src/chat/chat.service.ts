@@ -24,11 +24,11 @@ export class ChatService {
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
 
-  async findChatsInfoContainingName(name: string) : Promise<ChatShortInfoDto[]> {
+  async findChatsInfoContainingName(chatName: string) : Promise<ChatShortInfoDto[]> {
     const chats : Chat[] = await this.prisma.chat.findMany({
       where: {
         name: {
-          contains: name
+          contains: chatName
         },
         OR:[
           {

@@ -53,13 +53,13 @@ export class ChatController {
     return chat;
   }
 
-  @Get('search/:name')
+  @Get('search/:chatName')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiParam({type: String, name: "Chat name", description: "Name of the chat"})
   @ApiOperation({ summary: 'Find a list of chats which contains the given name' })
   @ApiResponse({type: [ChatShortInfoDto]})
-  async findChatsByName(chatName: string) : Promise<ChatShortInfoDto[]>{
+  async findChatsByName(@Param('chatName') chatName: string) : Promise<ChatShortInfoDto[]>{
+    console.log(chatName)
     const chat = await this.chatService.findChatsInfoContainingName(chatName);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
