@@ -67,14 +67,14 @@ export function Avatar(props: AvatarProps) {
 			{props.upload ? (
 				<div
 					className="wrapper-img"
-					style={{ "--img-size": props.size } as React.CSSProperties}
+					style={ props.size === undefined ? {} : { "--img-size": props.size } as React.CSSProperties}
 				>
 					<label htmlFor="upload">
 						<img
 							src={img}
 							className="user-avatar"
 							alt="Avatar of the user"
-							style={{ "--img-size": props.size } as React.CSSProperties}
+							style={ props.size === undefined ? {} : { "--img-size": props.size } as React.CSSProperties}
 						/>
 						<img
 							id="change-img"
@@ -93,8 +93,8 @@ export function Avatar(props: AvatarProps) {
 			) : (
 				<img
 					src={img}
-					style={{ "--img-size": props.size } as React.CSSProperties}
 					className="user-avatar user-avatar-no-edit"
+					style={ props.size === undefined ? {} : { "--img-size": props.size } as React.CSSProperties}
 					alt="Avatar of the user"
 				/>
 			)}
