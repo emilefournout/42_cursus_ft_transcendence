@@ -14,14 +14,21 @@
 }
 
 .settings-user-name {
+	width: 50%;
+	min-width: 200px;
+
 	color: var(--Light-Text);
 	font-size: clamp(0.4rem, 2vw, 0.8rem);
+	text-align: center;
 }
 
 .settings-change-user-name {
 	width: 25%;
+	min-width: fit-content;
+	height: 2.5em;
 
 	margin-top: 16px;
+	padding: 1em;
 }
 
 .settings-disconnect {
@@ -33,5 +40,5 @@
 }
 
 .settings-line-margin {
-	margin: 64px 0;
+	margin: clamp(8px, 8vh, 64px) 0;
 }

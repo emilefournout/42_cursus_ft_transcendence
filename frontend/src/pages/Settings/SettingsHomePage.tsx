@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import { Avatar } from "../../components/Avatar";
 export function SettingsHomePage() {
 	return (
-		<>
-			<Avatar size="128px" upload={true} download={true}/>
+		<div className="wrapper-matchmaking">
+			<Avatar upload={true} download={true}/>
 			<div className="underline settings-line-margin"></div>
-			<div className="settings-user-name">{"@" + localStorage.getItem("username")}</div>
+			<div className="settings-user-name ellipsed-txt">{"@" + localStorage.getItem("username")}</div>
 			<Link className="settings-fixed-height settings-change-user-name btn btn-bottom settings-btn-txt settings-btn-txt" to={"/board/settings/update"}>
 				Change username
 			</Link>
@@ -32,6 +32,6 @@ export function SettingsHomePage() {
 			{/*customization option*/}
 			{/*separator*/}
 			{/*enable/disable two factor authentification*/}
-		</>
+		</div>
 	);
 }
