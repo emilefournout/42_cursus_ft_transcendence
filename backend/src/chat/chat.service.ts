@@ -13,7 +13,7 @@ import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 export class ChatService {
   constructor(private prisma: PrismaService) {}
   
-  async findChatsInfo(id: any) : Promise<ChatShortInfoDto[]> {
+  async findChatsInfoById(id: number) : Promise<ChatShortInfoDto[]> {
     const chats : Chat[] = await this.prisma.$queryRaw`
     SELECT
     *
@@ -23,6 +23,27 @@ export class ChatService {
   `;
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
+
+  async findChatsInfoContainingName(name: string) : Promise<ChatShortInfoDto[]> {
+    const chats : Chat[] = await this.prisma.chat.findMany({
+      where: {
+        name: {
+          contains: name
+        },
+        OR:[
+          {
+            visibility: "PROTECTED",
+          },
+          {
+            visibility: "PUBLIC",
+          },
+        ]
+        }
+    })
+    return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
+  }
+
+  
 
 async createChat(
   user_id: number,
@@ -84,13 +105,12 @@ async createChat(
     const chat = await this.findChatById(id);
     if(!chat)
       throw new NotFoundException('Chat not found');
-    else if(chat.visibility === 'DIRECT')
-      throw new ForbiddenException('Direct chat is immutable');
     if(updateChatDto.chatVisibility !== 'PROTECTED')
       updateChatDto.password = null
-    Object.assign(chat, updateChatDto)
+    chat.password = updateChatDto.password
+    chat.visibility = updateChatDto.chatVisibility
     try {
-      this.prisma.chat.update({
+      await this.prisma.chat.update({
         where: {
           id: id
         },
@@ -148,6 +168,8 @@ async createChat(
         id: id
       }
     });
+    if(!chat)
+      return null;
     return ChatBasicInfoDto.fromChat(chat)
   }
 

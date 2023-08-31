@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Welcome.css";
-import iconVect from "../../common/change-icon.svg";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Avatar } from "../../components/Avatar";
@@ -44,7 +43,9 @@ export function Welcome() {
 		})
 			.then((response: Response) => {
 				if (response.ok) return response.json();
-				else throw new Error("Error registering");
+				else {
+					throw new Error("Error registering");
+				}
 			})
 			.then((data) => {
 				if (data.access_token) {
@@ -53,9 +54,12 @@ export function Welcome() {
 					navigate("/");
 				} else {
 					setShow2fa(true);
-				};
+				}
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+				setErrorMessage("bad username");
+				console.log(error);
+			});
 	}
 
 	return (

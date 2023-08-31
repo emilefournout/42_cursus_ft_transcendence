@@ -50,6 +50,7 @@ export class AuthService {
 
     // Check code2fa if needed
     if (
+      tfa &&
       tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
       code2fa &&
       !authenticator.check(code2fa, tfa.twoFactorAuthenticationSecret)
@@ -59,7 +60,11 @@ export class AuthService {
 
     let access_token = await this.signToken(user.id, user.intraname);
     // Send access_token = null if not code2fa and needed
-    if (tfa.status === TwoFactorAuthenticationStatus.ENABLED && !code2fa) {
+    if (
+      tfa &&
+      tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
+      !code2fa
+    ) {
       access_token = null;
     }
     return { access_token, id: user.id, username: user.username };

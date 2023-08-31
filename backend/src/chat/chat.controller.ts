@@ -48,7 +48,19 @@ export class ChatController {
   @ApiOperation({ summary: 'Find a list of chats from the user' })
   @ApiResponse({type: [ChatShortInfoDto]})
   async findChats(@GetUser() user) : Promise<ChatShortInfoDto[]>{
-    const chat = await this.chatService.findChatsInfo(user.sub);
+    const chat = await this.chatService.findChatsInfoById(user.sub);
+    if (!chat) throw new NotFoundException('Chats not found');
+    return chat;
+  }
+
+  @Get('search/:name')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({type: String, name: "Chat name", description: "Name of the chat"})
+  @ApiOperation({ summary: 'Find a list of chats which contains the given name' })
+  @ApiResponse({type: [ChatShortInfoDto]})
+  async findChatsByName(chatName: string) : Promise<ChatShortInfoDto[]>{
+    const chat = await this.chatService.findChatsInfoContainingName(chatName);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
   }
@@ -158,6 +170,23 @@ export class ChatController {
   ) {
     if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
     await this.membershipService.createChatMember(chatId, createChatMemberDto);
+  }
+
+  @Post(':id/join')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({
+    summary: 'Joins the user to the given chat',
+    description: 'Password is optional'
+  })
+  async joinChat(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId
+  ) {
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is already a member of the chat")
+    if (!this.membershipService.isOpenToUsers(chatId)) throw new ForbiddenException("Chat is not open to join this user")
+    await this.membershipService.createChatMember(chatId, {id: user.sub});
   }
 
   @Delete(':id/user')
