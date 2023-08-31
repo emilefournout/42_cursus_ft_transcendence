@@ -15,6 +15,14 @@
     width: 100%;
 }
 
+.wp-error-msg {
+	grid-column: 1 / 3;
+	grid-row: 3;
+
+	color: var(--Light-Text);
+	text-align: center;
+}
+
 /* Maketext responsive */
 .wp-responsive-txt {
 	font-size: clamp(0.35rem, 3vw, 0.8rem);
