@@ -4,71 +4,11 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { IGameData } from './types/game.interface';
+import { IGameData } from './types/game-data.interface';
 import { Socket } from 'socket.io';
-import { User } from '@prisma/client';
 import { UpdateGameDto } from './dto/updte-game.dto';
-import { AchievementService } from 'src/achievement/achievement.service';
-
-interface ConnectedClients {
-  [id: string]: {
-    socket: Socket;
-    userId: number;
-  };
-}
-
-export class GameState {
-  private gameId: string;
-  private player1: {
-    socket: Socket;
-    id: number;
-  };
-  private player2: {
-    socket: Socket;
-    id: number;
-  };
-  private maxGoals: number;
-  private finished: boolean;
-  constructor(id: string, player1: { socket: Socket; id: number; }, player2: { socket: Socket; id: number; })
-  {
-    this.gameId = id;
-    this.player1 = player1
-    this.player2 = player2
-    this.finished = false
-    this.maxGoals = 3
-  }
-
-  public finish() {
-  }
-  
-
-  public get id() :  string{
-    return this.gameId;
-  }
-
-  public get goalsLimit() :  number{
-    return this.maxGoals;
-  }
-
-  public get firstPlayer() :  {
-    socket: Socket;
-    id: number;
-  } {
-    return this.player1;
-  }
-
-  public get secondPlayer() :  {
-    socket: Socket;
-    id: number;
-  } {
-    return this.player2;
-  }
-
-  public get isFinished() :  boolean {
-    return this.finished;
-  }
-  
-};
+import { GameState } from './types/game-state.class';
+import { ConnectionStorage } from './types/connection-storage.class';
 
 @Injectable()
 export class GameService {
@@ -92,9 +32,9 @@ export class GameService {
     player1Score: 0,
     player2Score: 0
   };
-  private waitingRoom: Set<Socket> = new Set();
-  private games = new Map<string, IGameData>();
-  private clientsConnections: ConnectedClients = {};
+  private userConnections = new ConnectionStorage();
+  private waitingRoom: Set<Socket> = new Set<Socket>();
+  private games: Map<string, IGameData> = new Map<string, IGameData>();
 
   constructor(private prisma: PrismaService) {}
 
@@ -110,8 +50,8 @@ export class GameService {
     }
   }
 
-  getUserIdFromSocket(socketId: string): number | undefined {
-    return this.clientsConnections[socketId].userId
+  getUserIdFromSocket(socket: Socket): number | undefined {
+    return this.userConnections.getUserIdFromSocket(socket)
   }
 
   async findGameById(id: string) {
@@ -152,22 +92,22 @@ export class GameService {
     }
   }
 
-  async handleWaitingRoom(client: Socket): Promise<GameState> {
+  async handleWaitingRoom(clientSocket: Socket): Promise<GameState> {
     const user = await this.prisma.user.findFirst({
       where: {
-        id: this.clientsConnections[client.id].userId
+        id: this.userConnections.getUserIdFromSocket(clientSocket)
       }
     });
 
     if (user) {
-      this.waitingRoom.add(client);
+      this.waitingRoom.add(clientSocket);
 
       if (this.waitingRoom.size >= 2) {
         const setIterator = this.waitingRoom.values()
         const player1:Socket = setIterator.next().value;
         const player2:Socket = setIterator.next().value;
-        const player1Id = this.getUserIdFromSocket(player1.id);
-        const player2Id = this.getUserIdFromSocket(player2.id);
+        const player1Id = this.getUserIdFromSocket(player1);
+        const player2Id = this.getUserIdFromSocket(player2);
         this.waitingRoom.delete(player1)
         this.waitingRoom.delete(player2)
         const game = await this.createGame(player1Id, player2Id);
@@ -253,17 +193,22 @@ export class GameService {
     }
   }
 
-  public registerConnection(id: string, client: Socket, userId: number) {
+  public registerConnection(client: Socket, userId: number) {
     // Disable duplicated user - Commented for development
-    // this.checkAndRemoveUserConnection(userId)
-    this.clientsConnections[id] = {
-      socket: client,
-      userId
-    };
+    // this.disconnectPreviousConnection(userId);
+    this.userConnections.addUser(client, userId)
   }
 
-  public unregisterConnection(id: string) {
-    delete this.clientsConnections[id];
+  private disconnectPreviousConnection(userId: number) {
+    const previousSocket = this.userConnections.removeUserByUserId(userId);
+    if (previousSocket !== undefined) {
+      previousSocket.disconnect();
+    }
+  }
+
+  public unregisterConnection(socket: Socket) {
+    this.userConnections.removeUserBySocket(socket)
+    this.waitingRoom.delete(socket)
   }
 
   private checkOutsideCanva(gameState: IGameData) {
@@ -298,16 +243,5 @@ export class GameService {
         gameState.ballY - gameState.ballRadius <=
           gameState.rightPad + gameState.padHeight)
     );
-  }
-
-  private checkAndRemoveUserConnection(userId: number) {
-    for (const socketId of Object.keys(this.clientsConnections)) {
-      if (this.clientsConnections[socketId].userId === userId)
-      {
-        this.clientsConnections[socketId].socket.disconnect();
-        this.unregisterConnection(socketId)
-        break ;
-      }
-    }
   }
 }

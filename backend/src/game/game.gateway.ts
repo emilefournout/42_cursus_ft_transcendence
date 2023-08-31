@@ -9,13 +9,14 @@ import {
   WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { GameService, GameState } from './game.service';
+import { GameService } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
+import { GameState } from './types/game-state.class';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' }
@@ -43,7 +44,7 @@ export class GameGateway
     try {
       const token = client.handshake.headers.authentication as string;
       const payload: JwtPayload = this.jwtService.verify(token);
-      this.gameService.registerConnection(client.id, client, payload.sub);
+      this.gameService.registerConnection(client, payload.sub);
     } catch (error) {
       console.log('Error when verifying token');
       client.disconnect();
@@ -53,7 +54,7 @@ export class GameGateway
   }
 
   handleDisconnect(client: Socket) {
-    this.gameService.unregisterConnection(client.id);
+    this.gameService.unregisterConnection(client);
     console.log('Disconneted from ' + client.id);
   }
   
@@ -75,6 +76,7 @@ export class GameGateway
   async handleJoinWaitingRoom(
     @ConnectedSocket() client: Socket,
   ) {
+    console.log("Joining waiting room ", client.id)
     const game = await this.gameService.handleWaitingRoom(client);
 
     if (game) {
@@ -91,6 +93,7 @@ export class GameGateway
   handleLeaveWaitingRoom(
     @ConnectedSocket() client: Socket,
   ) {
+    console.log("Leaving waiting room ", client.id)
     this.gameService.leaveWaitingRoom(client);
   }
 
