@@ -63,7 +63,7 @@ export class GameData {
       if (this.player1Id < this.player2Id)
         return this.player1Id
       else
-        return this.player1Id
+        return this.player2Id
     }
     return -1
   }
@@ -74,7 +74,7 @@ export class GameData {
       if (this.player1Id >= this.player2Id)
         return this.player1Id
       else
-        return this.player1Id
+        return this.player2Id
     }
     return -1
   }
@@ -175,7 +175,7 @@ export class GameData {
 
   private increasePlayer2Score() {
     this.player2Score += 1
-    if (this.player1Score >= this.maxGoals)
+    if (this.player2Score >= this.maxGoals)
       this.finish()
   }
   
