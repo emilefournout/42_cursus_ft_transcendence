@@ -17,17 +17,17 @@ export function SettingsHomePage() {
 				Change username
 			</Link>
 			<div className="underline settings-line-margin"></div>
-			<div className="wrapper-row">
-        <button onClick={() => setShowQr(!showQr)}>Set 2FA</button>
-				{(showQr && <TwoFactorAuth username={localStorage.getItem("username")}/>)}
+			<div className="settings-bottom-container">
+				<button className="settings-fixed-height btn settings-btn-txt" onClick={() => setShowQr(!showQr)}>Set 2FA</button>
 				<Link className="settings-fixed-height btn settings-disconnect settings-btn-txt" to="/login"
 					onClick={() => {
 						localStorage.removeItem("access_token");
 						localStorage.removeItem("username");
-					}}>
+				}}>
 					Disconnect
 				</Link>
 			</div>
+			{(showQr && <TwoFactorAuth username={localStorage.getItem("username")}/>)}
 			{/*Change avatar button*/}
 			{/*separator*/}
 			{/*username*/}
