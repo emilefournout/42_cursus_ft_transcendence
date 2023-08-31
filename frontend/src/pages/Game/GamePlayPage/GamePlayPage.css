@@ -1,0 +1,12 @@
+.scores{
+	border-radius: 3px;
+	background-color: var(--Honey-Yellow);
+}
+
+.score{
+	padding: 0.5rem;
+}
+
+.light-text{
+	color: var(--Light-Text);
+}

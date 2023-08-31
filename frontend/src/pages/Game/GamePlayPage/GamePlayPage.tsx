@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import "./GamePlayPage.css";
 
 enum GameExistState {
 	Waiting,
@@ -13,7 +14,6 @@ export function GamePlayPage() {
 	const [gameExistState, setGameExistState] = useState(GameExistState.Waiting);
 	const { id } = useParams();
 	const gameSocket = GameSocket.getInstance().socket;
-	const navigate = useNavigate();
 	const boardState: GameCanvasProps = {
 		width: 600,
 		height: 350,
@@ -79,21 +79,25 @@ export function GamePlayPage() {
 	return (
 		<>
 			{gameExistState === GameExistState.Waiting ? (
-				<div>Waiting</div>
+				<div className="light-text">Waiting</div>
 			) : gameExistState === GameExistState.NotFound ? (
-				<div>Not Found</div>
+				<div className="light-text">Not Found</div>
 			) : (
 				<>
-					<h1 className="title">Game</h1>
-					<div className="title">
-						{player1Score} - {player2Score}
+					<h1 className="title light-text">Game</h1>
+					<div className="title scores">
+						<span className="score">{player1Score}</span>
+						<span> / </span>
+						<span className="score">{player2Score}</span>
 					</div>
 					<GameCanvas {...state} />
 					{showModal !== null && (
 						<div className="modal">
-							<div className="modal-content">
-								<p>{showModal} wins</p>
-								<button onClick={() => navigate("/board")}>HOME</button>
+							<div className="modal-content wrapper-col">
+								<p className="light-text">{showModal} wins</p>
+								<Link to={"/board"}>
+									<button>HOME</button>
+								</Link>
 							</div>
 						</div>
 					)}
