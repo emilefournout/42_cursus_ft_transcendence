@@ -84,14 +84,17 @@ export function Messages() {
                 ? "message-content message-content-right"
                 : "message-content message-content-left";
 
-              return (
-                <Message
-                  message={message}
-                  isMyMessage={isMyMessage}
-                  msgClasses={msgClasses}
-                  key={message.uuid}
-                />
-              );
+              if (message.text.length > 0) {
+                return (
+                  <Message
+                    message={message}
+                    isMyMessage={isMyMessage}
+                    msgClasses={msgClasses}
+                    key={message.uuid}
+                  />
+                );
+              }
+              return <></>;
             })}
           </div>
         </div>

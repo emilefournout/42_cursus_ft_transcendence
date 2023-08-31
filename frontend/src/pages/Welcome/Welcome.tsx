@@ -12,7 +12,7 @@ export function Welcome() {
 	const navigateError = useNavigate();
 	// Guest mode for no 42-students
 	const [searchParams, setSearchParams] = useSearchParams();
-
+	const [errorMessage, setErrorMessage] = useState("");
 	useEffect(() => {
 		if (searchParams.get("guest")) return;
 		if (!Cookies.get("42token") || Cookies.get("42token") == "j:null") {
@@ -22,6 +22,10 @@ export function Welcome() {
 	});
 
 	function register() {
+		if (username.length < 5) {
+			setErrorMessage("Username must be at least 5 characters long");
+			return;
+		}
 		const token: string | undefined = searchParams.get("guest")
 			? "guest"
 			: Cookies.get("42token");
@@ -62,7 +66,7 @@ export function Welcome() {
 			</div>
 			<div className="window-body-centered">
 				<div className="wrapper-welcome-grid">
-					<Avatar upload={true} download={false} setImg={setImage}/>
+					<Avatar upload={true} download={false} setImg={setImage} />
 					<input
 						id="wp-username-input"
 						className="wp-responsive-txt"
@@ -78,6 +82,9 @@ export function Welcome() {
 					>
 						Done!
 					</button>
+					<div className="wp-error-msg wp-responsive-txt">
+						{errorMessage}
+					</div>
 				</div>
 			</div>
 		</div>
