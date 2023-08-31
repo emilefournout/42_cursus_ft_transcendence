@@ -9,33 +9,33 @@ import { Visibility } from "../Room/RoomCreate/RoomCreate";
 import { Conversations } from "./Conversations/Conversations";
 
 export interface LeftBarProps {
-  chats: Array<ChatInfo> | undefined;
+	chats: Array<ChatInfo> | undefined;
 }
 
 export function LeftBar(props: LeftBarProps) {
-  const chatPageContext = React.useContext(ChatPageContext);
+	const chatPageContext = React.useContext(ChatPageContext);
 
-  return (
-    <div id="lb-main-wrapper" className="wrapper-col">
-      <div id="lb-top-wrapper">
-        <span>Chats</span>
-        <Link to="/board/chats/create">
-          <img className="nav-icons" src={NewChatIcon} />
-        </Link>
-        <img
-          className="nav-icons"
-          src={ReloadBlackIcon}
-          onClick={chatPageContext.updateChat}
-        />
-      </div>
-      {/* <Link to="/chats/room">*/}
-      <div id="lb-bot-wrapper">
-        {props.chats &&
-          props.chats.map((chat: ChatInfo) => {
-            return <Conversations chat={chat} key={chat.id} />;
-          })}
-      </div>
-      {/*</Link>*/}
-    </div>
-  );
+	return (
+		<div id="lb-main-wrapper" className="wrapper-col">
+			<div id="lb-top-wrapper">
+				<span>Chats</span>
+				<Link to="/board/chats/create">
+					<img className="nav-icons" src={NewChatIcon} />
+				</Link>
+				<img
+					className="nav-icons"
+					src={ReloadBlackIcon}
+					onClick={chatPageContext.updateChat}
+				/>
+			</div>
+			{/* <Link to="/chats/room">*/}
+			<div id="lb-bot-wrapper">
+				{props.chats &&
+					props.chats.map((chat: ChatInfo) => {
+						return <Conversations chat={chat} key={chat.id} />;
+					})}
+			</div>
+			{/*</Link>*/}
+		</div>
+	);
 }
