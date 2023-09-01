@@ -43,11 +43,14 @@ export class MembershipService {
 
   
   async createChatMember(chatId: number, createChatMemberDto: CreateChatMemberDto) {
-    const chat = await this.chatService.findChatById(chatId)
-    const user = await this.userService.findUserById(createChatMemberDto.id)
+    
+    const [chat, user] = await Promise.all([
+      this.chatService.findChatById(chatId),
+      this.userService.findUserById(createChatMemberDto.id)
+    ]);
     if(!chat || !user)
       throw new NotFoundException(`${'Chat' ? !chat : 'User'} not found`);
-    await this.checkAccess(chat, createChatMemberDto);
+    await this.checkAccess(chat, createChatMemberDto.password);
     try {
       await this.prisma.chatMember.create({
         data: {
@@ -66,12 +69,12 @@ export class MembershipService {
     }
   }
 
-  private async checkAccess(chat, createChatMemberDto: CreateChatMemberDto) {
+  private async checkAccess(chat, password?: string) {
     if (chat.visibility === 'PRIVATE')
       throw new ForbiddenException('Chat is private');
     else if (chat.visibility === 'PROTECTED') {
       try {
-        if (!createChatMemberDto.password || !await argon2.verify(chat.password, createChatMemberDto.password))
+        if (!password || !await argon2.verify(chat.password, password))
           throw new UnauthorizedException('Incorrect password');
       } catch (error) {
         throw new UnauthorizedException('Incorrect password');
@@ -237,6 +240,6 @@ export class MembershipService {
   async isOpenToUsers(chatId: number) : Promise<boolean> {
     const chatMember = await this.chatService.findChatById(chatId);
     if (!chatMember) return false
-    return chatMember.visibility === "PUBLIC";
+    return chatMember.visibility === "PUBLIC" || chatMember.visibility === "PROTECTED";
 }
 }

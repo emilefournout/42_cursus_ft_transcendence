@@ -1,5 +1,4 @@
 import React from "react";
-import { AchievementCard } from "./AchievementCard";
 import "../Profile.css";
 import { useNavigate } from "react-router-dom";
 

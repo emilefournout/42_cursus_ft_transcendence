@@ -20,6 +20,7 @@ import { MembershipService } from './membership.service';
 import { UpdateChatMemberDto } from './dto/update-chat-member.dto';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -33,6 +34,7 @@ import { UnmuteUserDto } from './dto/unmute-user.dto';
 import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
 import { ChatShortInfoDto } from './dto/short-info-chat.dto';
+import { JoinChatDto } from './dto/join-chat.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -180,13 +182,15 @@ export class ChatController {
     summary: 'Joins the user to the given chat',
     description: 'Password is optional'
   })
+  @ApiBody({ type: JoinChatDto})
   async joinChat(
     @GetUser() user,
-    @Param('id', ParseIntPipe) chatId
+    @Param('id', ParseIntPipe) chatId,
+    @Body() joinChatDto: JoinChatDto
   ) {
     if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is already a member of the chat")
     if (!this.membershipService.isOpenToUsers(chatId)) throw new ForbiddenException("Chat is not open to join this user")
-    await this.membershipService.createChatMember(chatId, {id: user.sub});
+    await this.membershipService.createChatMember(chatId, {id: user.sub, password: joinChatDto.password});
   }
 
   @Delete(':id/user')
