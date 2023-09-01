@@ -1,5 +1,9 @@
 import React from "react";
+<<<<<<< Updated upstream
 import { Profile } from "./profile/Profile";
+=======
+import { Profile } from "./user/Profile";
+>>>>>>> Stashed changes
 import { useParams } from "react-router-dom";
 import { ProfilePageContext } from "../UserProfilePage";
 import { BoardContext } from "../../board/Board";
