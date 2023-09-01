@@ -41,12 +41,20 @@ export function MuteDialog(props: MuteDialogProps) {
     <div>
       <dialog open={props.userIdToMute !== undefined}>
         {value} minutes
-        <Slider
-          aria-label="Volume"
-          value={value}
-          onChange={(e, newValue) => setValue(newValue as number)}
+        <input
+          id="mute"
+          type="range"
           min={15}
           max={90}
+          step={1}
+          value={value}
+          onChange={(event) => {
+            try {
+              setValue(Number(event.target.value));
+            } catch {
+              setValue(1);
+            }
+          }}
         />
         <div
           style={{
