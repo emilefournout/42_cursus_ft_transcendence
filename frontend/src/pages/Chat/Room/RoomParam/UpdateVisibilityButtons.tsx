@@ -49,41 +49,29 @@ export function UpdateVisibilityButtons() {
 	} else {
 		return (
 			<>
-				{roomContextArgs.chat.visibility} Room
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						gap: "25px",
-					}}
-				>
-					{updateIsSelected ? (
-						<>
-							<div onClick={() => updateVisibility(Visibility.PROTECTED)}>
-								Protected
-							</div>{" "}
-							or{" "}
-							<div onClick={() => updateVisibility(Visibility.PUBLIC)}>
-								Public
-							</div>
-							<button onClick={() => setUpdateIsSelected(false)}>cancel</button>
-						</>
-					) : (
-						<button onClick={() => setUpdateIsSelected(true)}>
-							update visibility
-						</button>
-					)}
-				</div>
-				<div style={{ padding: "10px" }}>
-					{roomContextArgs.chat.visibility === Visibility.PROTECTED && (
-						<button onClick={() => navigate("changePassword")}>
-							change password
-						</button>
-					)}
-				</div>
-				<div style={{ padding: "10px" }}>
-					<button onClick={() => navigate("delete")}>delete room</button>
-				</div>
+				{/* {roomContextArgs.chat.visibility} Room */}
+				{updateIsSelected ? (
+					<>
+						<div onClick={() => updateVisibility(Visibility.PROTECTED)}>
+							Protected
+						</div>{" "}
+						or{" "}
+						<div onClick={() => updateVisibility(Visibility.PUBLIC)}>
+							Public
+						</div>
+						<button onClick={() => setUpdateIsSelected(false)}>cancel</button>
+					</>
+				) : (
+					<button onClick={() => setUpdateIsSelected(true)}>
+						Update Vis
+					</button>
+				)}
+				{roomContextArgs.chat.visibility === Visibility.PROTECTED && (
+					<button onClick={() => navigate("changePassword")}>
+						Change Passwd
+					</button>
+				)}
+				<button onClick={() => navigate("delete")}>Delete Room</button>
 			</>
 		);
 	}

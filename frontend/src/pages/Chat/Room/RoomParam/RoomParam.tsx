@@ -21,8 +21,8 @@ export function RoomParam() {
 	return (
 		<div className="room-param">
 			<AddUser />
-			{/* {isOwner && <UpdateVisibilityButtons />}
-			  * <ChatMembers isManager={isOwner || isAdmin} /> */}
+			{isOwner && <UpdateVisibilityButtons />}
+			{/* <ChatMembers isManager={isOwner || isAdmin} /> */}
 		</div>
 	);
 }
