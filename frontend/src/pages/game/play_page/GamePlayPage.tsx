@@ -19,6 +19,8 @@ export function GamePlayPage() {
 		height: 350,
 		padWidth: 10,
 		padHeight: 60,
+		leftPadHeight: 60,
+		rightPadHeight: 60,
 		ballRadius: 8,
 		leftPad: 100,
 		rightPad: 150,

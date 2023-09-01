@@ -10,13 +10,13 @@ export function NavBar() {
     <nav>
       <div id="nav-left-side">
         <Link to="/board/settings" className="nav-icons">
-          <img src={settingsIcon}></img>
+          <img src={settingsIcon} alt="Setting icon"></img>
         </Link>
         <Link to="/board/chats" className="nav-icons">
-          <img src={chatsIcon}></img>
+          <img src={chatsIcon} alt="Chat icon"></img>
         </Link>
         <Link to="/board/user-account" className="nav-icons">
-          <img src={userIcon}></img>
+          <img src={userIcon} alt="User icon"></img>
         </Link>
       </div>
       <Link

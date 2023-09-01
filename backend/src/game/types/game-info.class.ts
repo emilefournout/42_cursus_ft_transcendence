@@ -4,6 +4,7 @@ export class GameDataOptions {
   powerUps: boolean;
 }
 export class GameData {
+  private readonly padHeight: number = 60;
   private player1Id: number;
   private player2Id: number;
   private player1Score: number = 0;
@@ -13,10 +14,11 @@ export class GameData {
   private width: number = 600;
   private height: number = 350;
   private padWidth: number = 10;
-  private padHeight: number = 60;
+  private leftPadHeight: number = 60;
+  private rightPadHeight: number = 60;
   private ballRadius: number = 8;
-  private leftPad: number = Math.random() * (this.height - this.padHeight);
-  private rightPad: number = Math.random() * (this.height - this.padHeight);
+  private leftPad: number = Math.random() * (this.height - this.leftPadHeight);
+  private rightPad: number = Math.random() * (this.height - this.rightPadHeight);
   private ballX: number = 200;
   private ballY: number = 150;
   private padVelocity: number = 30;
@@ -88,29 +90,35 @@ export class GameData {
   
   move(direction: string, playerId: number) {
     if (this.player1Id === playerId) {
-      if (
-        direction === 'down' &&
-        this.leftPad + this.padVelocity + this.padHeight <
-          this.height
-      )
-        this.leftPad += this.padVelocity;
-      else if (
-        direction === 'up' &&
-        this.leftPad - this.padVelocity > 0
-      )
-        this.leftPad -= this.padVelocity;
+      if (direction === 'down')
+      {
+        if (this.leftPad + this.padVelocity + this.leftPadHeight < this.height)
+          this.leftPad += this.padVelocity;
+        else
+          this.leftPad = this.height - this.leftPadHeight
+      }
+      else if (direction === 'up')
+      {
+        if ( this.leftPad - this.padVelocity > 0)
+          this.leftPad -= this.padVelocity;
+        else
+          this.leftPad = 0
+      }
     } else if (this.player2Id === playerId) {
-      if (
-        direction === 'down' &&
-        this.rightPad + this.padVelocity + this.padHeight <
-          this.height
-      )
-        this.rightPad += this.padVelocity;
-      else if (
-        direction === 'up' &&
-        this.rightPad - this.padVelocity > 0
-      )
-        this.rightPad -= this.padVelocity;
+      if (direction === 'down')
+      {
+        if (this.rightPad + this.padVelocity + this.rightPadHeight < this.height)
+          this.rightPad += this.padVelocity;
+        else
+          this.rightPad = this.height - this.rightPadHeight
+      }
+      else if (direction === 'up')
+      {
+        if ( this.rightPad - this.padVelocity > 0)
+          this.rightPad -= this.padVelocity;
+        else
+          this.rightPad = 0
+      }
     }
   }
 
@@ -154,7 +162,7 @@ export class GameData {
       this.ballX - this.ballRadius <=
         this.padWallSeparation + this.padWidth && // Desde la derecha
       this.ballY >= this.leftPad &&
-      this.ballY <= this.leftPad + this.padHeight &&
+      this.ballY <= this.leftPad + this.leftPadHeight &&
       this.velocityX < 0
     );
   }
@@ -169,23 +177,72 @@ export class GameData {
       (this.ballY - this.ballRadius >= this.rightPad ||
         this.ballY + this.ballRadius >= this.rightPad) &&
       (this.ballY + this.ballRadius <=
-        this.rightPad + this.padHeight ||
+        this.rightPad + this.rightPadHeight ||
         this.ballY - this.ballRadius <=
-          this.rightPad + this.padHeight)
+          this.rightPad + this.rightPadHeight)
     );
   }
   private increasePlayer1Score() {
     this.player1Score += 1
     if (this.player1Score >= this.maxGoals)
       this.finish()
+    this.checkAndGiveAdvantage()
   }
-
+  
   private increasePlayer2Score() {
     this.player2Score += 1
     if (this.player2Score >= this.maxGoals)
       this.finish()
+    this.checkAndGiveAdvantage()
   }
-  
+
+  private checkAndGiveAdvantage() {
+    if (!this.powerUps)
+      return;
+    if (Math.abs(this.player1Score - this.player2Score) >= 3)
+    {
+      if (this.player1Score < this.player2Score)
+        this.giveAdvantagePlayer1()
+      else
+        this.giveAdvantagePlayer2()
+    }
+    else
+    {
+      this.leftPadHeight = this.padHeight
+      this.rightPadHeight = this.padHeight
+    }
+  }
+
+  giveAdvantagePlayer1() {
+    if (this.leftPadHeight === this.padHeight * 1.50)
+      return;
+    if ((this.padHeight * 1.50) + this.leftPad <= this.height)
+    {
+      this.leftPadHeight = this.padHeight * 1.50
+    }
+    else
+    {
+      let difference = this.height - (this.leftPadHeight * 1.50 + this.leftPad)
+      this.leftPad -= difference
+      this.leftPadHeight = this.padHeight * 1.50
+    }
+  }
+
+  giveAdvantagePlayer2() {
+    if (this.rightPadHeight === this.padHeight * 1.50)
+      return ;
+    if ((this.padHeight * 1.50) + this.rightPad <= this.height)
+    {
+      this.rightPadHeight = this.padHeight * 1.50
+    }
+    else
+    {
+      let difference = this.height - (this.rightPadHeight * 1.50 + this.rightPad)
+      this.rightPad -= difference
+      this.rightPadHeight = this.padHeight * 1.50
+    }
+  }
+
   finish() {
     this.finished = true
   }  
