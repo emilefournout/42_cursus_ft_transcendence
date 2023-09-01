@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Slider } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 
