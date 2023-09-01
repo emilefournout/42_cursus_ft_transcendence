@@ -79,9 +79,21 @@ export class GameService {
   }
 
   async handleWaitingRoom(): Promise<GameState> {
-    if (this.waitingRoom.size > 0 && this.createdRoom.size > 0) {
-      const {player: player1, gameOptions} = this.peekGameFromCreatedRoom();
-      const player2: Socket = this.peekPlayerFromWaitingRoom();
+    let player1 : Socket,  player2 : Socket;
+    let gameOptions: GameDataOptions;
+    
+    if (this.waitingRoom.size >= 1 && this.createdRoom.size >= 1) {
+      const gameRoom = this.peekGameFromCreatedRoom();
+      player1 = gameRoom.player;
+      gameOptions = gameRoom.gameOptions;
+      player2 = this.peekPlayerFromWaitingRoom();
+    }
+    else if (this.waitingRoom.size >= 2)
+    {
+      player1 = this.peekPlayerFromWaitingRoom();
+      player2 = this.peekPlayerFromWaitingRoom();
+    }
+    if (player1 && player2) {
       const player1Id: number = this.getUserIdFromSocket(player1);
       const player2Id: number = this.getUserIdFromSocket(player2);
       const game = await this.createGame(player1Id, player2Id);
