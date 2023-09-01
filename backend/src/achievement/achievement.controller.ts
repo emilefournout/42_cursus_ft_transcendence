@@ -1,5 +1,5 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { AchievementService } from './achievement.service';
@@ -26,4 +26,15 @@ export class AchievementController {
         return this.achievementService.findAllAchievements()
     }
 
+    @Get(":id")
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
+    @ApiParam({ name: 'id' })
+    @ApiOperation({
+        summary: 'Returns the achievemnts from a given user',
+    })
+    async getAchievemntsFromUser(@Param('id', ParseIntPipe) userId)
+    {
+        return this.achievementService.findAchievementsFromUser(userId)
+    }
 }
