@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Slider } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 
@@ -41,12 +40,20 @@ export function MuteDialog(props: MuteDialogProps) {
     <div>
       <dialog open={props.userIdToMute !== undefined}>
         {value} minutes
-        <Slider
-          aria-label="Volume"
-          value={value}
-          onChange={(e, newValue) => setValue(newValue as number)}
+        <input
+          id="mute"
+          type="range"
           min={15}
           max={90}
+          step={1}
+          value={value}
+          onChange={(event) => {
+            try {
+              setValue(Number(event.target.value));
+            } catch {
+              setValue(30);
+            }
+          }}
         />
         <div
           style={{

@@ -7,6 +7,8 @@ export interface GameCanvasProps {
   height: number;
   padWidth: number;
   padHeight: number;
+  rightPadHeight: number;
+  leftPadHeight: number;
   ballRadius: number;
   leftPad: number;
   rightPad: number;
@@ -40,20 +42,23 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.stroke();
 
       // Draw left pad
+      console.log(props.leftPadHeight, " - left Height")
       ctx.fillStyle = "white";
       ctx.fillRect(
         padWallSeparation,
         props.leftPad,
         props.padWidth,
-        props.padHeight
+        props.leftPadHeight
       );
+
       // Draw right pad
       // ctx.fillStyle = "white"
+      console.log(props.leftPadHeight, " - right Height")
       ctx.fillRect(
         props.width - padWallSeparation - props.padWidth,
         props.rightPad,
         props.padWidth,
-        props.padHeight
+        props.rightPadHeight
       );
 
       // Draw ball
