@@ -65,7 +65,7 @@ export function Room() {
 	else if (location.pathname === "/board/chats" && chats.length === 0) {
 		return (
 			<div id="chat-no-messages">
-				No messages?
+				<p>No messages?</p>
 				<img src={NoMsgsImg} />
 			</div>
 		);
