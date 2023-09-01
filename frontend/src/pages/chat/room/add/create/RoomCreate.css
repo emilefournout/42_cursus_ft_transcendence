@@ -14,10 +14,6 @@
 	overflow-y: auto;
 }
 
-.wrapper-new-room > h2 {
-	margin-top: auto;
-}
-
 .wrapper-new-room > h2, .wrapper-new-room > h3 {
 	text-align: center;
 	font-size: clamp(0.4rem, 2.5vw, 0.8rem);
@@ -41,7 +37,7 @@
 .wrapper-new-room > button {
 	min-height: 1.6em;
 
-	margin-bottom: auto;
+	margin-bottom: 16px;
 
 	font-size: inherit;
 	padding: 0.3em;
@@ -49,7 +45,7 @@
 	transition: color .2s ease;
 }
 
-.wrapper-new-room > button:hover {
+.wrapper-new-room > button:hover, .wrapper-room-search-list > button:hover {
 	color: var(--Light-Text);
 }
 
@@ -82,4 +78,39 @@
 	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
 	text-align: center;
 	padding: 0.2rem;
+}
+
+#item-margin-top {
+	margin-top: auto;
+}
+
+#item-margin-bot {
+	margin-bottom: auto;
+}
+
+.wrapper-room-search-list {
+	width: 60%;
+
+	margin-bottom: 8px;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+
+	font-size: inherit;
+}
+
+.wrapper-room-search-list > div {
+	font-size: inherit;
+}
+
+.wrapper-room-search-list > button {
+	min-width: fit-content;
+	min-height: 1.4em;
+
+	font-size: inherit;
+	padding: 0.3em;
+
+	transition: color .2s ease;
 }
