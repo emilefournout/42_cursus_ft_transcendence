@@ -77,6 +77,10 @@
 	border-image: var(--LtR-Mooned-Cosmic) 1;
 }
 
+#delete-btn {
+	grid-column: 5;
+}
+
 #demote-btn {
 	grid-column: 3;
 
@@ -111,4 +115,45 @@
 
 	background-color: var(--Cosmic-Purple);
 	color: var(--Darks-Back);
+}
+
+
+
+/* Delete page */
+.param-subpage-container {
+	width: 100%;
+	height: 100%;
+
+	padding: 16px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+
+	color: var(--Light-Text);
+
+	overflow-y: auto;
+}
+
+.param-subpage-container > button {
+	padding: 0.3em;
+
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+
+	transition: color .15s ease, background-color .15s ease;
+}
+
+.param-subpage-container > button:hover {
+	color: var(--Light-Text);
+}
+
+#delete-page-del-btn {
+	background-color: var(--Crisped-Orange);
+}
+
+#delete-page-del-btn:hover {
+	color: var(--Crisped-Orange);
+	background-color: transparent;
 }
