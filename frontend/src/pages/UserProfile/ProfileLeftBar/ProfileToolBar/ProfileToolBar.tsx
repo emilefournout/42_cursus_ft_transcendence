@@ -2,10 +2,8 @@ import React, { useContext, useState } from "react";
 import "../ProfileLeftBar.css";
 import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { RequestTypeButton } from "./RequestTypeButton";
-import { useNavigate } from "react-router-dom";
 import ReloadBlackIcon from "../../../../common/reload_honey.svg";
 import AddFriendIcon from "./AddFriendIcon.svg";
-import { Dialog } from "../../../../components/Dialog";
 import { DialogContext } from "../../../Root/Root";
 
 export function ProfileToolBar() {
@@ -79,11 +77,12 @@ export function ProfileToolBar() {
             placeholder="Add Friend!"
             onChange={(e) => setNewFriend(e.target.value)}
           />
-          <img className="nav-icons" src={AddFriendIcon} onClick={addFriend} />
+          <img className="nav-icons" src={AddFriendIcon} onClick={addFriend} alt="Add friend icon" />
           <img
             className="nav-icons"
             src={ReloadBlackIcon}
             onClick={profileContext.updateFriends}
+            alt="Reload friend list icon"
           />
         </div>
         <div className="request-type-buttons">

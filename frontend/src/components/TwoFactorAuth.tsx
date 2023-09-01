@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { DialogContext } from "../pages/Root/Root";
 
 function TwoFactorAuth({ username }: { username: string | null }) {
@@ -35,7 +34,7 @@ function TwoFactorAuth({ username }: { username: string | null }) {
 
   return (
     <div className="settings-2fa-wrapper">
-      <img src={qrImage} />
+      <img src={qrImage} alt="QR for setting 2FA"/>
       <input
         type="text"
         placeholder="Code"

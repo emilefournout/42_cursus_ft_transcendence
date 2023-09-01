@@ -5,7 +5,6 @@ import "./RoomCreate.css";
 import { ChatSocket } from "../../../../services/socket";
 import { ChatInfo, ChatPageContext } from "../../Chat";
 import { useNavigate } from "react-router-dom";
-import { Dialog } from "../../../../components/Dialog";
 import { DialogContext } from "../../../Root/Root";
 
 export enum Visibility {

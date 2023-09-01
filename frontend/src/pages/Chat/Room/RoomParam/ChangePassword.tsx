@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import validator from "validator";
-import { Dialog } from "../../../../components/Dialog";
-import chat from "../../../../components/Chat";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../Room";
 import { Visibility } from "../RoomCreate/RoomCreate";

@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { Visibility } from "../RoomCreate/RoomCreate";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../Room";
-import { Dialog } from "../../../../components/Dialog";
 import { ChatPageContext } from "../../Chat";
 import { DialogContext } from "../../../Root/Root";
 
