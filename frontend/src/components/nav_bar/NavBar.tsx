@@ -19,7 +19,11 @@ export function NavBar() {
           <img src={userIcon}></img>
         </Link>
       </div>
-      <h2 className="txt txt-shadow-top nav-responsive-text">PONG</h2>
+      <Link
+        to="/board/"
+      >
+        <h2 className="txt txt-shadow-top nav-responsive-text">PONG</h2>
+      </Link>
       <Link
         to="/board/game"
         id="nav-right-side"

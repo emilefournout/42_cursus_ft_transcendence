@@ -18,6 +18,7 @@ import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
 import { GameData } from './types/game-info.class';
+import { CreateGameDto } from './dto/create-game.dto';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' }
@@ -59,7 +60,11 @@ export class GameGateway
   }
   
   @SubscribeMessage('create_room')
-  async handleCreateRoom(@ConnectedSocket() client: Socket) {
+  async handleCreateRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: CreateGameDto)
+  {
+      console.log(data)
     // client.join(uuid);
   }
 
