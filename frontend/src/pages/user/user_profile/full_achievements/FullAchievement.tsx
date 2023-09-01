@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< Updated upstream
 import { AchievementCard } from "../profile/achievements/AchievementCard";
-=======
-import { AchievementCard } from "../user/achievements/AchievementCard";
->>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 export interface Achievement {
   name: string;
