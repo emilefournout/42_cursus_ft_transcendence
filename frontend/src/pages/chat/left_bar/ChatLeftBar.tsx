@@ -3,9 +3,8 @@ import "./ChatLeftBar.css";
 import "./conversations/Conversations.css";
 import NewChatIcon from "../../../common/PlusIcon.svg";
 import ReloadBlackIcon from "../../../common/reload_black.svg";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
-import { Visibility } from "../room/add/create/RoomCreate";
 import { Conversations } from "./conversations/Conversations";
 
 export function LeftBar() {
@@ -17,12 +16,16 @@ export function LeftBar() {
       <div id="lb-top-wrapper">
         <span>Chats</span>
         <Link to="/board/chats/add">
-          <img className="nav-icons" src={NewChatIcon} />
+          <img
+            className="nav-icons"
+            src={NewChatIcon}
+            alt="New chat icon" />
         </Link>
         <img
           className="nav-icons"
           src={ReloadBlackIcon}
           onClick={chatPageContext.updateChat}
+          alt="Reload icon"
         />
       </div>
       {/* <Link to="/chats/room">*/}

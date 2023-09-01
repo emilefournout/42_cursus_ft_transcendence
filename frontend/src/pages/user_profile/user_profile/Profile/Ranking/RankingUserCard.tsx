@@ -1,6 +1,5 @@
 import React from "react";
 import { Avatar } from "../../../../../components/Avatar";
-import { useNavigate } from "react-router-dom";
 import { User } from "../../../../board/Board";
 import "./Ranking.css";
 
@@ -11,7 +10,6 @@ interface RankingUserCardProps {
 }
 
 export function RankingUserCard(props: RankingUserCardProps) {
-  const navigate = useNavigate();
   return (
     <div className="ranking-position-wrapper">
       <Avatar

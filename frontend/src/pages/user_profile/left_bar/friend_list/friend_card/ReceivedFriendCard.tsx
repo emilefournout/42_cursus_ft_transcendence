@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./FriendCard.css";
 import { ProfilePageContext } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
 import { FriendCardProps } from "./accepted_friend_card/AcceptedFriendCard";
-import { Dialog } from "../../../../../components/Dialog";
 import { DialogContext } from "../../../../root/Root";
 
 export function ReceivedFriendCard(props: FriendCardProps) {
