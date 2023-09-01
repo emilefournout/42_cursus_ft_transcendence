@@ -41,7 +41,7 @@
 .wrapper-new-room > button {
 	min-height: 1.6em;
 
-	margin-bottom: auto;
+	margin-bottom: 16px;
 
 	font-size: inherit;
 	padding: 0.3em;
@@ -82,4 +82,8 @@
 	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
 	text-align: center;
 	padding: 0.2rem;
+}
+
+#new-room-cancel-btn {
+	margin-bottom: auto;
 }
