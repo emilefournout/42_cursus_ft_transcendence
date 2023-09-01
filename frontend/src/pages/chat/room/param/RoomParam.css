@@ -14,7 +14,7 @@
 
 	font-size: clamp(0.4rem, 3vw, 0.8rem);
 
-	overflow-y : auto;
+	overflow-y: auto;
 }
 
 .room-param > input {
