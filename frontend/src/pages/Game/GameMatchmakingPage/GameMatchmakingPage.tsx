@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SEO from "../../../components/Seo";
 import { GameSocket } from "../../../services/socket";
@@ -7,19 +7,23 @@ import "./GameMatchmakingPage.css";
 export function GameMatchmakingPage() {
   const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
-  const username: string | null = localStorage.getItem("username");
-  let waiting = false;
+  let waiting = useRef(false);
 
   useEffect(() => {
-    gameSocket.emit("join_waiting_room");
-    gameSocket.on("game_found", (gameId) => {
-      navigate(`../${gameId}`);
-    });
-    return (() => {
-      gameSocket.emit("leave_waiting_room");
+    if (!waiting.current)
+    {
+      gameSocket.emit("join_waiting_room");
       gameSocket.off("game_found");
+      gameSocket.on("game_found", (gameId) => {
+        navigate(`../${gameId}`);
+      });
+      waiting.current = true
+    }
+    return (() => {
+      waiting.current = false
+      gameSocket.emit("leave_waiting_room");
     })
-  }, []);
+  }, [gameSocket, navigate]);
 
   return (
     <>
@@ -31,7 +35,9 @@ export function GameMatchmakingPage() {
         <div className="matchmaking-loader"></div>
         <p className="matchmaking-scaling">Finding new rival for you</p>
         <Link to="/board/game">
-          <button className="btn btn-fixed-height matchmaking-scaling" onClick={() => gameSocket.emit("leave_waiting_room")}> 
+          <button className="btn btn-fixed-height matchmaking-scaling" onClick={() => {
+            waiting.current = false
+          }}> 
             Cancel
           </button>
         </Link>

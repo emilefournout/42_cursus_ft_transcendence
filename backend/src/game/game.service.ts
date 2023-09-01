@@ -4,7 +4,7 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GameData } from './types/game-info.class';
+import { GameData, GameDataOptions } from './types/game-info.class';
 import { Socket } from 'socket.io';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';
@@ -12,11 +12,10 @@ import { ConnectionStorage } from './types/connection-storage.class';
 
 @Injectable()
 export class GameService {
-
   private userConnections = new ConnectionStorage();
   private waitingRoom: Set<Socket> = new Set<Socket>();
-  private createdRoom: Map<Socket, GameData> = new Map<Socket, GameData>();
-  private privateRoom: Map<Socket, GameData> = new Map<Socket, GameData>();
+  private createdRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
+  private privateRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
   private games: Map<string, GameData> = new Map<string, GameData>();
 
   constructor(private prisma: PrismaService) {}
@@ -75,35 +74,43 @@ export class GameService {
     }
   }
 
-  async handleWaitingRoom(clientSocket: Socket): Promise<GameState> {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        id: this.userConnections.getUserIdFromSocket(clientSocket)
-      }
-    });
+  customizeGame(client: Socket, gameOptions: GameDataOptions) {
+    this.createdRoom.set(client, gameOptions)
+  }
 
-    if (user) {
-      this.waitingRoom.add(clientSocket);
-
-      if (this.waitingRoom.size >= 2) {
-        const setIterator = this.waitingRoom.values()
-        const player1: Socket = setIterator.next().value;
-        const player2: Socket = setIterator.next().value;
-        const player1Id = this.getUserIdFromSocket(player1);
-        const player2Id = this.getUserIdFromSocket(player2);
-        this.waitingRoom.delete(player1)
-        this.waitingRoom.delete(player2)
-        const game = await this.createGame(player1Id, player2Id);
-
-        const gameData = new GameData(player1Id, player2Id)
-        this.games.set(game, gameData);
-        return new GameState(game,
-          {socket: player1, id: player1Id},
-          {socket: player2, id: player2Id},
-        );
-      }
+  async handleWaitingRoom(): Promise<GameState> {
+    if (this.waitingRoom.size > 0 && this.createdRoom.size > 0) {
+      const {player: player1, gameOptions} = this.peekGameFromCreatedRoom();
+      const player2: Socket = this.peekPlayerFromWaitingRoom();
+      const player1Id: number = this.getUserIdFromSocket(player1);
+      const player2Id: number = this.getUserIdFromSocket(player2);
+      const game = await this.createGame(player1Id, player2Id);
+      const gameData = new GameData(player1Id, player2Id, gameOptions)
+      this.games.set(game, gameData);
+      return new GameState(game,
+        {socket: player1, id: player1Id},
+        {socket: player2, id: player2Id},
+      );
     }
-    return null;
+  }
+
+  private peekPlayerFromWaitingRoom() {
+    const setIterator = this.waitingRoom.values();
+    const player: Socket = setIterator.next().value;
+    this.waitingRoom.delete(player);
+    return player;
+  }
+
+  private peekGameFromCreatedRoom() : {player: Socket, gameOptions: GameDataOptions}{
+    const setIterator = this.createdRoom.keys();
+    const player: Socket = setIterator.next().value;
+    const gameOptions = this.createdRoom.get(player)
+    this.createdRoom.delete(player);
+    return {player, gameOptions};
+  }
+
+  addToWaitingRoom(client: Socket) {
+    this.waitingRoom.add(client)
   }
 
   leaveWaitingRoom(client: Socket) {
@@ -142,6 +149,13 @@ export class GameService {
 
   public unregisterConnection(socket: Socket) {
     this.userConnections.removeUserBySocket(socket)
+    this.createdRoom.delete(socket)
     this.waitingRoom.delete(socket)
   }
+
+  public debug_room_status() {
+    console.log("Waiting room: ", this.waitingRoom.size)
+    console.log("Created room: ", this.createdRoom.size)
+  }
 }
+

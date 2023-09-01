@@ -11,7 +11,7 @@ export function GameHomePage() {
         description="Start a game with someone from the Internet with matchmaking or invite one of your friends."
       />
       <div className="wrapper-matchmaking">
-        <Link className="btn game-creation-btn" to="/board/game/matchmaking">
+        <Link className="btn game-creation-btn btn-top" to="/board/game/matchmaking">
           Matchmaking
         </Link>
         <div className="wrapper-row txt game-creation-divider">Or</div>

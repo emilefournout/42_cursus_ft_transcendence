@@ -295,6 +295,13 @@ button {
 	-webkit-background-clip: text;
 }
 
+.btn-top {
+	--colour-fill: var(--TtB-Honey-Paled);
+
+	border-top-left-radius: 32px;
+	border-top-right-radius: 32px;
+}
+
 .btn-bottom {
 	--colour-fill: var(--TtB-Honey-Paled);
 
