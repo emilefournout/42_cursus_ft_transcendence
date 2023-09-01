@@ -1,5 +1,4 @@
-import { error } from 'console';
-import { io, Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 export class ChatSocket {
     private static singleton: ChatSocket;

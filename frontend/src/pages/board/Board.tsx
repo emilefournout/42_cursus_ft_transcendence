@@ -1,10 +1,4 @@
-import {
-  Link,
-  Navigate,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/nav_bar/NavBar";
