@@ -4,10 +4,10 @@ import { UserBasicInfoDto } from './dto/info-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { url } from 'inspector';
-import { UserNotFoundException } from './exceptions/user-service.exception';
-import { OnlineStatus } from '@prisma/client';
+import { OnlineStatus, Prisma } from '@prisma/client';
 import { GameService } from 'src/game/game.service';
 import { ScoreField } from './types/scorefield.enum';
+import { UserServiceErrors } from './exceptions/user-service.exception';
 
 @Injectable()
 export class UserService {
@@ -92,19 +92,28 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto){
-    if (!updateUserDto.username)
-      throw new BadRequestException('Empty request')
+  async updateUsername(id: number, newUsername: string){
     const user = await this.findUserById(id);
     if (!user)
       return null;
-    const updatedUser = await this.prisma.user.update({
-      where: {
-        id: id
-      },
-      data: updateUserDto
-    })
-    return updatedUser;
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: {
+          id: id
+        },
+        data: {
+          username: newUsername
+        }
+      })
+      return updatedUser;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new UserServiceErrors.UsernameExistsException();
+        }
+      }
+      throw e
+    }
   }
   
   async updateScore(userId: number, field: ScoreField) {
@@ -135,7 +144,7 @@ export class UserService {
   async getUserHistory(id: number) {
     const user = await this.findUserById(id);
     if(!user)
-      throw new UserNotFoundException();
+      throw new UserServiceErrors.UserNotFoundException();
     
     const userGames = await this.prisma.$queryRaw`
       SELECT

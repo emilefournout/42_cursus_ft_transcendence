@@ -29,9 +29,16 @@ export function ChangeNamePage() {
 					localStorage.setItem("username", newUsername);
 					setErrorMessage("username changed");
 					boardContext?.updateMe();
+				} else if (response.status === 400) {
+					response.json().then((data) => {
+						setErrorMessage(data.message ||  " Could not change username");
+					});
 				} else {
 					setErrorMessage("Error while changing username");
 				}
+			})
+			.catch((error) => {
+				setErrorMessage("An error occurred while making the request");
 			});
 		}
 		setNewUsername("");

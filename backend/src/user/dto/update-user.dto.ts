@@ -19,9 +19,9 @@ export class UpdateUserRelationDto {
 
 export class UpdateUserDto {
   @ApiProperty()
-  @IsOptional()
+  @IsDefined()
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  username?: string
+  username: string
 }
