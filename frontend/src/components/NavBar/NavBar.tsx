@@ -15,7 +15,7 @@ export function NavBar() {
         <Link to="/board/chats" className="nav-icons">
           <img src={chatsIcon}></img>
         </Link>
-        <Link to="/board/userAccount" className="nav-icons">
+        <Link to="/board/user-account" className="nav-icons">
           <img src={userIcon}></img>
         </Link>
       </div>
