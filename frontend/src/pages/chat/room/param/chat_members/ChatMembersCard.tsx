@@ -7,6 +7,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { BoardContext } from "../../../../board/Board";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
+import { MuteDialogContext } from "../RoomParam";
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -15,8 +16,8 @@ export interface ChatMembersCardProps {
 }
 
 export function ChatMembersCard(props: ChatMembersCardProps) {
-  const [isMuteDialogOpen, setIsMuteDialogOpen] = useState(false);
   const roomContextArgs = useOutletContext<RoomContextArgs>();
+  const muteDialogContext = useContext(MuteDialogContext);
   const chadId = roomContextArgs.chat.id;
   const navigate = useNavigate();
 
@@ -59,18 +60,6 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       })
     ).catch((error) => console.log(error));
 
-  const mute = (time: number) =>
-    action(
-      `chat/${chadId}/mute`,
-      "POST",
-      JSON.stringify({ userId: props.member.userId, muteTime: time })
-    )
-      .then(() => {
-        setIsMuteDialogOpen(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   const unmute = () => {
     action(
       `chat/${chadId}/mute`,
@@ -87,11 +76,6 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 
   return (
     <>
-      <MuteDialog
-        open={isMuteDialogOpen}
-        setOpen={setIsMuteDialogOpen}
-        mute={mute}
-      />
       <div
         className="room-param-user-name ellipsed-txt"
         onClick={() => navigate(`/board/user-account/${props.member.userId}`)}
@@ -123,7 +107,10 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
               unmute
             </button>
           ) : (
-            <button id="mute-btn" onClick={() => setIsMuteDialogOpen(true)}>
+            <button
+              id="mute-btn"
+              onClick={() => muteDialogContext.mute(props.member.userId)}
+            >
               mute
             </button>
           )}
