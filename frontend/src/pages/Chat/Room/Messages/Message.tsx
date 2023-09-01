@@ -41,13 +41,13 @@ export function Message(props: MessageProps) {
 		<>
 			{props.isMyMessage ? (
 				<div className="message-container-right">
-					<div className="wrapper-col message-date-right">{"you " + date}</div>
+					<div className="wrapper-col message-date" style={{"textAlign": "right"}}>{"you " + date}</div>
 					<div className={props.msgClasses}>{props.message.text}</div>
 				</div>
 			) : (
 				<div className="message-container-left">
 					<div className={props.msgClasses}>{props.message.text}</div>
-					<div className="wrapper-col message-date-left">
+					<div className="wrapper-col message-date" style={{"textAlign": "left"}}>
 						{userName + " " + date}
 					</div>
 				</div>
