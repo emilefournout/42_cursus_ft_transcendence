@@ -117,7 +117,7 @@ export function RoomCreate() {
 	return (
 		<>
 			<div className="wrapper-new-room">
-				<h2 className="txt-light">Create a new room</h2>
+				<h2 id="item-margin-top" className="txt-light">Create a new room</h2>
 				<input
 					type="text"
 					placeholder="Room name"
@@ -166,7 +166,7 @@ export function RoomCreate() {
 				)}
 				<div>{errorMessage}</div>
 				<button onClick={() => validateConfirm()}>create room</button>
-				<button id="new-room-cancel-btn" onClick={() => navigate("/board/chats/add")}>cancel</button>
+				<button id="item-margin-bot" onClick={() => navigate("/board/chats/add")}>cancel</button>
 			</div>
 		</>
 	);
