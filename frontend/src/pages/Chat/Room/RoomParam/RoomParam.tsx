@@ -22,7 +22,7 @@ export function RoomParam() {
 		<div className="room-param">
 			<AddUser />
 			{isOwner && <UpdateVisibilityButtons />}
-			{/* <ChatMembers isManager={isOwner || isAdmin} /> */}
+			<ChatMembers isManager={isOwner || isAdmin} />
 		</div>
 	);
 }

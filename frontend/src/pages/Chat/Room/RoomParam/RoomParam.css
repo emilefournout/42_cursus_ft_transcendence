@@ -56,3 +56,59 @@
 
 	font-size: calc(var(--params-btn-font-size) - 0.05rem);
 }
+
+.room-param-user-name {
+	grid-column: 1;
+
+	padding: 8px;
+
+	cursor: pointer;
+
+	border-bottom: 2px solid var(--Honey-Yellow);
+	border-image: var(--Cornered-Honey-Crisped) 1;
+
+	font-size: inherit;
+	color: var(--Light-Text);
+
+	transition: border-image .4s ease;
+}
+
+.room-param-user-name:hover {
+	border-image: var(--LtR-Mooned-Cosmic) 1;
+}
+
+#demote-btn {
+	grid-column: 3;
+
+	border: none;
+
+	background-color: var(--Crisped-Orange);
+	color: var(--Browned-Text);
+}
+
+#promote-btn {
+	grid-column: 3;
+
+	border: none;
+
+	background-color: var(--Mooned-Teal);
+	color: var(--Darks-Back);
+}
+
+#unmute-btn {
+	grid-column: 4;
+
+	border: none;
+
+	background-color: var(--Crisped-Orange);
+	color: var(--Browned-Text);
+}
+
+#mute-btn {
+	grid-column: 4;
+
+	border: none;
+
+	background-color: var(--Cosmic-Purple);
+	color: var(--Darks-Back);
+}

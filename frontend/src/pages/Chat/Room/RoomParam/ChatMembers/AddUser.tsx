@@ -60,7 +60,7 @@ export function AddUser() {
 				value={newUser}
 				onChange={(e) => setNewUser(e.target.value)}
 			/>
-			<img src={addChatterIcon} onClick={addUser} />
+			<img src={addChatterIcon} style={{cursor: "pointer"}} onClick={addUser} />
 		</>
 	);
 }

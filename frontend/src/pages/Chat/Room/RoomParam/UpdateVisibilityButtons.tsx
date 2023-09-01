@@ -49,9 +49,9 @@ export function UpdateVisibilityButtons() {
 	} else {
 		return (
 			<>
-				{/* {roomContextArgs.chat.visibility} Room */}
 				{updateIsSelected ? (
 					<>
+						{roomContextArgs.chat.visibility} Room
 						<div onClick={() => updateVisibility(Visibility.PROTECTED)}>
 							Protected
 						</div>{" "}
