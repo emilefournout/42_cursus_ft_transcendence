@@ -1,8 +1,9 @@
 .wrapper-new-room {
 	height: 100%;
 
+	padding: 16px;
+
 	display: flex;
-	justify-content: safe center;
 	align-items: center;
 	flex-direction: column;
 	flex-grow: 1;
@@ -11,6 +12,10 @@
 	font-size: clamp(0.3rem, 2.5vw, 0.6rem);
 
 	overflow-y: auto;
+}
+
+.wrapper-new-room > h2 {
+	margin-top: auto;
 }
 
 .wrapper-new-room > h2, .wrapper-new-room > h3 {
@@ -35,6 +40,8 @@
 
 .wrapper-new-room > button {
 	min-height: 1.6em;
+
+	margin-bottom: auto;
 
 	font-size: inherit;
 	padding: 0.3em;
