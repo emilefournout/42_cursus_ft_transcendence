@@ -71,7 +71,7 @@ export function UpdateVisibilityButtons() {
 						Change Passwd
 					</button>
 				)}
-				<button onClick={() => navigate("delete")}>Delete Room</button>
+				<button id="delete-btn" onClick={() => navigate("delete")}>Delete Room</button>
 			</>
 		);
 	}

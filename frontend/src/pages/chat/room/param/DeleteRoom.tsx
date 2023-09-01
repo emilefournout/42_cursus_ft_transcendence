@@ -35,7 +35,7 @@ export function DeleteRoom() {
 	};
 
 	return (
-		<div className="delete-page-container">
+		<div className="param-subpage-container">
 			<button id="delete-page-del-btn" onClick={() => delete_room()}>delete</button>
 			<button onClick={() => navigate(back_route)}>back</button>
 		</div>

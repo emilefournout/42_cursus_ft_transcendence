@@ -61,12 +61,12 @@
 	font-size: clamp(0.2rem, 2.5vw, 0.5rem);
 }
 
-#wrapper-new-room-pswrd {
+.wrapper-new-room-pswrd {
 	display: grid;
 	grid-gap: 8px;
 }
 
-#wrapper-new-room-pswrd > input {
+.wrapper-new-room-pswrd > input {
 	height: 1.6em;
 
 	padding: 0.4em;

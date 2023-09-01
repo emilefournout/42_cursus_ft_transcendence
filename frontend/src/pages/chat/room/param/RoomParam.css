@@ -77,6 +77,10 @@
 	border-image: var(--LtR-Mooned-Cosmic) 1;
 }
 
+#delete-btn {
+	grid-column: 5;
+}
+
 #demote-btn {
 	grid-column: 3;
 
@@ -116,18 +120,24 @@
 
 
 /* Delete page */
-.delete-page-container {
+.param-subpage-container {
 	width: 100%;
 	height: 100%;
+
+	padding: 16px;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 16px;
+
+	color: var(--Light-Text);
+
+	overflow-y: auto;
 }
 
-.delete-page-container > button {
+.param-subpage-container > button {
 	padding: 0.3em;
 
 	font-size: clamp(0.4rem, 2vw, 0.8rem);
@@ -135,7 +145,7 @@
 	transition: color .15s ease, background-color .15s ease;
 }
 
-.delete-page-container > button:hover {
+.param-subpage-container > button:hover {
 	color: var(--Light-Text);
 }
 
