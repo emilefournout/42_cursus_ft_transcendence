@@ -10,14 +10,12 @@
 #chat-no-messages {
 	--no-msgs-size: clamp(100px, 40vw, 1000px);
 
+	flex-grow: 1;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
-	position: absolute;
-	left: calc(50% - var(--no-msgs-size) / 2);
-	top: 25%;
 
 	text-align: center;
 	color: var(--Light-Text);

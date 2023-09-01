@@ -9,12 +9,13 @@ import {
 	useParams,
 } from "react-router-dom";
 import { ChatInfo } from "../Chat";
-import NoMsgsImg from "../ChatLeftBar/NoMsgs.png";
+import NoMsgsImg from "../NoMsgs.png";
 
 export interface ChatFullInfo extends ChatInfo {
 	password?: string;
 	members?: Array<Member>;
 }
+
 export interface Member {
 	userId: number;
 	createdAt: string;
@@ -29,6 +30,7 @@ export interface RoomContextArgs {
 	chat: ChatFullInfo;
 	getChatInfo: (chat: ChatInfo) => void;
 }
+
 export function Room() {
 	const location = useLocation();
 	const chats: Array<ChatInfo> | undefined = useOutletContext();
