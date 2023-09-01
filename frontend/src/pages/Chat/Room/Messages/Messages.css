@@ -10,7 +10,7 @@
 	overflow-y: auto;
 }
 
-.message-container {
+.message-container-right {
 	width: 100%;
 
 	margin-bottom: 8px;
@@ -18,6 +18,17 @@
 
 	display: flex;
 	justify-content: flex-end;
+	align-items: baseline;
+}
+
+.message-container-left {
+	width: 100%;
+
+	margin-bottom: 8px;
+	gap: 4px;
+
+	display: flex;
+	justify-content: flex-start;
 	align-items: baseline;
 }
 
