@@ -17,9 +17,13 @@ export function RoomInput({ chatSocket }: InputProps) {
   const userId = boardContext?.me.id;
   const dialogContext = useContext(DialogContext);
   const setDialog = dialogContext.setDialog;
+
+  const isWhiteSpaceString = (str: string): boolean => {
+    return str.trim().length === 0;
+  };
   const sendMessage = () => {
-    if (input.length === 0) {
-      setDialog("Please enter a message.");
+    if (isWhiteSpaceString(input)) {
+      return;
     } else if (!userId) {
       setDialog("no user id");
     } else if (!id) {
