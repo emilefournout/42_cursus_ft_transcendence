@@ -14,7 +14,7 @@ import { ConnectionStorage } from './types/connection-storage.class';
 export class GameService {
   private userConnections = new ConnectionStorage();
   private waitingRoom: Set<Socket> = new Set<Socket>();
-  private createdRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
+  private customizedRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
   private privateRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
   private games: Map<string, GameState> = new Map<string, GameState>();
 
@@ -75,14 +75,14 @@ export class GameService {
   }
 
   customizeGame(client: Socket, gameOptions: GameDataOptions) {
-    this.createdRoom.set(client, gameOptions)
+    this.customizedRoom.set(client, gameOptions)
   }
 
   async handleWaitingRoom(): Promise<GameState> {
     let player1 : Socket,  player2 : Socket;
     let gameOptions: GameDataOptions;
 
-    if (this.waitingRoom.size >= 1 && this.createdRoom.size >= 1) {
+    if (this.waitingRoom.size >= 1 && this.customizedRoom.size >= 1) {
       const gameRoom = this.peekGameFromCreatedRoom();
       player1 = gameRoom.player;
       gameOptions = gameRoom.gameOptions;
@@ -115,10 +115,10 @@ export class GameService {
   }
 
   private peekGameFromCreatedRoom() : {player: Socket, gameOptions: GameDataOptions}{
-    const setIterator = this.createdRoom.keys();
+    const setIterator = this.customizedRoom.keys();
     const player: Socket = setIterator.next().value;
-    const gameOptions = this.createdRoom.get(player)
-    this.createdRoom.delete(player);
+    const gameOptions = this.customizedRoom.get(player)
+    this.customizedRoom.delete(player);
     return {player, gameOptions};
   }
 
@@ -162,13 +162,13 @@ export class GameService {
 
   public unregisterConnection(socket: Socket) {
     this.userConnections.removeUserBySocket(socket)
-    this.createdRoom.delete(socket)
+    this.customizedRoom.delete(socket)
     this.waitingRoom.delete(socket)
   }
 
   public debug_room_status() {
     console.log("Waiting room: ", this.waitingRoom.size)
-    console.log("Created room: ", this.createdRoom.size)
+    console.log("Created room: ", this.customizedRoom.size)
   }
 }
 
