@@ -17,7 +17,7 @@ import { UserService } from 'src/user/user.service';
 import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
-import { GameData } from './types/game-info.class';
+import { GameData, GameDataOptions } from './types/game-info.class';
 import { CreateGameDto } from './dto/create-game.dto';
 
 @WebSocketGateway(3002, {
@@ -55,17 +55,26 @@ export class GameGateway
   }
 
   handleDisconnect(client: Socket) {
-    this.gameService.unregisterConnection(client);
     console.log('Disconneted from ' + client.id);
+    this.gameService.unregisterConnection(client);
   }
   
   @SubscribeMessage('create_room')
   async handleCreateRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: CreateGameDto)
+    @MessageBody() gameDataOptions: CreateGameDto)
   {
-      console.log(data)
-    // client.join(uuid);
+    console.log('Customizing a game ' + client.id);
+    this.gameService.customizeGame(client, gameDataOptions)
+    const game = await this.gameService.handleWaitingRoom();
+    if (game) {
+      game.firstPlayer.socket.join(game.id);
+      game.secondPlayer.socket.join(game.id);
+      this.server.to(game.id).emit('game_found', game.id);
+      const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
+      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
+      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+    }
   }
 
   @SubscribeMessage('join_active_room')
@@ -82,8 +91,8 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log("Joining waiting room ", client.id)
-    const game = await this.gameService.handleWaitingRoom(client);
-
+    this.gameService.addToWaitingRoom(client)
+    const game = await this.gameService.handleWaitingRoom();
     if (game) {
       game.firstPlayer.socket.join(game.id);
       game.secondPlayer.socket.join(game.id);
@@ -95,15 +104,17 @@ export class GameGateway
   }
 
   @SubscribeMessage('leave_waiting_room')
-  handleLeaveWaitingRoom(
-    @ConnectedSocket() client: Socket,
-  ) {
+  handleLeaveWaitingRoom(@ConnectedSocket() client: Socket) {
     console.log("Leaving waiting room ", client.id)
     this.gameService.leaveWaitingRoom(client);
   }
 
   @SubscribeMessage('move_user')
-  async handleKeyPressed(client: Socket, @MessageBody() data: {gameId: string, direction: string}) {
+  async handleKeyPressed(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: {gameId: string, direction: string}
+  )
+  {
     this.gameService.movePad(client, data.gameId, data.direction);
   }
 

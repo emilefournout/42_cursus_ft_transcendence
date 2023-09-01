@@ -1,8 +1,7 @@
 export class GameDataOptions {
-  private maxGoals: number;
-  constructor({maxGoals: number}) {
-    
-  }
+  maxGoals: number;
+  speed: number;
+  powerUps: boolean;
 }
 export class GameData {
   private player1Id: number;
@@ -16,19 +15,27 @@ export class GameData {
   private padWidth: number = 10;
   private padHeight: number = 60;
   private ballRadius: number = 8;
-  private leftPad: number = 10;
-  private rightPad: number = 150;
+  private leftPad: number = Math.random() * (this.height - this.padHeight);
+  private rightPad: number = Math.random() * (this.height - this.padHeight);
   private ballX: number = 200;
   private ballY: number = 150;
   private padVelocity: number = 30;
   private padWallSeparation: number = 20;
-  private velocityX: number = Math.random() + 3;
-  private velocityY: number = Math.random() + 3;
+  private velocityX: number = 3;
+  private velocityY: number = 3;
+  private powerUps: boolean = false;
 
   constructor(player1Id:number,  player2Id:number, gameOptions?: GameDataOptions)
   {
     this.player1Id = player1Id
     this.player2Id = player2Id
+    if (gameOptions)
+    {
+      this.maxGoals = gameOptions.maxGoals
+      this.velocityX = gameOptions.speed * 3
+      this.velocityY = gameOptions.speed * 3
+      this.powerUps = gameOptions.powerUps
+    }
   }
 
   

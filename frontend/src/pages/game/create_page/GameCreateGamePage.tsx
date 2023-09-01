@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SEO from "../../../components/Seo";
 import "./GameCreateGamePage.css";
 import { GameSocket } from "../../../services/socket";
@@ -13,15 +13,20 @@ export function GameCreateGamePage() {
 	const gameSocket = GameSocket.getInstance().socket;
 	const MAX_GOALS = 25;
 	const MIN_GOALS = 5;
+	let waiting = useRef(false);
 
 	useEffect(() => {
-		gameSocket.off("game_found");
-		gameSocket.on("game_found", (gameId) => {
-			navigate(`../${gameId}`);
-		});
-		return (() => {
-			gameSocket.emit("leave_waiting_room");
+		if (!waiting.current)
+    	{
 			gameSocket.off("game_found");
+			gameSocket.on("game_found", (gameId) => {
+				navigate(`../${gameId}`);
+			});
+			waiting.current = true
+		}
+		return (() => {
+			waiting.current = false
+			gameSocket.emit("leave_creating_room");
 		})
 	}, [gameSocket, navigate]);
 
@@ -65,6 +70,7 @@ export function GameCreateGamePage() {
 											powerUps
 										}
 									);
+									waiting.current = false
 									setHiddenForm(true)
 								}
 							}
