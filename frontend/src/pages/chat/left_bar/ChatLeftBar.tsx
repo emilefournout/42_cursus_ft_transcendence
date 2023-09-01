@@ -8,12 +8,9 @@ import { ChatInfo, ChatPageContext } from "../Chat";
 import { Visibility } from "../room/add/create/RoomCreate";
 import { Conversations } from "./conversations/Conversations";
 
-export interface LeftBarProps {
-  chats: Array<ChatInfo> | undefined;
-}
-
-export function LeftBar(props: LeftBarProps) {
+export function LeftBar() {
   const chatPageContext = React.useContext(ChatPageContext);
+  const chats = chatPageContext.chats;
 
   return (
     <div id="lb-main-wrapper" className="wrapper-col">
@@ -30,8 +27,8 @@ export function LeftBar(props: LeftBarProps) {
       </div>
       {/* <Link to="/chats/room">*/}
       <div id="lb-bot-wrapper">
-        {props.chats &&
-          props.chats.map((chat: ChatInfo) => {
+        {chats &&
+          chats.map((chat: ChatInfo) => {
             return <Conversations chat={chat} key={chat.id} />;
           })}
       </div>

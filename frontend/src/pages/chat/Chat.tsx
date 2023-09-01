@@ -12,6 +12,7 @@ export interface ChatInfo {
 }
 interface ChatPageContextArgs {
   updateChat: () => Promise<void>;
+  chats: ChatInfo[] | undefined;
 }
 
 export const ChatPageContext = React.createContext({} as ChatPageContextArgs);
@@ -41,9 +42,13 @@ export function ChatPage() {
         description="Start a conversation now with a friends or join a channel."
       />
       <div id="chatpage-container">
-        <ChatPageContext.Provider value={{ updateChat: updateChats }}>
-          <LeftBar chats={chats} />
-          <Outlet context={chats} />
+        <ChatPageContext.Provider
+          value={
+            { updateChat: updateChats, chats: chats } as ChatPageContextArgs
+          }
+        >
+          <LeftBar />
+          <Outlet />
         </ChatPageContext.Provider>
         {/*<Room />*/}
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RoomToolBar } from "./tool_bar/RoomToolBar";
 import "./Room.css";
 import {
@@ -8,7 +8,7 @@ import {
   useOutletContext,
   useParams,
 } from "react-router-dom";
-import { ChatInfo } from "../Chat";
+import { ChatInfo, ChatPageContext } from "../Chat";
 import NoMsgsImg from "../NoMsgs.png";
 
 export interface ChatFullInfo extends ChatInfo {
@@ -33,7 +33,8 @@ export interface RoomContextArgs {
 
 export function Room() {
   const location = useLocation();
-  const chats: Array<ChatInfo> | undefined = useOutletContext();
+  const chatPageContext = useContext(ChatPageContext);
+  const chats: Array<ChatInfo> | undefined = chatPageContext.chats;
   const { id } = useParams();
   const [chat, setChat] = useState<ChatFullInfo | undefined>(undefined);
 

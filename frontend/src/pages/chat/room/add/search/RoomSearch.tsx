@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChatInfo } from "../../../Chat";
+import { ChatInfo, ChatPageContext } from "../../../Chat";
 
 export function RoomSearch() {
   const navigate = useNavigate();
@@ -8,6 +8,8 @@ export function RoomSearch() {
   const [searchResults, setSearchResults] = useState<
     Array<ChatInfo> | undefined
   >(undefined);
+  const chatPageContext = useContext(ChatPageContext);
+  const chats = chatPageContext.chats;
 
   const search_room = (search_input: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/chat/search/${search_input}`, {
@@ -54,7 +56,6 @@ export function RoomSearch() {
       />
       {searchResults &&
         searchResults.map((chat) => {
-            if ()
           return (
             <div key={chat.id}>
               <div
