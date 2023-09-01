@@ -4,7 +4,7 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GameData, GameDataOptions } from './types/game-info.class';
+import { GameData, GameDataOptions } from './types/game-data.class';
 import { Socket } from 'socket.io';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';

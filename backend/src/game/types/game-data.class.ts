@@ -3,6 +3,12 @@ export class GameDataOptions {
   speed: number;
   powerUps: boolean;
 }
+
+enum BallSize {
+  Small = 5,
+  Normal = 8,
+  Big = 15,
+}
 export class GameData {
   private readonly padHeight: number = 60;
   private player1Id: number;
@@ -16,7 +22,7 @@ export class GameData {
   private padWidth: number = 10;
   private leftPadHeight: number = 60;
   private rightPadHeight: number = 60;
-  private ballRadius: number = 8;
+  private ballRadius: number = BallSize.Normal;
   private leftPad: number = Math.random() * (this.height - this.leftPadHeight);
   private rightPad: number = Math.random() * (this.height - this.rightPadHeight);
   private ballX: number = 200;
@@ -135,13 +141,13 @@ export class GameData {
       this.ballX =
         this.width - this.padWallSeparation - this.padWidth;
     } else if (this.ballX + this.ballRadius > this.width) {
-      this.increasePlayer1Score();
+      this.increasePlayerScore(1);
       this.ballX = 400;
       this.ballY = 150;
       this.velocityX = -(Math.random() + 3);
       this.velocityY = Math.random() + 3;
     } else if (this.ballX - this.ballRadius < 0) {
-      this.increasePlayer2Score();
+      this.increasePlayerScore(2)
       this.ballX = 200;
       this.ballY = 150;
       this.velocityX = Math.random() + 3;
@@ -182,23 +188,46 @@ export class GameData {
           this.rightPad + this.rightPadHeight)
     );
   }
-  private increasePlayer1Score() {
-    this.player1Score += 1
-    if (this.player1Score >= this.maxGoals)
-      this.finish()
-    this.checkAndGiveAdvantage()
+
+  private increasePlayerScore(playerNumber: 1 | 2) {
+    if (playerNumber === 1)
+    {
+      this.player1Score += 1
+      if (this.player1Score >= this.maxGoals)
+        this.finish()
+    }
+    else
+    {
+      this.player2Score += 1
+      if (this.player2Score >= this.maxGoals)
+        this.finish()
+    }
+    if (this.powerUps)
+    {
+      this.checkAndGiveAdvantage()
+      this.randomizeBallSize()
+    }
   }
-  
-  private increasePlayer2Score() {
-    this.player2Score += 1
-    if (this.player2Score >= this.maxGoals)
-      this.finish()
-    this.checkAndGiveAdvantage()
+
+  private randomizeBallSize()
+  {
+    const rand = Math.floor(Math.random() * 3);
+    switch (rand) {
+      case 0:
+        this.ballRadius = BallSize.Small;
+        break;
+      case 1:
+        this.ballRadius = BallSize.Normal;
+        break;
+      case 2:
+        this.ballRadius = BallSize.Big;
+        break;
+      default:
+        break;
+    }
   }
 
   private checkAndGiveAdvantage() {
-    if (!this.powerUps)
-      return;
     if (Math.abs(this.player1Score - this.player2Score) >= 3)
     {
       if (this.player1Score < this.player2Score)
@@ -213,7 +242,7 @@ export class GameData {
     }
   }
 
-  giveAdvantagePlayer1() {
+  private giveAdvantagePlayer1() {
     if (this.leftPadHeight === this.padHeight * 1.50)
       return;
     if ((this.padHeight * 1.50) + this.leftPad <= this.height)
@@ -222,13 +251,13 @@ export class GameData {
     }
     else
     {
-      let difference = this.height - (this.leftPadHeight * 1.50 + this.leftPad)
+      let difference = ((this.padHeight * 1.50) + this.leftPad) - this.height
       this.leftPad -= difference
       this.leftPadHeight = this.padHeight * 1.50
     }
   }
 
-  giveAdvantagePlayer2() {
+  private giveAdvantagePlayer2() {
     if (this.rightPadHeight === this.padHeight * 1.50)
       return ;
     if ((this.padHeight * 1.50) + this.rightPad <= this.height)
@@ -237,7 +266,7 @@ export class GameData {
     }
     else
     {
-      let difference = this.height - (this.rightPadHeight * 1.50 + this.rightPad)
+      let difference = (this.rightPadHeight * 1.50 + this.rightPad) - this.height
       this.rightPad -= difference
       this.rightPadHeight = this.padHeight * 1.50
     }
@@ -247,5 +276,3 @@ export class GameData {
     this.finished = true
   }  
 }
-
-

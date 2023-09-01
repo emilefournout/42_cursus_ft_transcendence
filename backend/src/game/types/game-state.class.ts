@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { GameData, GameDataOptions } from './game-info.class';
+import { GameData, GameDataOptions } from './game-data.class';
 
 export class GameState {
   private gameId: string;

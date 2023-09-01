@@ -17,7 +17,7 @@ import { UserService } from 'src/user/user.service';
 import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
-import { GameData, GameDataOptions } from './types/game-info.class';
+import { GameData, GameDataOptions } from './types/game-data.class';
 import { CreateGameDto } from './dto/create-game.dto';
 
 @WebSocketGateway(3002, {
