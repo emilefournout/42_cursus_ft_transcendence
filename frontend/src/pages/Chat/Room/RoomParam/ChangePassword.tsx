@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import validator from "validator";
 import { Dialog } from "../../../../components/Dialog";
 import chat from "../../../../components/Chat";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../Room";
 import { Visibility } from "../RoomCreate/RoomCreate";
+import { ChatPageContext } from "../../Chat";
+import { DialogContext } from "../../../Root/Root";
 
 enum passwordStrength {
   EMPTY = "Choose a password",
@@ -24,6 +26,9 @@ export function ChangePassword() {
   const navigate = useNavigate();
   const location = useLocation();
   const backroute = location.pathname.replace("changePassword", "");
+  const chatPageContext = useContext(ChatPageContext);
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
 
   const clearState = (): void => {
     setPasswordSecurity(passwordStrength.EMPTY);
@@ -64,8 +69,12 @@ export function ChangePassword() {
     })
       .then((response) => {
         if (response.ok) {
-          roomContextArgs.getChatInfo(roomContextArgs.chat);
+          //roomContextArgs.getChatInfo(roomContextArgs.chat);
+          chatPageContext.updateChat().catch((error) => {
+            console.log(error);
+          });
           navigate(backroute);
+          setDialog("Password updated");
         } else throw new Error("Error changing password");
       })
       .catch((error) => {

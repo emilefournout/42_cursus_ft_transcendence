@@ -4,7 +4,7 @@ import SendIcon from "./SendIcon.svg";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../../Board/Board";
 import { Socket } from "socket.io-client";
-import { Dialog } from "../../../../components/Dialog";
+import { DialogContext } from "../../../Root/Root";
 
 interface InputProps {
   chatSocket: Socket;
@@ -15,7 +15,8 @@ export function RoomInput({ chatSocket }: InputProps) {
   const { id } = useParams();
   const boardContext = useContext(BoardContext);
   const userId = boardContext?.me.id;
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
   const sendMessage = () => {
     if (input.length === 0) {
       setDialog("Please enter a message.");
@@ -35,7 +36,6 @@ export function RoomInput({ chatSocket }: InputProps) {
   };
   return (
     <>
-      <Dialog dialog={dialog} setDialog={setDialog} />
       <div className="wrapper-room-input">
         <input
           value={input}

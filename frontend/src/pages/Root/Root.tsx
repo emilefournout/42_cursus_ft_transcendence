@@ -2,6 +2,11 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Dialog } from "../../components/Dialog";
 
+interface DialogContextArgs {
+  setDialog: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+export const DialogContext = React.createContext({} as DialogContextArgs);
+
 export function Root() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +34,11 @@ export function Root() {
   return (
     <>
       <Dialog dialog={dialog} setDialog={setDialog} />
-      <Outlet />
+      <DialogContext.Provider
+        value={{ setDialog: setDialog } as DialogContextArgs}
+      >
+        <Outlet />
+      </DialogContext.Provider>
     </>
   );
 }

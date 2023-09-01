@@ -1,17 +1,14 @@
 import React, { useContext } from "react";
 import "./RoomParam.css";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { AddUser } from "./ChatMembers/AddUser";
 import { ChatMembers } from "./ChatMembers/ChatMembers";
-import { ChatInfo } from "../../Chat";
 import { RoomContextArgs } from "../Room";
-import { Visibility } from "../RoomCreate/RoomCreate";
 import { UpdateVisibilityButtons } from "./UpdateVisibilityButtons";
 import { BoardContext } from "../../../Board/Board";
 export function RoomParam() {
   const roomContextArgs = useOutletContext<RoomContextArgs>();
   const boardContext = useContext(BoardContext);
-
   const me = roomContextArgs.chat.members?.find(
     (member) => member.userId === boardContext?.me.id
   );
