@@ -52,7 +52,7 @@ export function MuteDialog(props: MuteDialogProps) {
             try {
               setValue(Number(event.target.value));
             } catch {
-              setValue(1);
+              setValue(30);
             }
           }}
         />
