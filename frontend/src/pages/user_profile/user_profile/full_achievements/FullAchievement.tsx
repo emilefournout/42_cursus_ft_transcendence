@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AchievementCard } from "../Profile/Achievements/AchievementCard";
+import { AchievementCard } from "../profile/achievements/AchievementCard";
 import { useNavigate } from "react-router-dom";
 export interface Achievement {
   name: string;

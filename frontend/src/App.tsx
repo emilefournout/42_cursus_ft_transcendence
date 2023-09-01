@@ -22,11 +22,11 @@ import { SettingsHomePage } from "./pages/settings/SettingsHomePage";
 import { Messages } from "./pages/chat/room/messages/Messages";
 import { Root } from "./pages/root/Root";
 import { UserProfile } from "./pages/user_profile/user_profile/UserProfile";
-import { Ranking } from "./pages/user_profile/user_profile/Profile/Ranking/Ranking";
+import { Ranking } from "./pages/user_profile/user_profile/profile/ranking/Ranking";
 import { DeleteRoom } from "./pages/chat/room/param/DeleteRoom";
 import { ChangePassword } from "./pages/chat/room/param/ChangePassword";
 import { GameCreateGamePage } from "./pages/game/create_page/GameCreateGamePage";
-import { FullAchievements } from "./pages/user_profile/user_profile/FullAchievements/FullAchievement";
+import { FullAchievements } from "./pages/user_profile/user_profile/full_achievements/FullAchievement";
 import { RoomAdd } from "./pages/chat/room/add/RoomAdd";
 import { RoomSearch } from "./pages/chat/room/add/search/RoomSearch";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Profile } from "./Profile/Profile";
+import { Profile } from "./profile/Profile";
 import { useParams } from "react-router-dom";
 import { ProfilePageContext } from "../UserProfilePage";
 import { BoardContext } from "../../board/Board";

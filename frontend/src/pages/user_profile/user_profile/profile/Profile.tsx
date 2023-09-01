@@ -1,7 +1,7 @@
 import React from "react";
-import { Stats } from "./Stats/Stats";
-import { MatchHistory } from "./MatchHistory/MatchHistory";
-import { Achievements } from "./Achievements/Achievements";
+import { Stats } from "./stats/Stats";
+import { MatchHistory } from "./match_history/MatchHistory";
+import { Achievements } from "./achievements/Achievements";
 import { Avatar } from "../../../../components/Avatar";
 import { BoardContext, User } from "../../../board/Board";
 import "./Profile.css";
