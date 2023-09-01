@@ -1,8 +1,7 @@
 import SEO from "../../components/Seo";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Chat.css";
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Visibility } from "./Room/RoomCreate/RoomCreate";
 import { LeftBar } from "./ChatLeftBar/ChatLeftBar";
 
