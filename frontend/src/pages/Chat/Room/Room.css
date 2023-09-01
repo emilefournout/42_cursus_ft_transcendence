@@ -10,14 +10,21 @@
 #chat-no-messages {
 	--no-msgs-size: clamp(100px, 40vw, 1000px);
 
+	width: 85%;
+	height: 100%;
+
+	padding: 16px;
+
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 
-	position: absolute;
-	left: calc(50% - var(--no-msgs-size) / 2);
-	top: 25%;
+	overflow-y: auto;
+}
+
+#chat-no-messages > p {
+	margin: 0;
+	margin-top: auto;
 
 	text-align: center;
 	color: var(--Light-Text);
@@ -26,6 +33,8 @@
 
 #chat-no-messages > img {
 	width: var(--no-msgs-size);
+
+	margin-bottom: auto;
 
 	position: relative;
 	bottom: 20px;

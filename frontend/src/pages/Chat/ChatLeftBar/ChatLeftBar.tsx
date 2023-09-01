@@ -1,7 +1,7 @@
 import React from "react";
 import "./ChatLeftBar.css";
 import "./Conversations/Conversations.css";
-import NewChatIcon from "./NewChatIcon.svg";
+import NewChatIcon from "../../../common/PlusIcon.svg";
 import ReloadBlackIcon from "../../../common/reload_black.svg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";

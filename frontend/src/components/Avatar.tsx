@@ -50,7 +50,7 @@ export function Avatar(props: AvatarProps) {
 			downloadAvatar().catch((e) => console.log("Error when downloading the avatar"));
 			return () => {};
 		}
-	}, [downloadAvatar]);
+	}, [props.download, downloadAvatar]);
 
 	function saveImage(event: React.ChangeEvent<HTMLInputElement>) {
 		if (event.target.files?.length) {

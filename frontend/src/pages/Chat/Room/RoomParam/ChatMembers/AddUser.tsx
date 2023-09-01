@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
-import { Dialog } from "../../../../../components/Dialog";
 import { DialogContext } from "../../../../Root/Root";
 
 export function AddUser() {

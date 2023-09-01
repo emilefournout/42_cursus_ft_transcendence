@@ -8,5 +8,5 @@ import {
 export class LoginUserDto {
   @IsOptional()
   @IsString()
-  code2fa: string;
+  code2fa?: string;
 }

@@ -65,7 +65,7 @@ nav > a {
 }
 
 .nav-icons:hover {
-	border-width: 4px;
+	border-width: clamp(2px, 0.25vw, 4px);
 	border-color: var(--Mooned-Teal);
 }
 

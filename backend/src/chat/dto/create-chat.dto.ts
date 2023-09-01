@@ -16,6 +16,7 @@ export class CreateChatDto {
   @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
   
+  @IsDefined()
   @IsString()
   @ApiProperty({
     type: String

@@ -8,17 +8,13 @@ import {
   Body,
   ParseIntPipe,
   UseGuards,
-  Put
+  Put,
+  BadRequestException
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {
-  UserNotUpdatedException,
-  UserNotDeletedException,
-  UserNotFoundException
-} from './exceptions/user-service.exception';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -28,6 +24,8 @@ import {
 } from '@nestjs/swagger';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
+import { UserControllerErrors } from './exceptions/user-controller.exception';
+import { UserServiceErrors } from './exceptions/user-service.exception';
 
 @ApiTags('User')
 @Controller('user')
@@ -74,7 +72,7 @@ export class UserController {
   @ApiResponse({ type: UserBasicInfoDto })
   async findUser(@Param('id', ParseIntPipe) id) {
     const userInfo = await this.userService.getUserInfoById(id);
-    if (!userInfo) throw new UserNotFoundException();
+    if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
     return userInfo;
   }
 
@@ -102,9 +100,9 @@ export class UserController {
       userDeleted = await this.userService.deleteUser(user.sub);
     } catch (error) {
       console.log(error)
-      throw new UserNotDeletedException();
+      throw new UserControllerErrors.UserNotDeletedException();
     }
-    if (!userDeleted) throw new UserNotDeletedException();
+    if (!userDeleted) throw new UserControllerErrors.UserNotDeletedException();
   }
 
   @Patch('me')
@@ -112,17 +110,18 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Updates the user.',
-    description: 'Takes optional username, wins and loses. If none are provided, returns 400'
+    description: 'Takes username. If none are provided, returns 400'
   })
   async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
     let userUpdated;
-
+  
     try {
-      userUpdated = await this.userService.updateUser(user.sub, updateUserDto);
+      userUpdated = await this.userService.updateUsername(user.sub, updateUserDto.username);
     } catch (error) {
-      throw new UserNotUpdatedException();
+      if (error instanceof UserServiceErrors.UsernameExistsException)
+        throw new UserControllerErrors.UserNotUpdatedException(error.message);
     }
-    if (!userUpdated) throw new UserNotUpdatedException();
+    if (!userUpdated) throw new UserControllerErrors.UserNotUpdatedException();
   }
 
   @Put('/achievements')
