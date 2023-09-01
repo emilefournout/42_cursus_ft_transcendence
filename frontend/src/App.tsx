@@ -25,7 +25,7 @@ import { UserProfile } from "./pages/user_profile/user_profile/UserProfile";
 import { Ranking } from "./pages/user_profile/user_profile/profile/ranking/Ranking";
 import { DeleteRoom } from "./pages/chat/room/param/DeleteRoom";
 import { ChangePassword } from "./pages/chat/room/param/ChangePassword";
-import { GameCreateGamePage } from "./pages/game/create_page/GameCreateGamePage";
+import { GameCreatePage } from "./pages/game/create_page/GameCreatePage";
 import { FullAchievements } from "./pages/user_profile/user_profile/full_achievements/FullAchievement";
 import { RoomAdd } from "./pages/chat/room/add/RoomAdd";
 import { RoomSearch } from "./pages/chat/room/add/search/RoomSearch";
@@ -47,7 +47,7 @@ function App() {
               <Route path="game" element={<Game />}>
                 <Route path="" element={<GameHomePage />} />
                 <Route path="matchmaking" element={<GameMatchmakingPage />} />
-                <Route path="new-game" element={<GameCreateGamePage />} />
+                <Route path="new-game" element={<GameCreatePage />} />
                 <Route path=":id" element={<GamePlayPage />} />
               </Route>
               <Route path="chats" element={<ChatPage />}>
