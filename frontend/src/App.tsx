@@ -1,32 +1,34 @@
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import "./App.css";
-import { Board } from "./pages/Board/Board";
-import { Login } from "./pages/Login/Login";
-import { Welcome } from "./pages/Welcome/Welcome";
-import { ChatPage } from "./pages/Chat/Chat";
-import { RoomParam } from "./pages/Chat/Room/RoomParam/RoomParam";
-import { NotFound } from "./pages/Error/NotFound";
+import { Board } from "./pages/board/Board";
+import { Login } from "./pages/login/Login";
+import { Welcome } from "./pages/welcome/Welcome";
+import { ChatPage } from "./pages/chat/Chat";
+import { RoomParam } from "./pages/chat/room/param/RoomParam";
+import { NotFound } from "./pages/error/NotFound";
 import { HelmetProvider } from "react-helmet-async";
-import { Settings } from "./pages/Settings/Settings";
-import { GameHomePage } from "./pages/Game/GameHomePage/GameHomePage";
-import { GameMatchmakingPage } from "./pages/Game/GameMatchmakingPage/GameMatchmakingPage";
-import { GamePlayPage } from "./pages/Game/GamePlayPage/GamePlayPage";
-import { Game } from "./pages/Game/Game";
-import { CookieError } from "./pages/Error/CookieError";
-import { RoomCreate } from "./pages/Chat/Room/RoomCreate/RoomCreate";
-import { Room } from "./pages/Chat/Room/Room";
-import { UserProfilePage } from "./pages/UserProfile/UserProfilePage";
-import { ChangeNamePage } from "./pages/Settings/ChangeNamePage/ChangeNamePage";
-import { SettingsHomePage } from "./pages/Settings/SettingsHomePage";
-import { Messages } from "./pages/Chat/Room/Messages/Messages";
-import { Root } from "./pages/Root/Root";
-import { UserProfile } from "./pages/UserProfile/UserProfile/UserProfile";
-import { Ranking } from "./pages/UserProfile/UserProfile/Profile/Ranking/Ranking";
-import { DeleteRoom } from "./pages/Chat/Room/RoomParam/DeleteRoom";
-import { ChangePassword } from "./pages/Chat/Room/RoomParam/ChangePassword";
-import { GameCreateGamePage } from "./pages/Game/GameCreateGamePage/GameCreateGamePage";
-import { FullAchievements } from "./pages/UserProfile/UserProfile/FullAchievements/FullAchievement";
+import { Settings } from "./pages/settings/Settings";
+import { GameHomePage } from "./pages/game/home_page/GameHomePage";
+import { GameMatchmakingPage } from "./pages/game/matchmaking/GameMatchmakingPage";
+import { GamePlayPage } from "./pages/game/play_page/GamePlayPage";
+import { Game } from "./pages/game/Game";
+import { CookieError } from "./pages/error/CookieError";
+import { RoomCreate } from "./pages/chat/room/add/create/RoomCreate";
+import { Room } from "./pages/chat/room/Room";
+import { UserProfilePage } from "./pages/user_profile/UserProfilePage";
+import { ChangeNamePage } from "./pages/settings/change_name_page/ChangeNamePage";
+import { SettingsHomePage } from "./pages/settings/SettingsHomePage";
+import { Messages } from "./pages/chat/room/messages/Messages";
+import { Root } from "./pages/root/Root";
+import { UserProfile } from "./pages/user_profile/user_profile/UserProfile";
+import { Ranking } from "./pages/user_profile/user_profile/Profile/Ranking/Ranking";
+import { DeleteRoom } from "./pages/chat/room/param/DeleteRoom";
+import { ChangePassword } from "./pages/chat/room/param/ChangePassword";
+import { GameCreateGamePage } from "./pages/game/create_page/GameCreateGamePage";
+import { FullAchievements } from "./pages/user_profile/user_profile/FullAchievements/FullAchievement";
+import { RoomAdd } from "./pages/chat/room/add/RoomAdd";
+import { RoomSearch } from "./pages/chat/room/add/search/RoomSearch";
 
 function App() {
   return (
@@ -49,7 +51,11 @@ function App() {
                 <Route path=":id" element={<GamePlayPage />} />
               </Route>
               <Route path="chats" element={<ChatPage />}>
-                <Route path="create" element={<RoomCreate />} />
+                <Route path="add">
+                  <Route path="" element={<RoomAdd />} />
+                  <Route path="create" element={<RoomCreate />} />
+                  <Route path="search" element={<RoomSearch />} />
+                </Route>
                 <Route path="" element={<Room />} />
                 <Route path=":id" element={<Room />}>
                   <Route path="" element={<Messages />} />

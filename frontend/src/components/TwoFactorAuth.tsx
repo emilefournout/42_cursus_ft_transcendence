@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { DialogContext } from "../pages/Root/Root";
+import { DialogContext } from "../pages/root/Root";
 
 function TwoFactorAuth({ username }: { username: string | null }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret
@@ -34,7 +34,7 @@ function TwoFactorAuth({ username }: { username: string | null }) {
 
   return (
     <div className="settings-2fa-wrapper">
-      <img src={qrImage} alt="QR for setting 2FA"/>
+      <img src={qrImage} alt="QR for setting 2FA" />
       <input
         type="text"
         placeholder="Code"

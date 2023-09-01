@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Dialog } from "./Dialog";
 import { set } from "js-cookie";
-import { DialogContext } from "../pages/Root/Root";
+import { DialogContext } from "../pages/root/Root";
 
 function Register() {
   const [username, setUsername] = useState("");
