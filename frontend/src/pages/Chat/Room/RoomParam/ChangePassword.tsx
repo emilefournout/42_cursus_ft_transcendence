@@ -23,7 +23,7 @@ export function ChangePassword() {
   const roomContextArgs = useOutletContext<RoomContextArgs>();
   const navigate = useNavigate();
   const location = useLocation();
-  const backroute = location.pathname.replace("changePassword", "");
+  const backroute = location.pathname.replace("change-password", "");
   const chatPageContext = useContext(ChatPageContext);
   const dialogContext = useContext(DialogContext);
   const setDialog = dialogContext.setDialog;

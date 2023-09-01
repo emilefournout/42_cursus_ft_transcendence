@@ -38,11 +38,14 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="welcome" element={<Welcome />} />
             <Route path="board" element={<Board />}>
-              <Route path="" element={<Navigate to={"/board/userAccount"} />} />
+              <Route
+                path=""
+                element={<Navigate to={"/board/user-account"} />}
+              />
               <Route path="game" element={<Game />}>
                 <Route path="" element={<GameHomePage />} />
                 <Route path="matchmaking" element={<GameMatchmakingPage />} />
-                <Route path="newGame" element={<GameCreateGamePage />} />
+                <Route path="new-game" element={<GameCreateGamePage />} />
                 <Route path=":id" element={<GamePlayPage />} />
               </Route>
               <Route path="chats" element={<ChatPage />}>
@@ -53,7 +56,10 @@ function App() {
                   <Route path="param">
                     <Route path="" element={<RoomParam />} />
                     <Route path="delete" element={<DeleteRoom />} />
-                    <Route path="changePassword" element={<ChangePassword />} />
+                    <Route
+                      path="change-password"
+                      element={<ChangePassword />}
+                    />
                   </Route>
                 </Route>
               </Route>
@@ -61,14 +67,14 @@ function App() {
                 <Route path="" element={<SettingsHomePage />} />
                 <Route path="update" element={<ChangeNamePage />} />
               </Route>
-              <Route path="userAccount" element={<UserProfilePage />}>
+              <Route path="user-account" element={<UserProfilePage />}>
                 <Route path="achievements" element={<FullAchievements />} />
                 <Route path="" element={<UserProfile />} />
                 <Route path=":id" element={<UserProfile />} />
                 <Route path="ranking" element={<Ranking />} />
               </Route>
             </Route>
-            <Route path="cookieError" element={<CookieError />} />
+            <Route path="cookie-error" element={<CookieError />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

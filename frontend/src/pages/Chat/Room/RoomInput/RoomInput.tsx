@@ -4,7 +4,6 @@ import SendIcon from "./SendIcon.svg";
 import { useParams } from "react-router-dom";
 import { BoardContext } from "../../../Board/Board";
 import { Socket } from "socket.io-client";
-import { DialogContext } from "../../../Root/Root";
 
 interface InputProps {
   chatSocket: Socket;
@@ -15,17 +14,14 @@ export function RoomInput({ chatSocket }: InputProps) {
   const { id } = useParams();
   const boardContext = useContext(BoardContext);
   const userId = boardContext?.me.id;
-  const dialogContext = useContext(DialogContext);
-  const setDialog = dialogContext.setDialog;
-  const sendMessage = () => {
-    if (input.length === 0) {
-      setDialog("Please enter a message.");
-    } else if (!userId) {
-      setDialog("no user id");
-    } else if (!id) {
-      setDialog("no chat id");
-    }
 
+  const isWhiteSpaceString = (str: string): boolean => {
+    return str.trim().length === 0;
+  };
+  const sendMessage = () => {
+    if (isWhiteSpaceString(input) || !userId || !id) {
+      return;
+    }
     const data = {
       chatId: id,
       userId,

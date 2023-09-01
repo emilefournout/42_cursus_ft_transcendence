@@ -31,6 +31,7 @@ export function Root() {
       return;
     }
   }, [location.pathname, navigate]);
+
   return (
     <>
       <Dialog dialog={dialog} setDialog={setDialog} />

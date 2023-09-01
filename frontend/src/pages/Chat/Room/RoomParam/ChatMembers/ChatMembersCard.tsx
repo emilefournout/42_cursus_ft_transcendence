@@ -114,7 +114,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
           </>
         )}
         <button
-          onClick={() => navigate(`/board/userAccount/${props.member.userId}`)}
+          onClick={() => navigate(`/board/user-account/${props.member.userId}`)}
         >
           profile
         </button>

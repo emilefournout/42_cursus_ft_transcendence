@@ -19,7 +19,7 @@ export function UpdateVisibilityButtons() {
       return;
     }
     if (visibility === Visibility.PROTECTED) {
-      navigate("changePassword");
+      navigate("change-password");
       return;
     }
     fetch(`${process.env.REACT_APP_BACKEND}/chat/${roomContextArgs.chat.id}`, {
@@ -76,7 +76,7 @@ export function UpdateVisibilityButtons() {
         </div>
         <div style={{ padding: "10px" }}>
           {roomContextArgs.chat.visibility === Visibility.PROTECTED && (
-            <button onClick={() => navigate("changePassword")}>
+            <button onClick={() => navigate("change-password")}>
               change password
             </button>
           )}

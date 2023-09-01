@@ -18,7 +18,7 @@ export function Welcome() {
     if (searchParams.get("guest")) return;
     if (!Cookies.get("42token") || Cookies.get("42token") === "j:null") {
       Cookies.remove("42token");
-      navigateError("/cookieError");
+      navigateError("/cookie-error");
     }
   });
 

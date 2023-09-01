@@ -449,8 +449,7 @@ input {
 	display: block;
 	width: 100%;
 
-	transition: border-image 0.3s ease;
-	transition: background-color 0.3s ease;
+	transition: border 0.3s ease, background-color 0.3s ease;
 }
 
 input::placeholder {
