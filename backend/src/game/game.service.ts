@@ -6,7 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GameData } from './types/game-info.class';
 import { Socket } from 'socket.io';
-import { UpdateGameDto } from './dto/updte-game.dto';
+import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';
 import { ConnectionStorage } from './types/connection-storage.class';
 

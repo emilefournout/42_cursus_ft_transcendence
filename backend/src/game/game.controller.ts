@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateGameDto } from './dto/game.dto';
 import { GameService } from './game.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
