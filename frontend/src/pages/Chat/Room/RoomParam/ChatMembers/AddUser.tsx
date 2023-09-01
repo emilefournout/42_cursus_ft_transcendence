@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 import { Dialog } from "../../../../../components/Dialog";
+import { DialogContext } from "../../../../Root/Root";
 
 export function AddUser() {
   const [newUser, setNewUser] = useState<string>("");
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
   const roomContextArgs = useOutletContext<RoomContextArgs>();
 
   const addUser = () => {
@@ -52,7 +54,6 @@ export function AddUser() {
 
   return (
     <>
-      <Dialog dialog={dialog} setDialog={setDialog} />
       <div
         style={{
           display: "flex",

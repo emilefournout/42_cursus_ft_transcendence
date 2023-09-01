@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Visibility } from "../RoomCreate/RoomCreate";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../Room";
 import { Dialog } from "../../../../components/Dialog";
+import { ChatPageContext } from "../../Chat";
+import { DialogContext } from "../../../Root/Root";
 
 export function UpdateVisibilityButtons() {
   const navigate = useNavigate();
   const roomContextArgs = useOutletContext<RoomContextArgs>();
   const [updateIsSelected, setUpdateIsSelected] = useState(false);
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
+  const chatPageContext = useContext(ChatPageContext);
+
   const updateVisibility = (visibility: Visibility) => {
     if (visibility === roomContextArgs.chat.visibility) {
       setDialog("visibility is already set to " + visibility);
@@ -28,7 +33,10 @@ export function UpdateVisibilityButtons() {
     })
       .then((response) => {
         if (response.ok) {
-          roomContextArgs.getChatInfo(roomContextArgs.chat);
+          //roomContextArgs.getChatInfo(roomContextArgs.chat);
+          chatPageContext.updateChat().catch((error) => {
+            console.log(error);
+          });
           setDialog("visibility updated to " + Visibility.PUBLIC);
         }
       })
@@ -42,7 +50,6 @@ export function UpdateVisibilityButtons() {
   } else {
     return (
       <>
-        <Dialog dialog={dialog} setDialog={setDialog} />
         current visibility : {roomContextArgs.chat.visibility}
         <div
           style={{

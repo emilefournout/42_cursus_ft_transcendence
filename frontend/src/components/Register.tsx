@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Dialog } from "./Dialog";
 import { set } from "js-cookie";
+import { DialogContext } from "../pages/Root/Root";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
-
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
   function register() {
     fetch(`${process.env.REACT_APP_BACKEND}/user`, {
       method: "POST",
@@ -37,7 +38,6 @@ function Register() {
 
   return (
     <>
-      <Dialog dialog={dialog} setDialog={setDialog} />
       <div>
         <input
           type="text"

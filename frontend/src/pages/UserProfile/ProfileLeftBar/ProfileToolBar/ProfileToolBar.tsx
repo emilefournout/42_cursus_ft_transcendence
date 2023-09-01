@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../ProfileLeftBar.css";
 import { ProfilePageContext, RequestType } from "../../UserProfilePage";
 import { RequestTypeButton } from "./RequestTypeButton";
@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import ReloadBlackIcon from "../../../../common/reload_honey.svg";
 import AddFriendIcon from "./AddFriendIcon.svg";
 import { Dialog } from "../../../../components/Dialog";
+import { DialogContext } from "../../../Root/Root";
 
 export function ProfileToolBar() {
   const [newFriend, setNewFriend] = useState<string>("");
   const profileContext = React.useContext(ProfilePageContext);
-  const [dialog, setDialog] = useState<string | undefined>(undefined);
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
   const addFriend = () => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/info/username/${newFriend}`, {
       method: "GET",
@@ -52,7 +54,6 @@ export function ProfileToolBar() {
 
   return (
     <>
-      <Dialog dialog={dialog} setDialog={setDialog} />
       <div id="prof-tool-bar-container">
         {/* THE MY PROFILE IS REDUNDANT SINCE THE USER CAN CLICK THENT ICON IN THE NAVBAR. THE RANKING ONE IS BETTER PLACED INSIDE THE STATS SUBWINDOW  */}
 
