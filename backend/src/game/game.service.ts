@@ -14,9 +14,9 @@ import { ConnectionStorage } from './types/connection-storage.class';
 export class GameService {
   private userConnections = new ConnectionStorage();
   private waitingRoom: Set<Socket> = new Set<Socket>();
-  private createdRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
+  private customizedRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
   private privateRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
-  private games: Map<string, GameData> = new Map<string, GameData>();
+  private games: Map<string, GameState> = new Map<string, GameState>();
 
   constructor(private prisma: PrismaService) {}
 
@@ -35,8 +35,8 @@ export class GameService {
 
   findActiveGameByUserId(userId: number): string | undefined {
     for (const [gameId, gameData] of this.games.entries()) {
-      if (gameData.firstPlayerId == userId
-        || gameData.secondPlayerId == userId)
+      if (gameData.firstPlayer.id == userId
+        || gameData.secondPlayer.id == userId)
         return gameId;
     }
   }
@@ -75,14 +75,14 @@ export class GameService {
   }
 
   customizeGame(client: Socket, gameOptions: GameDataOptions) {
-    this.createdRoom.set(client, gameOptions)
+    this.customizedRoom.set(client, gameOptions)
   }
 
   async handleWaitingRoom(): Promise<GameState> {
     let player1 : Socket,  player2 : Socket;
     let gameOptions: GameDataOptions;
-    
-    if (this.waitingRoom.size >= 1 && this.createdRoom.size >= 1) {
+
+    if (this.waitingRoom.size >= 1 && this.customizedRoom.size >= 1) {
       const gameRoom = this.peekGameFromCreatedRoom();
       player1 = gameRoom.player;
       gameOptions = gameRoom.gameOptions;
@@ -97,12 +97,13 @@ export class GameService {
       const player1Id: number = this.getUserIdFromSocket(player1);
       const player2Id: number = this.getUserIdFromSocket(player2);
       const game = await this.createGame(player1Id, player2Id);
-      const gameData = new GameData(player1Id, player2Id, gameOptions)
-      this.games.set(game, gameData);
-      return new GameState(game,
+      const gameState = new GameState(game,
         {socket: player1, id: player1Id},
         {socket: player2, id: player2Id},
-      );
+        gameOptions
+        );
+      this.games.set(game, gameState);
+      return gameState
     }
   }
 
@@ -114,10 +115,10 @@ export class GameService {
   }
 
   private peekGameFromCreatedRoom() : {player: Socket, gameOptions: GameDataOptions}{
-    const setIterator = this.createdRoom.keys();
+    const setIterator = this.customizedRoom.keys();
     const player: Socket = setIterator.next().value;
-    const gameOptions = this.createdRoom.get(player)
-    this.createdRoom.delete(player);
+    const gameOptions = this.customizedRoom.get(player)
+    this.customizedRoom.delete(player);
     return {player, gameOptions};
   }
 
@@ -130,9 +131,9 @@ export class GameService {
   }
 
   updateGameState(gameId: string) : GameData {
-    const gameInfo = this.games.get(gameId);
-    gameInfo.updateBall()
-    return gameInfo;
+    const gameState = this.games.get(gameId);
+    gameState.info.updateBall()
+    return gameState.info;
   }
 
   movePad(socket: Socket, gameId: string, direction: string) {
@@ -140,10 +141,10 @@ export class GameService {
     const gameState = this.games.get(gameId);
     if (gameState === undefined) return;
 
-    if (gameState.firstPlayerId !== playerId && gameState.secondPlayerId !== playerId)
+    if (gameState.firstPlayer.id !== playerId && gameState.secondPlayer.id !== playerId)
       return;
 
-    gameState.move(direction, playerId)
+    gameState.info.move(direction, playerId)
   }
 
   public registerConnection(client: Socket, userId: number) {
@@ -161,13 +162,13 @@ export class GameService {
 
   public unregisterConnection(socket: Socket) {
     this.userConnections.removeUserBySocket(socket)
-    this.createdRoom.delete(socket)
+    this.customizedRoom.delete(socket)
     this.waitingRoom.delete(socket)
   }
 
   public debug_room_status() {
     console.log("Waiting room: ", this.waitingRoom.size)
-    console.log("Created room: ", this.createdRoom.size)
+    console.log("Created room: ", this.customizedRoom.size)
   }
 }
 

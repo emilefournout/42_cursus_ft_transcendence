@@ -23,7 +23,6 @@ export function Profile(props: ProfileProps) {
         <div id="prof-user-name" className="ellipsed-txt">
           {"@" + userInfo.username}
         </div>
-
         <div className="cards-container">
           <Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
           <MatchHistory userId={userInfo.id} username={userInfo.username} />
