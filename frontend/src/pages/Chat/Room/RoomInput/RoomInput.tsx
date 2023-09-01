@@ -22,14 +22,9 @@ export function RoomInput({ chatSocket }: InputProps) {
     return str.trim().length === 0;
   };
   const sendMessage = () => {
-    if (isWhiteSpaceString(input)) {
+    if (isWhiteSpaceString(input) || !userId || !id) {
       return;
-    } else if (!userId) {
-      setDialog("no user id");
-    } else if (!id) {
-      setDialog("no chat id");
     }
-
     const data = {
       chatId: id,
       userId,
