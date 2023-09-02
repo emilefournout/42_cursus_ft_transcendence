@@ -1,5 +1,5 @@
 .room-param {
-	--params-icon-size: clamp(0.8rem, 4vw, 1.2rem);
+	--params-icon-size: clamp(0.6rem, 4vw, 1.2rem);
 
 	width: 100%;
 	height: 100%;
@@ -7,14 +7,14 @@
 	padding: clamp(0.2rem, 2vw, 0.5rem);
 
 	display: grid;
-	grid-template-columns: 3fr var(--params-icon-size) 1fr 1fr 1fr;
-	grid-auto-rows: 1.5em;
+	grid-template-columns: minmax(2.5rem, 3fr) var(--params-icon-size) 1fr 1fr 1fr;
+	grid-auto-rows: 1.8em;
 	grid-auto-flow: row;
 	gap: 8px;
 
-	font-size: clamp(0.4rem, 3vw, 0.8rem);
+	font-size: clamp(0.3rem, 3vw, 0.8rem);
 
-	overflow-y: auto;
+	overflow: auto;
 }
 
 .room-param > input {
@@ -39,6 +39,7 @@
 .room-param > button {
 	--params-btn-font-size: clamp(0.2rem, 1.5vw, 0.5rem);
 
+	min-width: 1.2rem;
 	height: 100%;
 
 	padding: 4px;
@@ -49,6 +50,8 @@
 
 	font-size: var(--params-btn-font-size);
 	color: var(--Crisped-Orange);
+
+	overflow: hidden;
 }
 
 .room-param > button:hover {
