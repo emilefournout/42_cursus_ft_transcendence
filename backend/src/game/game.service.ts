@@ -9,13 +9,14 @@ import { Socket } from 'socket.io';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';
 import { ConnectionStorage } from './types/connection-storage.class';
+import { Pair } from './types/privateroom-pair.class';
 
 @Injectable()
 export class GameService {
   private userConnections = new ConnectionStorage();
   private waitingRoom: Set<Socket> = new Set<Socket>();
   private customizedRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
-  private privateRoom: Map<Socket, GameDataOptions> = new Map<Socket, GameDataOptions>();
+  private privateRoom: Map<Socket, Pair> = new Map<Socket, Pair>();
   private games: Map<string, GameState> = new Map<string, GameState>();
 
   constructor(private prisma: PrismaService) {}
@@ -43,6 +44,18 @@ export class GameService {
 
   getUserIdFromSocket(socket: Socket): number | undefined {
     return this.userConnections.getUserIdFromSocket(socket)
+  }
+
+  getUserInvitationsById(id: number) {
+    const invitations = []
+    let inviterId = null
+    this.privateRoom.forEach((gameData, socket) => {
+      if(gameData.invitedId === id)
+        inviterId = this.getUserIdFromSocket(socket);
+        invitations.push(inviterId)
+    })
+
+    return invitations;
   }
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
@@ -76,6 +89,36 @@ export class GameService {
 
   customizeGame(client: Socket, gameOptions: GameDataOptions) {
     this.customizedRoom.set(client, gameOptions)
+  }
+
+  createPrivateRoom(client: Socket, gameOptions: GameDataOptions, invitedId: number) {
+    this.privateRoom.set(client, new Pair(gameOptions, invitedId))
+  }
+
+  async joinPrivateRoom(client: Socket, friendId: number) {
+    let invitation = null
+    this.privateRoom.forEach((gameData, socket) => {
+      const socketUserId = this.getUserIdFromSocket(socket);
+      if (socketUserId === friendId) {
+        invitation = {socket, gameData};
+      }
+    })
+    if(!invitation)
+      return null;
+    this.privateRoom.delete(invitation.socket)
+    const player1: Socket = invitation.socket;
+    const player2: Socket = client;
+    const player1Id = this.getUserIdFromSocket(player1)
+    const player2Id = this.getUserIdFromSocket(player2)
+    const gameOptions = invitation.gameData
+    const game = await this.createGame(player1Id, player2Id);
+    const gameState = new GameState(game,
+      {socket: player1, id: player1Id},
+      {socket: player2, id: player2Id},
+      gameOptions
+      );
+    this.games.set(game, gameState);
+    return gameState
   }
 
   async handleWaitingRoom(): Promise<GameState> {
@@ -128,6 +171,14 @@ export class GameService {
 
   leaveWaitingRoom(client: Socket) {
     this.waitingRoom.delete(client)
+  }
+
+  leaveCreatingRoom(client: Socket) {
+    this.customizedRoom.delete(client)
+  }
+
+  leaveInvitationRoom(client: Socket) {
+    this.privateRoom.delete(client)
   }
 
   updateGameState(gameId: string) : GameData {

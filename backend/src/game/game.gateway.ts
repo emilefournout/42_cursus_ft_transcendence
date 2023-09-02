@@ -18,7 +18,7 @@ import { ScoreField } from 'src/user/types/scorefield.enum';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
 import { GameData, GameDataOptions } from './types/game-data.class';
-import { CreateGameDto } from './dto/create-game.dto';
+import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' }
@@ -59,6 +59,40 @@ export class GameGateway
     this.gameService.unregisterConnection(client);
   }
   
+  @SubscribeMessage('create_private_room')
+  async handleCreatePrivateRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() privateGameDataOptions: CreatePrivateGameDto)
+  {
+    console.log('Creating private game ' + client.id);
+    this.gameService.createPrivateRoom(client, privateGameDataOptions.gameDto, privateGameDataOptions.invitedId)
+  }
+
+  @SubscribeMessage('join_private_room')
+  async handleJoinPrivateRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() friendId: number)
+  {
+    console.log('Joining private game ' + client.id);
+    const game = await this.gameService.joinPrivateRoom(client, friendId)
+    if (game) {
+      game.firstPlayer.socket.join(game.id);
+      game.secondPlayer.socket.join(game.id);
+      this.server.to(game.id).emit('game_found', game.id);
+      const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
+      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
+      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+    }
+  }
+
+  @SubscribeMessage('leave_private_room')
+  async handleLeavePrivateRoom(
+    @ConnectedSocket() client: Socket)
+  {
+    console.log('Leaving private game ' + client.id);
+    this.gameService.leaveInvitationRoom(client)
+  }
+
   @SubscribeMessage('create_room')
   async handleCreateRoom(
     @ConnectedSocket() client: Socket,
@@ -107,6 +141,12 @@ export class GameGateway
   handleLeaveWaitingRoom(@ConnectedSocket() client: Socket) {
     console.log("Leaving waiting room ", client.id)
     this.gameService.leaveWaitingRoom(client);
+  }
+
+  @SubscribeMessage('leave_creating_room')
+  handleLeaveCreatingRoom(@ConnectedSocket() client: Socket) {
+    console.log("Leaving creating room ", client.id)
+    this.gameService.leaveCreatingRoom(client);
   }
 
   @SubscribeMessage('move_user')
