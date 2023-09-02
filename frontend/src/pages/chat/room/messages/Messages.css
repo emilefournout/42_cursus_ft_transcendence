@@ -1,6 +1,7 @@
 .wrapper-msgs {
 	width: 100%;
 	padding: 0 clamp(8px, calc(1vh + 1vw), 32px);
+	padding-top: 8px;
 
 	flex-grow: 1;
 
