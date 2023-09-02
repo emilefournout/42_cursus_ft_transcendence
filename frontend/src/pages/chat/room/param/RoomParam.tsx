@@ -24,7 +24,7 @@ export function RoomParam() {
   const [showUpdateDialog, setShowUpdateDialog] = useState<boolean>(false);
   const isOwner: boolean | undefined = me?.owner === true;
   const isAdmin: boolean | undefined = me?.administrator === true;
-
+  const isManager = isOwner || isAdmin;
   const [userIdToMute, setUserIdToMute] = useState<number | undefined>(
     undefined
   );
@@ -41,14 +41,14 @@ export function RoomParam() {
         setShowUpdateDialog={setShowUpdateDialog}
       />
       <div className="room-param">
-        <AddUser />
+        {isManager ? <AddUser /> : <div>members:</div>}
         {isOwner && (
           <UpdateVisibilityButtons updateVisibility={setShowUpdateDialog} />
         )}
         <MuteDialogContext.Provider
           value={{ mute: setUserIdToMute } as MuteDialogContextArgs}
         >
-          <ChatMembers isManager={isOwner || isAdmin} />
+          <ChatMembers isManager={isManager} />
         </MuteDialogContext.Provider>
       </div>
     </>

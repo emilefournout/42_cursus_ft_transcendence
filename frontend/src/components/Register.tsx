@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Dialog } from "./Dialog";
+import { Dialog } from "../pages/root/Dialog";
 import { set } from "js-cookie";
 import { DialogContext } from "../pages/root/Root";
 

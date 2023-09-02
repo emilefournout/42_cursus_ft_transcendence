@@ -1,6 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Dialog } from "../../components/Dialog";
+import { Dialog } from "./Dialog";
 
 interface DialogContextArgs {
   setDialog: React.Dispatch<React.SetStateAction<string | undefined>>;
