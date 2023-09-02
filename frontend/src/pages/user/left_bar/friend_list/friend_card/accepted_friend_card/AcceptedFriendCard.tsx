@@ -6,7 +6,6 @@ import { User } from "../../../../../board/Board";
 import { useNavigate } from "react-router-dom";
 import { ProfilePageContext } from "../../../../UserProfilePage";
 import { CardAction } from "./CardAction";
-import { Container } from "@mui/material";
 
 export interface FriendCardProps {
   userInfo: User;
