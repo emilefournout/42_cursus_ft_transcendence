@@ -1,6 +1,6 @@
 .wrapper-msgs {
 	width: 100%;
-	padding: 0 clamp(8px, calc(1vh + 1vw), 32px);
+	padding: 0 clamp(4px, 1vw, 32px);
 	padding-top: 8px;
 
 	flex-grow: 1;
@@ -31,12 +31,12 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: baseline;
+
+	overflow-x: hidden;
 }
 
 .message-content {
-	width: fit-content;
 	max-width: 65%;
-	min-width: 2em;
 	min-height: 1.5em;
 
 	padding: 4px;
@@ -46,6 +46,8 @@
 	background-color: var(--Light-Text);
 
 	font-size: clamp(0.24rem, 2vw, 0.5rem);
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .message-content-right {
@@ -61,7 +63,9 @@
 }
 
 .message-date {
-	white-space: pre-line;
+	white-space: break-spaces;
+
+	align-items: unset;
 
 	color: var(--Trans-Light-Text);
 	font-size: clamp(0.2rem, 1.5vw, 0.3rem);

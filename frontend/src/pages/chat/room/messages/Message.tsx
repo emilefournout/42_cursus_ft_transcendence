@@ -29,7 +29,7 @@ export function Message(props: MessageProps) {
 					else throw new Error("Error getting user info");
 				})
 				.then((data) => {
-					setUserName(data.username);
+					setUserName(data.username.length > 20 ? data.username.substring(0, 17) + "..." : data.username);
 				})
 				.catch((error) => {
 					console.log(error);
