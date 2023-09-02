@@ -15,7 +15,11 @@ export function Profile(props: ProfileProps) {
   const userInfo = props.userInfo ?? boardContext?.me;
 
   if (userInfo === undefined) {
-    return <>user not found</>;
+    return (
+      <div className="prof-cards-wrapper">
+        User not found! Try add him to friends first
+      </div>
+    );
   } else {
     return (
       <div className="prof-cards-wrapper">
