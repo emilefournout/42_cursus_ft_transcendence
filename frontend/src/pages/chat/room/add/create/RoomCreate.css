@@ -1,4 +1,5 @@
 .wrapper-new-room {
+	width: 85%;
 	height: 100%;
 
 	padding: 16px;
@@ -6,7 +7,6 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	flex-grow: 1;
 
 	color: var(--Light-Text);
 	font-size: clamp(0.3rem, 2.5vw, 0.6rem);

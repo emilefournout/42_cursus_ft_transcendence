@@ -5,6 +5,8 @@
 	padding-left: clamp(0.8rem, 4vw, 1.5rem);
 
 	justify-content: space-between;
+
+	overflow-x: auto;
 }
 
 #chat-no-messages {
