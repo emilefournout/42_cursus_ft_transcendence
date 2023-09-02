@@ -2,12 +2,14 @@ import {
   IsDefined,
   IsInt,
   IsNotEmpty,
-  IsString
+  IsString,
+  Min
 } from 'class-validator';
 
 export class VerifyUserDto {
   @IsDefined()
   @IsInt()
+  @Min(2)
   id: number;
 
   @IsDefined()

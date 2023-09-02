@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
   MinLength,
 } from 'class-validator';
 
@@ -14,6 +15,7 @@ export class UpdateUserRelationDto {
   @IsNumber()
   @IsDefined()
   @IsNotEmpty()
+  @Min(2)
   targetId: number
 }
 

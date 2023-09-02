@@ -6,7 +6,6 @@ import {
   Patch,
   Delete,
   Body,
-  ParseIntPipe,
   UseGuards,
   Put,
   BadRequestException
@@ -26,6 +25,7 @@ import { UserBasicInfoDto } from './dto/info-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { UserControllerErrors } from './exceptions/user-controller.exception';
 import { UserServiceErrors } from './exceptions/user-service.exception';
+import { IdValidationPipe } from './pipes/id-validation.pipe';
 
 @ApiTags('User')
 @Controller('user')
@@ -51,7 +51,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Returns last 10 games of the user based on the id.' })
-  async getUserHistoryById(@Param('id', ParseIntPipe) id) {
+  async getUserHistoryById(@Param('id', IdValidationPipe) id) {
     return this.userService.getUserHistory(id);
   }
 
@@ -70,7 +70,7 @@ export class UserController {
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Returns a basic info about a user.' })
   @ApiResponse({ type: UserBasicInfoDto })
-  async findUser(@Param('id', ParseIntPipe) id) {
+  async findUser(@Param('id', IdValidationPipe) id) {
     const userInfo = await this.userService.getUserInfoById(id);
     if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
     return userInfo;
@@ -146,6 +146,17 @@ export class UserController {
     return await this.userService.getUserFriendships(user.sub);
   }
 
+  @Get('/invitations')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets user game invitations.',
+    description: 'If no invitations are found, 404 will be returned'
+  })
+  async getUserInvitations(@GetUser() user) {
+    return await this.userService.getUserInvitations(user.sub);
+  }
+
   @Post('/block/:id')
   @ApiParam({
     name: 'id',
@@ -157,7 +168,7 @@ export class UserController {
     description: 'The user with the id will be blocked'
   })
   @UseGuards(JwtAuthGuard)
-  async addUserBlocked(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+  async addUserBlocked(@GetUser() user, @Param('id', IdValidationPipe) id: number) {
     await this.userService.addUserBlocked(user.sub, id);
   }
 
@@ -174,7 +185,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async deleteUserBlocked(
     @GetUser() user,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', IdValidationPipe) id: number
   ) {
     await this.userService.deleteUserBlocked(user.sub, id);
   }
@@ -190,7 +201,7 @@ export class UserController {
     description: 'The user with the id will recieve a friendship request'
   })
   @UseGuards(JwtAuthGuard)
-  async addUserFriends(@GetUser() user, @Param('id', ParseIntPipe) id: number) {
+  async addUserFriends(@GetUser() user, @Param('id', IdValidationPipe) id: number) {
     await this.userService.addUserFriends(user.sub, id);
   }
 
@@ -207,7 +218,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async acceptUserFriends(
     @GetUser() user,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', IdValidationPipe) id: number
   ) {
     await this.userService.acceptUserFriends(user.sub, id);
   }
@@ -226,7 +237,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async declineUserFriends(
     @GetUser() user,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', IdValidationPipe) id: number
   ) {
     await this.userService.declineUserFriends(user.sub, id);
   }
@@ -245,7 +256,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async deleteUserFriends(
     @GetUser() user,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', IdValidationPipe) id: number
   ) {
     await this.userService.declineUserFriends(user.sub, id);
   }

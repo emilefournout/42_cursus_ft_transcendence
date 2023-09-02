@@ -19,3 +19,13 @@ export class CreateGameDto {
     @Max(1.25)
     speed: number
 }
+
+export class CreatePrivateGameDto {
+    @IsDefined()
+    gameDto: CreateGameDto
+
+    @IsDefined()
+    @IsNumber()
+    @Min(2)
+    invitedId: number
+}

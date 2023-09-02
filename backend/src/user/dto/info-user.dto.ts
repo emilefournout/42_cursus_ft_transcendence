@@ -1,12 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { OnlineStatus } from "@prisma/client";
-import { IsDefined } from "class-validator";
+import { IsDefined, Min } from "class-validator";
 
 export class UserBasicInfoDto {
   @ApiProperty({
     type: Number,
     description: "Identification number of the user"
   })
+  @Min(2)
   id: number;
 
   @ApiProperty()
