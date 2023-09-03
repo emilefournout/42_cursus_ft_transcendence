@@ -75,23 +75,23 @@ export class AchievementService {
       },
       include: {
         achievements: {
-          where: {
-            name: achievementName
-          }
+          where: { name: achievementName }
         }
       }
     });
-    if (user && user.achievements.length) {
+    if (!user) return;
+
+    const achievement = await this.prisma.achievement.findFirst({
+      where: { name: achievementName }
+    });
+
+    if (achievement) {
       await this.prisma.achievement.update({
         where: {
           name: achievementName
         },
         data: {
-          users: {
-            connect: {
-              id: userId
-            }
-          }
+          users: { connect: { id: userId } }
         }
       });
     } else {
@@ -99,11 +99,7 @@ export class AchievementService {
         data: {
           name: achievementName,
           description: achievementName,
-          users: {
-            connect: {
-              id: userId
-            }
-          }
+          users: { connect: { id: userId } }
         }
       });
     }
