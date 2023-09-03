@@ -1,10 +1,7 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
   NotFoundException,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -20,21 +17,20 @@ import { GetUser } from 'src/auth/decorator';
 @Controller('game')
 export class GameController {
   constructor(private gameService: GameService) {}
-  
+
   @Get('info/:id')
-  @ApiParam({name: 'id'})
-  @ApiOperation({summary: "Return basic information about a game"})
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Return basic information about a game' })
   findGame(@Param('id', ParseUUIDPipe) id: string) {
     const game = this.gameService.findGameById(id);
-    if (game === undefined)
-    throw new NotFoundException('Game was not found');
-    return game
+    if (game === undefined) throw new NotFoundException('Game was not found');
+    return game;
   }
 
   @Get('active-plays')
-  @ApiOperation({summary: "Return the games that can be watched"})
-  @ApiResponse({type: [String]})
-  getActiveGame() : string[] {
+  @ApiOperation({ summary: 'Return the games that can be watched' })
+  @ApiResponse({ type: [String] })
+  getActiveGame(): string[] {
     return this.gameService.findActiveGames();
   }
 
