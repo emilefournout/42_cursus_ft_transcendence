@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AchievementDto } from './dto/achievement.dto';
+import { GameState } from 'src/game/types/game-state.class';
 
 @Injectable()
 export class AchievementService {
@@ -33,65 +34,41 @@ export class AchievementService {
     return userAchievements;
   }
 
-  async checkAndGrantGameAchievements(userId: number) {
-    const user = await this.prisma.user.findFirst({ where: { id: userId } });
-
-    if (user && user.wins === 1) this.grantGameAchievement(userId, 'First Win');
-    if (await this.checkKOAchievement(userId))
-      this.grantGameAchievement(userId, 'KO');
-    if (user && user.wins === 10)
-      this.grantGameAchievement(userId, 'eSport trainee');
-  }
-
-  private async checkKOAchievement(userId: number): Promise<boolean> {
-    const game = await this.prisma.game.findFirst({
-      where: {
-        OR: [
-          {
-            AND: {
-              user1_id: userId,
-              points_user2: 0
-            }
-          },
-          {
-            AND: {
-              user2_id: userId,
-              points_user1: 0
-            }
-          }
-        ]
-      }
+  async checkAndGrantGameAchievements(game: GameState) {
+    const user1 = await this.prisma.user.findFirst({
+      where: { id: game.firstPlayer.id }
     });
-    return game !== null;
+    const user2 = await this.prisma.user.findFirst({
+      where: { id: game.secondPlayer.id }
+    });
+    if (!user1 || !user2) return; // TODO Error message
+
+    for (const user of [user1, user2]) {
+      if (user.wins === 1) this.grantGameAchievement(user.id, 'First Win');
+      if (user.wins === 10)
+        this.grantGameAchievement(user.id, 'eSport trainee');
+    }
+    if (game.firstPlayerScore === 0)
+      this.grantGameAchievement(game.secondPlayer.id, 'KO');
+    if (game.secondPlayerScore === 0)
+      this.grantGameAchievement(game.firstPlayer.id, 'KO');
   }
 
   private async grantGameAchievement(
     userId: number,
     achievementName: string
   ): Promise<void> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId
-      },
-      include: {
-        achievements: {
-          where: {
-            name: achievementName
-          }
-        }
-      }
+    const achievement = await this.prisma.achievement.findFirst({
+      where: { name: achievementName }
     });
-    if (user && user.achievements.length) {
+
+    if (achievement) {
       await this.prisma.achievement.update({
         where: {
           name: achievementName
         },
         data: {
-          users: {
-            connect: {
-              id: userId
-            }
-          }
+          users: { connect: { id: userId } }
         }
       });
     } else {
@@ -99,11 +76,7 @@ export class AchievementService {
         data: {
           name: achievementName,
           description: achievementName,
-          users: {
-            connect: {
-              id: userId
-            }
-          }
+          users: { connect: { id: userId } }
         }
       });
     }

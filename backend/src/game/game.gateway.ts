@@ -61,37 +61,51 @@ export class GameGateway
   @SubscribeMessage('create_private_room')
   async handleCreatePrivateRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() privateGameDataOptions: CreatePrivateGameDto) {
+    @MessageBody() privateGameDataOptions: CreatePrivateGameDto
+  ) {
     console.log('Creating private game ' + client.id);
-    const friend = await this.userService.findUserByName(privateGameDataOptions.friendUserName)
-    if(!friend){
-      console.log('Sadly emitted bro')
+    const friend = await this.userService.findUserByName(
+      privateGameDataOptions.friendUserName
+    );
+    if (!friend) {
+      console.log('Sadly emitted bro');
       return 'ko';
     }
-    console.log(`USER FOUND?? -> ${friend.username}`)
-    this.gameService.createPrivateRoom(client, privateGameDataOptions.gameDto, friend.id)
+    console.log(`USER FOUND?? -> ${friend.username}`);
+    this.gameService.createPrivateRoom(
+      client,
+      privateGameDataOptions.gameDto,
+      friend.id
+    );
     return 'ok';
   }
 
   @SubscribeMessage('join_private_room')
   async handleJoinPrivateRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() friendId: number) {
+    @MessageBody() friendId: number
+  ) {
     console.log('Joining private game ' + client.id);
     const game = await this.gameService.joinPrivateRoom(client, friendId);
     if (game) {
       game.firstPlayer.socket.join(game.id);
       game.secondPlayer.socket.join(game.id);
       this.server.to(game.id).emit('game_found', game.id);
-      const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
-      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
-      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+      const gameLoopInterval = setInterval(
+        () => this.gameLoop(game, gameLoopInterval),
+        10
+      );
+      game.firstPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer1(game, gameLoopInterval)
+      );
+      game.secondPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer2(game, gameLoopInterval)
+      );
     }
   }
 
   @SubscribeMessage('leave_private_room')
-  async handleLeavePrivateRoom(@ConnectedSocket() client: Socket)
-  {
+  async handleLeavePrivateRoom(@ConnectedSocket() client: Socket) {
     console.log('Leaving private game ' + client.id);
     this.gameService.leaveInvitationRoom(client);
   }
@@ -99,8 +113,8 @@ export class GameGateway
   @SubscribeMessage('create_room')
   async handleCreateRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() gameDataOptions: CreateGameDto)
-    {
+    @MessageBody() gameDataOptions: CreateGameDto
+  ) {
     console.log('Customizing a game ' + client.id);
     this.gameService.customizeGame(client, gameDataOptions);
     const game = await this.gameService.handleWaitingRoom();
@@ -108,9 +122,16 @@ export class GameGateway
       game.firstPlayer.socket.join(game.id);
       game.secondPlayer.socket.join(game.id);
       this.server.to(game.id).emit('game_found', game.id);
-      const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
-      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
-      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+      const gameLoopInterval = setInterval(
+        () => this.gameLoop(game, gameLoopInterval),
+        10
+      );
+      game.firstPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer1(game, gameLoopInterval)
+      );
+      game.secondPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer2(game, gameLoopInterval)
+      );
     }
   }
 
@@ -123,8 +144,7 @@ export class GameGateway
   }
 
   @SubscribeMessage('join_waiting_room')
-  async handleJoinWaitingRoom(@ConnectedSocket() client: Socket)
-  {
+  async handleJoinWaitingRoom(@ConnectedSocket() client: Socket) {
     console.log('Joining waiting room ', client.id);
     this.gameService.addToWaitingRoom(client);
     const game = await this.gameService.handleWaitingRoom();
@@ -132,9 +152,16 @@ export class GameGateway
       game.firstPlayer.socket.join(game.id);
       game.secondPlayer.socket.join(game.id);
       this.server.to(game.id).emit('game_found', game.id);
-      const gameLoopInterval = setInterval(() => this.gameLoop(game, gameLoopInterval), 10);
-      game.firstPlayer.socket.on('disconnect', () => this.disconnectPlayer1(game, gameLoopInterval));
-      game.secondPlayer.socket.on('disconnect', () => this.disconnectPlayer2(game, gameLoopInterval));
+      const gameLoopInterval = setInterval(
+        () => this.gameLoop(game, gameLoopInterval),
+        10
+      );
+      game.firstPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer1(game, gameLoopInterval)
+      );
+      game.secondPlayer.socket.on('disconnect', () =>
+        this.disconnectPlayer2(game, gameLoopInterval)
+      );
     }
   }
 
@@ -153,8 +180,8 @@ export class GameGateway
   @SubscribeMessage('move_user')
   async handleKeyPressed(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { gameId: string; direction: string })
-  {
+    @MessageBody() data: { gameId: string; direction: string }
+  ) {
     this.gameService.movePad(client, data.gameId, data.direction);
   }
 
@@ -175,8 +202,7 @@ export class GameGateway
         .then(() => this.userService.updateScore(winner_id, ScoreField.Wins))
         .then(() => this.userService.updateScore(loser_id, ScoreField.Loses))
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(winner_id);
-          this.achievementsService.checkAndGrantGameAchievements(loser_id);
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }
@@ -206,12 +232,7 @@ export class GameGateway
           this.userService.updateScore(game.secondPlayer.id, ScoreField.Loses)
         )
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.firstPlayer.id
-          );
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.secondPlayer.id
-          );
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }
@@ -241,12 +262,7 @@ export class GameGateway
           this.userService.updateScore(game.firstPlayer.id, ScoreField.Loses)
         )
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.firstPlayer.id
-          );
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.secondPlayer.id
-          );
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }

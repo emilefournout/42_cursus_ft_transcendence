@@ -16,7 +16,7 @@ export function Message(props: MessageProps) {
 	useEffect(() => {
 		return () => {
 			fetch(
-				`${process.env.REACT_APP_BACKEND}/user/info/id/${props.message.userId}`,
+				`${process.env.REACT_APP_BACKEND}/user/info/${props.message.userId}`,
 				{
 					method: "GET",
 					headers: {
