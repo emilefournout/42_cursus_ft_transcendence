@@ -49,7 +49,7 @@ export class MembershipService {
       this.userService.findUserById(createChatMemberDto.id)
     ]);
     if(!chat || !user)
-      throw new NotFoundException(`${'Chat' ? !chat : 'User'} not found`);
+      throw new NotFoundException(`${!chat ? 'Chat' : 'User'} not found`);
     await this.checkAccess(chat, createChatMemberDto.password);
     try {
       await this.prisma.chatMember.create({
