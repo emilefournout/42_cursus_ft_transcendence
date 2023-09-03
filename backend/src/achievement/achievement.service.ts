@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GameService } from 'src/game/game.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from 'src/user/user.service';
 import { AchievementDto } from './dto/achievement.dto';
 
 @Injectable()
@@ -43,28 +41,6 @@ export class AchievementService {
       this.grantGameAchievement(userId, 'KO');
     if (user && user.wins === 10)
       this.grantGameAchievement(userId, 'eSport trainee');
-  }
-
-  // This function checks for some victory, not the first win
-  private async checkFirstWin(userId: number): Promise<boolean> {
-    const game = await this.prisma.$queryRaw`
-        SELECT
-        *
-        FROM "Game" game
-        WHERE (game."user1_id" = ${userId} AND game."points_user1" > game."points_user1")
-        OR (game."user2_id" = ${userId} AND game."points_user2" > game."points_user1")
-        `;
-    return game !== null;
-  }
-
-  // This function checks if there is more than 10 wins, not the tenth win
-  private async checkTenWins(userId: number): Promise<boolean> {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        id: userId
-      }
-    });
-    return user && user.wins > 10;
   }
 
   private async checkKOAchievement(userId: number): Promise<boolean> {

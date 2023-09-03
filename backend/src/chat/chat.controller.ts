@@ -48,8 +48,8 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Find a list of chats from the user' })
-  @ApiResponse({type: [ChatShortInfoDto]})
-  async findChats(@GetUser() user) : Promise<ChatShortInfoDto[]>{
+  @ApiResponse({ type: [ChatShortInfoDto] })
+  async findChats(@GetUser() user): Promise<ChatShortInfoDto[]> {
     const chat = await this.chatService.findChatsInfoById(user.sub);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
@@ -58,10 +58,14 @@ export class ChatController {
   @Get('search/:chatName')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Find a list of chats which contains the given name' })
-  @ApiResponse({type: [ChatShortInfoDto]})
-  async findChatsByName(@Param('chatName') chatName: string) : Promise<ChatShortInfoDto[]>{
-    console.log(chatName)
+  @ApiOperation({
+    summary: 'Find a list of chats which contains the given name'
+  })
+  @ApiResponse({ type: [ChatShortInfoDto] })
+  async findChatsByName(
+    @Param('chatName') chatName: string
+  ): Promise<ChatShortInfoDto[]> {
+    console.log(chatName);
     const chat = await this.chatService.findChatsInfoContainingName(chatName);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;
@@ -73,12 +77,16 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get basic info about a chat',
-    description: 'If the user is not in the chat, response will throw an exception'
+    description:
+      'If the user is not in the chat, response will throw an exception'
   })
-  @ApiResponse({type: ChatBasicInfoDto})
-  async findChat(@GetUser() user, @Param('id', ParseIntPipe) chatId) : Promise<ChatBasicInfoDto>
-  {
-    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
+  @ApiResponse({ type: ChatBasicInfoDto })
+  async findChat(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId
+  ): Promise<ChatBasicInfoDto> {
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId))
+      throw new ForbiddenException('User is not part of this chat');
     const chat = await this.chatService.findChatByIdWithUserInside(chatId);
     if (!chat) throw new NotFoundException('Chat not found');
     return chat;
@@ -92,8 +100,11 @@ export class ChatController {
     description:
       'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'
   })
-  @ApiResponse({type: ChatBasicInfoDto})
-  async createChat(@GetUser() user, @Body() createChatDto: CreateChatDto): Promise<ChatBasicInfoDto> {
+  @ApiResponse({ type: ChatBasicInfoDto })
+  async createChat(
+    @GetUser() user,
+    @Body() createChatDto: CreateChatDto
+  ): Promise<ChatBasicInfoDto> {
     try {
       const newChat = await this.chatService.createChat(
         user.sub,
@@ -114,11 +125,9 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Deletes a chat only if owner' })
-  async deleteChat(
-    @GetUser() user,
-    @Param('id', ParseIntPipe) chatId
-    ) {
-    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not allowed to delete this chat")
+  async deleteChat(@GetUser() user, @Param('id', ParseIntPipe) chatId) {
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not allowed to delete this chat');
     await this.chatService.deleteChat(chatId);
   }
 
@@ -136,7 +145,10 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() updateChatDto: UpdateChatDto
   ) {
-    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not update information from this chat")
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId))
+      throw new ForbiddenException(
+        'User is not update information from this chat'
+      );
     await this.chatService.updateChat(chatId, updateChatDto);
   }
 
@@ -145,16 +157,19 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Gets chat members from a given chat',
+    summary: 'Gets chat members from a given chat'
   })
   @ApiResponse({ type: [ChatMemberBasicInfoDto] })
   async getChatMember(
     @GetUser() user,
-    @Param('id', ParseIntPipe) chatId,
-  ) : Promise<ChatMemberBasicInfoDto[]>{
-    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is not part of this chat")
+    @Param('id', ParseIntPipe) chatId
+  ): Promise<ChatMemberBasicInfoDto[]> {
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId))
+      throw new ForbiddenException('User is not part of this chat');
     const members = await this.membershipService.findChatMemberByChatId(chatId);
-    return members.map((chatMember) => ChatMemberBasicInfoDto.fromChatMember(chatMember))
+    return members.map((chatMember) =>
+      ChatMemberBasicInfoDto.fromChatMember(chatMember)
+    );
   }
 
   @Post(':id/user')
@@ -170,7 +185,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() createChatMemberDto: CreateChatMemberDto
   ) {
-    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.createChatMember(chatId, createChatMemberDto);
   }
 
@@ -182,15 +198,20 @@ export class ChatController {
     summary: 'Joins the user to the given chat',
     description: 'Password is optional'
   })
-  @ApiBody({ type: JoinChatDto})
+  @ApiBody({ type: JoinChatDto })
   async joinChat(
     @GetUser() user,
     @Param('id', ParseIntPipe) chatId,
     @Body() joinChatDto: JoinChatDto
   ) {
-    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new ForbiddenException("User is already a member of the chat")
-    if (!this.membershipService.isOpenToUsers(chatId)) throw new ForbiddenException("Chat is not open to join this user")
-    await this.membershipService.createChatMember(chatId, {id: user.sub, password: joinChatDto.password});
+    if (!this.membershipService.isUserMemberOfChat(user.sub, chatId))
+      throw new ForbiddenException('User is already a member of the chat');
+    if (!this.membershipService.isOpenToUsers(chatId))
+      throw new ForbiddenException('Chat is not open to join this user');
+    await this.membershipService.createChatMember(chatId, {
+      id: user.sub,
+      password: joinChatDto.password
+    });
   }
 
   @Delete(':id/user')
@@ -206,7 +227,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() deleteChatMemberDto: DeleteChatMemberDto
   ) {
-    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.deleteChatMember(
       chatId,
       deleteChatMemberDto.id
@@ -227,7 +249,10 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() updateChatMember: UpdateChatMemberDto
   ) {
-    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not update information from this chat")
+    if (!this.membershipService.isOwnerOfTheChat(user.sub, chatId))
+      throw new ForbiddenException(
+        'User is not update information from this chat'
+      );
     await this.membershipService.updateChatMember(
       updateChatMember.userId,
       chatId,
@@ -239,11 +264,9 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
-  async findChatMessages(
-    @GetUser() user,
-    @Param('id', ParseIntPipe) chatId
-  ) {
-    if (!await this.membershipService.isUserMemberOfChat(user.sub, chatId)) throw new UnauthorizedException("User is not part of this chat")
+  async findChatMessages(@GetUser() user, @Param('id', ParseIntPipe) chatId) {
+    if (!(await this.membershipService.isUserMemberOfChat(user.sub, chatId)))
+      throw new UnauthorizedException('User is not part of this chat');
     const messages = await this.chatService.findChatMessagesById(chatId);
     if (!messages) throw new NotFoundException('Chat not found');
     return messages;
@@ -258,7 +281,13 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() createMessageDto: CreateMessageDto
   ) {
-    if (!await this.membershipService.isUserAllowedToTextOnChat(user.sub, chatId)) throw new UnauthorizedException("User cannot text in this chat")
+    if (
+      !(await this.membershipService.isUserAllowedToTextOnChat(
+        user.sub,
+        chatId
+      ))
+    )
+      throw new UnauthorizedException('User cannot text in this chat');
     const created = await this.chatService.createChatMessages(
       chatId,
       createMessageDto.userId,
@@ -279,7 +308,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: MuteUserDto
   ) {
-    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.muteUser(
       chatId,
       muteUserDto.userId,
@@ -299,7 +329,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: UnmuteUserDto
   ) {
-    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId)) throw new ForbiddenException("User is not an administrator of this chat")
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.unmuteUser(chatId, muteUserDto.userId);
   }
 }

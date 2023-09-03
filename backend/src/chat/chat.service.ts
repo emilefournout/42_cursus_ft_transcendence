@@ -1,20 +1,22 @@
 import * as argon2 from 'argon2';
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Chat, ChatVisibility, User } from '@prisma/client';
-import { UserService } from 'src/user/user.service';
+import { Chat, ChatVisibility } from '@prisma/client';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
-import { MembershipService } from './membership.service';
-import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
 import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 
 @Injectable()
 export class ChatService {
   constructor(private prisma: PrismaService) {}
-  
-  async findChatsInfoById(id: number) : Promise<ChatShortInfoDto[]> {
-    const chats : Chat[] = await this.prisma.$queryRaw`
+
+  async findChatsInfoById(id: number): Promise<ChatShortInfoDto[]> {
+    const chats: Chat[] = await this.prisma.$queryRaw`
     SELECT
     *
     FROM "Chat" chat
@@ -24,114 +26,121 @@ export class ChatService {
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
 
-  async findChatsInfoContainingName(chatName: string) : Promise<ChatShortInfoDto[]> {
-    const chats : Chat[] = await this.prisma.chat.findMany({
+  async findChatsInfoContainingName(
+    chatName: string
+  ): Promise<ChatShortInfoDto[]> {
+    const chats: Chat[] = await this.prisma.chat.findMany({
       where: {
         name: {
           contains: chatName
         },
-        OR:[
+        OR: [
           {
-            visibility: "PROTECTED",
+            visibility: 'PROTECTED'
           },
           {
-            visibility: "PUBLIC",
-          },
+            visibility: 'PUBLIC'
+          }
         ]
-        }
-    })
+      }
+    });
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
 
-  
-
-async createChat(
-  user_id: number,
-  chatVisibility: ChatVisibility,
-  name: string,
-  password?: string,
-  invitedId?: number
-): Promise<ChatBasicInfoDto> {
-  if (chatVisibility === 'PROTECTED' && !password) {
-    throw new BadRequestException('No password provided for protected chat');
-  }
-
-  let hashedPassword: string | null = null;
-  if (chatVisibility === 'PROTECTED' && password) {
-    hashedPassword = await argon2.hash(password);
-  }
-
-  const chatData = {
-    visibility: chatVisibility,
-    name: name,
-    password: hashedPassword,
-    members: {
-      create: [{ userId: user_id, administrator: true, owner: true }]
+  async createChat(
+    user_id: number,
+    chatVisibility: ChatVisibility,
+    name: string,
+    password?: string,
+    invitedId?: number
+  ): Promise<ChatBasicInfoDto> {
+    if (chatVisibility === 'PROTECTED' && !password) {
+      throw new BadRequestException('No password provided for protected chat');
     }
-  };
 
-  if (invitedId) {
-    chatData.members.create.push({ userId: invitedId, administrator: false, owner: false });
+    let hashedPassword: string | null = null;
+    if (chatVisibility === 'PROTECTED' && password) {
+      hashedPassword = await argon2.hash(password);
+    }
+
+    const chatData = {
+      visibility: chatVisibility,
+      name: name,
+      password: hashedPassword,
+      members: {
+        create: [{ userId: user_id, administrator: true, owner: true }]
+      }
+    };
+
+    if (invitedId) {
+      chatData.members.create.push({
+        userId: invitedId,
+        administrator: false,
+        owner: false
+      });
+    }
+
+    const chat = await this.prisma.chat.create({
+      data: chatData
+    });
+    if (chat) return ChatBasicInfoDto.fromChat(chat);
+    return null;
   }
 
-  const chat = await this.prisma.chat.create({
-    data: chatData
-  })
-  if (chat)
-    return ChatBasicInfoDto.fromChat(chat)
-  return null;
-}
-
-  async deleteChat(chatId: number){
+  async deleteChat(chatId: number) {
     const chat = await this.findChatById(chatId);
-    if(!chat)
-      throw new NotFoundException('Chat not found');
+    if (!chat) throw new NotFoundException('Chat not found');
     try {
       await this.prisma.chat.delete({
         where: {
           id: chatId
         }
       });
-    } catch(error) {
+    } catch (error) {
       throw new ForbiddenException('Could not delete chat');
     }
   }
 
   async updateChat(id: number, updateChatDto: UpdateChatDto) {
-    if(updateChatDto.password === undefined && updateChatDto.chatVisibility === undefined)
+    if (
+      updateChatDto.password === undefined &&
+      updateChatDto.chatVisibility === undefined
+    )
       throw new BadRequestException('Empty request');
-    else if(updateChatDto.chatVisibility === 'PROTECTED' && !updateChatDto.password)
+    else if (
+      updateChatDto.chatVisibility === 'PROTECTED' &&
+      !updateChatDto.password
+    )
       throw new BadRequestException('Protected chat requires a password');
     const chat = await this.findChatById(id);
-    if(!chat)
-      throw new NotFoundException('Chat not found');
-    if(updateChatDto.chatVisibility !== 'PROTECTED')
-      updateChatDto.password = null
-    chat.password = updateChatDto.password
-    chat.visibility = updateChatDto.chatVisibility
+    if (!chat) throw new NotFoundException('Chat not found');
+    if (updateChatDto.chatVisibility !== 'PROTECTED')
+      updateChatDto.password = null;
+    chat.password = updateChatDto.password;
+    chat.visibility = updateChatDto.chatVisibility;
     try {
       await this.prisma.chat.update({
         where: {
           id: id
         },
         data: chat
-      })
-    } catch(error) {
+      });
+    } catch (error) {
       throw new ForbiddenException('Could not update user');
     }
   }
 
   async createChatMessages(chat_id: number, user_id: number, text: string) {
     try {
-        return await this.prisma.message.create({
-          data: {
-            chatId: chat_id,
-            userId: user_id,
-            text: text
-          }
-        });
+      return await this.prisma.message.create({
+        data: {
+          chatId: chat_id,
+          userId: user_id,
+          text: text
+        }
+      });
     } catch (error) {
-        return false;
+      return false;
     }
   }
 
@@ -151,8 +160,7 @@ async createChat(
           select: {
             userId: true,
             user: {
-              select: 
-              {
+              select: {
                 username: true
               }
             },
@@ -160,7 +168,7 @@ async createChat(
             administrator: true,
             owner: true,
             muted: true,
-            mutedExpiringDate: true,
+            mutedExpiringDate: true
           }
         }
       },
@@ -168,9 +176,8 @@ async createChat(
         id: id
       }
     });
-    if(!chat)
-      return null;
-    return ChatBasicInfoDto.fromChat(chat)
+    if (!chat) return null;
+    return ChatBasicInfoDto.fromChat(chat);
   }
 
   async findChatMessagesById(id: number) {
