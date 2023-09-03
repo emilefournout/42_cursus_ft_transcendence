@@ -1,7 +1,9 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
-  NotFoundException
+  NotFoundException,
+  forwardRef
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GameData, GameDataOptions } from './types/game-data.class';
@@ -10,6 +12,7 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';
 import { ConnectionStorage } from './types/connection-storage.class';
 import { Pair } from './types/privateroom-pair.class';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class GameService {
@@ -19,7 +22,10 @@ export class GameService {
   private privateRoom: Map<Socket, Pair> = new Map<Socket, Pair>();
   private games: Map<string, GameState> = new Map<string, GameState>();
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService) {}
 
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
@@ -28,6 +34,14 @@ export class GameService {
       }
     });
     return game;
+  }
+
+  async getUserInvitations(id: number) {
+    const user = await this.userService.findUserById(id);
+    if(!user)
+      throw new NotFoundException();
+
+    return this.getUserInvitationsById(id);
   }
 
   findActiveGames(): string[] {
@@ -48,11 +62,11 @@ export class GameService {
 
   getUserInvitationsById(id: number) {
     const invitations = []
-    let inviterId = null
     this.privateRoom.forEach((gameData, socket) => {
-      if(gameData.invitedId === id)
-        inviterId = this.getUserIdFromSocket(socket);
+      if(gameData.invitedId === id) {
+        const inviterId = this.getUserIdFromSocket(socket);
         invitations.push(inviterId)
+      }
     })
 
     return invitations;

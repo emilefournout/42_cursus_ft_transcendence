@@ -9,9 +9,12 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { GameService } from './game.service';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guard';
+import { GetUser } from 'src/auth/decorator';
 
 @ApiTags('Game')
 @Controller('game')
@@ -33,5 +36,16 @@ export class GameController {
   @ApiResponse({type: [String]})
   getActiveGame() : string[] {
     return this.gameService.findActiveGames();
+  }
+
+  @Get('/invitations')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets user game invitations.',
+    description: 'If no invitations are found, 404 will be returned'
+  })
+  async getUserInvitations(@GetUser() user) {
+    return await this.gameService.getUserInvitations(user.sub);
   }
 }

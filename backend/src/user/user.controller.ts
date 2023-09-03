@@ -146,17 +146,6 @@ export class UserController {
     return await this.userService.getUserFriendships(user.sub);
   }
 
-  @Get('/invitations')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Gets user game invitations.',
-    description: 'If no invitations are found, 404 will be returned'
-  })
-  async getUserInvitations(@GetUser() user) {
-    return await this.userService.getUserInvitations(user.sub);
-  }
-
   @Post('/block/:id')
   @ApiParam({
     name: 'id',

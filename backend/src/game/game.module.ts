@@ -7,6 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserService } from 'src/user/user.service';
 import { AchievementsModule } from 'src/achievement/achievement.module';
 import { AchievementService } from 'src/achievement/achievement.service';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [AchievementsModule, forwardRef(() =>AuthModule)],

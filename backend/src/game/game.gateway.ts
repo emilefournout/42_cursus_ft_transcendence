@@ -65,7 +65,14 @@ export class GameGateway
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto)
   {
     console.log('Creating private game ' + client.id);
-    this.gameService.createPrivateRoom(client, privateGameDataOptions.gameDto, privateGameDataOptions.invitedId)
+    const friend = await this.userService.findUserByName(privateGameDataOptions.friendUserName)
+    if(!friend){
+      console.log('Sadly emitted bro')
+      return 'ko';
+    }
+    console.log(`USER FOUND?? -> ${friend.username}`)
+    this.gameService.createPrivateRoom(client, privateGameDataOptions.gameDto, friend.id)
+    return 'ok';
   }
 
   @SubscribeMessage('join_private_room')

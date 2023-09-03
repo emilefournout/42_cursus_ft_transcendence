@@ -141,14 +141,6 @@ export class UserService {
     return users.map((chat) => UserBasicInfoDto.fromUser(chat));
   }
 
-  async getUserInvitations(id: number) {
-    const user = await this.findUserById(id);
-    if(!user)
-      throw new UserServiceErrors.UserNotFoundException();
-    
-    return this.gameService.getUserInvitationsById(id);
-  }
-
   async getUserHistory(id: number) {
     const user = await this.findUserById(id);
     if(!user)
