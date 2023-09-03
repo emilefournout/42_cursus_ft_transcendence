@@ -73,8 +73,9 @@ export class GameService {
         invitations.push(inviterId)
       }
     })
-
-    return invitations;
+    if(invitations.length === 0)
+      throw new NotFoundException();
+    return {invitations};
   }
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
@@ -120,19 +121,18 @@ export class GameService {
 
   async joinPrivateRoom(client: Socket, friendId: number) {
     let invitation = null;
-    this.privateRoom.forEach((gameData, socket) => {
+    this.privateRoom.forEach((pair, socket) => {
       const socketUserId = this.getUserIdFromSocket(socket);
       if (socketUserId === friendId) {
-        invitation = { socket, gameData };
+        invitation = { socket, pair };
       }
     });
     if (!invitation) return null;
-    this.privateRoom.delete(invitation.socket);
     const player1: Socket = invitation.socket;
     const player2: Socket = client;
     const player1Id = this.getUserIdFromSocket(player1);
     const player2Id = this.getUserIdFromSocket(player2);
-    const gameOptions = invitation.gameData;
+    const gameOptions = invitation.pair.gameData;
     const game = await this.createGame(player1Id, player2Id);
     const gameState = new GameState(
       game,
@@ -140,6 +140,7 @@ export class GameService {
       { socket: player2, id: player2Id },
       gameOptions
     );
+    this.privateRoom.delete(invitation.socket);
     this.games.set(game, gameState);
     return gameState;
   }

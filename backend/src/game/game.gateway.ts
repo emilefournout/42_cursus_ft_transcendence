@@ -119,7 +119,6 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() uuid: string | null
   ) {
-    // TODO ? -> Check if the user should be able to join the room (uuid, finished game, permissions)
     client.join(uuid);
   }
 
@@ -166,8 +165,6 @@ export class GameGateway
       clearInterval(gameLoopInterval);
       const winnerUser = await this.userService.findUserById(gameState.winner);
       this.server.to(game.id).emit('end', winnerUser.username);
-      //game.player1.client.disconnect(); TODO -> Handle clients disconnections
-      //game.player2.client.disconnect();
       const [winner_id, loser_id] = [gameState.winner, gameState.loser];
       this.gameService
         .updateGame(game.id, {
