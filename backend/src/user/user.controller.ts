@@ -66,7 +66,7 @@ export class UserController {
     return this.findUser(user.sub);
   }
 
-  @Get('info/id/:id')
+  @Get('info/:id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ summary: 'Returns a basic info about a user.' })
   @ApiResponse({ type: UserBasicInfoDto })

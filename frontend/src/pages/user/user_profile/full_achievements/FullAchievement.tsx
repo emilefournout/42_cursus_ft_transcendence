@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AchievementCard } from "../profile/achievements/AchievementCard";
 import { useNavigate } from "react-router-dom";
+import { BoardContext } from "../../../board/Board";
 
 export interface Achievement {
 	name: string;
@@ -12,9 +13,11 @@ export function FullAchievements() {
 		Array<Achievement> | undefined
 	>(undefined);
 	const navigate = useNavigate();
+  const boardContext = useContext(BoardContext);
+  const userId = boardContext?.me.id;
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND}/achievements/all`, {
+		fetch(`${process.env.REACT_APP_BACKEND}/achievements/${userId}`, {
 			method: "GET",
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -30,7 +33,7 @@ export function FullAchievements() {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, []);
+	}, [userId]);
 	if (achievements === undefined) {
 		return (
 			<div className="prof-cards-wrapper">
@@ -48,6 +51,7 @@ export function FullAchievements() {
 						{achievements.map((achievement: Achievement) => {
 							return (
 								<AchievementCard
+									key={achievement.name}
 									title={achievement.name}
 									description={achievement.description}
 								/>

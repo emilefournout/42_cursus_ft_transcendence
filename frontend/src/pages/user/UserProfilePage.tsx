@@ -49,7 +49,7 @@ export function UserProfilePage() {
   const getUserInfoFromId = React.useCallback(
     async (friendId: number): Promise<User> => {
       return fetch(
-        `${process.env.REACT_APP_BACKEND}/user/info/id/${friendId}`,
+        `${process.env.REACT_APP_BACKEND}/user/info/${friendId}`,
         {
           method: "GET",
           headers: {
