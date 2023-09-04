@@ -175,12 +175,16 @@
 	flex-grow: 1;
 }
 
-.history-txt-win {
+.history-txt {
+	width: 1.8em;
+
 	font-size: clamp(0.4rem, 2vw, 0.8rem) !important;
+}
+
+.history-txt-win {
 	color: var(--Mooned-Teal);
 }
 
 .history-txt-loose {
-	font-size: clamp(0.4rem, 2vw, 0.8rem) !important;
 	color: var(--Cosmic-Purple);
 }
