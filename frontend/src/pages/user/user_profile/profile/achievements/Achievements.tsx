@@ -69,33 +69,6 @@ export function Achievements(props: AchievementsProps) {
 							/>
 						);
 					})}
-					{achievements.map((achievement: Achievement, index) => {
-						return (
-							<AchievementCard
-								title={achievement.name}
-								description={achievement.description}
-								key={index}
-							/>
-						);
-					})}
-					{achievements.map((achievement: Achievement, index) => {
-						return (
-							<AchievementCard
-								title={achievement.name}
-								description={achievement.description}
-								key={index}
-							/>
-						);
-					})}
-					{achievements.map((achievement: Achievement, index) => {
-						return (
-							<AchievementCard
-								title={achievement.name}
-								description={achievement.description}
-								key={index}
-							/>
-						);
-					})}
 				</div>
 			</div>
 		);
