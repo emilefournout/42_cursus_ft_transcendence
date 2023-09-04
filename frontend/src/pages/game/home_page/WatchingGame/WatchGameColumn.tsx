@@ -27,9 +27,13 @@ export function WatchGameColumn() {
   return (
     <div className="wrapper-col">
       <div>currents game:</div>
-      {activePlays.map((uuid) => {
-        return <WatchingGameCard uuid={uuid} key={uuid} />;
-      })}
+      {activePlays.length === 0 ? (
+        <>No game to watch</>
+      ) : (
+        activePlays.map((uuid) => {
+          return <WatchingGameCard uuid={uuid} key={uuid} />;
+        })
+      )}
     </div>
   );
 }
