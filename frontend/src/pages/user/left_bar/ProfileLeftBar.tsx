@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfileToolBar } from "./tool_bar/ProfileToolBar";
 import { FriendList } from "./friend_list/FriendList";
 import "./ProfileLeftBar.css";
@@ -30,7 +30,6 @@ export function ProfileLeftBar() {
       >
         <div id="prof-left-bar" className="wrapper-col">
           {/* My profile button*/}
-
           <ProfileToolBar />
           <FriendList />
         </div>
