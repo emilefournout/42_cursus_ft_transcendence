@@ -58,16 +58,19 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
 
 	return (
 		<div>
-			<dialog className="dialog-window wrapper-col" open={props.showUpdateDialog}>
-				This room is {roomContextArgs.chat.visibility}
-				<button disabled={roomContextArgs.chat.visibility === "PUBLIC"} onClick={() => updateVisibility(Visibility.PUBLIC)}>
-					Public
-				</button>
-				<button disabled={roomContextArgs.chat.visibility === "PRIVATE"} onClick={() => updateVisibility(Visibility.PROTECTED)}>
-					Protected
-				</button>
-				<button onClick={close}>Cancel</button>
-			</dialog>
+			{props.showUpdateDialog ?
+				<dialog className="dialog-window wrapper-col">
+					This room is {roomContextArgs.chat.visibility}
+					<button disabled={roomContextArgs.chat.visibility === "PUBLIC"} onClick={() => updateVisibility(Visibility.PUBLIC)}>
+						Public
+					</button>
+					<button disabled={roomContextArgs.chat.visibility === "PRIVATE"} onClick={() => updateVisibility(Visibility.PROTECTED)}>
+						Protected
+					</button>
+					<button onClick={close}>Cancel</button>
+				</dialog>
+				: <></>
+			}
 		</div>
 	);
 }
