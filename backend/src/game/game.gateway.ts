@@ -64,11 +64,20 @@ export class GameGateway
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto
   ) {
     console.log('Creating private game ' + client.id);
+    const friend = await this.userService.findUserByName(
+      privateGameDataOptions.friendUserName
+    );
+    if (!friend) {
+      console.log('Sadly emitted bro');
+      return 'ko';
+    }
+    console.log(`USER FOUND?? -> ${friend.username}`);
     this.gameService.createPrivateRoom(
       client,
       privateGameDataOptions.gameDto,
-      privateGameDataOptions.invitedId
+      friend.id
     );
+    return 'ok';
   }
 
   @SubscribeMessage('join_private_room')
@@ -131,7 +140,6 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() uuid: string | null
   ) {
-    // TODO ? -> Check if the user should be able to join the room (uuid, finished game, permissions)
     client.join(uuid);
   }
 
@@ -159,13 +167,13 @@ export class GameGateway
 
   @SubscribeMessage('leave_waiting_room')
   handleLeaveWaitingRoom(@ConnectedSocket() client: Socket) {
-    console.log('Leaving waiting room ', client.id);
+    console.log('Leaving waiting room', client.id);
     this.gameService.leaveWaitingRoom(client);
   }
 
   @SubscribeMessage('leave_creating_room')
   handleLeaveCreatingRoom(@ConnectedSocket() client: Socket) {
-    console.log('Leaving creating room ', client.id);
+    console.log('Leaving creating room', client.id);
     this.gameService.leaveCreatingRoom(client);
   }
 
@@ -184,8 +192,6 @@ export class GameGateway
       clearInterval(gameLoopInterval);
       const winnerUser = await this.userService.findUserById(gameState.winner);
       this.server.to(game.id).emit('end', winnerUser.username);
-      //game.player1.client.disconnect(); TODO -> Handle clients disconnections
-      //game.player2.client.disconnect();
       const [winner_id, loser_id] = [gameState.winner, gameState.loser];
       this.gameService
         .updateGame(game.id, {
@@ -196,8 +202,7 @@ export class GameGateway
         .then(() => this.userService.updateScore(winner_id, ScoreField.Wins))
         .then(() => this.userService.updateScore(loser_id, ScoreField.Loses))
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(winner_id);
-          this.achievementsService.checkAndGrantGameAchievements(loser_id);
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }
@@ -227,12 +232,7 @@ export class GameGateway
           this.userService.updateScore(game.secondPlayer.id, ScoreField.Loses)
         )
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.firstPlayer.id
-          );
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.secondPlayer.id
-          );
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }
@@ -262,12 +262,7 @@ export class GameGateway
           this.userService.updateScore(game.firstPlayer.id, ScoreField.Loses)
         )
         .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.firstPlayer.id
-          );
-          this.achievementsService.checkAndGrantGameAchievements(
-            game.secondPlayer.id
-          );
+          this.achievementsService.checkAndGrantGameAchievements(game);
         });
     }
   }

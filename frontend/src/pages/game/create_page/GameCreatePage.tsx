@@ -9,6 +9,9 @@ export function GameCreatePage() {
   const [maxGoals, setMaxGoals] = useState(10);
   const [speed, setSpeed] = useState(1);
   const [powerUps, setPoweUps] = useState(false);
+  const [error, setError] = useState(false);
+  const [invitation, setInvitation] = useState(false);
+  const [friendInvited, setFriendInvited] = useState("");
   const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
   const MAX_GOALS = 25;
@@ -16,6 +19,7 @@ export function GameCreatePage() {
   let waiting = useRef(false);
 
   useEffect(() => {
+    console.log('SOCKET GOT MESSAGE')
     if (!waiting.current) {
       gameSocket.off("game_found");
       gameSocket.on("game_found", (gameId) => {
@@ -28,6 +32,32 @@ export function GameCreatePage() {
       gameSocket.emit("leave_creating_room");
     };
   }, [gameSocket, navigate]);
+
+  useEffect(() => {
+    console.log('SOCKET GOT MESSAGE')
+    if (!waiting.current) {
+      gameSocket.off("friend_found");
+      gameSocket.on("friend_found", () => {
+        
+      });
+      waiting.current = true;
+    }
+    return () => {
+      waiting.current = false;
+      gameSocket.emit("leave_private_room");
+    };
+  }, [gameSocket, navigate]);
+  
+  useEffect(() => {
+    console.log('SOCKET GOT MESSAGE')
+    if (!waiting.current) {
+      gameSocket.off("friend_not_found");
+      gameSocket.on("friend_not_found", () => {
+        console.log('Friend not found buddy')
+        
+      });
+    }
+  }, [gameSocket]);
 
   return (
     <>
@@ -74,18 +104,55 @@ export function GameCreatePage() {
                   setPoweUps(!powerUps);
                 }}
               />
+              <label htmlFor="inviteFriend">Invite a friend</label>
+              <input
+                id="inviteFriend"
+                type="checkbox"
+                defaultChecked={invitation}
+                onClick={(event) => {
+                  console.log(`Invitation is now: ${invitation}`)
+                  setInvitation(!invitation);
+                }}
+                />
+                {invitation && (
+                <input
+                  id="unc-in1"
+                  type="text"
+                  value={friendInvited}
+                  placeholder="Friend username"
+                  onChange={(e) => setFriendInvited(e.target.value)}
+                  />
+                  )}
+                  {error && (
+                    <>Friend not found</>
+                  )}
+                  {error && (
+                  <button
+                    className="btn game-creation-btn create-game-btn btn-bottom"
+                    onClick={(event) => {
+                      setError(false)
+                    }}
+                    >
+                      OK
+                    </button>
+            )}
             </fieldset>
 
             <button
               className="btn game-creation-btn create-game-btn btn-bottom"
               onClick={(event) => {
-                gameSocket.emit("create_room", {
-                  speed,
-                  maxGoals,
-                  powerUps,
-                });
-                waiting.current = false;
-                setHiddenForm(true);
+                if(!invitation) {
+                  gameSocket.emit("create_room", {
+                    speed,
+                    maxGoals,
+                    powerUps,
+                  });
+                  waiting.current = false;
+                  setHiddenForm(true);
+                }
+                else {
+                  createPrivateGame();
+                }
               }}
             >
               Create
@@ -95,12 +162,34 @@ export function GameCreatePage() {
         {hiddenForm && (
           <>
             <div className="matchmaking-loader"></div>
-            <p className="matchmaking-scaling">Finding new rival for you</p>
+            <p className="matchmaking-scaling">
+              {!invitation ? 'Finding new rival for you' : `Waiting for ${friendInvited} to join`}
+            </p>
           </>
         )}
       </div>
     </>
   );
+
+  function createPrivateGame() {
+    gameSocket.emit("create_private_room", {
+      gameDto: {
+        speed,
+        maxGoals,
+        powerUps
+      },
+      friendUserName: friendInvited
+    }, (response: any) => {
+      if(response === 'ok') {
+        setHiddenForm(true);
+        waiting.current = true;
+      }
+      else {
+        setError(true);
+        waiting.current = false;
+      }
+    });
+  }
 
   function checkValueLimits(event: React.ChangeEvent<HTMLInputElement>) {
     const value: number = parseInt(event.target.value);

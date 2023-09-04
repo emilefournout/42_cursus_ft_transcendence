@@ -1,5 +1,5 @@
 import { GameStatus } from "@prisma/client"
-import { IsBoolean, IsDefined, IsNumber, Max, Min } from "class-validator"
+import { IsBoolean, IsDefined, IsNotEmpty, IsNumber, IsString, Max, Min } from "class-validator"
 
 export class CreateGameDto {
     @IsDefined()
@@ -25,7 +25,7 @@ export class CreatePrivateGameDto {
     gameDto: CreateGameDto
 
     @IsDefined()
-    @IsNumber()
-    @Min(2)
-    invitedId: number
+    @IsString()
+    @IsNotEmpty()
+    friendUserName: string
 }

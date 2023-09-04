@@ -1,7 +1,9 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
-  NotFoundException
+  NotFoundException,
+  forwardRef
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GameData, GameDataOptions } from './types/game-data.class';
@@ -10,6 +12,7 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { GameState } from './types/game-state.class';
 import { ConnectionStorage } from './types/connection-storage.class';
 import { Pair } from './types/privateroom-pair.class';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class GameService {
@@ -22,7 +25,10 @@ export class GameService {
   private privateRoom: Map<Socket, Pair> = new Map<Socket, Pair>();
   private games: Map<string, GameState> = new Map<string, GameState>();
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService) {}
 
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
@@ -31,6 +37,14 @@ export class GameService {
       }
     });
     return game;
+  }
+
+  async getUserInvitations(id: number) {
+    const user = await this.userService.findUserById(id);
+    if(!user)
+      throw new NotFoundException();
+
+    return this.getUserInvitationsById(id);
   }
 
   findActiveGames(): string[] {
@@ -52,15 +66,16 @@ export class GameService {
   }
 
   getUserInvitationsById(id: number) {
-    const invitations = [];
-    let inviterId = null;
+    const invitations = []
     this.privateRoom.forEach((gameData, socket) => {
-      if (gameData.invitedId === id)
-        inviterId = this.getUserIdFromSocket(socket);
-      invitations.push(inviterId);
-    });
-
-    return invitations;
+      if(gameData.invitedId === id) {
+        const inviterId = this.getUserIdFromSocket(socket);
+        invitations.push(inviterId)
+      }
+    })
+    if(invitations.length === 0)
+      throw new NotFoundException();
+    return {invitations};
   }
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
@@ -106,19 +121,18 @@ export class GameService {
 
   async joinPrivateRoom(client: Socket, friendId: number) {
     let invitation = null;
-    this.privateRoom.forEach((gameData, socket) => {
+    this.privateRoom.forEach((pair, socket) => {
       const socketUserId = this.getUserIdFromSocket(socket);
       if (socketUserId === friendId) {
-        invitation = { socket, gameData };
+        invitation = { socket, pair };
       }
     });
     if (!invitation) return null;
-    this.privateRoom.delete(invitation.socket);
     const player1: Socket = invitation.socket;
     const player2: Socket = client;
     const player1Id = this.getUserIdFromSocket(player1);
     const player2Id = this.getUserIdFromSocket(player2);
-    const gameOptions = invitation.gameData;
+    const gameOptions = invitation.pair.gameData;
     const game = await this.createGame(player1Id, player2Id);
     const gameState = new GameState(
       game,
@@ -126,6 +140,7 @@ export class GameService {
       { socket: player2, id: player2Id },
       gameOptions
     );
+    this.privateRoom.delete(invitation.socket);
     this.games.set(game, gameState);
     return gameState;
   }
