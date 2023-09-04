@@ -40,7 +40,6 @@ export function Board() {
       })
       .catch((e) => {
         localStorage.removeItem("access_token")
-        localStorage.removeItem("username")
         setDialog("Received bad response from server, try to login again")
         navigate("/login")
       });

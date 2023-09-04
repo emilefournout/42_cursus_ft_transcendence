@@ -27,7 +27,6 @@ export function ChangeNamePage() {
       })
         .then((response) => {
           if (response.status === 200) {
-            localStorage.setItem("username", newUsername);
             setErrorMessage("username changed");
             boardContext?.updateMe();
           } else if (response.status === 400) {
