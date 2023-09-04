@@ -193,17 +193,15 @@ export class GameGateway
       const winnerUser = await this.userService.findUserById(gameState.winner);
       this.server.to(game.id).emit('end', winnerUser.username);
       const [winner_id, loser_id] = [gameState.winner, gameState.loser];
-      this.gameService
-        .updateGame(game.id, {
+      await Promise.all([this.gameService.updateGame(game.id, {
           points_user1: gameState.firstPlayerScore,
           points_user2: gameState.secondPlayerScore,
           status: 'FINISHED'
-        })
-        .then(() => this.userService.updateScore(winner_id, ScoreField.Wins))
-        .then(() => this.userService.updateScore(loser_id, ScoreField.Loses))
-        .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(game);
-        });
+        }),
+        this.userService.updateScore(winner_id, ScoreField.Wins),
+        this.userService.updateScore(loser_id, ScoreField.Loses),
+        this.achievementsService.checkAndGrantGameAchievements(game)
+      ]);
     }
   }
 
@@ -219,21 +217,15 @@ export class GameGateway
           'end',
           (await this.userService.findUserById(game.firstPlayer.id)).username
         );
-      this.gameService
-        .updateGame(game.id, {
+      await Promise.all([this.gameService.updateGame(game.id, {
           points_user1: game.goalsLimit,
           points_user2: -1,
           status: 'FINISHED'
-        })
-        .then(() =>
-          this.userService.updateScore(game.firstPlayer.id, ScoreField.Wins)
-        )
-        .then(() =>
-          this.userService.updateScore(game.secondPlayer.id, ScoreField.Loses)
-        )
-        .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(game);
-        });
+        }),
+        this.userService.updateScore(game.firstPlayer.id, ScoreField.Wins),
+        this.userService.updateScore(game.secondPlayer.id, ScoreField.Loses),
+        this.achievementsService.checkAndGrantGameAchievements(game)
+      ])
     }
   }
 
@@ -249,21 +241,14 @@ export class GameGateway
           'end',
           (await this.userService.findUserById(game.secondPlayer.id)).username
         );
-      this.gameService
-        .updateGame(game.id, {
+      await Promise.all([this.gameService.updateGame(game.id, {
           points_user1: -1,
           points_user2: game.goalsLimit,
           status: 'FINISHED'
-        })
-        .then(() =>
-          this.userService.updateScore(game.secondPlayer.id, ScoreField.Wins)
-        )
-        .then(() =>
-          this.userService.updateScore(game.firstPlayer.id, ScoreField.Loses)
-        )
-        .then(() => {
-          this.achievementsService.checkAndGrantGameAchievements(game);
-        });
+        }),
+        this.userService.updateScore(game.firstPlayer.id, ScoreField.Loses),
+        this.userService.updateScore(game.secondPlayer.id, ScoreField.Wins),
+        this.achievementsService.checkAndGrantGameAchievements(game)])
     }
   }
 }
