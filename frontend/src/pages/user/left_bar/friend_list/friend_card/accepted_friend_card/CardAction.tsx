@@ -8,41 +8,8 @@ interface CardActionProps {
 }
 
 export function CardAction(props: CardActionProps) {
-	const gameSocket = GameSocket.getInstance().socket;
 	const [deleteIsSelected, setDeleteIsSelected] = useState<boolean>(false);
-	const [invited, setInvited] = useState<boolean>(false);
 	const profilePageContext = React.useContext(ProfilePageContext);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		gameSocket.off("game_found");
-		gameSocket.on("game_found", (gameId) => {
-			navigate(`../game/${gameId}`);
-		});
-	}, [gameSocket]);
-
-	useEffect(() => {
-		fetch(
-			`${process.env.REACT_APP_BACKEND}/game/invitations`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-				},
-			}
-		).then((response) => {
-			if(response.ok) return response.json();
-			return null
-		}).then((data) => {
-			console.log(`data type is ${typeof(data)}`)
-			if(data) console.log(`data.invitations is ${data.invitations}`);
-			if(data){
-				data.invitations.forEach((id: number) => {
-					if(id === props.userId) setInvited(true);
-				})
-			}
-		})
-	})
 
 	const deleteUser = () => {
 		fetch(
@@ -78,13 +45,6 @@ export function CardAction(props: CardActionProps) {
 					Delete
 				</button>
 			)}
-			{invited &&
-				<button className="friend-card-subtitle-1" onClick={() => {
-					gameSocket.emit('join_private_room', props.userId)
-				}}>
-					Play
-				</button>
-			}
 		</>
 	);
 }

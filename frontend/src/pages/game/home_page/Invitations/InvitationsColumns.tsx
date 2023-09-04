@@ -34,7 +34,7 @@ export function InvitationsColumns() {
     <div className="wrapper-col">
       <div>Invitations:</div>
       {invitations.length === 0 ||
-      (invitations.length == 1 && invitations[0] == null) ? (
+      (invitations.length === 1 && invitations[0] === null) ? (
         <>No one invited you</>
       ) : (
         invitations.map((id, index) => {
