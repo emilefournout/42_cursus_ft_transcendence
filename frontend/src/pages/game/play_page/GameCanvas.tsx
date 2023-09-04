@@ -42,7 +42,6 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.stroke();
 
       // Draw left pad
-      console.log(props.leftPadHeight, " - left Height")
       ctx.fillStyle = "white";
       ctx.fillRect(
         padWallSeparation,
@@ -53,7 +52,6 @@ export function GameCanvas(props: GameCanvasProps) {
 
       // Draw right pad
       // ctx.fillStyle = "white"
-      console.log(props.leftPadHeight, " - right Height")
       ctx.fillRect(
         props.width - padWallSeparation - props.padWidth,
         props.rightPad,
