@@ -9,16 +9,7 @@ import * as qrcode from 'qrcode';
 import { authenticator } from 'otplib';
 import { UserService } from 'src/user/user.service';
 import { TwoFactorAuthenticationStatus } from '@prisma/client';
-
-interface I42_oauth {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
-  created_at: number;
-  secret_valid_until: number;
-}
+import { I42_oauth } from './interface/I42_oauth';
 
 @Injectable()
 export class AuthService {
