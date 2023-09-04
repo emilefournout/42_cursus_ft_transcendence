@@ -7,7 +7,14 @@ interface InvitationCardProps {
 export function InvitationCard(props: InvitationCardProps) {
   return (
     <div>
-      {props.id} invited you <button>accept</button>
+      {props.id} invited you{" "}
+      <button
+        onClick={() => {
+          /*TODO put the accept method : Adrian*/
+        }}
+      >
+        accept
+      </button>
     </div>
   );
 }
