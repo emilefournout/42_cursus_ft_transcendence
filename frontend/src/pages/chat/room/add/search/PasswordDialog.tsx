@@ -14,6 +14,7 @@ export function PasswordDialog(props: PasswordDialogProps) {
   const join = (password: string) => {
     if (password.length === 0) {
       setErrorMessage("Please enter a password");
+      return;
     }
     props.fetchJoin(props.showDialog!, password).catch((error) => {
       console.log(error);

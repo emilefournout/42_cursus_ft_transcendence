@@ -30,7 +30,7 @@ export function Profile(props: ProfileProps) {
         <div className="cards-container">
           <Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
           <MatchHistory userId={userInfo.id} username={userInfo.username} />
-          <Achievements />
+          <Achievements userId={userInfo.id} />
         </div>
       </div>
     );
