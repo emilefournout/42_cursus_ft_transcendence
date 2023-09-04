@@ -40,10 +40,6 @@ export class GameService {
   }
 
   async getUserInvitations(id: number) {
-    const user = await this.userService.findUserById(id);
-    if(!user)
-      throw new NotFoundException();
-
     return this.getUserInvitationsById(id);
   }
 
@@ -73,8 +69,6 @@ export class GameService {
         invitations.push(inviterId)
       }
     })
-    if(invitations.length === 0)
-      throw new NotFoundException();
     return {invitations};
   }
 

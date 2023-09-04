@@ -51,19 +51,20 @@ export class MembershipService {
 
   async createChatMember(
     chatId: number,
-    createChatMemberDto: CreateChatMemberDto
+    id: number,
+    password?: string
   ) {
     const [chat, user] = await Promise.all([
       this.chatService.findChatById(chatId),
-      this.userService.findUserById(createChatMemberDto.id)
+      this.userService.findUserById(id)
     ]);
     if (!chat || !user)
       throw new NotFoundException(`${!chat ? 'Chat' : 'User'} not found`);
-    await this.checkAccess(chat, createChatMemberDto.password);
+    await this.checkAccess(chat, password);
     try {
       await this.prisma.chatMember.create({
         data: {
-          userId: createChatMemberDto.id,
+          userId: id,
           chatId: chatId
         }
       });
@@ -77,6 +78,16 @@ export class MembershipService {
       }
       throw new ForbiddenException('Could not save chat member');
     }
+  }
+
+  async addChatMember(chatId: number, id: number) {
+    const chatMember = await this.prisma.chatMember.create({
+      data: {
+        userId: id,
+        chatId: chatId
+      }
+    });
+    return chatMember
   }
 
   private async checkAccess(chat, password?: string) {

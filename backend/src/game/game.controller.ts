@@ -39,7 +39,7 @@ export class GameController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Gets user game invitations.',
-    description: 'If no invitations are found, 404 will be returned'
+    description: 'If no invitations are found, an empty array will be returned'
   })
   async getUserInvitations(@GetUser() user) {
     return await this.gameService.getUserInvitations(user.sub);

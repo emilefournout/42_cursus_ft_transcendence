@@ -13,11 +13,8 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateChatDto, CreateMessageDto } from './dto';
-import { CreateChatMemberDto } from './dto/create-chat-member.dto';
-import { DeleteChatMemberDto } from './dto/delete-chat-member.dto';
+import { CreateChatDto, CreateMessageDto, UpdateChatMemberDto, DeleteChatMemberDto, AddChatMemberDto } from './dto';
 import { MembershipService } from './membership.service';
-import { UpdateChatMemberDto } from './dto/update-chat-member.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -177,17 +174,17 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Adds a new chat member',
-    description: 'Password is optional'
+    summary: 'Adds a new chat member to the room',
+    description: 'An administrator of the chat adds a new user to the chat'
   })
   async createChatMember(
     @GetUser() user,
-    @Param('id', ParseIntPipe) chatId,
-    @Body() createChatMemberDto: CreateChatMemberDto
+    @Param('id', ParseIntPipe) chatId: number,
+    @Body() addChatMemberDto: AddChatMemberDto
   ) {
     if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
       throw new ForbiddenException('User is not an administrator of this chat');
-    await this.membershipService.createChatMember(chatId, createChatMemberDto);
+    await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
   }
 
   @Post(':id/join')
@@ -208,10 +205,7 @@ export class ChatController {
       throw new ForbiddenException('User is already a member of the chat');
     if (!this.membershipService.isOpenToUsers(chatId))
       throw new ForbiddenException('Chat is not open to join this user');
-    await this.membershipService.createChatMember(chatId, {
-      id: user.sub,
-      password: joinChatDto.password
-    });
+    await this.membershipService.createChatMember(chatId, user.sub, joinChatDto.password);
   }
 
   @Delete(':id/user')
