@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/nav_bar/NavBar";
+import { DialogContext } from "../root/Root";
+
 export interface User {
   id: number;
   username: string;
@@ -20,7 +22,9 @@ export const BoardContext = React.createContext<BoardContextArgs | undefined>(
 );
 export function Board() {
   const [myUser, setMyUser] = useState<User | undefined>();
-
+  const dialogContext = useContext(DialogContext);
+  const setDialog = dialogContext.setDialog;
+  const navigate = useNavigate()
   const updateMe = React.useCallback(async () => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
       headers: {
@@ -34,8 +38,14 @@ export function Board() {
       .then((data) => {
         setMyUser(data as User);
       })
-      .catch((e) => console.log("Error updating user"));
-  }, []);
+      .catch((e) => {
+        localStorage.removeItem("access_token")
+        localStorage.removeItem("username")
+        setDialog("Received bad response from server, try to login again")
+        navigate("/login")
+      });
+      
+  }, [navigate, setDialog]);
 
   useEffect(() => {
     updateMe();
