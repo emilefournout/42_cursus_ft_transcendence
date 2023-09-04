@@ -161,10 +161,10 @@ export function RoomCreate() {
 								onChange={(e) => setConfirm(e.target.value)}
 							/>
 						</div>
-						<div id="txt-password-strength">{passwordErrorMessage}</div>
+						<div className="txt-password-strength">{passwordErrorMessage}</div>
 					</>
 				)}
-				<div>{errorMessage}</div>
+				<div className="txt-password-strength">{errorMessage}</div>
 				<button onClick={() => validateConfirm()}>create room</button>
 				<button id="item-margin-bot" onClick={() => navigate("/board/chats/add")}>cancel</button>
 			</div>
