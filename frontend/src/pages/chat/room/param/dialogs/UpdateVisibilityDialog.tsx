@@ -66,7 +66,7 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
 				<button disabled={roomContextArgs.chat.visibility === "PRIVATE"} onClick={() => updateVisibility(Visibility.PROTECTED)}>
 					Protected
 				</button>
-				<button onClick={close}>cancel</button>
+				<button onClick={close}>Cancel</button>
 			</dialog>
 		</div>
 	);
