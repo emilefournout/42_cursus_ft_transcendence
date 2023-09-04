@@ -1,8 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Member, RoomContextArgs } from "../../Room";
-import { set } from "js-cookie";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { BoardContext } from "../../../../board/Board";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../RoomParam";
@@ -81,9 +79,9 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
         {props.member.username}
       </div>
       {props.member.owner ? (
-        <img src={ownerIcon} title="Room Owner" />
+        <img src={ownerIcon} title="Room Owner" alt="Room owner icon"/>
       ) : props.member.administrator ? (
-        <img src={adminIcon} title="Room Admin" />
+        <img src={adminIcon} title="Room Admin" alt="Room administrator icon"/>
       ) : (
         <></>
       )}

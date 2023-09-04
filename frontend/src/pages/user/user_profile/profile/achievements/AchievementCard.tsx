@@ -1,5 +1,6 @@
 import React from "react";
 import "./../ranking/Ranking.css";
+import { title } from "process";
 
 interface AchievementCardProps {
 	title: String;
@@ -13,7 +14,7 @@ export function AchievementCard(props: AchievementCardProps) {
 			<div className="ach-card-title">{props.title}</div>
 			<div className="ach-card-subtitle">{props.description}</div>
 			<div className="ach-card-back"></div>
-			<img className="ach-card-img" src="" />
+			<img className="ach-card-img" src="" alt={`${title} icon`}/>
 		</div>
 	);
 }
