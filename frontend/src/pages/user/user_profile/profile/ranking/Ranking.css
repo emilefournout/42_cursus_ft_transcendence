@@ -5,17 +5,35 @@
 }
 
 .ranking-title {
-	padding: clamp(0.1rem, 1vh, 0.3rem) 0;
+	display: flex;
 
-	font-size: clamp(0.4rem, 2vw, 0.9rem);
+	font-size: clamp(0.3rem, 2vw, 0.8rem);
 	text-align: center;
 
-	border-color: var(--Honey-Yellow);
-	border-width: 2px;
-	border-style: solid;
-	border-top: none;
-	border-left: none;
-	border-right: none;
+	border-bottom: 2px solid var(--Honey-Yellow);
+}
+
+.ranking-title > button {
+	width: 1.5em;
+	height: 1.5em;
+
+	border-radius: 0;
+
+	font-size: inherit;
+}
+
+.ranking-title > button:hover {
+	color: var(--Light-Text);
+}
+
+.ranking-title > span {
+	flex-grow: 1;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: inherit;
 }
 
 .ranking-positions-container {

@@ -13,8 +13,8 @@ export function FullAchievements() {
 		Array<Achievement> | undefined
 	>(undefined);
 	const navigate = useNavigate();
-  const boardContext = useContext(BoardContext);
-  const userId = boardContext?.me.id;
+	const boardContext = useContext(BoardContext);
+	const userId = boardContext?.me.id;
 
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_BACKEND}/achievements/${userId}`, {
@@ -45,7 +45,8 @@ export function FullAchievements() {
 			<div className="prof-cards-wrapper">
 				<div className="window-module ranking-window">
 					<div className="ranking-title">
-						Achievements
+						<button onClick={() => navigate(-1)}>X</button>
+						<span>Achievements</span>
 					</div>
 					<div className="wrapper-col all-ach-wrapper">
 						{achievements.map((achievement: Achievement) => {
@@ -59,7 +60,6 @@ export function FullAchievements() {
 						})}
 					</div>
 				</div>
-				<button onClick={() => navigate(-1)}>back</button>
 			</div>
 		);
 	}
