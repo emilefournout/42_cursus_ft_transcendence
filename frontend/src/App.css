@@ -101,8 +101,14 @@ fieldset {
 	border-image: var(--Cornered-Honey-Crisped) 1;
 }
 
+fieldset > input[type="text"] {
+	height: 1.8em;
+
+	font-size: clamp(0.3rem, 2vw, 0.6rem);
+}
+
 input[type="number"] {
-	padding: 8px;
+	height: 1.8em;
 
 	text-align: center;
 	font-size: clamp(0.3rem, 2vw, 0.6rem);
