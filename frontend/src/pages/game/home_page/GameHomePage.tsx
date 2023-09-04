@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SEO from "../../../components/Seo";
 import { Link } from "react-router-dom";
 import "../Game.css";
-import { InvitationsColumns } from "./InvitationsColumns";
+import { InvitationsColumns } from "./Invitations/InvitationsColumns";
 import { WatchGameColumn } from "./WatchingGame/WatchGameColumn";
 
 export function GameHomePage() {
@@ -13,8 +13,6 @@ export function GameHomePage() {
         description="Start a game with someone from the Internet with matchmaking or invite one of your friends."
       />
 
-      <InvitationsColumns />
-      <WatchGameColumn />
       <div className="wrapper-matchmaking">
         <Link
           className="btn game-creation-btn btn-top"
@@ -29,6 +27,10 @@ export function GameHomePage() {
         >
           Create a new game
         </Link>
+        <div className="wrapper-row">
+          <InvitationsColumns />
+          <WatchGameColumn />
+        </div>
       </div>
       {/*separator or*/}
       {/*Invite Friend Form*/}

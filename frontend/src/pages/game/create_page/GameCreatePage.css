@@ -3,6 +3,16 @@
 	font-size: clamp(0.5rem, 3vw, 1.2rem);
 }
 
+.create-game-btns-wrapper {
+	width: clamp(300px, 30vw, 500px);
+
+	gap: 8px;
+}
+
+.cancel-game-btn {
+	background: var(--Crisped-Orange);
+}
+
 .create-game-btn {
 	min-height: 2em;
 }

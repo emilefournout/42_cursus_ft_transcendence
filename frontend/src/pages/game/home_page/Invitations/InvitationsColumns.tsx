@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { InvitationCard } from "./InvitationCard";
 
 interface Invitations {
   invitations: Array<number>;
 }
+
 export function InvitationsColumns() {
   const [invitations, setInvitations] = useState<Array<number>>([]);
 
@@ -29,15 +31,17 @@ export function InvitationsColumns() {
   }, []);
 
   return (
-    <div
-      style={{
-        float: "left",
-      }}
-    >
+    <div className="wrapper-col">
       <div>Invitations:</div>
-      {invitations.map((id) => {
-        return <div>{id} invited you </div>;
-      })}
+      {invitations.length === 0 ||
+      (invitations.length == 1 && invitations[0] == null) ? (
+        <>No one invited you</>
+      ) : (
+        invitations.map((id, index) => {
+          if (id == null) return <></>;
+          return <InvitationCard id={id} key={index} />;
+        })
+      )}
     </div>
   );
 }

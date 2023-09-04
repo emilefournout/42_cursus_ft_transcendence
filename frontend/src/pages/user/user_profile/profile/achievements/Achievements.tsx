@@ -7,6 +7,7 @@ import { AchievementCard } from "./AchievementCard";
 interface AchievementsProps {
 	userId: number;
 }
+
 export function Achievements(props: AchievementsProps) {
 	const navigate = useNavigate();
 	const [achievements, setAchievements] = useState<

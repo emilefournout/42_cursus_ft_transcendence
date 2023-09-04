@@ -35,6 +35,7 @@
 
 .cards-container {
 	width: 100%;
+	min-height: 432px;
 
 	flex-grow: 1;
 
@@ -107,6 +108,8 @@
 #achievements-card {
 	grid-column: 1 / 2;
 	grid-row: 2 / 3;
+
+	overflow-y: hidden;
 }
 
 #achievements-values {
@@ -116,9 +119,14 @@
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+
+	overflow-y: auto;
 }
 
 #achievements-values > button {
+	width: 100%;
+	height: 1em;
+
 	padding: 8px;
 
 	font-size: clamp(0.2rem, 1.5vw, 0.6rem);
@@ -136,11 +144,13 @@
 }
 
 #history-values {
+	width: 100%;
 	height: 100%;
-	flex-grow: 1;
 
 	display: flex;
 	flex-direction: column;
+
+	overflow-y: auto;
 }
 
 #history-values * {
@@ -165,12 +175,16 @@
 	flex-grow: 1;
 }
 
-.history-txt-win {
+.history-txt {
+	width: 1.8em;
+
 	font-size: clamp(0.4rem, 2vw, 0.8rem) !important;
+}
+
+.history-txt-win {
 	color: var(--Mooned-Teal);
 }
 
 .history-txt-loose {
-	font-size: clamp(0.4rem, 2vw, 0.8rem) !important;
 	color: var(--Cosmic-Purple);
 }
