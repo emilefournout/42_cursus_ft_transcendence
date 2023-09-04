@@ -59,6 +59,9 @@ export function ChangeNamePage() {
         type="text"
         placeholder="confirm new username"
         onChange={(e) => setConfirm(e.target.value)}
+        onKeyDown={(e) => {
+          e.key === "Enter" && validateUsername();
+        }}
       />
       <div id="unc-msg" className="wrapper-col">
         {errorMessage}
