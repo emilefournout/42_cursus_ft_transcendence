@@ -1,8 +1,5 @@
-import * as argon2 from 'argon2';
-import * as jdenticon from 'jdenticon';
-import * as fs from 'fs';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as qrcode from 'qrcode';
@@ -10,6 +7,7 @@ import { authenticator } from 'otplib';
 import { UserService } from 'src/user/user.service';
 import { TwoFactorAuthenticationStatus } from '@prisma/client';
 import { I42_oauth } from './interface/I42_oauth';
+import { UserServiceErrors } from 'src/user/exceptions/user-service.exception';
 
 @Injectable()
 export class AuthService {
@@ -31,34 +29,42 @@ export class AuthService {
     avatarURL: string,
     code2fa: string
   ) {
-    let user = await this.userService.findUserByName(username);
-    if (!user) {
-      user = await this.userService.createUser(intraname, username, avatarURL);
+    try {
+      let user = await this.userService.findUserByName(username);
+      if (!user) {
+        user = await this.userService.createUser(intraname, username, avatarURL);
+      }
+      const tfa = await this.prisma.twoFactorAuthentication.findFirst({
+        where: { user_id: user.id }
+      });
+  
+      if (this.checkCode2fa(tfa, code2fa)) {
+        throw new UnauthorizedException("2FA code check failed");
+      }
+  
+      let access_token = await this.signToken(user.id, user.intraname);
+      // Send access_token = null if not code2fa and needed
+      if (
+        tfa &&
+        tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
+        !code2fa
+      ) {
+        access_token = null;
+      }
+      return { access_token, id: user.id, username: user.username };
+    } catch (error) {
+      if (error instanceof UserServiceErrors.UsernameExistsException)
+        throw new BadRequestException("Username with the same name already exists")
+      else
+        throw new ForbiddenException("Cannot create a user with those parameters")
     }
-    const tfa = await this.prisma.twoFactorAuthentication.findFirst({
-      where: { user_id: user.id }
-    });
+  }
 
-    // Check code2fa if needed
-    if (
-      tfa &&
+  private checkCode2fa(tfa, code2fa: string) {
+    return tfa &&
       tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
       code2fa &&
-      !authenticator.check(code2fa, tfa.twoFactorAuthenticationSecret)
-    ) {
-      throw new UnauthorizedException();
-    }
-
-    let access_token = await this.signToken(user.id, user.intraname);
-    // Send access_token = null if not code2fa and needed
-    if (
-      tfa &&
-      tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
-      !code2fa
-    ) {
-      access_token = null;
-    }
-    return { access_token, id: user.id, username: user.username };
+      !authenticator.check(code2fa, tfa.twoFactorAuthenticationSecret);
   }
 
   async login(username: string) {

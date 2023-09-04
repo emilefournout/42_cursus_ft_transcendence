@@ -15,6 +15,7 @@ export class UserService {
     private gameService: GameService) {}
 
   async createUser(intraname: string, username: string, avatar: string) {
+    try {
       const user = await this.prisma.user.create({
         data: {
           intraname: intraname,
@@ -23,6 +24,14 @@ export class UserService {
         }
       });
       return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new UserServiceErrors.UsernameExistsException();
+        }
+      }
+      throw new error;
+    }
   }
 
   async findUserById(id: number) {
