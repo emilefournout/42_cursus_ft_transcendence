@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { InvitationCard } from "./InvitationCard";
+import { testing } from "../../../../services/core";
 
 interface Invitations {
   invitations: Array<number>;
@@ -25,7 +26,7 @@ export function InvitationsColumns() {
         setInvitations(data.invitations);
       })
       .catch((error) => {
-        console.log(error);
+        if (testing) console.log(error);
       });
     return () => {};
   }, []);

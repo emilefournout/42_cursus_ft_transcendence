@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ProfilePageContext } from "../../../../UserProfilePage";
 import { GameSocket } from "../../../../../../services/socket";
 import { useNavigate } from "react-router-dom";
+import { testing } from "../../../../../../services/core";
 
 interface CardActionProps {
 	userId: number;

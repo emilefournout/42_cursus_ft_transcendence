@@ -3,6 +3,7 @@ import "./Welcome.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Avatar } from "../../components/Avatar";
+import { testing } from "../../services/core";
 
 export function Welcome() {
   const [username, setUsername] = useState("");
@@ -57,7 +58,7 @@ export function Welcome() {
       })
       .catch((error) => {
         setErrorMessage("bad 2fa code");
-        console.log(error);
+        if (testing) console.log(error);
       });
   }
 

@@ -75,7 +75,7 @@ export class GameData {
 
   public get loser(): number {
     if (this.isFinished) {
-      if (this.player1Id < this.player2Id) return this.player1Id;
+      if (this.player1Score < this.player2Score) return this.player1Id;
       else return this.player2Id;
     }
     return -1;

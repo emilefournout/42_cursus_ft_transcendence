@@ -4,6 +4,7 @@ import "./Chat.css";
 import { Outlet } from "react-router-dom";
 import { Visibility } from "./room/add/create/RoomCreate";
 import { LeftBar } from "./left_bar/ChatLeftBar";
+import { testing } from "../../services/core";
 
 export interface ChatInfo {
   id: number;
@@ -31,7 +32,7 @@ export function ChatPage() {
   };
   useEffect(() => {
     updateChats().catch((error) => {
-      console.log(error);
+      if (testing) console.log(error);
     });
     return () => {};
   }, []);

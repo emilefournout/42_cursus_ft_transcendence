@@ -21,7 +21,7 @@ export function GameCanvas(props: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { id } = useParams();
   const gameSocket = GameSocket.getInstance().socket;
-  
+
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
@@ -64,13 +64,13 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.beginPath();
       ctx.arc(props.ballX, props.ballY, props.ballRadius, 0, 2 * Math.PI);
       ctx.fill();
-      // console.log("BALL", props.ballX, props.ballY);
+      // if testing console.log("BALL", props.ballX, props.ballY);
     }
   });
 
   useEffect(() => {
     function handleKeyDown(event: any) {
-      if (event.key === 'ArrowUp') {
+      if (event.key === "ArrowUp") {
         gameSocket.emit("move_user", {
           gameId: id,
           direction: "up",
