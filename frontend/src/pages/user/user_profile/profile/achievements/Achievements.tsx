@@ -29,21 +29,7 @@ export function Achievements(props: AchievementsProps) {
         return response.json();
       })
       .then((data) => {
-        setAchievements([
-          ...data,
-          {
-            name: "this is a test achievements",
-            description: "don't forget to remove it from the frontend code",
-          },
-          {
-            name: "this is also a test achievements",
-            description:
-              "don't forget to also remove it from the frontend code",
-          },
-        ]);
-        {
-          /*TODO remove test achievements*/
-        }
+        setAchievements(data);
       })
       .catch((error) => {
         if (testing) console.log(error);
