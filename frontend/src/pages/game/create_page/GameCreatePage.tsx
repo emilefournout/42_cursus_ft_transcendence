@@ -138,25 +138,33 @@ export function GameCreatePage() {
 							)}
 						</fieldset>
 
-						<button
-							className="btn game-creation-btn create-game-btn btn-bottom"
-							onClick={(event) => {
-								if(!invitation) {
-									gameSocket.emit("create_room", {
-										speed,
-										maxGoals,
-										powerUps,
-									});
-									waiting.current = false;
-									setHiddenForm(true);
-								}
-								else {
-									createPrivateGame();
-								}
-							}}
-						>
-							Create
-						</button>
+						<div className="wrapper-row create-game-btns-wrapper">
+							<button
+								className="btn game-creation-btn btn-bottom-left cancel-game-btn"
+								onClick={() => navigate(-1)}
+							>
+								Cancel
+							</button>
+							<button
+								className="btn game-creation-btn btn-bottom-right create-game-btn"
+								onClick={(event) => {
+									if(!invitation) {
+										gameSocket.emit("create_room", {
+											speed,
+											maxGoals,
+											powerUps,
+										});
+										waiting.current = false;
+										setHiddenForm(true);
+									}
+									else {
+										createPrivateGame();
+									}
+								}}
+							>
+								Create
+							</button>
+						</div>
 					</>
 				)}
 				{hiddenForm && (
