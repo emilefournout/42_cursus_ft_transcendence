@@ -173,11 +173,12 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
+  @ApiBody({ type: AddChatMemberDto })
   @ApiOperation({
     summary: 'Adds a new chat member to the room',
     description: 'An administrator of the chat adds a new user to the chat'
   })
-  async createChatMember(
+  async addChatMember(
     @GetUser() user,
     @Param('id', ParseIntPipe) chatId: number,
     @Body() addChatMemberDto: AddChatMemberDto
