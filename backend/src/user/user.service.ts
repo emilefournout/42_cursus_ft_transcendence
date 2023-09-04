@@ -340,7 +340,7 @@ export class UserService {
   }
 
   async updateProfilePhoto(userId: number, url: string) {
-    this.prisma.user.update({
+    await this.prisma.user.update({
       where: {
         id: userId
       }, data: {

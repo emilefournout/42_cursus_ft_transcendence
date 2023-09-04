@@ -184,11 +184,12 @@ export class GameGateway
   ) {
     this.gameService.movePad(client, data.gameId, data.direction);
   }
-
+  
   private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
     const gameState: GameData = this.gameService.updateGameState(game.id);
     this.server.to(game.id).emit('update', gameState);
     if (gameState.isFinished) {
+      this.gameService.removeActiveGame(game.id)
       clearInterval(gameLoopInterval);
       const winnerUser = await this.userService.findUserById(gameState.winner);
       this.server.to(game.id).emit('end', winnerUser.username);
@@ -210,6 +211,7 @@ export class GameGateway
     gameLoopInterval: NodeJS.Timer
   ) {
     if (!game.isFinished) {
+      this.gameService.removeActiveGame(game.id)
       clearInterval(gameLoopInterval);
       this.server
         .to(game.id)
@@ -234,6 +236,7 @@ export class GameGateway
     gameLoopInterval: NodeJS.Timer
   ) {
     if (!game.isFinished) {
+      this.gameService.removeActiveGame(game.id)
       clearInterval(gameLoopInterval);
       this.server
         .to(game.id)
