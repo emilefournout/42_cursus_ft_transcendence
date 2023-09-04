@@ -40,7 +40,7 @@ export class GameService {
   }
 
   async getUserInvitations(id: number) {
-    return this.getUserInvitationsById(id);
+    return await this.getUserInvitationsById(id);
   }
 
   findActiveGames(): string[] {
@@ -61,16 +61,21 @@ export class GameService {
     return this.userConnections.getUserIdFromSocket(socket);
   }
 
-  getUserInvitationsById(id: number) {
-    const invitations = []
-    this.privateRoom.forEach((gameData, socket) => {
-      if(gameData.invitedId === id) {
+  async getUserInvitationsById(id: number) {
+    const invitations = [];
+  
+    for (const [socket, gameData] of this.privateRoom) {
+      if (gameData.invitedId === id) {
         const inviterId = this.getUserIdFromSocket(socket);
-        invitations.push(inviterId)
+        const user = await this.userService.getUserInfoById(inviterId);
+        const username = user.username
+        invitations.push({ inviterId, username });
       }
-    })
-    return {invitations};
+    }
+  
+    return { invitations };
   }
+  
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
     const game = await this.prisma.game.create({

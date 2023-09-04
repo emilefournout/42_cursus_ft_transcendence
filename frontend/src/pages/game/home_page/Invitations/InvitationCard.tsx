@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface InvitationCardProps {
   id: number;
+  username: string;
   key: number;
 }
 export function InvitationCard(props: InvitationCardProps) {
@@ -19,7 +20,7 @@ export function InvitationCard(props: InvitationCardProps) {
 
   return (
     <div>
-      {props.id} invited you{" "}
+      {props.username} invited you{" "}
       <button
         onClick={() => {
 					gameSocket.emit('join_private_room', props.id)

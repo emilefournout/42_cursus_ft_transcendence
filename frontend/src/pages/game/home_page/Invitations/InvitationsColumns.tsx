@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import { InvitationCard } from "./InvitationCard";
 import { testing } from "../../../../services/core";
 
-interface Invitations {
-  invitations: Array<number>;
-}
-
 export function InvitationsColumns() {
-  const [invitations, setInvitations] = useState<Array<number>>([]);
+  const [invitations, setInvitations] = useState<Array<any>>([]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/game/invitations`, {
@@ -22,7 +18,7 @@ export function InvitationsColumns() {
         }
         return response.json();
       })
-      .then((data: Invitations) => {
+      .then((data: any) => {
         setInvitations(data.invitations);
       })
       .catch((error) => {
@@ -34,14 +30,14 @@ export function InvitationsColumns() {
   return (
     <div className="wrapper-col">
       <div>Invitations:</div>
-      {invitations.length === 0 ||
-      (invitations.length === 1 && invitations[0] === null) ? (
-        <>No one invited you</>
+      {invitations.length === 0 ? (
+        <>No one invited you {invitations.length}</>
       ) : (
-        invitations.map((id, index) => {
-          if (id == null) return <></>;
-          return <InvitationCard id={id} key={index} />;
+        invitations.map((invitation, index) => {
+          if (!invitation) return null;
+          return <InvitationCard id={invitation.inviterId} username={invitation.username} key={index} />;
         })
+        
       )}
     </div>
   );
