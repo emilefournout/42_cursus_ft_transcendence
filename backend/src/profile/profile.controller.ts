@@ -7,12 +7,13 @@ import {
     UploadedFile,
     UseInterceptors,
     UseGuards,
-    NotFoundException
+    NotFoundException,
+    BadRequestException
   } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import * as path from 'path';
+import * as fs from 'fs';
 import { GetUser } from 'src/auth/decorator';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { ProfileService } from './profile.service';
@@ -29,7 +30,14 @@ export class ProfileController {
     public getImage(@Param("filename") filename: string, @Res() res) {
         if (filename === "null" || filename === "undefined")
           throw new NotFoundException("Not valid null or undefined");
-        return res.sendFile(path.join(process.cwd(), 'uploads/' + filename))
+        const filePath = path.join(process.cwd(), 'uploads/' + filename)
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            res.status(404).send('File does not exist.');
+          } else {
+            res.sendFile(filePath);
+          }
+        });
     }
 
     @Patch()
@@ -50,12 +58,11 @@ export class ProfileController {
       })
     @ApiOperation({ summary: 'Updates user image profile' })
     async updateImage(@GetUser() user, @UploadedFile() image: Express.Multer.File) {
-        let url: string;
-        if (image !== undefined) {
-            url = this.profileService.saveImage(image);
-        } else {
-            url = this.profileService.generateNewIcon();
-        }
-        await this.userService.updateProfilePhoto(user.sub, url);
+      try {
+        await this.profileService.updateUserAvatar(user.sub, image);
+      } catch (error) {
+        console.log(error)
+        throw new BadRequestException("Image cannot be updated")
+      }
     }
 }

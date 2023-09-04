@@ -54,7 +54,11 @@ export class AuthController {
           : await this.authService.getIntraLogin(token);
       let url: string;
       if (image !== undefined) {
-        url = this.profileService.saveImage(image);
+        try {
+          url = this.profileService.saveImage(image);
+        } catch (error) {
+          url = this.profileService.generateNewIcon();          
+        }
       } else {
         url = this.profileService.generateNewIcon();
       }
