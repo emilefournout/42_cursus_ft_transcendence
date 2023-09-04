@@ -3,6 +3,9 @@ import { ProfileLeftBar } from "./left_bar/ProfileLeftBar";
 import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../board/Board";
 import "./UserProfilePage.css";
+import { testing } from "../../services/core";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 export enum RequestType {
   enabled = "ENABLED",
@@ -48,15 +51,12 @@ export function UserProfilePage() {
 
   const getUserInfoFromId = React.useCallback(
     async (friendId: number): Promise<User> => {
-      return fetch(
-        `${process.env.REACT_APP_BACKEND}/user/info/${friendId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      )
+      return fetch(`${process.env.REACT_APP_BACKEND}/user/info/${friendId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
         .then((response) => {
           if (!response.ok) throw new Error("Error getting user info");
           return response.json();
@@ -107,7 +107,9 @@ export function UserProfilePage() {
             ? setPendingFriends(users)
             : setReceivedFriends(users)
         )
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          if (testing) console.log(error);
+        });
     },
     [getAllFetchRequests, myId]
   );
@@ -129,7 +131,9 @@ export function UserProfilePage() {
         setFriends(RequestType.pending, requests);
         setFriends(RequestType.received, requests);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (testing) console.log(error);
+      });
   }, [setFriends]);
 
   React.useEffect(() => {
@@ -152,7 +156,9 @@ export function UserProfilePage() {
       .then((data) => {
         setRanking(data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (testing) console.log(error);
+      });
   }, []);
 
   return (

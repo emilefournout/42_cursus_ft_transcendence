@@ -4,6 +4,9 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../RoomParam";
+import { testing } from "../../../../../services/core";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -41,7 +44,9 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
           administrator: true,
         },
       })
-    ).catch((error) => console.log(error));
+    ).catch((error) => {
+      if (testing) console.log(error);
+    });
 
   const demote = () =>
     action(
@@ -54,21 +59,27 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
           administrator: false,
         },
       })
-    ).catch((error) => console.log(error));
+    ).catch((error) => {
+      if (testing) console.log(error);
+    });
 
   const unmute = () => {
     action(
       `chat/${chadId}/mute`,
       "DELETE",
       JSON.stringify({ userId: props.member.userId })
-    ).catch((error) => console.log(error));
+    ).catch((error) => {
+      if (testing) console.log(error);
+    });
   };
   const kickOut = () =>
     action(
       `chat/${chadId}/user`,
       "DELETE",
       JSON.stringify({ id: props.member.userId })
-    ).catch((error) => console.log(error));
+    ).catch((error) => {
+      if (testing) console.log(error);
+    });
 
   return (
     <>
@@ -79,9 +90,9 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
         {props.member.username}
       </div>
       {props.member.owner ? (
-        <img src={ownerIcon} title="Room Owner" alt="Room owner icon"/>
+        <img src={ownerIcon} title="Room Owner" alt="Room owner icon" />
       ) : props.member.administrator ? (
-        <img src={adminIcon} title="Room Admin" alt="Room administrator icon"/>
+        <img src={adminIcon} title="Room Admin" alt="Room administrator icon" />
       ) : (
         <></>
       )}

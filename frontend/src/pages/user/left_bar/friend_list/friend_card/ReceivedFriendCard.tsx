@@ -4,6 +4,7 @@ import { ProfilePageContext } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
 import { FriendCardProps } from "./accepted_friend_card/AcceptedFriendCard";
 import { DialogContext } from "../../../../root/Root";
+import { testing } from "../../../../../services/core";
 
 export function ReceivedFriendCard(props: FriendCardProps) {
   const profilePageContext = React.useContext(ProfilePageContext);
@@ -27,7 +28,7 @@ export function ReceivedFriendCard(props: FriendCardProps) {
         }
       })
       .catch((e) => {
-        console.log(e);
+        if (testing) console.log(e);
       });
   };
   const decline = async () => {
@@ -48,7 +49,7 @@ export function ReceivedFriendCard(props: FriendCardProps) {
         }
       })
       .catch((e) => {
-        console.log(e);
+        if (testing) console.log(e);
       });
   };
   const handleFriendRequest = async (action: () => Promise<void>) => {
