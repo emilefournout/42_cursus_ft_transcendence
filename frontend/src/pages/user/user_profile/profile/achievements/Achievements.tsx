@@ -7,6 +7,7 @@ import { AchievementCard } from "./AchievementCard";
 interface AchievementsProps {
 	userId: number;
 }
+
 export function Achievements(props: AchievementsProps) {
 	const navigate = useNavigate();
 	const [achievements, setAchievements] = useState<
@@ -59,6 +60,33 @@ export function Achievements(props: AchievementsProps) {
 					<button onClick={() => navigate("/board/user-account/achievements")}>
 						Full achievements
 					</button>
+					{achievements.map((achievement: Achievement, index) => {
+						return (
+							<AchievementCard
+								title={achievement.name}
+								description={achievement.description}
+								key={index}
+							/>
+						);
+					})}
+					{achievements.map((achievement: Achievement, index) => {
+						return (
+							<AchievementCard
+								title={achievement.name}
+								description={achievement.description}
+								key={index}
+							/>
+						);
+					})}
+					{achievements.map((achievement: Achievement, index) => {
+						return (
+							<AchievementCard
+								title={achievement.name}
+								description={achievement.description}
+								key={index}
+							/>
+						);
+					})}
 					{achievements.map((achievement: Achievement, index) => {
 						return (
 							<AchievementCard

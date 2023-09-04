@@ -35,6 +35,7 @@
 
 .cards-container {
 	width: 100%;
+	min-height: 432px;
 
 	flex-grow: 1;
 
@@ -107,6 +108,8 @@
 #achievements-card {
 	grid-column: 1 / 2;
 	grid-row: 2 / 3;
+
+	overflow-y: hidden;
 }
 
 #achievements-values {
@@ -116,6 +119,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+
+	overflow-y: auto;
 }
 
 #achievements-values > button {
