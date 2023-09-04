@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { WatchingGameCard } from "./WatchingGameCard";
+import { testing } from "../../../../services/core";
 
 export function WatchGameColumn() {
   const [activePlays, setActivePlays] = useState<Array<string>>([]);
@@ -21,7 +22,7 @@ export function WatchGameColumn() {
         setActivePlays(data);
       })
       .catch((error) => {
-        console.log(error);
+        if (testing) console.log(error);
       });
   }, []);
   return (

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { DialogContext } from "../pages/root/Root";
+import { testing } from "../services/core";
 
 function TwoFactorAuth({ username }: { username: string | null }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret
@@ -29,7 +30,9 @@ function TwoFactorAuth({ username }: { username: string | null }) {
       .then((response: Response) => {
         response.ok ? setDialog("Good") : setDialog("Incorrect code");
       })
-      .catch((error) => console.log("Error on setting 2FA"));
+      .catch((error) => {
+        if (testing) console.log("Error on setting 2FA");
+      });
   }
 
   return (

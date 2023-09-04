@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import NoMsgsImg from "../NoMsgs.png";
+import { testing } from "../../../services/core";
 
 export interface ChatFullInfo extends ChatInfo {
   password?: string;
@@ -58,7 +59,7 @@ export function Room() {
     else chat = chats.find((chat: ChatInfo) => chat.id === parseInt(id));
     if (chat === undefined) return;
     getChatInfo(chat).catch((error) => {
-      console.log(error);
+      if (testing) console.log(error);
     });
   }, [chats, id, location.state]);
 
