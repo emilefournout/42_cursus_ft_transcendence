@@ -50,7 +50,6 @@ export function Welcome() {
       .then((data) => {
         if (data.access_token) {
           localStorage.setItem("access_token", data.access_token);
-          localStorage.setItem("username", data.username);
           navigate("/");
         } else {
           setShow2fa(true);

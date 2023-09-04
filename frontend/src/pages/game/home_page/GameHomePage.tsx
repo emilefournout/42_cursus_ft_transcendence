@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SEO from "../../../components/Seo";
 import { Link } from "react-router-dom";
 import "../Game.css";
+import { InvitationsColumns } from "./InvitationsColumns";
 
 export function GameHomePage() {
   return (
@@ -10,8 +11,13 @@ export function GameHomePage() {
         title="Pong - Game"
         description="Start a game with someone from the Internet with matchmaking or invite one of your friends."
       />
+
+      <InvitationsColumns />
       <div className="wrapper-matchmaking">
-        <Link className="btn game-creation-btn btn-top" to="/board/game/matchmaking">
+        <Link
+          className="btn game-creation-btn btn-top"
+          to="/board/game/matchmaking"
+        >
           Matchmaking
         </Link>
         <div className="wrapper-row txt game-creation-divider">Or</div>

@@ -23,7 +23,6 @@ export function Root() {
         if (expirationDate < Date.now()) throw new Error("Expired token")
       } catch (error) {
         localStorage.removeItem("access_token");
-        localStorage.removeItem("username");
         setDialog("Please sign in");
         navigate("/login");
       }
