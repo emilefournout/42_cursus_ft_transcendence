@@ -19,29 +19,13 @@ export function Login() {
 
       <button
         className="btn btn-bottom btn-fixed-height responsive-button"
-        onClick={handleLoginWith42}
+        onClick={redirectTo42Api}
       >
         Login with 42
       </button>
     </>
   );
 
-  function handleLoginWith42() {
-    const jwtToken = localStorage.getItem("access_token");
-    if (jwtToken) {
-      const jwtData = JSON.parse(atob(jwtToken.split(".")[1]));
-      const expirationDate = new Date(jwtData.exp * 1000);
-      if (expirationDate > new Date()) {
-        window.location.href = "http://localhost:8000/";
-      } else {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("username");
-        redirectTo42Api();
-      }
-    } else {
-      redirectTo42Api();
-    }
-  }
 
   function redirectTo42Api() {
     window.location.href = `https://api.intra.42.fr/oauth/authorize?client_id=${

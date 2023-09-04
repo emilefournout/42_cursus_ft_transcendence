@@ -11,27 +11,23 @@ export function Root() {
   const navigate = useNavigate();
   const location = useLocation();
   const [dialog, setDialog] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     if (location.pathname === "/login" || location.pathname === "/welcome")
       return;
     const jwtToken = localStorage.getItem("access_token");
-    if (jwtToken) {
-      const jwtData = JSON.parse(atob(jwtToken.split(".")[1]));
-      const expirationDate = new Date(jwtData.exp * 1000);
-      if (expirationDate < new Date(Date.now())) {
-        navigate("/login");
+    try {
+        if (!jwtToken) throw new Error("No token found")
+        const jwtData = JSON.parse(atob(jwtToken.split(".")[1]));
+        const expirationDate: number = jwtData.exp * 1000;
+        if (expirationDate < Date.now()) throw new Error("Expired token")
+      } catch (error) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("username");
-        setDialog("Your session has expired, please sign in again");
-        return;
+        setDialog("Please sign in");
+        navigate("/login");
       }
-    } else {
-      navigate("/login");
-      setDialog("Sign in to access this page");
-      return;
-    }
   }, [location.pathname, navigate]);
-
   return (
     <>
       <Dialog dialog={dialog} setDialog={setDialog} />
