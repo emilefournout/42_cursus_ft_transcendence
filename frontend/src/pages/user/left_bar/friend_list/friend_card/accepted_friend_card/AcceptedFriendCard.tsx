@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { FriendStatus, UserStatus } from "../../FriendStatus";
+import React from "react";
+import { FriendStatus } from "../../FriendStatus";
 import "../FriendCard.css";
 import { Avatar } from "../../../../../../components/Avatar";
 import { User } from "../../../../../board/Board";
 import { useNavigate } from "react-router-dom";
-import { ProfilePageContext } from "../../../../UserProfilePage";
 import { CardAction } from "./CardAction";
 
 export interface FriendCardProps {
