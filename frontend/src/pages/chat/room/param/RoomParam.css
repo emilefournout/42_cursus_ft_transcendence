@@ -12,6 +12,7 @@
 	grid-auto-flow: row;
 	gap: 8px;
 
+	color: var(--Light-Text);
 	font-size: clamp(0.3rem, 3vw, 0.8rem);
 
 	overflow: auto;
