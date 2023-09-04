@@ -137,6 +137,7 @@ export function GameCreatePage() {
                     </button>
             )}
             </fieldset>
+
             <button
               className="btn game-creation-btn create-game-btn btn-bottom"
               onClick={(event) => {
