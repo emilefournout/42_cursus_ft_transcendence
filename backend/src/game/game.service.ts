@@ -239,6 +239,10 @@ export class GameService {
     this.customizedRoom.delete(socket);
     this.waitingRoom.delete(socket);
   }
+  
+  removeActiveGame(id: string) {
+    this.games.delete(id)
+  }
 
   public debug_room_status() {
     console.log('Waiting room: ', this.waitingRoom.size);
