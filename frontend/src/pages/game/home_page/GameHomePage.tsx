@@ -3,6 +3,7 @@ import SEO from "../../../components/Seo";
 import { Link } from "react-router-dom";
 import "../Game.css";
 import { InvitationsColumns } from "./InvitationsColumns";
+import { WatchGameColumn } from "./WatchingGame/WatchGameColumn";
 
 export function GameHomePage() {
   return (
@@ -13,6 +14,7 @@ export function GameHomePage() {
       />
 
       <InvitationsColumns />
+      <WatchGameColumn />
       <div className="wrapper-matchmaking">
         <Link
           className="btn game-creation-btn btn-top"

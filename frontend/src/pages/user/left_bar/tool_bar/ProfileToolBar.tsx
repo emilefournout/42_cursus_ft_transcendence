@@ -76,6 +76,9 @@ export function ProfileToolBar() {
             type="text"
             placeholder="Add Friend!"
             onChange={(e) => setNewFriend(e.target.value)}
+            onKeyDown={(e) => {
+              e.key === "Enter" && addFriend();
+            }}
           />
           <img
             className="nav-icons"
