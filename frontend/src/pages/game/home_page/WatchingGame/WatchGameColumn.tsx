@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { WatchingGameCard } from "./WatchingGameCard";
 
 export function WatchGameColumn() {
-  const [activePlays, setActivePlays] = useState<Array<String>>([]);
+  const [activePlays, setActivePlays] = useState<Array<string>>([]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/game/active-plays`, {
@@ -16,9 +17,19 @@ export function WatchGameColumn() {
         }
         return response.json();
       })
-      .then((data: Array<String>) => {
+      .then((data: Array<string>) => {
         setActivePlays(data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
-  return <></>;
+  return (
+    <>
+      <div>currents game:</div>
+      {activePlays.map((uuid) => {
+        return <WatchingGameCard key={uuid} />;
+      })}
+    </>
+  );
 }
