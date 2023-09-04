@@ -258,6 +258,13 @@ button {
 	text-align: center;
 }
 
+button:disabled {
+	background-color: var(--Darks-Back);
+	color: var(--Light-Text);
+
+	pointer-events: none;
+}
+
 .btn {
 	border-width: 2px;
 	border-radius: var(--Default-BR);

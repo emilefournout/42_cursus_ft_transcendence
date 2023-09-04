@@ -1,10 +1,12 @@
 .dialog-window {
+	gap: 8px;
+
 	background-color: var(--Light-Text);
 	border-radius: 4px;
 	color: var(--Browned-Text);
 
 	text-align: center;
-	font-size: clamp(0.5rem, 3vw, 1rem);
+	font-size: clamp(0.4rem, 3vw, 1rem);
 
 	z-index: 6;
 }
@@ -12,7 +14,7 @@
 .dialog-window > button {
 	padding: 0.2rem;
 
-	font-size: clamp(0.5rem, 3vw, 1rem);
+	font-size: inherit;
 
 	transition: background .2s ease;
 }
