@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, TransformFnParams } from 'class-transformer';
 import {
   IsDefined,
   IsNotEmpty,
@@ -15,6 +16,7 @@ export class RegisterUserDto {
   @ApiProperty({
     description: 'Username to register, can be different than the intraname.'
   })
+  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase())
   username: string;
 
   @IsOptional()

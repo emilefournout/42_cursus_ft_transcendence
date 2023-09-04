@@ -40,7 +40,7 @@ export class AuthController {
   })
   async registerAuth(
     @Req() request: Request,
-    @Body() loginUser: RegisterUserDto,
+    @Body() registerUser: RegisterUserDto,
     @UploadedFile() image?: Express.Multer.File
   ) {
     const token = extractTokenFromRequest(request);
@@ -60,9 +60,9 @@ export class AuthController {
       }
       return this.authService.register(
         intraname,
-        loginUser.username,
+        registerUser.username,
         url,
-        loginUser.code2fa
+        registerUser.code2fa
       );
     } catch (error) {
       throw new UnauthorizedException();
