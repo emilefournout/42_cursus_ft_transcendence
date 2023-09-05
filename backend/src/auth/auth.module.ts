@@ -7,6 +7,7 @@ import { ProfileService } from '../profile/profile.service';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { ProfileModule } from 'src/profile/profile.module';
 
 @Module({
   imports: [
@@ -24,9 +25,10 @@ import { PassportModule } from '@nestjs/passport';
         }
       }
     }),
-    forwardRef(() =>UserModule)],
+    forwardRef(() => UserModule),
+    forwardRef(() => ProfileModule)],
   controllers: [AuthController],
-  providers: [AuthService, ProfileService, JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   exports: [JwtStrategy, JwtModule]
 })
 export class AuthModule {}
