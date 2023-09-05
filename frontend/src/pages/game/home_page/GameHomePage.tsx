@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SEO from "../../../components/Seo";
 import { Link } from "react-router-dom";
 import "../Game.css";

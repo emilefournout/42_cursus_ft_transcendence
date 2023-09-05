@@ -5,8 +5,6 @@ import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../RoomParam";
 import { testing } from "../../../../../services/core";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 export interface ChatMembersCardProps {
   member: Member;
