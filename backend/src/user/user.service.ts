@@ -10,7 +10,7 @@ import { UserBasicInfoDto } from './dto/info-user.dto';
 import { OnlineStatus, Prisma } from '@prisma/client';
 import { GameService } from 'src/game/game.service';
 import { ScoreField } from './types/scorefield.enum';
-import { UserServiceErrors } from './exceptions/user-service.exception';
+import * as UserServiceErrors from './exceptions/user-service.exception';
 
 @Injectable()
 export class UserService {

@@ -35,11 +35,11 @@ export class GameGateway
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: any) {
+  afterInit(_server: Server) {
     console.log('Init GameGateway');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ..._args: any[]) {
     console.log('Connection received from ' + client.id);
     try {
       const token = client.handshake.headers.authentication as string;

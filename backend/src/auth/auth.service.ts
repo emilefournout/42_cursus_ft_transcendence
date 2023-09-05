@@ -12,7 +12,7 @@ import { authenticator } from 'otplib';
 import { UserService } from 'src/user/user.service';
 import { TwoFactorAuthenticationStatus } from '@prisma/client';
 import { I42_oauth } from './interface/I42_oauth';
-import { UserServiceErrors } from 'src/user/exceptions/user-service.exception';
+import { UserServiceError } from '../user/exceptions/index.dto';
 
 @Injectable()
 export class AuthService {
@@ -62,7 +62,7 @@ export class AuthService {
       }
       return { access_token, id: user.id, username: user.username };
     } catch (error) {
-      if (error instanceof UserServiceErrors.UsernameExistsException)
+      if (error instanceof UserServiceError.UsernameExistsException)
         throw new BadRequestException(
           'Username with the same name already exists'
         );

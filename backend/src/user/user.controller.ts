@@ -22,8 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
-import { UserControllerErrors } from './exceptions/user-controller.exception';
-import { UserServiceErrors } from './exceptions/user-service.exception';
+import { UserControllerError, UserServiceError } from './exceptions/index.dto';
 import { IdValidationPipe } from './pipes/id-validation.pipe';
 
 @ApiTags('User')
@@ -67,7 +66,7 @@ export class UserController {
     try {
       return this.findUser(user.sub);
     } catch (error) {
-      throw new UserControllerErrors.UserNotFoundException();
+      throw new UserControllerError.UserNotFoundException();
     }
   }
 
@@ -78,10 +77,10 @@ export class UserController {
   async findUser(@Param('id', IdValidationPipe) id) {
     try {
       const userInfo = await this.userService.getUserInfoById(id);
-      if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
+      if (!userInfo) throw new UserControllerError.UserNotFoundException();
       return userInfo;
     } catch (error) {
-      throw new UserControllerErrors.UserNotFoundException();
+      throw new UserControllerError.UserNotFoundException();
     }
   }
 
@@ -109,9 +108,9 @@ export class UserController {
       userDeleted = await this.userService.deleteUser(user.sub);
     } catch (error) {
       console.log(error);
-      throw new UserControllerErrors.UserNotDeletedException();
+      throw new UserControllerError.UserNotDeletedException();
     }
-    if (!userDeleted) throw new UserControllerErrors.UserNotDeletedException();
+    if (!userDeleted) throw new UserControllerError.UserNotDeletedException();
   }
 
   @Patch('me')
@@ -130,10 +129,10 @@ export class UserController {
         updateUserDto.username
       );
     } catch (error) {
-      if (error instanceof UserServiceErrors.UsernameExistsException)
-        throw new UserControllerErrors.UserNotUpdatedException(error.message);
+      if (error instanceof UserServiceError.UsernameExistsException)
+        throw new UserControllerError.UserNotUpdatedException(error.message);
     }
-    if (!userUpdated) throw new UserControllerErrors.UserNotUpdatedException();
+    if (!userUpdated) throw new UserControllerError.UserNotUpdatedException();
   }
 
   @Put('/achievements')
