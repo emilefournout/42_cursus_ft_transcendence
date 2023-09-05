@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import SEO from "../../components/Seo";
 import { NavBar } from "../../components/nav_bar/NavBar";
 import { DialogContext } from "../root/Root";
+import { UserSocket } from "../../services/socket";
+import { Socket } from "socket.io-client";
 
 export interface User {
   id: number;
@@ -11,6 +13,7 @@ export interface User {
   status: string;
   wins: number;
   loses: number;
+  socket: Socket
 }
 
 export interface BoardContextArgs {
@@ -31,19 +34,19 @@ export function Board() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     })
-      .then((response) => {
-        if (!response.ok) throw new Error("Error getting user info");
-        return response.json();
-      })
-      .then((data) => {
-        setMyUser(data as User);
-      })
-      .catch((e) => {
-        localStorage.removeItem("access_token")
-        setDialog("Received bad response from server, try to login again")
-        navigate("/login")
-      });
-      
+    .then((response) => {
+      if (!response.ok) throw new Error("Error getting user info");
+      return response.json();
+    })
+    .then((data) => {
+      data.socket = UserSocket.getInstance()
+      setMyUser(data as User);
+    })
+    .catch((e) => {
+      localStorage.removeItem("access_token")
+      setDialog("Received bad response from server, try to login again")
+      navigate("/login")
+    });
   }, [navigate, setDialog]);
 
   useEffect(() => {

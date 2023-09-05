@@ -9,7 +9,7 @@ export class ChatSocket {
     }
 
     public static getInstance(){
-        if (!this.singleton)
+        if (!this.singleton || !this.singleton.socket.connected)
             this.singleton = new ChatSocket();
         return this.singleton;
     }
@@ -35,8 +35,34 @@ export class GameSocket {
     }
 
     public static getInstance(){
-        if (!this.singleton)
+        if (!this.singleton || !this.singleton.socket.connected)
             this.singleton = new GameSocket();
+        return this.singleton;
+    }
+
+    get socket(){
+        return this.socketIo;
+    }
+}
+
+export class UserSocket {
+    private static singleton: UserSocket;
+    private socketIo;
+
+    private constructor(){
+        const access_token = localStorage.getItem('access_token')
+        if (!access_token)
+            throw new Error("Access token not found")
+        this.socketIo = io(`${process.env.REACT_APP_USER_SOCKET}`, {
+            extraHeaders: {
+                authentication: access_token
+            }
+        })
+    }
+
+    public static getInstance(){
+        if (!this.singleton || !this.singleton.socket.connected)
+            this.singleton = new UserSocket();
         return this.singleton;
     }
 
