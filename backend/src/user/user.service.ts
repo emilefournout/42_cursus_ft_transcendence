@@ -361,4 +361,18 @@ export class UserService {
       }
     })
   }
+
+  async setUserStatusBackToOnline(id: number) {
+    await this.prisma.user.updateMany({
+      where: {
+        id,
+        status: {
+          not: "OFFLINE"
+        }
+      },
+      data: {
+        status: "ONLINE"
+      }
+    })
+  }
 }

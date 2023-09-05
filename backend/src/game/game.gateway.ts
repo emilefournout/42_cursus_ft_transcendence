@@ -183,7 +183,7 @@ export class GameGateway
     playerNumber: 1 | 2
   ) {
       game.disconnectPlayer(playerNumber)
-      await this.finishGame(game, gameLoopInterval);
+      await this.finishGame(game, gameLoopInterval);    
     }
 
   private async finishGame(gameState: GameState, gameLoopInterval: NodeJS.Timer) {
@@ -198,6 +198,8 @@ export class GameGateway
       }),
       this.userService.updateScore(gameState.winnerId, ScoreField.Wins),
       this.userService.updateScore(gameState.loserId, ScoreField.Loses),
+      this.userService.setUserStatusBackToOnline(gameState.firstPlayer.id),
+      this.userService.setUserStatusBackToOnline(gameState.secondPlayer.id)
     ]);
     await this.achievementsService.checkAndGrantGameAchievements(gameState)
   }
