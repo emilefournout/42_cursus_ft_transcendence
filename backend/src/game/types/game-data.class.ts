@@ -89,6 +89,23 @@ export class GameData {
     return -1;
   }
 
+  
+  public disconnectPlayer(playerNumber : 1 | 2) {
+    if (playerNumber === 1)
+    {
+      this.player1Score = -1
+      this.player2Score = this.goalsLimit
+      this.finish()
+    }
+    else if (playerNumber === 2)
+    {
+      this.player1Score = this.goalsLimit
+      this.player2Score = -1
+      this.finish()
+    }
+  }
+  
+
   move(direction: string, playerId: number) {
     if (this.player1Id === playerId) {
       if (direction === 'down') {

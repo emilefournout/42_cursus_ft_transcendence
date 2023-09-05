@@ -69,4 +69,8 @@ export class GameState {
   public get info(): GameData {
     return this.gameData;
   }
+
+  public disconnectPlayer(playerNumber : 1 | 2) {
+    this.gameData.disconnectPlayer(playerNumber)
+  }
 }
