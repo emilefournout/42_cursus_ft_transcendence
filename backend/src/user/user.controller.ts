@@ -199,9 +199,7 @@ export class UserController {
     summary: 'Gets an array of blocked users',
   })
   @UseGuards(JwtAuthGuard)
-  async getBlockedList(
-    @GetUser() user,
-  ) {
+  async getBlockedList(@GetUser() user) {
     return await this.userService.getBlockedById(user.sub);
   }
 

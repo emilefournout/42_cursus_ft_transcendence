@@ -68,10 +68,7 @@ export class GameGateway
     const invited = await this.userService.findUserByName(
       privateGameDataOptions.friendUserName
     );
-    if (
-      !invited ||
-      userId === invited.id
-    ) {
+    if (!invited || userId === invited.id) {
       console.log('Not a friend');
       return 'ko';
     }
