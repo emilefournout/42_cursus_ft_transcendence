@@ -64,14 +64,18 @@ export class GameGateway
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto
   ) {
     console.log('Creating private game ' + client.id);
-    const friend = await this.userService.findUserByName(
-      privateGameDataOptions.friendUserName
-    );
-    if (!friend) {
-      console.log('Sadly emitted bro');
+    const userId = this.gameService.getUserIdFromSocket(client)
+    const friend = await this.userService.findUserByName(privateGameDataOptions.friendUserName);
+    const friendships = friend ? await this.userService.getUserFriendships(friend.id) : null;
+    if (
+      !friend ||
+      !friendships ||
+      userId === friend.id ||
+      !this.gameService.isUserFriend(userId, friendships)
+      ) {
+      console.log('Not a friend')
       return 'ko';
     }
-    console.log(`USER FOUND?? -> ${friend.username}`);
     this.gameService.createPrivateRoom(
       client,
       privateGameDataOptions.gameDto,

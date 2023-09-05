@@ -57,6 +57,17 @@ export class GameService {
     }
   }
 
+  isUserFriend(friendId, friendships) {
+    var found = false;
+    friendships.forEach((data) => {
+      if(data.adressee_id === friendId || data.requester_id === friendId) {
+        console.log(`User id ${friendId} is friend with id ${data.adressee_id === friendId ? data.requester_id : data.adressee_id}`)
+        found = true;
+      }
+    })
+    return found;
+  }
+
   getUserIdFromSocket(socket: Socket): number | undefined {
     return this.userConnections.getUserIdFromSocket(socket);
   }
