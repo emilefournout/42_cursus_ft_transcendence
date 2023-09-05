@@ -348,4 +348,15 @@ export class UserService {
       }
     })
   }
+
+  async setUserStatus(id: number, status : OnlineStatus) {
+    await this.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        status
+      }
+    })
+  }
 }
