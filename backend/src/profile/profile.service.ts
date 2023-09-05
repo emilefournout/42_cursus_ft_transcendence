@@ -45,8 +45,8 @@ export class ProfileService {
     const user = await this.userService.findUserById(userId);
     const previousUrl = user.avatarURL;
     await this.userService.updateProfilePhoto(userId, url);
-    fs.unlink('uploads/' + previousUrl, (err) => {
-      const ignore = err;
+    fs.unlink('uploads/' + previousUrl, (_err) => {
+      const _ignore = _err;
     });
   }
 }

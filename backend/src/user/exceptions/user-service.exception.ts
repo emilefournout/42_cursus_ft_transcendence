@@ -1,13 +1,11 @@
-export namespace UserServiceErrors {
-  export class UserNotFoundException extends Error {
-    constructor() {
-      super('User not found');
-    }
+export class UserNotFoundException extends Error {
+  constructor() {
+    super('User not found');
   }
+}
 
-  export class UsernameExistsException extends Error {
-    constructor() {
-      super('Username already exists');
-    }
+export class UsernameExistsException extends Error {
+  constructor() {
+    super('Username already exists');
   }
 }

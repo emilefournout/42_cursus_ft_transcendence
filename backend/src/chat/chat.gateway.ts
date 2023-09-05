@@ -22,11 +22,11 @@ export class ChatGateway
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: any) {
+  afterInit(_server: Server) {
     console.log('Init ChatGateway');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ..._args: any[]) {
     console.log('Connection from ' + client.id);
   }
 

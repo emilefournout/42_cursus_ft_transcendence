@@ -35,11 +35,11 @@ export class GameGateway
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: any) {
+  afterInit(_server: Server) {
     console.log('Init GameGateway');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ..._args: any[]) {
     console.log('Connection received from ' + client.id);
     try {
       const token = client.handshake.headers.authentication as string;
@@ -65,25 +65,17 @@ export class GameGateway
   ) {
     console.log('Creating private game ' + client.id);
     const userId = this.gameService.getUserIdFromSocket(client);
-    const friend = await this.userService.findUserByName(
+    const invited = await this.userService.findUserByName(
       privateGameDataOptions.friendUserName
     );
-    const friendships = friend
-      ? await this.userService.getUserFriendships(friend.id)
-      : null;
-    if (
-      !friend ||
-      !friendships ||
-      userId === friend.id ||
-      !this.gameService.isUserFriend(userId, friendships)
-    ) {
+    if (!invited || userId === invited.id) {
       console.log('Not a friend');
       return 'ko';
     }
     this.gameService.createPrivateRoom(
       client,
       privateGameDataOptions.gameDto,
-      friend.id
+      invited.id
     );
     return 'ok';
   }

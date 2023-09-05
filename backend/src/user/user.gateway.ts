@@ -24,11 +24,11 @@ export class UserGateway
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: any) {
+  afterInit(_server: Server) {
     console.log('Init UserGateway');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ..._args: any[]) {
     console.log(client.id + ' is connecting');
     try {
       const token = client.handshake.headers.authentication as string;

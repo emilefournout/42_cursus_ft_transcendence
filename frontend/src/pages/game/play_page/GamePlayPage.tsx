@@ -27,6 +27,8 @@ export function GamePlayPage() {
     rightPad: 150,
     ballX: 100,
     ballY: 150,
+    primaryColor: "black",
+    secondaryColor: "white"
   };
 
   const [state, updateGameState] = useState(boardState);

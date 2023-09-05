@@ -10,7 +10,7 @@ import { UserBasicInfoDto } from './dto/info-user.dto';
 import { OnlineStatus, Prisma } from '@prisma/client';
 import { GameService } from 'src/game/game.service';
 import { ScoreField } from './types/scorefield.enum';
-import { UserServiceErrors } from './exceptions/user-service.exception';
+import * as UserServiceErrors from './exceptions/user-service.exception';
 
 @Injectable()
 export class UserService {
@@ -175,6 +175,22 @@ export class UserService {
       LIMIT 10;
     `;
     return userGames;
+  }
+
+  async getBlockedById(userId: number) {
+    const user = await this.findUserById(userId);
+    if (!user) throw new NotFoundException('User not found');
+    const queryResponse = await this.prisma.userBlocked.findMany({
+      where: {
+        OR: [{ user1_id: userId }, { user2_id: userId }],
+      },
+    });
+    const blockList = new Set();
+    queryResponse.forEach((data) => {
+      const to_push = data.user1_id === userId ? data.user2_id : data.user1_id;
+      blockList.add(to_push);
+    });
+    return [...blockList];
   }
 
   async addUserBlocked(userId: number, targetId: number) {

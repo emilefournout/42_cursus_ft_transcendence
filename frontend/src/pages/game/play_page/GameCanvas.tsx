@@ -14,6 +14,8 @@ export interface GameCanvasProps {
   rightPad: number;
   ballX: number;
   ballY: number;
+  primaryColor: string;
+  secondaryColor: string;
 }
 
 export function GameCanvas(props: GameCanvasProps) {
@@ -26,10 +28,10 @@ export function GameCanvas(props: GameCanvasProps) {
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
     const ctx = canvas.getContext("2d");
-
+    
     if (ctx) {
       // Draw board
-      ctx.fillStyle = "black";
+      ctx.fillStyle = props.primaryColor;
       ctx.fillRect(0, 0, props.width, props.height);
 
       // Draw middle line
@@ -42,7 +44,7 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.stroke();
 
       // Draw left pad
-      ctx.fillStyle = "white";
+      ctx.fillStyle = props.secondaryColor;
       ctx.fillRect(
         padWallSeparation,
         props.leftPad,
