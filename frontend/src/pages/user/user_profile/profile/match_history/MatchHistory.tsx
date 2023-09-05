@@ -66,12 +66,12 @@ export function MatchHistory(props: MatchHistoryProps) {
             let matchResult: MatchResult;
             let userScore_1: UserScore = {
               username: match.user1_username,
-              score: match.points_user1,
+              score: match.points_user1 > 0 ? match.points_user1 : 0,
               user_id: match.user1_id,
             };
             let userScore_2: UserScore = {
               username: match.user2_username,
-              score: match.points_user2,
+              score: match.points_user2 > 0 ? match.points_user2 : 0,
               user_id: match.user2_id,
             };
             if (match.user1_id === props.userId) {
