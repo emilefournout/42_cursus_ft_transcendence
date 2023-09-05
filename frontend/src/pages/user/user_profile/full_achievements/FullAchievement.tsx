@@ -18,7 +18,7 @@ export function FullAchievements() {
   const userId = boardContext?.me.id;
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND}/achievements/${userId}`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/achievements/all`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -43,7 +43,7 @@ export function FullAchievements() {
         <div className="window-module ranking-window">
           <div className="ranking-title">
             <button onClick={() => navigate(-1)}>X</button>
-            <span>Achievements</span>
+            <span>All achievements</span>
           </div>
           <div className="wrapper-col all-ach-wrapper">
             {achievements.map((achievement: Achievement) => {

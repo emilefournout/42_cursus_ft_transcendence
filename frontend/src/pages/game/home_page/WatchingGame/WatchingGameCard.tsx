@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { User } from "../../../board/Board";
+import { GameInfo, User } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 import { testing } from "../../../../services/core";
 
@@ -7,10 +7,7 @@ interface WatchingGameCardProps {
   uuid: string;
   key: string;
 }
-interface GameInfo {
-  user1_id: number;
-  user2_id: number;
-}
+
 export function WatchingGameCard(props: WatchingGameCardProps) {
   const [username_1, setUsername_1] = useState<string | undefined>(undefined);
   const [username_2, setUsername_2] = useState<string | undefined>(undefined);

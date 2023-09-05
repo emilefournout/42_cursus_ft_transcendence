@@ -25,6 +25,7 @@ export function WatchGameColumn() {
         if (testing) console.log(error);
       });
   }, []);
+
   return (
     <div className="wrapper-col">
       <div>currents game:</div>

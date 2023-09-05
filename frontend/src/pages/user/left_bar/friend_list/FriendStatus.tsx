@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./friend_card/FriendCard.css";
 import ingameIcon from "./friend_card/accepted_friend_card/ingameIcon.svg";
+import { BoardContext, GameInfo } from "../../../board/Board";
+import { useNavigate } from "react-router-dom";
 
 export enum UserStatus {
   Online = "ONLINE",
@@ -10,12 +12,39 @@ export enum UserStatus {
 
 interface Props {
   status: string;
+  friendId: number;
 }
 
-export function FriendStatus({ status }: Props) {
-  if (status === UserStatus.Online) {
+export function FriendStatus(props: Props) {
+  const boardContext = useContext(BoardContext);
+
+  const navigate = useNavigate();
+
+  const currentGame: GameInfo | undefined = boardContext?.currentGames.find(
+    (game) =>
+      game.user1_id === props.friendId || game.user2_id === props.friendId
+  );
+
+  if (boardContext === undefined) {
+    return <></>;
+  } else if (currentGame !== undefined) {
     return (
-      <div className="friend-card-status friend-card-username">
+      <div
+        className="friend-card-status friend-card-subtitle"
+        onClick={() => {
+          navigate("/board/game/" + currentGame!.uuid);
+        }}
+      >
+        <div
+          className="friend-card-status-marker"
+          style={{ background: "green" }}
+        ></div>
+        Watch Game
+      </div>
+    );
+  } else if (props.status === UserStatus.Online) {
+    return (
+      <div className="friend-card-status friend-card-subtitle">
         <div
           className="friend-card-status-marker"
           style={{ background: "var(--Mooned-Teal)" }}
@@ -23,7 +52,7 @@ export function FriendStatus({ status }: Props) {
         Online
       </div>
     );
-  } else if (status === UserStatus.Offline) {
+  } else if (props.status === UserStatus.Offline) {
     return (
       <div className="friend-card-status friend-card-subtitle">
         <div
@@ -33,14 +62,7 @@ export function FriendStatus({ status }: Props) {
         Offline
       </div>
     );
-  } else if (status === UserStatus.InGame) {
-    return (
-      <div className="friend-card-status friend-card-subtitle">
-        <img src={ingameIcon} alt="Ingame icon" />
-        In-game
-      </div>
-    );
   } else {
-    throw new Error("Unknown StatType");
+    return <></>;
   }
 }

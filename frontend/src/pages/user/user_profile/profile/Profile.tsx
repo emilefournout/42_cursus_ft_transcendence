@@ -13,11 +13,11 @@ interface ProfileProps {
 export function Profile(props: ProfileProps) {
   const boardContext = React.useContext(BoardContext);
   const userInfo = props.userInfo ?? boardContext?.me;
-
+  const isBlocked = false;
   if (userInfo === undefined) {
     return (
       <div className="prof-cards-wrapper">
-        User not found! Try add him to friends first
+        User is not your friend ! Try add him to friends first
       </div>
     );
   } else {
@@ -27,6 +27,7 @@ export function Profile(props: ProfileProps) {
         <div id="prof-user-name" className="ellipsed-txt">
           {"@" + userInfo.username}
         </div>
+        {isBlocked ? <button>unblock</button> : <button>block</button>}
         <div className="cards-container">
           <Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
           <MatchHistory userId={userInfo.id} username={userInfo.username} />

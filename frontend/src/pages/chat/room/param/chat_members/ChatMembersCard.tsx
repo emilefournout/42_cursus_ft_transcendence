@@ -5,6 +5,7 @@ import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../RoomParam";
 import { testing } from "../../../../../services/core";
+import { BoardContext } from "../../../../board/Board";
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -17,7 +18,9 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
   const muteDialogContext = useContext(MuteDialogContext);
   const chadId = roomContextArgs.chat.id;
   const navigate = useNavigate();
-
+  const boardContext = useContext(BoardContext);
+  const isMe = boardContext?.me.id === props.member.userId;
+  const style = isMe ? { backgroundColor: "green" } : {};
   const action = (route: string, method: string, body: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
@@ -79,49 +82,77 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       if (testing) console.log(error);
     });
 
-  return (
-    <>
-      <div
-        className="room-param-user-name ellipsed-txt"
-        onClick={() => navigate(`/board/user-account/${props.member.userId}`)}
-      >
-        {props.member.username}
-      </div>
-      {props.member.owner ? (
-        <img src={ownerIcon} title="Room Owner" alt="Room owner icon" />
-      ) : props.member.administrator ? (
-        <img src={adminIcon} title="Room Admin" alt="Room administrator icon" />
-      ) : (
-        <></>
-      )}
-      {props.member.owner || !props.showButtons ? (
-        <></>
-      ) : (
-        <>
-          {props.member.administrator ? (
-            <button id="demote-btn" onClick={demote}>
-              demote
-            </button>
-          ) : (
-            <button id="promote-btn" onClick={promote}>
-              promote
-            </button>
-          )}
-          {props.member.muted ? (
-            <button id="unmute-btn" onClick={unmute}>
-              unmute
-            </button>
-          ) : (
+  if (!boardContext) {
+    return <>Loading</>;
+  } else {
+    return (
+      <>
+        <div
+          style={style}
+          className="room-param-user-name ellipsed-txt"
+          onClick={() => navigate(`/board/user-account/${props.member.userId}`)}
+        >
+          {props.member.username}
+        </div>
+        {props.member.owner ? (
+          <img src={ownerIcon} title="Room Owner" alt="Room owner icon" />
+        ) : props.member.administrator ? (
+          <img
+            src={adminIcon}
+            title="Room Admin"
+            alt="Room administrator icon"
+          />
+        ) : (
+          <></>
+        )}
+        {props.member.owner || !props.showButtons ? (
+          <></>
+        ) : (
+          <>
+            {props.member.administrator ? (
+              <button id="demote-btn" onClick={demote}>
+                demote
+              </button>
+            ) : (
+              <button id="promote-btn" onClick={promote}>
+                promote
+              </button>
+            )}
+          </>
+        )}
+        {isMe ? (
+          <></>
+        ) : (
+          <>
+            {props.member.muted ? (
+              <button id="unmute-btn" onClick={unmute}>
+                unmute
+              </button>
+            ) : (
+              <button
+                id="mute-btn"
+                onClick={() => muteDialogContext.mute(props.member.userId)}
+              >
+                mute
+              </button>
+            )}
+            <button onClick={kickOut}>ban</button>
+
+            <button onClick={kickOut}>kick out</button>
             <button
-              id="mute-btn"
-              onClick={() => muteDialogContext.mute(props.member.userId)}
+              onClick={() => {
+                navigate("/board/game/new-game", {
+                  state: {
+                    invite: props.member.username,
+                  },
+                });
+              }}
             >
-              mute
+              Invite
             </button>
-          )}
-          <button onClick={kickOut}>kick out</button>
-        </>
-      )}
-    </>
-  );
+          </>
+        )}
+      </>
+    );
+  }
 }
