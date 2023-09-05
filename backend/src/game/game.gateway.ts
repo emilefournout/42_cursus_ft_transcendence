@@ -198,7 +198,7 @@ export class GameGateway
       }),
       this.userService.updateScore(gameState.winnerId, ScoreField.Wins),
       this.userService.updateScore(gameState.loserId, ScoreField.Loses),
-      this.achievementsService.checkAndGrantGameAchievements(gameState)
     ]);
+    await this.achievementsService.checkAndGrantGameAchievements(gameState)
   }
 }
