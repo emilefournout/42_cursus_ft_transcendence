@@ -5,7 +5,7 @@ import {
   IsNotEmpty,
   IsString,
   IsOptional,
-  MinLength
+  MinLength,
 } from 'class-validator';
 
 export class RegisterUserDto {
@@ -14,14 +14,14 @@ export class RegisterUserDto {
   @IsNotEmpty()
   @MinLength(5)
   @ApiProperty({
-    description: 'Username to register, can be different than the intraname.'
+    description: 'Username to register, can be different than the intraname.',
   })
   @Transform((name: TransformFnParams) => (name.value as string).toLowerCase())
   username: string;
 
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Possible image to upload as profile avatar.'
+    description: 'Possible image to upload as profile avatar.',
   })
   image?: any;
 
@@ -29,7 +29,7 @@ export class RegisterUserDto {
   @IsString()
   @ApiPropertyOptional({
     type: String,
-    description: 'Two factor authentication code.'
+    description: 'Two factor authentication code.',
   })
   code2fa: string;
 }

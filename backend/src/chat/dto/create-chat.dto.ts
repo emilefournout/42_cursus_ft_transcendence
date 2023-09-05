@@ -3,11 +3,9 @@ import { ChatVisibility } from '@prisma/client';
 import {
   IsDefined,
   IsEnum,
-  IsInt,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
 } from 'class-validator';
 
 export class CreateChatDto {
@@ -15,25 +13,25 @@ export class CreateChatDto {
   @IsEnum(ChatVisibility)
   @ApiProperty({ enum: ChatVisibility })
   chatVisibility: ChatVisibility;
-  
+
   @IsDefined()
   @IsString()
   @ApiProperty({
-    type: String
+    type: String,
   })
   name: string;
-  
+
   @IsOptional()
   @IsString()
   @ApiPropertyOptional({
-    type: String
+    type: String,
   })
   password?: string;
-  
+
   @IsOptional()
   @IsNumber()
   @ApiProperty({
-    type: Number
+    type: Number,
   })
   invitedId?: number;
 }

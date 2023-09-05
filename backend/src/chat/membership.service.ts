@@ -4,10 +4,9 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateChatMemberDto } from './dto/create-chat-member.dto';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
 import { ChatRoleDto } from './dto/update-chat-member.dto';
@@ -26,9 +25,9 @@ export class MembershipService {
       where: {
         chatId_userId: {
           chatId: chatId,
-          userId: userId
-        }
-      }
+          userId: userId,
+        },
+      },
     });
     return chatMember;
   }
@@ -36,27 +35,23 @@ export class MembershipService {
   async findChatMemberByChatId(chatId: any) {
     const chatMembers = await this.prisma.chatMember.findMany({
       where: {
-        chatId: chatId
+        chatId: chatId,
       },
       include: {
         user: {
           select: {
-            username: true
-          }
-        }
-      }
+            username: true,
+          },
+        },
+      },
     });
     return chatMembers;
   }
 
-  async createChatMember(
-    chatId: number,
-    id: number,
-    password?: string
-  ) {
+  async createChatMember(chatId: number, id: number, password?: string) {
     const [chat, user] = await Promise.all([
       this.chatService.findChatById(chatId),
-      this.userService.findUserById(id)
+      this.userService.findUserById(id),
     ]);
     if (!chat || !user)
       throw new NotFoundException(`${!chat ? 'Chat' : 'User'} not found`);
@@ -65,8 +60,8 @@ export class MembershipService {
       await this.prisma.chatMember.create({
         data: {
           userId: id,
-          chatId: chatId
-        }
+          chatId: chatId,
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -84,10 +79,10 @@ export class MembershipService {
     const chatMember = await this.prisma.chatMember.create({
       data: {
         userId: id,
-        chatId: chatId
-      }
+        chatId: chatId,
+      },
     });
-    return chatMember
+    return chatMember;
   }
 
   private async checkAccess(chat, password?: string) {
@@ -115,9 +110,9 @@ export class MembershipService {
         where: {
           chatId_userId: {
             chatId: chatId,
-            userId: userId
-          }
-        }
+            userId: userId,
+          },
+        },
       });
     } catch (error) {
       throw new ForbiddenException('Could not delete chat member');
@@ -131,7 +126,7 @@ export class MembershipService {
     } else if (chatMember.owner === true)
       await this.updateChatMember(newOwner.userId, chatId, {
         owner: true,
-        administrator: true
+        administrator: true,
       });
   }
 
@@ -139,17 +134,17 @@ export class MembershipService {
     return await this.prisma.chatMember.findFirst({
       where: {
         userId: {
-          not: userId
-        }
+          not: userId,
+        },
       },
       orderBy: [
         {
-          administrator: 'desc'
+          administrator: 'desc',
         },
         {
-          createdAt: 'asc'
-        }
-      ]
+          createdAt: 'asc',
+        },
+      ],
     });
   }
 
@@ -161,13 +156,13 @@ export class MembershipService {
       const owner = await this.prisma.chatMember.findFirst({
         where: {
           chatId: chatId,
-          owner: true
-        }
+          owner: true,
+        },
       });
       if (owner)
         await this.updateChatMember(owner.userId, chatId, {
           administrator: true,
-          owner: false
+          owner: false,
         });
     }
     try {
@@ -175,10 +170,10 @@ export class MembershipService {
         where: {
           chatId_userId: {
             userId: userId,
-            chatId: chatId
-          }
+            chatId: chatId,
+          },
         },
-        data: newData
+        data: newData,
       });
     } catch (error) {
       throw new ForbiddenException('Could not update user');
@@ -189,8 +184,8 @@ export class MembershipService {
     const chatMember = await this.prisma.chatMember.findFirst({
       where: {
         chatId: chatId,
-        userId: userId
-      }
+        userId: userId,
+      },
     });
     if (!chatMember) throw new NotFoundException('User not found');
     if (chatMember.administrator)
@@ -200,14 +195,14 @@ export class MembershipService {
     await this.prisma.chatMember.update({
       data: {
         muted: true,
-        mutedExpiringDate: muteDate
+        mutedExpiringDate: muteDate,
       },
       where: {
         chatId_userId: {
           chatId: chatId,
-          userId: userId
-        }
-      }
+          userId: userId,
+        },
+      },
     });
   }
 
@@ -215,21 +210,21 @@ export class MembershipService {
     const chatMember = await this.prisma.chatMember.findFirst({
       where: {
         chatId: chatId,
-        userId: userId
-      }
+        userId: userId,
+      },
     });
     if (!chatMember) throw new NotFoundException('User not found');
     await this.prisma.chatMember.update({
       data: {
         muted: false,
-        mutedExpiringDate: null
+        mutedExpiringDate: null,
       },
       where: {
         chatId_userId: {
           chatId: chatId,
-          userId: userId
-        }
-      }
+          userId: userId,
+        },
+      },
     });
   }
 

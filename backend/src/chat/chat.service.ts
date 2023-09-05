@@ -3,7 +3,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Chat, ChatVisibility } from '@prisma/client';
@@ -32,17 +32,17 @@ export class ChatService {
     const chats: Chat[] = await this.prisma.chat.findMany({
       where: {
         name: {
-          contains: chatName
+          contains: chatName,
         },
         OR: [
           {
-            visibility: 'PROTECTED'
+            visibility: 'PROTECTED',
           },
           {
-            visibility: 'PUBLIC'
-          }
-        ]
-      }
+            visibility: 'PUBLIC',
+          },
+        ],
+      },
     });
     return chats.map((chat) => ChatShortInfoDto.fromChat(chat));
   }
@@ -68,20 +68,20 @@ export class ChatService {
       name: name,
       password: hashedPassword,
       members: {
-        create: [{ userId: user_id, administrator: true, owner: true }]
-      }
+        create: [{ userId: user_id, administrator: true, owner: true }],
+      },
     };
 
     if (invitedId) {
       chatData.members.create.push({
         userId: invitedId,
         administrator: false,
-        owner: false
+        owner: false,
       });
     }
 
     const chat = await this.prisma.chat.create({
-      data: chatData
+      data: chatData,
     });
     if (chat) return ChatBasicInfoDto.fromChat(chat);
     return null;
@@ -93,8 +93,8 @@ export class ChatService {
     try {
       await this.prisma.chat.delete({
         where: {
-          id: chatId
-        }
+          id: chatId,
+        },
       });
     } catch (error) {
       throw new ForbiddenException('Could not delete chat');
@@ -121,9 +121,9 @@ export class ChatService {
     try {
       await this.prisma.chat.update({
         where: {
-          id: id
+          id: id,
         },
-        data: chat
+        data: chat,
       });
     } catch (error) {
       throw new ForbiddenException('Could not update user');
@@ -136,8 +136,8 @@ export class ChatService {
         data: {
           chatId: chat_id,
           userId: user_id,
-          text: text
-        }
+          text: text,
+        },
       });
     } catch (error) {
       return false;
@@ -147,8 +147,8 @@ export class ChatService {
   async findChatById(id: number) {
     const chat = await this.prisma.chat.findUnique({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
     return chat;
   }
@@ -161,20 +161,20 @@ export class ChatService {
             userId: true,
             user: {
               select: {
-                username: true
-              }
+                username: true,
+              },
             },
             createdAt: true,
             administrator: true,
             owner: true,
             muted: true,
-            mutedExpiringDate: true
-          }
-        }
+            mutedExpiringDate: true,
+          },
+        },
       },
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
     if (!chat) return null;
     return ChatBasicInfoDto.fromChat(chat);
@@ -183,8 +183,8 @@ export class ChatService {
   async findChatMessagesById(id: number) {
     const messages = await this.prisma.message.findMany({
       where: {
-        chatId: id
-      }
+        chatId: id,
+      },
     });
     return messages;
   }
@@ -192,11 +192,11 @@ export class ChatService {
   async findChatMessagesByIdSortedByDate(id: number) {
     const messages = await this.prisma.message.findMany({
       where: {
-        chatId: id
+        chatId: id,
       },
       orderBy: {
-        createdAt: 'asc'
-      }
+        createdAt: 'asc',
+      },
     });
     return messages;
   }

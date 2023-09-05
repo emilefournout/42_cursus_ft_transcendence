@@ -7,6 +7,6 @@ import { UserModule } from 'src/user/user.module';
   imports: [forwardRef(() => UserModule)],
   providers: [ProfileService],
   controllers: [ProfileController],
-  exports: [ProfileService]
+  exports: [ProfileService],
 })
 export class ProfileModule {}

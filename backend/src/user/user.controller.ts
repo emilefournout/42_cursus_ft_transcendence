@@ -8,7 +8,6 @@ import {
   Body,
   UseGuards,
   Put,
-  BadRequestException
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/decorator';
@@ -19,7 +18,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiTags
+  ApiTags,
 } from '@nestjs/swagger';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { AssignAchievementDto } from './dto/assign-achievement.dto';
@@ -37,7 +36,7 @@ export class UserController {
   async getRanking(): Promise<UserBasicInfoDto[]> {
     return await this.userService.getRanking();
   }
-  
+
   @Get('history')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -50,7 +49,9 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Returns last 10 games of the user based on the id.' })
+  @ApiOperation({
+    summary: 'Returns last 10 games of the user based on the id.',
+  })
   async getUserHistoryById(@Param('id', IdValidationPipe) id) {
     return this.userService.getUserHistory(id);
   }
@@ -59,14 +60,14 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Returns a basic info about the user who requested.'
+    summary: 'Returns a basic info about the user who requested.',
   })
   @ApiResponse({ type: UserBasicInfoDto })
   async findUserMe(@GetUser() user) {
     try {
       return this.findUser(user.sub);
     } catch (error) {
-      throw new UserControllerErrors.UserNotFoundException()
+      throw new UserControllerErrors.UserNotFoundException();
     }
   }
 
@@ -77,10 +78,10 @@ export class UserController {
   async findUser(@Param('id', IdValidationPipe) id) {
     try {
       const userInfo = await this.userService.getUserInfoById(id);
-    if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
-    return userInfo;
+      if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
+      return userInfo;
     } catch (error) {
-      throw new UserControllerErrors.UserNotFoundException()
+      throw new UserControllerErrors.UserNotFoundException();
     }
   }
 
@@ -99,7 +100,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Removes the user account.',
-    description: 'Remove your account'
+    description: 'Remove your account',
   })
   async deleteUser(@GetUser() user) {
     let userDeleted;
@@ -107,7 +108,7 @@ export class UserController {
     try {
       userDeleted = await this.userService.deleteUser(user.sub);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw new UserControllerErrors.UserNotDeletedException();
     }
     if (!userDeleted) throw new UserControllerErrors.UserNotDeletedException();
@@ -118,13 +119,16 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Updates the user.',
-    description: 'Takes username. If none are provided, returns 400'
+    description: 'Takes username. If none are provided, returns 400',
   })
   async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
     let userUpdated;
-  
+
     try {
-      userUpdated = await this.userService.updateUsername(user.sub, updateUserDto.username);
+      userUpdated = await this.userService.updateUsername(
+        user.sub,
+        updateUserDto.username
+      );
     } catch (error) {
       if (error instanceof UserServiceErrors.UsernameExistsException)
         throw new UserControllerErrors.UserNotUpdatedException(error.message);
@@ -148,7 +152,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Gets user friendships.',
-    description: 'If no friendships are found, 404 will be returned'
+    description: 'If no friendships are found, 404 will be returned',
   })
   async getUserFriendships(@GetUser() user) {
     return await this.userService.getUserFriendships(user.sub);
@@ -157,27 +161,30 @@ export class UserController {
   @Post('/block/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the user the sender wants to block'
+    description: 'The id of the user the sender wants to block',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Blocks the user with id for the sender',
-    description: 'The user with the id will be blocked'
+    description: 'The user with the id will be blocked',
   })
   @UseGuards(JwtAuthGuard)
-  async addUserBlocked(@GetUser() user, @Param('id', IdValidationPipe) id: number) {
+  async addUserBlocked(
+    @GetUser() user,
+    @Param('id', IdValidationPipe) id: number
+  ) {
     await this.userService.addUserBlocked(user.sub, id);
   }
 
   @Delete('/block/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the user the sender wants to remove the block'
+    description: 'The id of the user the sender wants to remove the block',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Removes the block to id for the sender',
-    description: 'The user with the id will be unblocked'
+    description: 'The user with the id will be unblocked',
   })
   @UseGuards(JwtAuthGuard)
   async deleteUserBlocked(
@@ -190,27 +197,30 @@ export class UserController {
   @Post('/friends/send/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the user the sender wants to be friends with'
+    description: 'The id of the user the sender wants to be friends with',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Invites id to be friends',
-    description: 'The user with the id will recieve a friendship request'
+    description: 'The user with the id will recieve a friendship request',
   })
   @UseGuards(JwtAuthGuard)
-  async addUserFriends(@GetUser() user, @Param('id', IdValidationPipe) id: number) {
+  async addUserFriends(
+    @GetUser() user,
+    @Param('id', IdValidationPipe) id: number
+  ) {
     await this.userService.addUserFriends(user.sub, id);
   }
 
   @Patch('/friends/accept/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the user that send the invitation'
+    description: 'The id of the user that send the invitation',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Accepts the invitation from id',
-    description: 'The user with the id will have its invitation accepted'
+    description: 'The user with the id will have its invitation accepted',
   })
   @UseGuards(JwtAuthGuard)
   async acceptUserFriends(
@@ -223,13 +233,13 @@ export class UserController {
   @Delete('/friends/decline/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the user that send the invitation'
+    description: 'The id of the user that send the invitation',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Declines id user invitation',
     description:
-      'The user invitation to be friends from id with the will be declined'
+      'The user invitation to be friends from id with the will be declined',
   })
   @UseGuards(JwtAuthGuard)
   async declineUserFriends(
@@ -242,13 +252,12 @@ export class UserController {
   @Delete('/friends/delete/:id')
   @ApiParam({
     name: 'id',
-    description: 'The id of the friend to delete'
+    description: 'The id of the friend to delete',
   })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Deletes a friend or a pending request',
-    description:
-      'If the friend or request is not found, 404 will be returned'
+    description: 'If the friend or request is not found, 404 will be returned',
   })
   @UseGuards(JwtAuthGuard)
   async deleteUserFriends(

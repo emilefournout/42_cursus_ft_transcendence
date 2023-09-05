@@ -15,10 +15,8 @@ export namespace UserControllerErrors {
 
   export class UserNotUpdatedException extends HttpException {
     constructor(message?: string) {
-      if (message)
-        super(message, HttpStatus.BAD_REQUEST);
-      else
-        super("User could not be updated", HttpStatus.BAD_REQUEST);
+      if (message) super(message, HttpStatus.BAD_REQUEST);
+      else super('User could not be updated', HttpStatus.BAD_REQUEST);
     }
   }
 

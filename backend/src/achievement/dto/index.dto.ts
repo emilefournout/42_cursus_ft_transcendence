@@ -1,1 +1,1 @@
-export * from './achievement.dto'
+export * from './achievement.dto';

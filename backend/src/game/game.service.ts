@@ -3,7 +3,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  forwardRef
+  forwardRef,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GameData, GameDataOptions } from './types/game-data.class';
@@ -28,13 +28,14 @@ export class GameService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => UserService))
-    private userService: UserService) {}
+    private userService: UserService
+  ) {}
 
   async findGameById(id: string) {
     const game = await this.prisma.game.findUnique({
       where: {
-        uuid: id
-      }
+        uuid: id,
+      },
     });
     return game;
   }
@@ -58,13 +59,17 @@ export class GameService {
   }
 
   isUserFriend(friendId, friendships) {
-    var found = false;
+    let found = false;
     friendships.forEach((data) => {
-      if(data.adressee_id === friendId || data.requester_id === friendId) {
-        console.log(`User id ${friendId} is friend with id ${data.adressee_id === friendId ? data.requester_id : data.adressee_id}`)
+      if (data.adressee_id === friendId || data.requester_id === friendId) {
+        console.log(
+          `User id ${friendId} is friend with id ${
+            data.adressee_id === friendId ? data.requester_id : data.adressee_id
+          }`
+        );
         found = true;
       }
-    })
+    });
     return found;
   }
 
@@ -74,26 +79,25 @@ export class GameService {
 
   async getUserInvitationsById(id: number) {
     const invitations = [];
-  
+
     for (const [socket, gameData] of this.privateRoom) {
       if (gameData.invitedId === id) {
         const inviterId = this.getUserIdFromSocket(socket);
         const user = await this.userService.getUserInfoById(inviterId);
-        const username = user.username
+        const username = user.username;
         invitations.push({ inviterId, username });
       }
     }
-  
+
     return { invitations };
   }
-  
 
   async createGame(player1Id: number, player2Id: number): Promise<string> {
     const game = await this.prisma.game.create({
       data: {
         user1_id: player1Id,
-        user2_id: player2Id
-      }
+        user2_id: player2Id,
+      },
     });
     return game.uuid;
   }
@@ -104,13 +108,13 @@ export class GameService {
     try {
       await this.prisma.game.update({
         where: {
-          uuid: uuid
+          uuid: uuid,
         },
         data: {
           points_user1: updateGameDto.points_user1,
           points_user2: updateGameDto.points_user2,
-          status: updateGameDto.status
-        }
+          status: updateGameDto.status,
+        },
       });
     } catch (err) {
       throw new ForbiddenException('Could not update game');
@@ -255,9 +259,9 @@ export class GameService {
     this.customizedRoom.delete(socket);
     this.waitingRoom.delete(socket);
   }
-  
+
   removeActiveGame(id: string) {
-    this.games.delete(id)
+    this.games.delete(id);
   }
 
   public debug_room_status() {

@@ -4,9 +4,9 @@ import { GameData, GameDataOptions } from './game-data.class';
 export class GameState {
   private gameId: string;
   private gameData: GameData;
-  private player1 : { socket: Socket; id: number };
-  private player2 : { socket: Socket; id: number };
-  
+  private player1: { socket: Socket; id: number };
+  private player2: { socket: Socket; id: number };
+
   constructor(
     id: string,
     player1: { socket: Socket; id: number },
@@ -20,45 +20,38 @@ export class GameState {
   }
 
   public finish() {
-    this.gameData.finish()
+    this.gameData.finish();
   }
 
   public get id(): string {
     return this.gameId;
   }
 
-  public get firstPlayer(): { socket: Socket; id: number }
-  {
+  public get firstPlayer(): { socket: Socket; id: number } {
     return this.player1;
   }
 
-  public get secondPlayer(): { socket: Socket; id: number }
-  {
+  public get secondPlayer(): { socket: Socket; id: number } {
     return this.player2;
   }
 
-  public get winnerId(): number
-  {
+  public get winnerId(): number {
     return this.gameData.winner;
   }
 
-
-  public get goalsLimit(): number
-  {
+  public get goalsLimit(): number {
     return this.gameData.goalsLimit;
   }
 
-  public get firstPlayerScore() : number {
-    return this.gameData.firstPlayerScore
-  }
-  
-  public get secondPlayerScore() : number {
-    return this.gameData.secondPlayerScore
+  public get firstPlayerScore(): number {
+    return this.gameData.firstPlayerScore;
   }
 
+  public get secondPlayerScore(): number {
+    return this.gameData.secondPlayerScore;
+  }
 
-  public get loserId(): number
-  {
+  public get loserId(): number {
     return this.gameData.loser;
   }
 
@@ -70,7 +63,7 @@ export class GameState {
     return this.gameData;
   }
 
-  public disconnectPlayer(playerNumber : 1 | 2) {
-    this.gameData.disconnectPlayer(playerNumber)
+  public disconnectPlayer(playerNumber: 1 | 2) {
+    this.gameData.disconnectPlayer(playerNumber);
   }
 }

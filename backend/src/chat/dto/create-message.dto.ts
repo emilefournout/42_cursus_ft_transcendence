@@ -10,5 +10,5 @@ export class CreateMessageDto {
   @ApiProperty()
   @IsDefined()
   @IsString()
-  text: string
+  text: string;
 }

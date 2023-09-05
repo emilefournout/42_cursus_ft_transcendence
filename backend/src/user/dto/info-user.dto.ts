@@ -1,24 +1,24 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { OnlineStatus } from "@prisma/client";
-import { IsDefined, Min } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { OnlineStatus } from '@prisma/client';
+import { Min } from 'class-validator';
 
 export class UserBasicInfoDto {
   @ApiProperty({
     type: Number,
-    description: "Identification number of the user"
+    description: 'Identification number of the user',
   })
   @Min(2)
   id: number;
 
   @ApiProperty()
   username: string;
-  
+
   @ApiProperty()
   avatar: string;
 
   @ApiProperty()
   status: OnlineStatus;
-  
+
   @ApiProperty()
   wins: number;
 

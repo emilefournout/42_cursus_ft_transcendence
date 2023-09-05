@@ -4,12 +4,16 @@ import {
   NotFoundException,
   Param,
   ParseUUIDPipe,
-  Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { GameService } from './game.service';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
 
@@ -39,7 +43,7 @@ export class GameController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Gets user game invitations.',
-    description: 'If no invitations are found, an empty array will be returned'
+    description: 'If no invitations are found, an empty array will be returned',
   })
   async getUserInvitations(@GetUser() user) {
     return await this.gameService.getUserInvitations(user.sub);

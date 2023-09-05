@@ -1,51 +1,49 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { ChatMember, ChatVisibility } from "@prisma/client";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ChatMember, ChatVisibility } from '@prisma/client';
 
 export class ChatMemberBasicInfoDto {
   @ApiProperty({
     type: Number,
-    description: "User identificator"
+    description: 'User identificator',
   })
   userId: number;
 
   @ApiProperty({
     type: String,
-    description: "Username"
+    description: 'Username',
   })
   username: string;
 
   @ApiProperty({
     type: Date,
-    description: "Creation Date"
+    description: 'Creation Date',
   })
   createdAt: Date;
 
-
   @ApiProperty({
     type: Boolean,
-    description: "Owner of the chat"
+    description: 'Owner of the chat',
   })
   owner: boolean;
 
   @ApiProperty({
     type: Boolean,
-    description: "Administrator"
+    description: 'Administrator',
   })
   administrator: boolean;
 
-
   @ApiProperty({
     type: Boolean,
-    description: "Muted"
+    description: 'Muted',
   })
   muted: boolean;
 
   @ApiProperty({
     type: Date,
-    description: "Muted"
+    description: 'Muted',
   })
   mutedExpiringDate: Date;
-  
+
   public static fromChatMember(chatMember) {
     const chatMemberInfo = new ChatMemberBasicInfoDto();
     chatMemberInfo.userId = chatMember.userId;

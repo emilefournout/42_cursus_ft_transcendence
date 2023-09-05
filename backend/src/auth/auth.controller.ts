@@ -2,19 +2,15 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
-  ParseFilePipe,
-  ParseFilePipeBuilder,
   Post,
   Query,
   Req,
   Res,
   UnauthorizedException,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Response, Express, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -36,7 +32,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Registers a new user' })
   @ApiResponse({
     description:
-      'Returns an access token if the user logged in or throws an exception if not authorized.'
+      'Returns an access token if the user logged in or throws an exception if not authorized.',
   })
   async registerAuth(
     @Req() request: Request,
@@ -57,7 +53,7 @@ export class AuthController {
         try {
           url = this.profileService.saveImage(image);
         } catch (error) {
-          url = this.profileService.generateNewIcon();          
+          url = this.profileService.generateNewIcon();
         }
       } else {
         url = this.profileService.generateNewIcon();
@@ -77,7 +73,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Returns a qr image for the 2FA' })
   @ApiResponse({
     description:
-      'Renders and return a qr image given the secret for a given username.'
+      'Renders and return a qr image given the secret for a given username.',
   })
   qrImage(@Query('user') user: string) {
     return this.authService.getQR(user);

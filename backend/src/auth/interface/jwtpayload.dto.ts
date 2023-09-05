@@ -1,4 +1,4 @@
 export interface JwtPayload {
-    sub: number,
-    intraname: string
+  sub: number;
+  intraname: string;
 }

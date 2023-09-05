@@ -10,10 +10,16 @@ import {
   Delete,
   Patch,
   UseGuards,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateChatDto, CreateMessageDto, UpdateChatMemberDto, DeleteChatMemberDto, AddChatMemberDto } from './dto';
+import {
+  CreateChatDto,
+  CreateMessageDto,
+  UpdateChatMemberDto,
+  DeleteChatMemberDto,
+  AddChatMemberDto,
+} from './dto';
 import { MembershipService } from './membership.service';
 import {
   ApiBearerAuth,
@@ -21,7 +27,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiTags
+  ApiTags,
 } from '@nestjs/swagger';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { GetUser } from 'src/auth/decorator';
@@ -56,7 +62,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Find a list of chats which contains the given name'
+    summary: 'Find a list of chats which contains the given name',
   })
   @ApiResponse({ type: [ChatShortInfoDto] })
   async findChatsByName(
@@ -75,7 +81,7 @@ export class ChatController {
   @ApiOperation({
     summary: 'Get basic info about a chat',
     description:
-      'If the user is not in the chat, response will throw an exception'
+      'If the user is not in the chat, response will throw an exception',
   })
   @ApiResponse({ type: ChatBasicInfoDto })
   async findChat(
@@ -95,7 +101,7 @@ export class ChatController {
   @ApiOperation({
     summary: 'Adds a new chat room',
     description:
-      'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned'
+      'Password is optional. If chatVisibility is protected and no password is provided, a bad request error will be returned',
   })
   @ApiResponse({ type: ChatBasicInfoDto })
   async createChat(
@@ -135,7 +141,7 @@ export class ChatController {
   @ApiOperation({
     summary: 'Update chat visibility or password',
     description:
-      'Password and chatVisibility are optional. If neither of them are provided, a bad request error will be returned. If chatVisibility changes to PROTECTED, a password is required. If the chat to be updated has DIRECT visibility, a forbidden error will be returned'
+      'Password and chatVisibility are optional. If neither of them are provided, a bad request error will be returned. If chatVisibility changes to PROTECTED, a password is required. If the chat to be updated has DIRECT visibility, a forbidden error will be returned',
   })
   async updateChat(
     @GetUser() user,
@@ -154,7 +160,7 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Gets chat members from a given chat'
+    summary: 'Gets chat members from a given chat',
   })
   @ApiResponse({ type: [ChatMemberBasicInfoDto] })
   async getChatMember(
@@ -176,7 +182,7 @@ export class ChatController {
   @ApiBody({ type: AddChatMemberDto })
   @ApiOperation({
     summary: 'Adds a new chat member to the room',
-    description: 'An administrator of the chat adds a new user to the chat'
+    description: 'An administrator of the chat adds a new user to the chat',
   })
   async addChatMember(
     @GetUser() user,
@@ -194,7 +200,7 @@ export class ChatController {
   @ApiParam({ name: 'id' })
   @ApiOperation({
     summary: 'Joins the user to the given chat',
-    description: 'Password is optional'
+    description: 'Password is optional',
   })
   @ApiBody({ type: JoinChatDto })
   async joinChat(
@@ -206,7 +212,11 @@ export class ChatController {
       throw new ForbiddenException('User is already a member of the chat');
     if (!this.membershipService.isOpenToUsers(chatId))
       throw new ForbiddenException('Chat is not open to join this user');
-    await this.membershipService.createChatMember(chatId, user.sub, joinChatDto.password);
+    await this.membershipService.createChatMember(
+      chatId,
+      user.sub,
+      joinChatDto.password
+    );
   }
 
   @Delete(':id/user')
@@ -215,7 +225,7 @@ export class ChatController {
   @ApiParam({ name: 'id' })
   @ApiOperation({
     summary: 'Removes a chat member',
-    description: 'Password is optional'
+    description: 'Password is optional',
   })
   async deleteChatMember(
     @GetUser() user,
@@ -237,7 +247,7 @@ export class ChatController {
   @ApiOperation({
     summary: 'Updates chat member privileges',
     description:
-      'In role, owner and administrator are optional, but at least one must be provided'
+      'In role, owner and administrator are optional, but at least one must be provided',
   })
   async updateChatMember(
     @GetUser() user,
@@ -317,7 +327,7 @@ export class ChatController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
   @ApiOperation({
-    summary: 'Removes the mutes a chat member for a limited time'
+    summary: 'Removes the mutes a chat member for a limited time',
   })
   async unmuteChatMember(
     @GetUser() user,

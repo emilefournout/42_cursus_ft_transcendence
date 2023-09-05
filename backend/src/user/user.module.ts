@@ -8,11 +8,8 @@ import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [UserController],
-  imports: [
-    forwardRef(() => AuthModule),
-    forwardRef(() => GameModule),
-  ],
+  imports: [forwardRef(() => AuthModule), forwardRef(() => GameModule)],
   providers: [UserService, UserStatusService, UserGateway],
-  exports: [UserService]
+  exports: [UserService],
 })
 export class UserModule {}

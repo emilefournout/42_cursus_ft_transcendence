@@ -9,6 +9,6 @@ import { UserModule } from 'src/user/user.module';
   imports: [UserModule],
   controllers: [ChatController],
   providers: [ChatService, MembershipService, ChatGateway],
-  exports: [ChatService]
+  exports: [ChatService],
 })
 export class ChatModule {}

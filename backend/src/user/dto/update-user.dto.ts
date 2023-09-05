@@ -1,10 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsBoolean,
   IsDefined,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   Min,
   MinLength,
@@ -16,7 +14,7 @@ export class UpdateUserRelationDto {
   @IsDefined()
   @IsNotEmpty()
   @Min(2)
-  targetId: number
+  targetId: number;
 }
 
 export class UpdateUserDto {
@@ -25,5 +23,5 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  username: string
+  username: string;
 }

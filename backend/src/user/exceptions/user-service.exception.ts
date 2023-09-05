@@ -1,4 +1,3 @@
-
 export namespace UserServiceErrors {
   export class UserNotFoundException extends Error {
     constructor() {
@@ -6,7 +5,7 @@ export namespace UserServiceErrors {
     }
   }
 
-  export class UsernameExistsException  extends Error {
+  export class UsernameExistsException extends Error {
     constructor() {
       super('Username already exists');
     }

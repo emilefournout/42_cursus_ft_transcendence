@@ -1,5 +1,10 @@
 import { JwtService } from '@nestjs/jwt';
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as qrcode from 'qrcode';
@@ -32,16 +37,20 @@ export class AuthService {
     try {
       let user = await this.userService.findUserByName(username);
       if (!user) {
-        user = await this.userService.createUser(intraname, username, avatarURL);
+        user = await this.userService.createUser(
+          intraname,
+          username,
+          avatarURL
+        );
       }
       const tfa = await this.prisma.twoFactorAuthentication.findFirst({
-        where: { user_id: user.id }
+        where: { user_id: user.id },
       });
-  
+
       if (this.checkCode2fa(tfa, code2fa)) {
-        throw new UnauthorizedException("2FA code check failed");
+        throw new UnauthorizedException('2FA code check failed');
       }
-  
+
       let access_token = await this.signToken(user.id, user.intraname);
       // Send access_token = null if not code2fa and needed
       if (
@@ -54,17 +63,23 @@ export class AuthService {
       return { access_token, id: user.id, username: user.username };
     } catch (error) {
       if (error instanceof UserServiceErrors.UsernameExistsException)
-        throw new BadRequestException("Username with the same name already exists")
+        throw new BadRequestException(
+          'Username with the same name already exists'
+        );
       else
-        throw new ForbiddenException("Cannot create a user with those parameters")
+        throw new ForbiddenException(
+          'Cannot create a user with those parameters'
+        );
     }
   }
 
   private checkCode2fa(tfa, code2fa: string) {
-    return tfa &&
+    return (
+      tfa &&
       tfa.status === TwoFactorAuthenticationStatus.ENABLED &&
       code2fa &&
-      !authenticator.check(code2fa, tfa.twoFactorAuthenticationSecret);
+      !authenticator.check(code2fa, tfa.twoFactorAuthenticationSecret)
+    );
   }
 
   async login(username: string) {
@@ -80,14 +95,14 @@ export class AuthService {
 
     const user = await this.userService.findUserByName(username);
     await this.prisma.twoFactorAuthentication.deleteMany({
-      where: { user_id: user.id }
+      where: { user_id: user.id },
     });
     await this.prisma.twoFactorAuthentication.create({
       data: {
         user_id: user.id,
         status: TwoFactorAuthenticationStatus.PENDING,
-        twoFactorAuthenticationSecret: secret
-      }
+        twoFactorAuthenticationSecret: secret,
+      },
     });
     return image;
   }
@@ -95,7 +110,7 @@ export class AuthService {
   async set2FA(username: string, code: string) {
     const user = await this.userService.findUserByName(username);
     const tfa = await this.prisma.twoFactorAuthentication.findFirst({
-      where: { user_id: user.id }
+      where: { user_id: user.id },
     });
     if (!tfa) throw new UnauthorizedException();
     const verified = authenticator.check(
@@ -105,7 +120,7 @@ export class AuthService {
     if (!verified) throw new UnauthorizedException();
     await this.prisma.twoFactorAuthentication.update({
       where: { user_id: user.id },
-      data: { status: TwoFactorAuthenticationStatus.ENABLED }
+      data: { status: TwoFactorAuthenticationStatus.ENABLED },
     });
     return 'OK';
   }
@@ -117,7 +132,7 @@ export class AuthService {
   get42Token(code: string): Promise<string> {
     return fetch('https://api.intra.42.fr/oauth/token', {
       method: 'POST',
-      body: this.authTokenFormData(code)
+      body: this.authTokenFormData(code),
     })
       .then((response) => response.json())
       .then((data: I42_oauth) => data.access_token ?? null)
@@ -129,8 +144,8 @@ export class AuthService {
   async getIntraLogin(token: string) {
     const response = await fetch('https://api.intra.42.fr/v2/me', {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     const data = await response.json();
     if (data.status > 400) throw new Error('Access token is invalid');

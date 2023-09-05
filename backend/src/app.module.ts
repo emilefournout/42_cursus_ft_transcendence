@@ -9,15 +9,17 @@ import { ProfileModule } from './profile/profile.module';
 import { AchievementsModule } from './achievement/achievement.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true
-  }),
-  AchievementsModule,
-  AuthModule,
-  ChatModule,
-  GameModule,
-  PrismaModule,
-  ProfileModule,
-  UserModule,
-  ]})
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AchievementsModule,
+    AuthModule,
+    ChatModule,
+    GameModule,
+    PrismaModule,
+    ProfileModule,
+    UserModule,
+  ],
+})
 export class AppModule {}

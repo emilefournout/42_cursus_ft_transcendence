@@ -1,10 +1,4 @@
-import {
-  IsDefined,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  Min
-} from 'class-validator';
+import { IsDefined, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
 export class VerifyUserDto {
   @IsDefined()

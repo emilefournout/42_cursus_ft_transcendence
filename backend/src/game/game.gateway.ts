@@ -6,7 +6,7 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { GameService } from './game.service';
@@ -20,7 +20,7 @@ import { GameData } from './types/game-data.class';
 import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
 
 @WebSocketGateway(3002, {
-  cors: { origin: '*' }
+  cors: { origin: '*' },
 })
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -64,16 +64,20 @@ export class GameGateway
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto
   ) {
     console.log('Creating private game ' + client.id);
-    const userId = this.gameService.getUserIdFromSocket(client)
-    const friend = await this.userService.findUserByName(privateGameDataOptions.friendUserName);
-    const friendships = friend ? await this.userService.getUserFriendships(friend.id) : null;
+    const userId = this.gameService.getUserIdFromSocket(client);
+    const friend = await this.userService.findUserByName(
+      privateGameDataOptions.friendUserName
+    );
+    const friendships = friend
+      ? await this.userService.getUserFriendships(friend.id)
+      : null;
     if (
       !friend ||
       !friendships ||
       userId === friend.id ||
       !this.gameService.isUserFriend(userId, friendships)
-      ) {
-      console.log('Not a friend')
+    ) {
+      console.log('Not a friend');
       return 'ko';
     }
     this.gameService.createPrivateRoom(
@@ -104,11 +108,11 @@ export class GameGateway
       () => this.gameLoop(game, gameLoopInterval),
       10
     );
-    game.firstPlayer.socket.on('disconnect',
-      () => this.disconnectPlayer(game, gameLoopInterval, 1)
+    game.firstPlayer.socket.on('disconnect', () =>
+      this.disconnectPlayer(game, gameLoopInterval, 1)
     );
-    game.secondPlayer.socket.on('disconnect',
-      () => this.disconnectPlayer(game, gameLoopInterval, 2)
+    game.secondPlayer.socket.on('disconnect', () =>
+      this.disconnectPlayer(game, gameLoopInterval, 2)
     );
   }
 
@@ -127,7 +131,7 @@ export class GameGateway
     this.gameService.customizeGame(client, gameDataOptions);
     const game = await this.gameService.handleWaitingRoom();
     if (game) {
-      this.initGame(game)
+      this.initGame(game);
     }
   }
 
@@ -145,7 +149,7 @@ export class GameGateway
     this.gameService.addToWaitingRoom(client);
     const game = await this.gameService.handleWaitingRoom();
     if (game) {
-      this.initGame(game)
+      this.initGame(game);
     }
   }
 
@@ -168,12 +172,12 @@ export class GameGateway
   ) {
     this.gameService.movePad(client, data.gameId, data.direction);
   }
-  
+
   private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
     const gameState: GameData = this.gameService.updateGameState(game.id);
     this.server.to(game.id).emit('update', gameState);
     if (gameState.isFinished) {
-      this.finishGame(game, gameLoopInterval)
+      this.finishGame(game, gameLoopInterval);
     }
   }
 
@@ -182,25 +186,29 @@ export class GameGateway
     gameLoopInterval: NodeJS.Timer,
     playerNumber: 1 | 2
   ) {
-      game.disconnectPlayer(playerNumber)
-      await this.finishGame(game, gameLoopInterval);    
-    }
+    game.disconnectPlayer(playerNumber);
+    await this.finishGame(game, gameLoopInterval);
+  }
 
-  private async finishGame(gameState: GameState, gameLoopInterval: NodeJS.Timer) {
+  private async finishGame(
+    gameState: GameState,
+    gameLoopInterval: NodeJS.Timer
+  ) {
     clearInterval(gameLoopInterval);
     const winnerUser = await this.userService.findUserById(gameState.winnerId);
     this.gameService.removeActiveGame(gameState.id);
     this.server.to(gameState.id).emit('end', winnerUser.username);
-    await Promise.all([this.gameService.updateGame(gameState.id, {
+    await Promise.all([
+      this.gameService.updateGame(gameState.id, {
         points_user1: gameState.firstPlayerScore,
         points_user2: gameState.secondPlayerScore,
-        status: 'FINISHED'
+        status: 'FINISHED',
       }),
       this.userService.updateScore(gameState.winnerId, ScoreField.Wins),
       this.userService.updateScore(gameState.loserId, ScoreField.Loses),
       this.userService.setUserStatusBackToOnline(gameState.firstPlayer.id),
-      this.userService.setUserStatusBackToOnline(gameState.secondPlayer.id)
+      this.userService.setUserStatusBackToOnline(gameState.secondPlayer.id),
     ]);
-    await this.achievementsService.checkAndGrantGameAchievements(gameState)
+    await this.achievementsService.checkAndGrantGameAchievements(gameState);
   }
 }

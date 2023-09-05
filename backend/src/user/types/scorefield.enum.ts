@@ -1,4 +1,4 @@
 export enum ScoreField {
-    Wins = 'wins',
-    Loses = 'loses',
+  Wins = 'wins',
+  Loses = 'loses',
 }

@@ -1,1 +1,1 @@
-export * from './scorefield.enum'
+export * from './scorefield.enum';

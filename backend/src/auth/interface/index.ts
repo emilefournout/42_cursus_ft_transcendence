@@ -1,1 +1,1 @@
-export * from './jwtpayload.dto'
+export * from './jwtpayload.dto';

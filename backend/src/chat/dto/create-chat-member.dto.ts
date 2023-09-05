@@ -1,18 +1,24 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsDefined,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateChatMemberDto {
-    @IsNumber()
-    @IsDefined()
-    @IsNotEmpty()
-    @ApiProperty()
-    id: number
+  @IsNumber()
+  @IsDefined()
+  @IsNotEmpty()
+  @ApiProperty()
+  id: number;
 
-    @IsOptional()
-    @IsString()
-    @IsNotEmpty()
-    @ApiPropertyOptional({
-        type: String
-    })
-    password?: string
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @ApiPropertyOptional({
+    type: String,
+  })
+  password?: string;
 }

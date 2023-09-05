@@ -19,11 +19,11 @@ export class AchievementService {
   async findAchievementsFromUser(userId: number) {
     const userWithAchievements = await this.prisma.user.findFirst({
       include: {
-        achievements: true
+        achievements: true,
       },
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     });
     const userAchievements =
       userWithAchievements == null
@@ -36,10 +36,10 @@ export class AchievementService {
 
   async checkAndGrantGameAchievements(game: GameState) {
     const user1 = await this.prisma.user.findFirst({
-      where: { id: game.firstPlayer.id }
+      where: { id: game.firstPlayer.id },
     });
     const user2 = await this.prisma.user.findFirst({
-      where: { id: game.secondPlayer.id }
+      where: { id: game.secondPlayer.id },
     });
     if (!user1 || !user2) return; // TODO Error message
 
@@ -59,25 +59,25 @@ export class AchievementService {
     achievementName: string
   ): Promise<void> {
     const achievement = await this.prisma.achievement.findFirst({
-      where: { name: achievementName }
+      where: { name: achievementName },
     });
 
     if (achievement) {
       await this.prisma.achievement.update({
         where: {
-          name: achievementName
+          name: achievementName,
         },
         data: {
-          users: { connect: { id: userId } }
-        }
+          users: { connect: { id: userId } },
+        },
       });
     } else {
       await this.prisma.achievement.create({
         data: {
           name: achievementName,
           description: achievementName,
-          users: { connect: { id: userId } }
-        }
+          users: { connect: { id: userId } },
+        },
       });
     }
   }
