@@ -9,9 +9,13 @@ import { AchievementService } from 'src/achievement/achievement.service';
 import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [AchievementsModule, forwardRef(() => AuthModule)],
-  providers: [GameService, GameGateway, UserService, AchievementService],
+  imports: [
+    AchievementsModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule)
+  ],
   controllers: [GameController],
+  providers: [GameService, GameGateway],
   exports: [GameService]
 })
 export class GameModule {}

@@ -4,7 +4,8 @@ import { AchievementController } from './achievement.controller';
 
 @Module({
   imports: [],
+  controllers: [AchievementController],
   providers: [AchievementService],
-  controllers: [AchievementController]
+  exports: [AchievementService]
 })
 export class AchievementsModule {}
