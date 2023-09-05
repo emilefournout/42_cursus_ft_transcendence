@@ -177,6 +177,23 @@ export class UserService {
     return userGames;
   }
 
+  async getBlockedById(userId: number){
+    const user = await this.findUserById(userId);
+    if(!user)
+      throw new NotFoundException('User not found');
+    const queryResponse = await this.prisma.userBlocked.findMany({
+      where: {
+        OR: [{ user1_id: userId }, { user2_id: userId }]
+      }
+    });
+    var blockList = new Set();
+    queryResponse.forEach((data) => {
+      var to_push = data.user1_id === userId ? data.user2_id : data.user1_id;
+      blockList.add(to_push);
+    })
+    return [ ...blockList];
+  }
+
   async addUserBlocked(userId: number, targetId: number) {
     const user = await this.findUserById(userId);
     const target = await this.findUserById(targetId);

@@ -193,6 +193,18 @@ export class UserController {
     await this.userService.deleteUserBlocked(user.sub, id);
   }
 
+  @Get('/block')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets an array of blocked users',
+  })
+  @UseGuards(JwtAuthGuard)
+  async getBlockedList(
+    @GetUser() user,
+  ) {
+    return await this.userService.getBlockedById(user.sub);
+  }
+
   @Post('/friends/send/:id')
   @ApiParam({
     name: 'id',
