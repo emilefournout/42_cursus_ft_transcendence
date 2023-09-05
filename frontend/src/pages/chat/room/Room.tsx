@@ -5,7 +5,6 @@ import {
   Navigate,
   Outlet,
   useLocation,
-  useOutletContext,
   useParams,
 } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
@@ -68,7 +67,7 @@ export function Room() {
     return (
       <div id="chat-no-messages">
         <p>No messages?</p>
-        <img src={NoMsgsImg} />
+        <img src={NoMsgsImg} alt="No messages"/>
       </div>
     );
   } else if (location.pathname === "/board/chats") {

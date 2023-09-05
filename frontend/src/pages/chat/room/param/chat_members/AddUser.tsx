@@ -67,6 +67,7 @@ export function AddUser() {
         src={addChatterIcon}
         style={{ cursor: "pointer" }}
         onClick={addUser}
+        alt="Add chat icon"
       />
     </>
   );

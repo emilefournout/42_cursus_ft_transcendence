@@ -57,7 +57,7 @@ export function FriendList() {
     return (
       <div className="friendlist-wrapper">
         Friendless
-        <img src={FriendLessImg} />
+        <img src={FriendLessImg} alt="No friends"/>
       </div>
     );
   } else if (isPendingEmpty()) {

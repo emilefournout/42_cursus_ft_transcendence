@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { UserInfo } from "os";
 import { User } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 import { testing } from "../../../../services/core";

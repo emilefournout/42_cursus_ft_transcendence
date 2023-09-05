@@ -16,7 +16,7 @@ export function InvitationCard(props: InvitationCardProps) {
 		gameSocket.on("game_found", (gameId) => {
 			navigate(`./${gameId}`);
 		});
-	}, [gameSocket]);
+	}, [gameSocket, navigate]);
 
   return (
     <div>

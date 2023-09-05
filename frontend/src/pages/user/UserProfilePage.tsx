@@ -4,8 +4,6 @@ import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../board/Board";
 import "./UserProfilePage.css";
 import { testing } from "../../services/core";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 export enum RequestType {
   enabled = "ENABLED",

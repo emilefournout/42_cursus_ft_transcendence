@@ -36,7 +36,7 @@ export function FriendStatus({ status }: Props) {
   } else if (status === UserStatus.InGame) {
     return (
       <div className="friend-card-status friend-card-subtitle">
-        <img src={ingameIcon} />
+        <img src={ingameIcon} alt="Ingame icon" />
         In-game
       </div>
     );

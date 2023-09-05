@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ProfileToolBar } from "./tool_bar/ProfileToolBar";
 import { FriendList } from "./friend_list/FriendList";
 import "./ProfileLeftBar.css";
