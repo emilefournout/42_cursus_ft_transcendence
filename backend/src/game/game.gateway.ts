@@ -65,17 +65,12 @@ export class GameGateway
   ) {
     console.log('Creating private game ' + client.id);
     const userId = this.gameService.getUserIdFromSocket(client);
-    const friend = await this.userService.findUserByName(
+    const invited = await this.userService.findUserByName(
       privateGameDataOptions.friendUserName
     );
-    const friendships = friend
-      ? await this.userService.getUserFriendships(friend.id)
-      : null;
     if (
-      !friend ||
-      !friendships ||
-      userId === friend.id ||
-      !this.gameService.isUserFriend(userId, friendships)
+      !invited ||
+      userId === invited.id
     ) {
       console.log('Not a friend');
       return 'ko';
@@ -83,7 +78,7 @@ export class GameGateway
     this.gameService.createPrivateRoom(
       client,
       privateGameDataOptions.gameDto,
-      friend.id
+      invited.id
     );
     return 'ok';
   }

@@ -12,7 +12,7 @@ export function GameCreatePage() {
   const [powerUps, setPoweUps] = useState(false);
   const [error, setError] = useState(false);
   const [invitation, setInvitation] = useState(false);
-  const [friendInvited, setFriendInvited] = useState("");
+  const [userInvited, setFriendInvited] = useState("");
   const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
   const MAX_GOALS = 25;
@@ -102,13 +102,12 @@ export function GameCreatePage() {
                   setPoweUps(!powerUps);
                 }}
               />
-              <label htmlFor="inviteFriend">Invite a friend</label>
+              <label htmlFor="inviteFriend">Invite someone!</label>
               <input
                 id="inviteFriend"
                 type="checkbox"
                 defaultChecked={invitation}
                 onClick={(event) => {
-                  if (testing) console.log(`Invitation is now: ${invitation}`);
                   setInvitation(!invitation);
                 }}
               />
@@ -116,12 +115,12 @@ export function GameCreatePage() {
                 <input
                   id="unc-in1"
                   type="text"
-                  value={friendInvited}
-                  placeholder="Friend username"
+                  value={userInvited}
+                  placeholder="Invited username"
                   onChange={(e) => setFriendInvited(e.target.value)}
                 />
               )}
-              {error && <>Friend not found</>}
+              {error && <>Could not invite user</>}
               {error && (
                 <button
                   className="btn game-creation-btn create-game-btn btn-bottom"
@@ -168,7 +167,7 @@ export function GameCreatePage() {
             <p className="matchmaking-scaling">
               {!invitation
                 ? "Finding new rival for you"
-                : `Waiting for ${friendInvited} to join`}
+                : `Waiting for ${userInvited} to join`}
             </p>
           </>
         )}
@@ -185,7 +184,7 @@ export function GameCreatePage() {
           maxGoals,
           powerUps,
         },
-        friendUserName: friendInvited,
+        friendUserName: userInvited,
       },
       (response: any) => {
         if (response === "ok") {
