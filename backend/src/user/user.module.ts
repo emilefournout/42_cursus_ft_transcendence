@@ -9,8 +9,8 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   controllers: [UserController],
   imports: [
+    forwardRef(() => AuthModule),
     forwardRef(() => GameModule),
-    forwardRef(() => AuthModule)
   ],
   providers: [UserService, UserStatusService, UserGateway],
   exports: [UserService]

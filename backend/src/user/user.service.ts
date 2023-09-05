@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Inject, forwardRef, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
 import { OnlineStatus, Prisma } from '@prisma/client';
@@ -9,6 +9,7 @@ import { UserServiceErrors } from './exceptions/user-service.exception';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService,
+    @Inject(forwardRef(() => GameService))
     private gameService: GameService) {}
 
   async createUser(intraname: string, username: string, avatar: string) {
