@@ -1,3 +1,5 @@
+import { GameColors } from "../dto/game-colors";
+
 export class GameDataOptions {
   maxGoals: number;
   speed: number;
@@ -23,6 +25,8 @@ export class GameData {
   private leftPadHeight = 60;
   private rightPadHeight = 60;
   private ballRadius: number = BallSize.Normal;
+  private primaryColor: string = GameColors.mad.primary;
+  private secondaryColor: string = GameColors.mad.secondary;
   private leftPad: number = Math.random() * (this.height - this.leftPadHeight);
   private rightPad: number =
     Math.random() * (this.height - this.rightPadHeight);
