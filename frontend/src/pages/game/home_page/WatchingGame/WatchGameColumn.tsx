@@ -1,41 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { WatchingGameCard } from "./WatchingGameCard";
 import { testing } from "../../../../services/core";
+import { BoardContext } from "../../../board/Board";
 
 export function WatchGameColumn() {
-  const [activePlays, setActivePlays] = useState<Array<string>>([]);
+  const boardContext = useContext(BoardContext);
+  const activePlays = boardContext?.currentGames;
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND}/game/active-plays`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error getting active plays");
-        }
-        return response.json();
-      })
-      .then((data: Array<string>) => {
-        setActivePlays(data);
-      })
-      .catch((error) => {
-        if (testing) console.log(error);
-      });
-  }, []);
-
-  return (
-    <div className="wrapper-col">
-      <div>currents game:</div>
-      {activePlays.length === 0 ? (
-        <>No game to watch</>
-      ) : (
-        activePlays.map((uuid) => {
-          return <WatchingGameCard uuid={uuid} key={uuid} />;
-        })
-      )}
-    </div>
-  );
+  if (boardContext === undefined) {
+    return <></>;
+  } else {
+    return (
+      <div className="wrapper-col">
+        <button onClick={() => boardContext?.updateWatchGame()}>reload</button>
+        <div>currents game:</div>
+        {activePlays && activePlays.length === 0 ? (
+          <>No game to watch</>
+        ) : (
+          activePlays &&
+          activePlays.map((game) => {
+            return <WatchingGameCard uuid={game.uuid} key={game.uuid} />;
+          })
+        )}
+      </div>
+    );
+  }
 }
