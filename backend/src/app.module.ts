@@ -12,12 +12,12 @@ import { AchievementsModule } from './achievement/achievement.module';
   imports: [ConfigModule.forRoot({
     isGlobal: true
   }),
-    UserModule,
-    ChatModule,
-    GameModule,
-    AuthModule,
-    PrismaModule,
-    ProfileModule,
-    AchievementsModule]
-  })
+  AchievementsModule,
+  AuthModule,
+  ChatModule,
+  GameModule,
+  PrismaModule,
+  ProfileModule,
+  UserModule,
+  ]})
 export class AppModule {}

@@ -1,9 +1,6 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserBasicInfoDto } from './dto/info-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AssignAchievementDto } from './dto/assign-achievement.dto';
-import { url } from 'inspector';
 import { OnlineStatus, Prisma } from '@prisma/client';
 import { GameService } from 'src/game/game.service';
 import { ScoreField } from './types/scorefield.enum';
@@ -81,7 +78,7 @@ export class UserService {
         username: username
       }
     })
-    if(!user)
+    if (!user)
       throw new NotFoundException('User not found')
     return UserBasicInfoDto.fromUser(user);
   }
@@ -156,7 +153,7 @@ export class UserService {
 
   async getUserHistory(id: number) {
     const user = await this.findUserById(id);
-    if(!user)
+    if (!user)
       throw new UserServiceErrors.UserNotFoundException();
     
     const userGames = await this.prisma.$queryRaw`
@@ -184,7 +181,7 @@ export class UserService {
         user1_id: userId,
         user2_id: targetId
       }})
-    } catch(error) {
+    } catch (error) {
       throw new ForbiddenException('Could not create blocked user')
     }
   }
@@ -217,14 +214,14 @@ export class UserService {
   async addUserFriends(requester_id: number, adressee_id: number){
     const requester = await this.findUserById(requester_id)
     const adressee = await this.findUserById(adressee_id)
-    if(!requester || !adressee)
+    if (!requester || !adressee)
       throw new NotFoundException('User not found');
     
     const checkFriends = await this.checkFriendships(requester_id, adressee_id);
-    if(checkFriends !== null)
+    if (checkFriends !== null)
       throw new ForbiddenException(checkFriends)
 
-    if(requester_id === adressee_id)
+    if (requester_id === adressee_id)
       throw new ForbiddenException('Requester and adressee has same id')
     
     try {
@@ -233,7 +230,7 @@ export class UserService {
           requester_id: requester_id,
           adressee_id: adressee_id
       }})
-    } catch(error) {
+    } catch (error) {
       throw new ForbiddenException('Could not add friend')
     }
   }
@@ -252,9 +249,9 @@ export class UserService {
 
   async acceptUserFriends(adressee_id: number, requester_id: number) {
     const friendship = await this.findFriendShipByIds(requester_id, adressee_id)
-    if(!friendship)
+    if (!friendship)
       throw new NotFoundException('Friendship not found');
-    else if(friendship.status === 'ENABLED')
+    else if (friendship.status === 'ENABLED')
       throw new ForbiddenException('Friend alredy accepted');
     await this.prisma.userFriendship.update({
       where: {
@@ -272,9 +269,9 @@ export class UserService {
   async declineUserFriends(adressee_id: number, requester_id: number) {
     const friendship = await this.findFriendShipByIds(requester_id, adressee_id);
     const request = await this.findFriendShipByIds(adressee_id, requester_id);
-    if(!friendship && !request)
+    if (!friendship && !request)
       throw new NotFoundException('Friendship not found');
-    if(!friendship)
+    if (!friendship)
       [requester_id, adressee_id] = [adressee_id, requester_id]
     try {
       await this.prisma.userFriendship.delete({
@@ -299,7 +296,7 @@ export class UserService {
         ]
       }
     })
-    if(!friendships)
+    if (!friendships)
       throw new NotFoundException('No friendships found for user')
     return friendships
   }
@@ -316,9 +313,9 @@ export class UserService {
   async assingAchievementToUser(id: number, achievementName: string){
     const user = await this.findUserById(id)
     const achievement = await  this.findAchievementByName(achievementName)
-    if(!user)
+    if (!user)
       throw new NotFoundException('User not found')
-    else if(!achievement)
+    else if (!achievement)
       throw new NotFoundException('Achievement not found')
     
     try {

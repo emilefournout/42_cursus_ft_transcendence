@@ -29,7 +29,7 @@ export class UserGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    console.log('Connection received from ' + client.id);
+    console.log(client.id + " is connecting");
     try {
       const token = client.handshake.headers.authentication as string;
       const payload: JwtPayload = this.jwtService.verify(token);
@@ -39,7 +39,6 @@ export class UserGateway
       client.disconnect();
       return;
     }
-    console.log('Connection stablished with ' + client.id);
   }
 
   handleDisconnect(client: Socket) {
