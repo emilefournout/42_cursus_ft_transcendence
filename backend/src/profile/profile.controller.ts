@@ -8,7 +8,8 @@ import {
     UseInterceptors,
     UseGuards,
     NotFoundException,
-    BadRequestException
+    BadRequestException,
+    ForbiddenException
   } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -28,8 +29,8 @@ export class ProfileController {
     @ApiParam({name: 'filename', description: 'Profile image asked'})
     @ApiOperation({summary: "Returns an image from the users' profile", description: "Sends an image from the users' profile located on uploads folder."})
     public getImage(@Param("filename") filename: string, @Res() res) {
-        if (filename === "null" || filename === "undefined")
-          throw new NotFoundException("Not valid null or undefined");
+        if (filename === "null" || filename === "undefined" || !ProfileService.imageRegex.test(path.extname(filename)))
+          throw new ForbiddenException("Not valid null or undefined");
         const filePath = path.join(process.cwd(), 'uploads/' + filename)
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (err) {

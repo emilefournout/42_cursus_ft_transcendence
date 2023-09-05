@@ -9,6 +9,7 @@ import { UserService } from 'src/user/user.service';
 @Injectable()
 export class ProfileService {
     private static filepath = "uploads/"
+    public static readonly imageRegex = /(.jpg|.jpeg|.png)/
 
     constructor (private userService: UserService) {}
 
@@ -16,7 +17,7 @@ export class ProfileService {
         if (file.size > 10_000_000) // 10 MB
             throw new Error("Max size image violated")
         const fileExtension: string = path.extname(file.originalname)
-        if (!fileExtension || !/(.jpg|.jpeg|.png)/.test(fileExtension))
+        if (!fileExtension || !ProfileService.imageRegex.test(fileExtension))
             throw new Error(`Invalid extension`)
         const filename = uuidv4() + fileExtension
         fs.writeFileSync(ProfileService.filepath + filename, file.buffer);
