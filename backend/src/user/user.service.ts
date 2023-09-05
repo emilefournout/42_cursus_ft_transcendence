@@ -35,12 +35,16 @@ export class UserService {
   }
 
   async findUserById(id: number) {
-    const user = await this.prisma.user.findFirst({
-      where:{
-        id: id
-      }
-    });
-    return user;
+    try {
+      const user = await this.prisma.user.findFirst({
+        where:{
+          id: id
+        }
+      });
+      return user;
+    } catch (error) {
+      throw new UserServiceErrors.UserNotFoundException()
+    }
   }
 
   async findUserByName(username: string) {

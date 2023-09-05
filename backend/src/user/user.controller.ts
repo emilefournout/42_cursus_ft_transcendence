@@ -63,7 +63,11 @@ export class UserController {
   })
   @ApiResponse({ type: UserBasicInfoDto })
   async findUserMe(@GetUser() user) {
-    return this.findUser(user.sub);
+    try {
+      return this.findUser(user.sub);
+    } catch (error) {
+      throw new UserControllerErrors.UserNotFoundException()
+    }
   }
 
   @Get('info/:id')
@@ -71,9 +75,13 @@ export class UserController {
   @ApiOperation({ summary: 'Returns a basic info about a user.' })
   @ApiResponse({ type: UserBasicInfoDto })
   async findUser(@Param('id', IdValidationPipe) id) {
-    const userInfo = await this.userService.getUserInfoById(id);
+    try {
+      const userInfo = await this.userService.getUserInfoById(id);
     if (!userInfo) throw new UserControllerErrors.UserNotFoundException();
     return userInfo;
+    } catch (error) {
+      throw new UserControllerErrors.UserNotFoundException()
+    }
   }
 
   @Get('info/username/:username')
