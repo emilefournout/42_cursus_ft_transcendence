@@ -8,23 +8,23 @@ interface InvitationCardProps {
   key: number;
 }
 export function InvitationCard(props: InvitationCardProps) {
-	const gameSocket = GameSocket.getInstance().socket;
-	const navigate = useNavigate();
+  const gameSocket = GameSocket.getInstance().socket;
+  const navigate = useNavigate();
 
   useEffect(() => {
-		gameSocket.off("game_found");
-		gameSocket.on("game_found", (gameId) => {
-			navigate(`./${gameId}`);
-		});
-	}, [gameSocket, navigate]);
+    gameSocket.off("game_found");
+    gameSocket.on("game_found", (gameId) => {
+      navigate(`./${gameId}`);
+    });
+  }, [gameSocket, navigate]);
 
   return (
     <div>
       {props.username} invited you{" "}
       <button
         onClick={() => {
-					gameSocket.emit('join_private_room', props.id)
-				}}
+          gameSocket.emit("join_private_room", props.id);
+        }}
       >
         accept
       </button>

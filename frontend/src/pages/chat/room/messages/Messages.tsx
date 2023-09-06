@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Message } from "./Message";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Messages.css";
 import { RoomInput } from "../input/RoomInput";
-import { BoardContext, User } from "../../../board/Board";
+import { BoardContext } from "../../../board/Board";
 import { ChatSocket } from "../../../../services/socket";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 export interface MsgProps {
   messages: Array<Msg>;

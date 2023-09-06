@@ -5,7 +5,7 @@ import { Visibility } from "../../add/create/RoomCreate";
 import { ChatPageContext } from "../../../Chat";
 import { DialogContext } from "../../../../root/Root";
 import "../../../../root/Dialog.css";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface UpdateVisibilityDialogProps {
   showUpdateDialog: boolean;

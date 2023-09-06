@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import iconVect from "../common/change-icon.svg";
-import { devlog, testing } from "../services/core";
+import { devlog } from "../services/core";
 
 type AvatarProps = {
   url?: string;

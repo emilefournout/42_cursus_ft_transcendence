@@ -3,7 +3,7 @@ import "./Welcome.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Avatar } from "../../components/Avatar";
-import { devlog, testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 export function Welcome() {
   const [username, setUsername] = useState("");

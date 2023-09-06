@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChatPageContext } from "../../Chat";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 export function DeleteRoom() {
   const navigate = useNavigate();

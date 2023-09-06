@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { InvitationCard } from "./InvitationCard";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 export function InvitationsColumns() {
   const [invitations, setInvitations] = useState<Array<any>>([]);

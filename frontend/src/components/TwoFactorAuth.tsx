@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { DialogContext } from "../pages/root/Root";
-import { devlog, testing } from "../services/core";
+import { devlog } from "../services/core";
 
 function TwoFactorAuth({ username }: { username: string | null }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret

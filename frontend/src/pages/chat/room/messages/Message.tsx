@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Msg } from "./Messages";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 interface MessageProps {
   message: Msg;

@@ -3,7 +3,7 @@ import { ProfileLeftBar } from "./left_bar/ProfileLeftBar";
 import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../board/Board";
 import "./UserProfilePage.css";
-import { devlog, testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 export enum RequestType {
   enabled = "ENABLED",

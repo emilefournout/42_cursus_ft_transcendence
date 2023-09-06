@@ -6,7 +6,7 @@ import ReloadBlackIcon from "../../../../common/reload_honey.svg";
 import AddFriendIcon from "./AddFriendIcon.svg";
 import SearchIcon from "./SearchIcon.svg";
 import { DialogContext } from "../../../root/Root";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 import { BoardContext } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 

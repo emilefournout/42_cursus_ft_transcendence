@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 import { DialogContext } from "../../../../root/Root";
 import addChatterIcon from "../../../../../common/SquaredPlusIcon.svg";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 export function AddUser() {
   const [newUser, setNewUser] = useState<string>("");

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../../../Chat";
 import { PasswordDialog } from "./PasswordDialog";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 export function RoomSearch() {
   const navigate = useNavigate();

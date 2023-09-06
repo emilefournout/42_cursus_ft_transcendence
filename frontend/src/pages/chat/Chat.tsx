@@ -4,7 +4,7 @@ import "./Chat.css";
 import { Outlet } from "react-router-dom";
 import { Visibility } from "./room/add/create/RoomCreate";
 import { LeftBar } from "./left_bar/ChatLeftBar";
-import { devlog, testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 export interface ChatInfo {
   id: number;

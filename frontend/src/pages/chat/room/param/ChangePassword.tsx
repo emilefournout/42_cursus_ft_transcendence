@@ -5,7 +5,7 @@ import { RoomContextArgs } from "../Room";
 import { Visibility } from "../add/create/RoomCreate";
 import { ChatPageContext } from "../../Chat";
 import { DialogContext } from "../../../root/Root";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 enum passwordStrength {
   EMPTY = "Choose a password",

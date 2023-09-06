@@ -4,7 +4,7 @@ import "./Room.css";
 import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import NoMsgsImg from "../NoMsgs.png";
-import { devlog, testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 export interface ChatFullInfo extends ChatInfo {
   password?: string;

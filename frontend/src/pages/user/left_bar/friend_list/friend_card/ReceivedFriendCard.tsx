@@ -4,7 +4,7 @@ import { ProfilePageContext } from "../../../UserProfilePage";
 import { Avatar } from "../../../../../components/Avatar";
 import { FriendCardProps } from "./accepted_friend_card/AcceptedFriendCard";
 import { DialogContext } from "../../../../root/Root";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 export function ReceivedFriendCard(props: FriendCardProps) {
   const profilePageContext = React.useContext(ProfilePageContext);
