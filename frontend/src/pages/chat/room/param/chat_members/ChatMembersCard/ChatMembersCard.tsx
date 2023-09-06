@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { Member, RoomContextArgs } from "../../Room";
+import { Member, RoomContextArgs } from "../../../Room";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
-import { MuteDialogContext } from "../RoomParam";
-import { testing } from "../../../../../services/core";
-import { BoardContext } from "../../../../board/Board";
+import { MuteDialogContext } from "../../RoomParam";
+import { testing } from "../../../../../../services/core";
+import { BoardContext } from "../../../../../board/Board";
 
 export interface ChatMembersCardProps {
   member: Member;
