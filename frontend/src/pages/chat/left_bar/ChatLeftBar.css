@@ -21,6 +21,8 @@
 	align-items: center;
 
 	padding: 0 10px;
+
+	z-index: 4;
 }
 
 #lb-top-wrapper > span {
