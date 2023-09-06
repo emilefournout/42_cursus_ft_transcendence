@@ -1,5 +1,4 @@
-import { getRandomValues } from "crypto";
-import { GameColors } from "../dto/game-colors";
+import { GameColors } from '../dto/game-colors';
 
 export class GameDataOptions {
   maxGoals: number;
@@ -133,9 +132,8 @@ export class GameData {
     }
   }
 
-  private getRandomBounce() : number
-  {
-    return Math.random() * 0.1 + 0.95
+  private getRandomBounce(): number {
+    return Math.random() * 0.1 + 0.95;
   }
 
   updateBall() {
