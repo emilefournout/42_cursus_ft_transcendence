@@ -11,6 +11,7 @@ import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
 import { ChatRoleDto } from './dto/update-chat-member.dto';
 import { Prisma } from '@prisma/client';
+import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
 
 @Injectable()
 export class MembershipService {
@@ -180,6 +181,53 @@ export class MembershipService {
     }
   }
 
+  async findBansByChatId(chatId: number): Promise<UserBasicInfoDto[]> {
+    const chatWithBannedUSers = await this.prisma.chat.findFirst({
+      where: {
+        id: chatId,
+      },
+      include: {
+        bannedUsers: true,
+      },
+    });
+    return chatWithBannedUSers.bannedUsers.map((user) =>
+      UserBasicInfoDto.fromUser(user)
+    );
+  }
+
+  async banUser(chatId: number, userId: number) {
+    await Promise.all([
+      this.deleteChatMember(chatId, userId),
+      this.prisma.chat.update({
+        where: {
+          id: chatId,
+        },
+        data: {
+          bannedUsers: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      }),
+    ]);
+  }
+
+  async unbanUser(chatId: number, userId: number) {
+    await this.prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        bannedUsers: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
   async muteUser(chatId: number, userId: number, muteTime: number) {
     const chatMember = await this.prisma.chatMember.findFirst({
       where: {
@@ -258,6 +306,24 @@ export class MembershipService {
     const chatMember = await this.findChatMemberByIds(userId, chatId);
     if (!chatMember) return false;
     return chatMember.administrator;
+  }
+
+  async isUserBannedFrom(chatId: number, userId: number): Promise<boolean> {
+    try {
+      const chat = await this.prisma.user.findFirst({
+        where: {
+          id: userId,
+          chatBan: {
+            some: {
+              id: chatId,
+            },
+          },
+        },
+      });
+      return chat !== null;
+    } catch (error) {
+      return false;
+    }
   }
 
   async isOpenToUsers(chatId: number): Promise<boolean> {
