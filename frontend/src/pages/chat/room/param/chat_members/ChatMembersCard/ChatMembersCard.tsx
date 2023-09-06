@@ -153,7 +153,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                 });
               }}
             >
-              Invite
+              Play
             </button>
           </>
         )}
