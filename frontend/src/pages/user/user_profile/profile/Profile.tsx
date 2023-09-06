@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Stats } from "./stats/Stats";
 import { MatchHistory } from "./match_history/MatchHistory";
 import { Achievements } from "./achievements/Achievements";
@@ -13,13 +13,15 @@ interface ProfileProps {
 export function Profile(props: ProfileProps) {
   const boardContext = React.useContext(BoardContext);
   const userInfo = props.userInfo ?? boardContext?.me;
-  const isBlocked = false;
-  if (userInfo === undefined) {
-    return (
-      <div className="prof-cards-wrapper">
-        User is not your friend ! Try add him to friends first
-      </div>
-    );
+  const [isBlocked, setIsBlocked] = useState(false);
+  const handleBlock = () => {
+    setIsBlocked((prev) => !prev);
+  };
+
+  if (boardContext === undefined) {
+    return <div className="prof-cards-wrapper">Loading...</div>;
+  } else if (userInfo === undefined) {
+    return <div className="prof-cards-wrapper">User not found</div>;
   } else {
     return (
       <div className="prof-cards-wrapper">
@@ -27,7 +29,12 @@ export function Profile(props: ProfileProps) {
         <div id="prof-user-name" className="ellipsed-txt">
           {"@" + userInfo.username}
         </div>
-        {isBlocked ? <button>unblock</button> : <button>block</button>}
+        {userInfo.id !== boardContext.me.id &&
+          (isBlocked ? (
+            <button onClick={handleBlock}>unblock</button>
+          ) : (
+            <button onClick={handleBlock}>block</button>
+          ))}
         <div className="cards-container">
           <Stats wins={userInfo.wins} loses={userInfo.loses} id={userInfo.id} />
           <MatchHistory userId={userInfo.id} username={userInfo.username} />
