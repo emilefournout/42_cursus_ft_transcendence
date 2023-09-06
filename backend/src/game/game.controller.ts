@@ -38,7 +38,7 @@ export class GameController {
     return this.gameService.findActiveGames();
   }
 
-  @Get('/invitations')
+  @Get('invitations')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
