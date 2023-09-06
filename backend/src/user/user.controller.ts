@@ -8,6 +8,7 @@ import {
   Body,
   UseGuards,
   Put,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/decorator';
@@ -172,6 +173,8 @@ export class UserController {
     @GetUser() user,
     @Param('id', IdValidationPipe) id: number
   ) {
+    if (user.sub === id)
+      throw new ForbiddenException('Could not create blocked user');
     await this.userService.addUserBlocked(user.sub, id);
   }
 

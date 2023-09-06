@@ -1,3 +1,4 @@
+import { getRandomValues } from "crypto";
 import { GameColors } from "../dto/game-colors";
 
 export class GameDataOptions {
@@ -25,8 +26,8 @@ export class GameData {
   private leftPadHeight = 60;
   private rightPadHeight = 60;
   private ballRadius: number = BallSize.Normal;
-  private primaryColor: string = GameColors.mad.primary;
-  private secondaryColor: string = GameColors.mad.secondary;
+  private primaryColor: string = GameColors.classic.primary;
+  private secondaryColor: string = GameColors.classic.secondary;
   private leftPad: number = Math.random() * (this.height - this.leftPadHeight);
   private rightPad: number =
     Math.random() * (this.height - this.rightPadHeight);
@@ -132,29 +133,34 @@ export class GameData {
     }
   }
 
+  private getRandomBounce() : number
+  {
+    return Math.random() * 0.1 + 0.95
+  }
+
   updateBall() {
     this.ballX += this.velocityX;
     this.ballY += this.velocityY;
     if (this.checkOutsideCanva()) {
-      this.velocityY = -this.velocityY;
+      this.velocityY = -this.velocityY * this.getRandomBounce();
     } else if (this.checkLeftPadCollision()) {
-      this.velocityX = -this.velocityX;
+      this.velocityX = -this.velocityX * this.getRandomBounce();
       this.ballX = this.padWallSeparation + this.padWidth;
     } else if (this.checkRightPadCollision()) {
-      this.velocityX = -this.velocityX;
+      this.velocityX = -this.velocityX * this.getRandomBounce();
       this.ballX = this.width - this.padWallSeparation - this.padWidth;
     } else if (this.ballX + this.ballRadius > this.width) {
       this.increasePlayerScore(1);
       this.ballX = 400;
       this.ballY = 150;
-      this.velocityX = -(Math.random() + 3);
-      this.velocityY = Math.random() + 3;
+      this.velocityX = -this.velocityX * this.getRandomBounce();
+      this.velocityY = this.velocityY * this.getRandomBounce();
     } else if (this.ballX - this.ballRadius < 0) {
       this.increasePlayerScore(2);
       this.ballX = 200;
       this.ballY = 150;
-      this.velocityX = Math.random() + 3;
-      this.velocityY = Math.random() + 3;
+      this.velocityX = -this.velocityX * this.getRandomBounce();
+      this.velocityY = this.velocityY * this.getRandomBounce();
     }
   }
 
