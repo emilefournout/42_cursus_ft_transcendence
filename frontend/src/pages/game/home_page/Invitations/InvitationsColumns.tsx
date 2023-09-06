@@ -35,7 +35,7 @@ export function InvitationsColumns() {
       <button onClick={fetch_invitations}>Reload</button>
       <div>Invitations:</div>
       {invitations.length === 0 ? (
-        <>No one invited you {invitations.length}</>
+        <>No one invited you</>
       ) : (
         invitations.map((invitation, index) => {
           if (!invitation) return null;
