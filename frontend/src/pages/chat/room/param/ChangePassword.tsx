@@ -5,7 +5,7 @@ import { RoomContextArgs } from "../Room";
 import { Visibility } from "../add/create/RoomCreate";
 import { ChatPageContext } from "../../Chat";
 import { DialogContext } from "../../../root/Root";
-import { testing } from "../../../../services/core";
+import { devlog, testing } from "../../../../services/core";
 
 enum passwordStrength {
   EMPTY = "Choose a password",
@@ -71,14 +71,14 @@ export function ChangePassword() {
         if (response.ok) {
           //roomContextArgs.getChatInfo(roomContextArgs.chat);
           chatPageContext.updateChat().catch((error) => {
-            if (testing) console.log(error);
+            devlog(error);
           });
           navigate(backroute);
           setDialog("Password updated");
         } else throw new Error("Error changing password");
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
 
   const validateConfirm = async (): Promise<void> => {

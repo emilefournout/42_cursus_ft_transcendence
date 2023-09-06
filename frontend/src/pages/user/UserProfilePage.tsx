@@ -3,7 +3,7 @@ import { ProfileLeftBar } from "./left_bar/ProfileLeftBar";
 import { Outlet } from "react-router-dom";
 import { BoardContext, User } from "../board/Board";
 import "./UserProfilePage.css";
-import { testing } from "../../services/core";
+import { devlog, testing } from "../../services/core";
 
 export enum RequestType {
   enabled = "ENABLED",
@@ -106,7 +106,7 @@ export function UserProfilePage() {
             : setReceivedFriends(users)
         )
         .catch((error) => {
-          if (testing) console.log(error);
+          devlog(error);
         });
     },
     [getAllFetchRequests, myId]
@@ -130,7 +130,7 @@ export function UserProfilePage() {
         setFriends(RequestType.received, requests);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   }, [setFriends]);
 
@@ -155,7 +155,7 @@ export function UserProfilePage() {
         setRanking(data);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   }, []);
 

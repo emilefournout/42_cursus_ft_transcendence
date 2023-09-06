@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../../../Chat";
 import { PasswordDialog } from "./PasswordDialog";
-import { testing } from "../../../../../services/core";
+import { devlog, testing } from "../../../../../services/core";
 
 export function RoomSearch() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function RoomSearch() {
         setSearchResults(data);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
 
   const fetchJoin = (chat: ChatInfo, password?: string) =>
@@ -48,7 +48,7 @@ export function RoomSearch() {
       chatPageContext
         .updateChat()
         .catch((error) => {
-          if (testing) console.log(error);
+          devlog(error);
         })
         .then(() => search_room(searchInput));
       navigate(`/board/chats/${chat.id}`);
@@ -59,7 +59,7 @@ export function RoomSearch() {
       setShowDialog(chat);
     } else {
       fetchJoin(chat).catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
     }
   };

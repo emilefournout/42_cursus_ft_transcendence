@@ -5,7 +5,7 @@ import "./Messages.css";
 import { RoomInput } from "../input/RoomInput";
 import { BoardContext, User } from "../../../board/Board";
 import { ChatSocket } from "../../../../services/socket";
-import { testing } from "../../../../services/core";
+import { devlog, testing } from "../../../../services/core";
 
 export interface MsgProps {
   messages: Array<Msg>;
@@ -45,7 +45,7 @@ export function Messages() {
       })
       .catch((error) => {
         setHasError(true);
-        if (testing) console.log(error);
+        devlog(error);
       });
     return () => {};
   }, [chatSocket, id]);

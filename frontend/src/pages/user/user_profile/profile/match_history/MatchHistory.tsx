@@ -1,7 +1,7 @@
 import React from "react";
 import { MatchHistoryCard, MatchResult } from "./MatchHistoryCard";
 import "../Profile.css";
-import { testing } from "../../../../../services/core";
+import { devlog, testing } from "../../../../../services/core";
 
 export interface UserScore {
   username: string;
@@ -43,7 +43,7 @@ export function MatchHistory(props: MatchHistoryProps) {
         setHistory(data);
       })
       .catch((e) => {
-        if (testing) console.log(e);
+        devlog(e);
       });
   }, [props.userId]);
 

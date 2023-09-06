@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Msg } from "./Messages";
-import { testing } from "../../../../services/core";
+import { devlog, testing } from "../../../../services/core";
 
 interface MessageProps {
   message: Msg;
@@ -37,7 +37,7 @@ export function Message(props: MessageProps) {
           );
         })
         .catch((error) => {
-          if (testing) console.log(error);
+          devlog(error);
         });
     };
   }, [props.message.userId]);

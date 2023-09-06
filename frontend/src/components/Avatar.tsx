@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import iconVect from "../common/change-icon.svg";
-import { testing } from "../services/core";
+import { devlog, testing } from "../services/core";
 
 type AvatarProps = {
   url?: string;
@@ -49,7 +49,7 @@ export function Avatar(props: AvatarProps) {
   useEffect(() => {
     if (props.download) {
       downloadAvatar().catch((e) => {
-        if (testing) console.log("Error when downloading the avatar");
+        devlog("Error when downloading the avatar");
       });
       return () => {};
     }

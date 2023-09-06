@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GameInfo, User } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
-import { testing } from "../../../../services/core";
+import { devlog, testing } from "../../../../services/core";
 
 interface WatchingGameCardProps {
   uuid: string;
@@ -46,11 +46,11 @@ export function WatchingGameCard(props: WatchingGameCardProps) {
           .then(() => fetch_username(data.user2_id))
           .then((username) => setUsername_2(username))
           .catch((error) => {
-            if (testing) console.log(error);
+            devlog(error);
           });
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   }, [props.uuid]);
 

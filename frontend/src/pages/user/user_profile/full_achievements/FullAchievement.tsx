@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AchievementCard } from "../profile/achievements/AchievementCard";
 import { useNavigate } from "react-router-dom";
 import { BoardContext } from "../../../board/Board";
-import { testing } from "../../../../services/core";
+import { devlog, testing } from "../../../../services/core";
 
 export interface Achievement {
   name: string;
@@ -32,7 +32,7 @@ export function FullAchievements() {
         setAchievements(data);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   }, [userId]);
   if (achievements === undefined) {

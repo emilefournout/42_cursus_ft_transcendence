@@ -5,7 +5,7 @@ import { Visibility } from "../../add/create/RoomCreate";
 import { ChatPageContext } from "../../../Chat";
 import { DialogContext } from "../../../../root/Root";
 import "../../../../root/Dialog.css";
-import { testing } from "../../../../../services/core";
+import { devlog, testing } from "../../../../../services/core";
 
 interface UpdateVisibilityDialogProps {
   showUpdateDialog: boolean;
@@ -45,7 +45,7 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
         if (response.ok) {
           //roomContextArgs.getChatInfo(roomContextArgs.chat);
           chatPageContext.updateChat().catch((error) => {
-            if (testing) console.log(error);
+            devlog(error);
           });
           close();
           setDialog("visibility updated to " + Visibility.PUBLIC);
@@ -53,7 +53,7 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
       })
       .catch((error) => {
         close();
-        if (testing) console.log(error);
+        devlog(error);
       });
   };
 
