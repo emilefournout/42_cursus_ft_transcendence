@@ -49,13 +49,9 @@ export class AuthController {
           ? 'guest'
           : await this.authService.getIntraLogin(token);
       let url: string;
-      if (image !== undefined) {
-        try {
-          url = this.profileService.saveImage(image);
-        } catch (error) {
-          url = this.profileService.generateNewIcon();
-        }
-      } else {
+      try {
+        url = this.profileService.saveImage(image);
+      } catch (error) {
         url = this.profileService.generateNewIcon();
       }
       return this.authService.register(
@@ -98,18 +94,17 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     try {
-      // const intraname = await this.authService.getIntraLogin(token);
-      const user = null; // await this.userService.findUserByIntraname(intraname)
+      const intraname = await this.authService.getIntraLogin(token);
+      const user = await this.userService.findUserByIntraname(intraname);
       if (!user) {
         return res
           .cookie('42token', token)
           .redirect('http://localhost:8000/welcome');
       } else {
-        return (
-          res
-            // .send(await this.authService.signToken(user.id, user.username))
-            .redirect('http://localhost:8000/home')
-        );
+        return res
+          .cookie('42token', token)
+          .cookie('username', user.username)
+          .redirect('http://localhost:8000/welcome');
       }
     } catch (error) {
       return res

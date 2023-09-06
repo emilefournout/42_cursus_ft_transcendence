@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SEO from "../../../components/Seo";
 import "./GameCreatePage.css";
 import { GameSocket } from "../../../services/socket";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { testing } from "../../../services/core";
 
 export function GameCreatePage() {
@@ -11,8 +11,13 @@ export function GameCreatePage() {
   const [speed, setSpeed] = useState(1);
   const [powerUps, setPoweUps] = useState(false);
   const [error, setError] = useState(false);
-  const [invitation, setInvitation] = useState(false);
-  const [userInvited, setFriendInvited] = useState("");
+
+  const location = useLocation();
+  const inviteFromChat: string | undefined =
+    location.state && location.state.invite;
+  const [invitation, setInvitation] = useState(!!inviteFromChat);
+  const [userInvited, setUserInvited] = useState(inviteFromChat ?? "");
+
   const navigate = useNavigate();
   const gameSocket = GameSocket.getInstance().socket;
   const MAX_GOALS = 25;
@@ -117,7 +122,7 @@ export function GameCreatePage() {
                   type="text"
                   value={userInvited}
                   placeholder="Invited username"
-                  onChange={(e) => setFriendInvited(e.target.value)}
+                  onChange={(e) => setUserInvited(e.target.value)}
                 />
               )}
               {error && <>Could not invite user</>}

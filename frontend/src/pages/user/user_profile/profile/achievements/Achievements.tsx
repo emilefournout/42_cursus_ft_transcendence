@@ -45,7 +45,7 @@ export function Achievements(props: AchievementsProps) {
         <div className="window-title card-title">Achievements</div>
         <div id="achievements-values" className="card-body">
           <button onClick={() => navigate("/board/user-account/achievements")}>
-            Full achievements
+            all achievements
           </button>
           {achievements.map((achievement: Achievement, index) => {
             return (

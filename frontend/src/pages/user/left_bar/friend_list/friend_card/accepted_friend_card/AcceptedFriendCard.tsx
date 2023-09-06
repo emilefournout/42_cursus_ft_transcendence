@@ -32,7 +32,10 @@ export function AcceptedFriendCard(props: FriendCardProps) {
         >
           {props.userInfo.username}
         </div>
-        <FriendStatus status={props.userInfo.status} />
+        <FriendStatus
+          status={props.userInfo.status}
+          friendId={props.userInfo.id}
+        />
         <CardAction userId={props.userInfo.id} />
       </div>
     </>

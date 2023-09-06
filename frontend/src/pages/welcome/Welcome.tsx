@@ -11,30 +11,38 @@ export function Welcome() {
   const [code2fa, setCode2fa] = useState("");
   const [show2fa, setShow2fa] = useState(false);
   const navigate = useNavigate();
-  const navigateError = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   // Guest mode for no 42-students
   const [searchParams, setSearchParams] = useSearchParams();
-  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     if (searchParams.get("guest")) return;
+    if (Cookies.get("username")) callRegister(Cookies.get("username"));
     if (!Cookies.get("42token") || Cookies.get("42token") === "j:null") {
       Cookies.remove("42token");
-      navigateError("/cookie-error");
+      navigate("/cookie-error");
     }
   });
 
-  function register() {
-    if (username.length < 5) {
+  function callRegister(user_name: string | undefined) {
+    Cookies.remove("username");
+    register(user_name)
+  }
+
+  function register(user_name=username) {
+    if (user_name.length < 5) {
       setErrorMessage("Username must be at least 5 characters long");
       return;
     }
     const token: string | undefined = searchParams.get("guest")
       ? "guest"
       : Cookies.get("42token");
+
     const formData = new FormData();
-    formData.append("username", username);
+    formData.append("username", user_name);
     formData.append("image", image as File);
     formData.append("code2fa", code2fa);
+
     fetch(`${process.env.REACT_APP_BACKEND}/auth/register`, {
       method: "POST",
       body: formData,
@@ -53,6 +61,7 @@ export function Welcome() {
           localStorage.setItem("access_token", data.access_token);
           navigate("/");
         } else {
+          setUsername(data.username)
           setShow2fa(true);
         }
       })
@@ -81,6 +90,7 @@ export function Welcome() {
             className="wp-responsive-txt"
             type="text"
             placeholder="User Name"
+            value={username}
             onChange={(event) => setUsername(event.target.value)}
             onKeyDown={(event) => {
               event.key === "Enter" && register();
@@ -102,7 +112,7 @@ export function Welcome() {
           <button
             id={show2fa ? "wp-submit-2fa" : "wp-submit-no-2fa"}
             className="btn btn-bottom-right wp-responsive-txt"
-            onClick={register}
+            onClick={() => register()}
           >
             Done!
           </button>
