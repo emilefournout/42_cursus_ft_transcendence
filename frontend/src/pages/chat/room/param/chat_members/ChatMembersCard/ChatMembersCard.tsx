@@ -20,7 +20,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
   const navigate = useNavigate();
   const boardContext = useContext(BoardContext);
   const isMe = boardContext?.me.id === props.member.userId;
-  const style = isMe ? { backgroundColor: "green" } : {};
+  const style = isMe ? { backgroundColor: "var(--Trans-Mooned-Teal-Strong)" } : {};
   const action = (route: string, method: string, body: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
