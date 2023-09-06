@@ -1,7 +1,7 @@
 import React from "react";
 import { MatchHistoryCard, MatchResult } from "./MatchHistoryCard";
 import "../Profile.css";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 export interface UserScore {
   username: string;

@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../../RoomParam";
-import { devlog, testing } from "../../../../../../services/core";
+import { devlog } from "../../../../../../services/core";
 import { BoardContext } from "../../../../../board/Board";
 
 export interface ChatMembersCardProps {

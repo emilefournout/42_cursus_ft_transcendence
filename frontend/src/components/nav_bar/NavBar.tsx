@@ -19,9 +19,7 @@ export function NavBar() {
           <img src={userIcon} alt="User icon"></img>
         </Link>
       </div>
-      <Link
-        to="/board/"
-      >
+      <Link to="/board/">
         <h2 className="txt txt-shadow-top nav-responsive-text">PONG</h2>
       </Link>
       <Link

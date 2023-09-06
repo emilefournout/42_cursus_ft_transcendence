@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AchievementCard } from "../profile/achievements/AchievementCard";
 import { useNavigate } from "react-router-dom";
 import { BoardContext } from "../../../board/Board";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 export interface Achievement {
   name: string;

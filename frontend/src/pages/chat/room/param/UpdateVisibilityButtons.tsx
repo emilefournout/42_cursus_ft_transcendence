@@ -4,6 +4,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../Room";
 import { ChatPageContext } from "../../Chat";
 import { DialogContext } from "../../../root/Root";
+
 interface UpdateVisibilityButtonsProps {
   updateVisibility: (open: boolean) => void;
 }

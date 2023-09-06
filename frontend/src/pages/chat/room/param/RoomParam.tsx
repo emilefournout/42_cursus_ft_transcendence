@@ -8,7 +8,7 @@ import { UpdateVisibilityButtons } from "./UpdateVisibilityButtons";
 import { BoardContext } from "../../../board/Board";
 import { MuteDialog } from "./dialogs/MuteDialog";
 import { UpdateVisibilityDialog } from "./dialogs/UpdateVisibilityDialog";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 import { ChatPageContext } from "../../Chat";
 
 interface MuteDialogContextArgs {

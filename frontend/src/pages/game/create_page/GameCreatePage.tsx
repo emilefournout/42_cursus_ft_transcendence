@@ -3,7 +3,7 @@ import SEO from "../../../components/Seo";
 import "./GameCreatePage.css";
 import { GameSocket } from "../../../services/socket";
 import { useLocation, useNavigate } from "react-router-dom";
-import { devlog, testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 export function GameCreatePage() {
   const [hiddenForm, setHiddenForm] = useState(false);

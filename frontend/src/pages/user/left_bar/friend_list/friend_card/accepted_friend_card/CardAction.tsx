@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ProfilePageContext } from "../../../../UserProfilePage";
-import { devlog, testing } from "../../../../../../services/core";
+import { devlog } from "../../../../../../services/core";
 
 interface CardActionProps {
   userId: number;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 import "../../../../root/Dialog.css";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface MuteDialogProps {
   userIdToMute: number | undefined;

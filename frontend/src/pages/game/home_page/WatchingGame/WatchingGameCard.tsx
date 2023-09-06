@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GameInfo, User } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
-import { devlog, testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 interface WatchingGameCardProps {
   uuid: string;

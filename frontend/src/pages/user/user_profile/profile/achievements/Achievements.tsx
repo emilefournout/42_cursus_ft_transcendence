@@ -3,7 +3,7 @@ import "../Profile.css";
 import { useNavigate } from "react-router-dom";
 import { Achievement } from "../../full_achievements/FullAchievement";
 import { AchievementCard } from "./AchievementCard";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface AchievementsProps {
   userId: number;

@@ -30,7 +30,11 @@ export function Conversations(props: ConversationsProps) {
       <div style={{ flexGrow: 1 }}></div>
       {props.chat.visibility === Visibility.PRIVATE ||
       props.chat.visibility === Visibility.PROTECTED ? (
-        <img className="conversation-icons" src={LockChatIcon} alt="Look chat icon"/>
+        <img
+          className="conversation-icons"
+          src={LockChatIcon}
+          alt="Look chat icon"
+        />
       ) : (
         <></>
       )}

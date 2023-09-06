@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChatInfo } from "../../../Chat";
-import { devlog, testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface PasswordDialogProps {
   showDialog: ChatInfo | undefined;

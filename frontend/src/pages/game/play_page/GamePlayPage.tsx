@@ -3,7 +3,7 @@ import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
 import { Link, useParams } from "react-router-dom";
 import "./GamePlayPage.css";
-import { devlog, testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 enum GameExistState {
   Waiting,
