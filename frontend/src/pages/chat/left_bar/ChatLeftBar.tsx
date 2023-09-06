@@ -6,6 +6,7 @@ import ReloadBlackIcon from "../../../common/reload_black.svg";
 import { Link } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import { Conversations } from "./conversations/Conversations";
+import { testing } from "../../../services/core";
 
 export function LeftBar() {
   const chatPageContext = React.useContext(ChatPageContext);
@@ -16,15 +17,16 @@ export function LeftBar() {
       <div id="lb-top-wrapper">
         <span>Chats</span>
         <Link to="/board/chats/add">
-          <img
-            className="nav-icons"
-            src={NewChatIcon}
-            alt="New chat icon" />
+          <img className="nav-icons" src={NewChatIcon} alt="New chat icon" />
         </Link>
         <img
           className="nav-icons"
           src={ReloadBlackIcon}
-          onClick={chatPageContext.updateChat}
+          onClick={() =>
+            chatPageContext.updateChat().catch((error) => {
+              if (testing) console.log(error);
+            })
+          }
           alt="Reload icon"
         />
       </div>
