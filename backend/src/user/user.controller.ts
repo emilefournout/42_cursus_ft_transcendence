@@ -7,7 +7,6 @@ import {
   Delete,
   Body,
   UseGuards,
-  Put,
   ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -31,31 +30,6 @@ import { IdValidationPipe } from './pipes/id-validation.pipe';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('ranking')
-  @ApiOperation({ summary: 'Returns the top 10 ranking.' })
-  async getRanking(): Promise<UserBasicInfoDto[]> {
-    return await this.userService.getRanking();
-  }
-
-  @Get('history')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Returns last 10 games of the user.' })
-  async getUserHistory(@GetUser() user) {
-    return this.userService.getUserHistory(user.sub);
-  }
-
-  @Get('history/:id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiParam({ name: 'id' })
-  @ApiOperation({
-    summary: 'Returns last 10 games of the user based on the id.',
-  })
-  async getUserHistoryById(@Param('id', IdValidationPipe) id) {
-    return this.userService.getUserHistory(id);
-  }
-
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -69,30 +43,6 @@ export class UserController {
     } catch (error) {
       throw new UserControllerError.UserNotFoundException();
     }
-  }
-
-  @Get('info/:id')
-  @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Returns a basic info about a user.' })
-  @ApiResponse({ type: UserBasicInfoDto })
-  async findUser(@Param('id', IdValidationPipe) id) {
-    try {
-      const userInfo = await this.userService.getUserInfoById(id);
-      if (!userInfo) throw new UserControllerError.UserNotFoundException();
-      return userInfo;
-    } catch (error) {
-      throw new UserControllerError.UserNotFoundException();
-    }
-  }
-
-  @Get('info/username/:username')
-  @UseGuards(JwtAuthGuard)
-  @ApiParam({ name: 'username' })
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Returns a basic info about user by its username.' })
-  @ApiResponse({ type: UserBasicInfoDto })
-  async getUserInfoByName(@Param('username') username: string) {
-    return await this.userService.getUserInfoByName(username);
   }
 
   @Delete('me')
@@ -136,18 +86,56 @@ export class UserController {
     if (!userUpdated) throw new UserControllerError.UserNotUpdatedException();
   }
 
-  @Put('/achievements')
-  @ApiOperation({ summary: 'Adds an achievement to a user.' })
-  async assingAchievementToUser(
-    @Body() assingAchievementDto: AssignAchievementDto
-  ) {
-    await this.userService.assingAchievementToUser(
-      assingAchievementDto.id,
-      assingAchievementDto.achievementName
-    );
+  @Get('ranking')
+  @ApiOperation({ summary: 'Returns the top 10 ranking.' })
+  async getRanking(): Promise<UserBasicInfoDto[]> {
+    return await this.userService.getRanking();
   }
 
-  @Get('/friendships')
+  @Get('history')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Returns last 10 games of the user.' })
+  async getUserHistory(@GetUser() user) {
+    return this.userService.getUserHistory(user.sub);
+  }
+
+  @Get('history/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({
+    summary: 'Returns last 10 games of the user based on the id.',
+  })
+  async getUserHistoryById(@Param('id', IdValidationPipe) id) {
+    return this.userService.getUserHistory(id);
+  }
+
+  @Get('info/:id')
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Returns a basic info about a user.' })
+  @ApiResponse({ type: UserBasicInfoDto })
+  async findUser(@Param('id', IdValidationPipe) id) {
+    try {
+      const userInfo = await this.userService.getUserInfoById(id);
+      if (!userInfo) throw new UserControllerError.UserNotFoundException();
+      return userInfo;
+    } catch (error) {
+      throw new UserControllerError.UserNotFoundException();
+    }
+  }
+
+  @Get('info/username/:username')
+  @UseGuards(JwtAuthGuard)
+  @ApiParam({ name: 'username' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Returns a basic info about user by its username.' })
+  @ApiResponse({ type: UserBasicInfoDto })
+  async getUserInfoByName(@Param('username') username: string) {
+    return await this.userService.getUserInfoByName(username);
+  }
+
+  @Get('friendships')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
@@ -158,7 +146,7 @@ export class UserController {
     return await this.userService.getUserFriendships(user.sub);
   }
 
-  @Post('/block/:id')
+  @Post('block/:id')
   @ApiParam({
     name: 'id',
     description: 'The id of the user the sender wants to block',
@@ -178,7 +166,7 @@ export class UserController {
     await this.userService.addUserBlocked(user.sub, id);
   }
 
-  @Delete('/block/:id')
+  @Delete('block/:id')
   @ApiParam({
     name: 'id',
     description: 'The id of the user the sender wants to remove the block',
@@ -196,7 +184,7 @@ export class UserController {
     await this.userService.deleteUserBlocked(user.sub, id);
   }
 
-  @Get('/block')
+  @Get('block')
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Gets an array of blocked users',
@@ -206,7 +194,8 @@ export class UserController {
     return await this.userService.getBlockedById(user.sub);
   }
 
-  @Post('/friends/send/:id')
+  @Post('friends/send/:id')
+  @UseGuards(JwtAuthGuard)
   @ApiParam({
     name: 'id',
     description: 'The id of the user the sender wants to be friends with',
@@ -216,7 +205,6 @@ export class UserController {
     summary: 'Invites id to be friends',
     description: 'The user with the id will recieve a friendship request',
   })
-  @UseGuards(JwtAuthGuard)
   async addUserFriends(
     @GetUser() user,
     @Param('id', IdValidationPipe) id: number
@@ -224,7 +212,7 @@ export class UserController {
     await this.userService.addUserFriends(user.sub, id);
   }
 
-  @Patch('/friends/accept/:id')
+  @Patch('friends/accept/:id')
   @ApiParam({
     name: 'id',
     description: 'The id of the user that send the invitation',
@@ -242,7 +230,7 @@ export class UserController {
     await this.userService.acceptUserFriends(user.sub, id);
   }
 
-  @Delete('/friends/decline/:id')
+  @Delete('friends/decline/:id')
   @ApiParam({
     name: 'id',
     description: 'The id of the user that send the invitation',
@@ -261,7 +249,7 @@ export class UserController {
     await this.userService.declineUserFriends(user.sub, id);
   }
 
-  @Delete('/friends/delete/:id')
+  @Delete('friends/delete/:id')
   @ApiParam({
     name: 'id',
     description: 'The id of the friend to delete',
