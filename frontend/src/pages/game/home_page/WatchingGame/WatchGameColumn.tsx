@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { WatchingGameCard } from "./WatchingGameCard";
-import { testing } from "../../../../services/core";
 import { BoardContext } from "../../../board/Board";
 
 export function WatchGameColumn() {

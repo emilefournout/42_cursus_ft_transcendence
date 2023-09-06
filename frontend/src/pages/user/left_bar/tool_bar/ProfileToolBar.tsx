@@ -7,7 +7,7 @@ import AddFriendIcon from "./AddFriendIcon.svg";
 import SearchIcon from "./SearchIcon.svg";
 import { DialogContext } from "../../../root/Root";
 import { testing } from "../../../../services/core";
-import { BoardContext, User } from "../../../board/Board";
+import { BoardContext } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 
 export function ProfileToolBar() {

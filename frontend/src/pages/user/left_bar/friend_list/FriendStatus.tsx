@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "./friend_card/FriendCard.css";
-import ingameIcon from "./friend_card/accepted_friend_card/ingameIcon.svg";
 import { BoardContext, GameInfo } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 
