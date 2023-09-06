@@ -85,7 +85,7 @@ export function RoomParam() {
 					<ChatMembers isManager={isManager} />
 				</MuteDialogContext.Provider>
 			</div>
-			<button onClick={leaveRoom}>Leave room</button>
+			<button className="leave-room-btn" onClick={leaveRoom}>Leave room</button>
 		</>
 	);
 }

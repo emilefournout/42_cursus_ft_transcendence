@@ -1,3 +1,20 @@
+.leave-room-btn {
+	min-height: 1.2em;
+
+	padding: 0.25em;
+
+	font-size: clamp(0.3rem, 2vw, 0.7rem);
+
+	transition: color .15s ease, background-color .15s ease;
+}
+
+.leave-room-btn:hover {
+	color: var(--Crisped-Orange);
+	background-color: transparent;
+}
+
+
+
 .room-param {
 	--params-icon-size: clamp(0.6rem, 4vw, 1.2rem);
 
