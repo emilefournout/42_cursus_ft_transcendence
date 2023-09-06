@@ -11,6 +11,7 @@ export function GameCreatePage() {
   const [speed, setSpeed] = useState(1);
   const [powerUps, setPoweUps] = useState(false);
   const [error, setError] = useState(false);
+  const [color, setColor] = useState("classic");
 
   const location = useLocation();
   const inviteFromChat: string | undefined =
@@ -98,6 +99,19 @@ export function GameCreatePage() {
                   }
                 }}
               />
+              <label htmlFor="color-palette-select">Color</label>
+              <select
+                id="color-palette-select"
+                name="color"
+                className={`${color}-color`}
+                defaultValue={color}
+                onChange={(event) => setColor(event.target.value)}
+              >
+                <option className={`classic-color`} value="classic">Classic</option>
+                <option className={`pastel-color`} value="pastel">Pastel</option>
+                <option className={`red-color`} value="red">Red</option>
+                <option className={`mad-color`} value="mad">Mad</option>
+              </select>
               <label htmlFor="powerUp">PowerUps</label>
               <input
                 id="powerUp"
@@ -153,6 +167,7 @@ export function GameCreatePage() {
                       speed,
                       maxGoals,
                       powerUps,
+                      color,
                     });
                     waiting.current = false;
                     setHiddenForm(true);
@@ -188,6 +203,7 @@ export function GameCreatePage() {
           speed,
           maxGoals,
           powerUps,
+          color,
         },
         friendUserName: userInvited,
       },

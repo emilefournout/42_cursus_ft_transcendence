@@ -16,3 +16,30 @@
 .create-game-btn {
 	min-height: 2em;
 }
+
+select {
+	font-family: 'Bungee';
+    font-size: 24px;
+    background: var(--Darks-Back);
+    color: var(--Honey-Yellow);
+}
+
+.classic-color
+{
+	color: white;
+}
+
+.mad-color
+{
+	color: #ee9a33ff;
+}
+
+.pastel-color
+{
+	color: #fe7160ff;
+}
+
+.red-color
+{
+	color: red;
+}

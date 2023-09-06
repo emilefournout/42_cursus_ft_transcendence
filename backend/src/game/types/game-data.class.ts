@@ -4,6 +4,7 @@ export class GameDataOptions {
   maxGoals: number;
   speed: number;
   powerUps: boolean;
+  color: string;
 }
 
 enum BallSize {
@@ -46,6 +47,8 @@ export class GameData {
     this.player1Id = player1Id;
     this.player2Id = player2Id;
     if (gameOptions) {
+      this.primaryColor = GameColors[gameOptions.color].primary;
+      this.secondaryColor = GameColors[gameOptions.color].secondary;
       this.maxGoals = gameOptions.maxGoals;
       this.velocityX = gameOptions.speed * 3;
       this.velocityY = gameOptions.speed * 3;
