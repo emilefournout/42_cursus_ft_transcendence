@@ -63,7 +63,7 @@ export function GamePlayPage() {
           setGameExistState(GameExistState.Play);
         }
       });
-  }, [id, gameSocket]);
+  }, [id]);
 
   useEffect(() => {
     gameSocket.off("update");
