@@ -69,8 +69,12 @@
 
 	cursor: pointer;
 
+	display: flex;
+	align-items: center;
+
 	border-bottom: 2px solid var(--Honey-Yellow);
 	border-image: var(--Cornered-Honey-Crisped) 1;
+	border-radius: 2px;
 
 	font-size: inherit;
 	color: var(--Light-Text);
