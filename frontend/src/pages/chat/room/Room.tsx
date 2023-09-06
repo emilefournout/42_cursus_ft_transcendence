@@ -1,15 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RoomToolBar } from "./tool_bar/RoomToolBar";
 import "./Room.css";
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-  useParams,
-} from "react-router-dom";
+import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import NoMsgsImg from "../NoMsgs.png";
-import { testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 export interface ChatFullInfo extends ChatInfo {
   password?: string;
@@ -58,7 +53,7 @@ export function Room() {
     else chat = chats.find((chat: ChatInfo) => chat.id === parseInt(id));
     if (chat === undefined) return;
     getChatInfo(chat).catch((error) => {
-      if (testing) console.log(error);
+      devlog(error);
     });
   }, [chats, id, location.state]);
 
@@ -67,7 +62,7 @@ export function Room() {
     return (
       <div id="chat-no-messages">
         <p>No messages?</p>
-        <img src={NoMsgsImg} alt="No messages"/>
+        <img src={NoMsgsImg} alt="No messages" />
       </div>
     );
   } else if (location.pathname === "/board/chats") {

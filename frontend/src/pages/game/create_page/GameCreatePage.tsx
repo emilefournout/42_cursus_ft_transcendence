@@ -3,7 +3,7 @@ import SEO from "../../../components/Seo";
 import "./GameCreatePage.css";
 import { GameSocket } from "../../../services/socket";
 import { useLocation, useNavigate } from "react-router-dom";
-import { testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 export function GameCreatePage() {
   const [hiddenForm, setHiddenForm] = useState(false);
@@ -26,7 +26,7 @@ export function GameCreatePage() {
   let waiting = useRef(false);
 
   useEffect(() => {
-    if (testing) console.log("SOCKET GOT MESSAGE");
+    devlog("SOCKET GOT MESSAGE");
     if (!waiting.current) {
       gameSocket.off("game_found");
       gameSocket.on("game_found", (gameId) => {
@@ -41,7 +41,7 @@ export function GameCreatePage() {
   }, [gameSocket, navigate]);
 
   useEffect(() => {
-    if (testing) console.log("SOCKET GOT MESSAGE");
+    devlog("SOCKET GOT MESSAGE");
     if (!waiting.current) {
       gameSocket.off("friend_found");
       gameSocket.on("friend_found", () => {});
@@ -54,11 +54,11 @@ export function GameCreatePage() {
   }, [gameSocket, navigate]);
 
   useEffect(() => {
-    if (testing) console.log("SOCKET GOT MESSAGE");
+    devlog("SOCKET GOT MESSAGE");
     if (!waiting.current) {
       gameSocket.off("friend_not_found");
       gameSocket.on("friend_not_found", () => {
-        if (testing) console.log("Friend not found buddy");
+        devlog("Friend not found buddy");
       });
     }
   }, [gameSocket]);
@@ -107,10 +107,18 @@ export function GameCreatePage() {
                 defaultValue={color}
                 onChange={(event) => setColor(event.target.value)}
               >
-                <option className={`classic-color`} value="classic">Classic</option>
-                <option className={`pastel-color`} value="pastel">Pastel</option>
-                <option className={`red-color`} value="red">Red</option>
-                <option className={`mad-color`} value="mad">Mad</option>
+                <option className={`classic-color`} value="classic">
+                  Classic
+                </option>
+                <option className={`pastel-color`} value="pastel">
+                  Pastel
+                </option>
+                <option className={`red-color`} value="red">
+                  Red
+                </option>
+                <option className={`mad-color`} value="mad">
+                  Mad
+                </option>
               </select>
               <label htmlFor="powerUp">PowerUps</label>
               <input

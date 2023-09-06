@@ -28,7 +28,7 @@ export function GameCanvas(props: GameCanvasProps) {
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    
+
     if (ctx) {
       // Draw board
       ctx.fillStyle = props.primaryColor;

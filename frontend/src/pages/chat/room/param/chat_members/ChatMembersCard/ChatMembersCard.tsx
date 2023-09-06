@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
 import { MuteDialogContext } from "../../RoomParam";
-import { testing } from "../../../../../../services/core";
+import { devlog } from "../../../../../../services/core";
 import { BoardContext } from "../../../../../board/Board";
 
 export interface ChatMembersCardProps {
@@ -46,7 +46,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 				},
 			})
 		).catch((error) => {
-			if (testing) console.log(error);
+			devlog(error);
 		});
 
 	const demote = () =>
@@ -61,7 +61,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 				},
 			})
 		).catch((error) => {
-			if (testing) console.log(error);
+			devlog(error);
 		});
 
 	const unmute = () => {
@@ -70,7 +70,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 			"DELETE",
 			JSON.stringify({ userId: props.member.userId })
 		).catch((error) => {
-			if (testing) console.log(error);
+			devlog(error);
 		});
 	};
 	const kickOut = () =>
@@ -79,7 +79,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 			"DELETE",
 			JSON.stringify({ id: props.member.userId })
 		).catch((error) => {
-			if (testing) console.log(error);
+			devlog(error);
 		});
 
 	if (!boardContext) {

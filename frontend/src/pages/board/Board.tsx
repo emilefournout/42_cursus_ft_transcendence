@@ -5,7 +5,7 @@ import { NavBar } from "../../components/nav_bar/NavBar";
 import { DialogContext } from "../root/Root";
 import { UserSocket } from "../../services/socket";
 import { Socket } from "socket.io-client";
-import { testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 export interface GameInfo {
   user1_id: number;
@@ -99,7 +99,7 @@ export function Board() {
           setCurrentGames(data ?? []);
         })
         .catch((error) => {
-          if (testing) console.log(error);
+          devlog(error);
         }),
     [getGameInfo, setCurrentGames]
   );

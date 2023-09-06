@@ -6,7 +6,7 @@ import ReloadBlackIcon from "../../../common/reload_black.svg";
 import { Link } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import { Conversations } from "./conversations/Conversations";
-import { testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 export function LeftBar() {
   const chatPageContext = React.useContext(ChatPageContext);
@@ -24,7 +24,7 @@ export function LeftBar() {
           src={ReloadBlackIcon}
           onClick={() =>
             chatPageContext.updateChat().catch((error) => {
-              if (testing) console.log(error);
+              devlog(error);
             })
           }
           alt="Reload icon"

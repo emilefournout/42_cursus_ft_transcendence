@@ -3,7 +3,7 @@ import "../Profile.css";
 import { useNavigate } from "react-router-dom";
 import { Achievement } from "../../full_achievements/FullAchievement";
 import { AchievementCard } from "./AchievementCard";
-import { testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface AchievementsProps {
   userId: number;
@@ -32,7 +32,7 @@ export function Achievements(props: AchievementsProps) {
         setAchievements(data);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
     return () => {};
   }, [props.userId]);

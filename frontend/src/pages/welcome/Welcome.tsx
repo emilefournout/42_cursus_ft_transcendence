@@ -3,7 +3,7 @@ import "./Welcome.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Avatar } from "../../components/Avatar";
-import { testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 export function Welcome() {
   const [username, setUsername] = useState("");
@@ -26,10 +26,10 @@ export function Welcome() {
 
   function callRegister(user_name: string | undefined) {
     Cookies.remove("username");
-    register(user_name)
+    register(user_name);
   }
 
-  function register(user_name=username) {
+  function register(user_name = username) {
     if (user_name.length < 5) {
       setErrorMessage("Username must be at least 5 characters long");
       return;
@@ -61,13 +61,13 @@ export function Welcome() {
           localStorage.setItem("access_token", data.access_token);
           navigate("/");
         } else {
-          setUsername(data.username)
+          setUsername(data.username);
           setShow2fa(true);
         }
       })
       .catch((error) => {
         setErrorMessage("bad 2fa code");
-        if (testing) console.log(error);
+        devlog(error);
       });
   }
 

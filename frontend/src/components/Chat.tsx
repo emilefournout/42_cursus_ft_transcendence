@@ -1,17 +1,17 @@
-import { useState } from "react"
-import { ChatSocket } from '../services/socket'
-import ChatWindow from "./ChatWindow"
-import './Chat.css'
+import { useState } from "react";
+import { ChatSocket } from "../services/socket";
+import ChatWindow from "./ChatWindow";
+import "./Chat.css";
 
 function Chat() {
-  const [username, setUsername] = useState("") // TODO get username
-  const [room, setRoom] = useState("")
-  const [showChat, setShowChat] = useState(false)
+  const [username, setUsername] = useState(""); // TODO get username
+  const [room, setRoom] = useState("");
+  const [showChat, setShowChat] = useState(false);
   const chatSocket = ChatSocket.getInstance().socket;
   function joinRoom() {
     if (room !== "") {
-      chatSocket.emit("join_room", {chatId: Number(room)})
-      setShowChat(true)
+      chatSocket.emit("join_room", { chatId: Number(room) });
+      setShowChat(true);
     }
   }
 
@@ -23,12 +23,12 @@ function Chat() {
           <input
             type="text"
             placeholder="Username"
-            onChange={ event => setUsername(event.target.value) }
+            onChange={(event) => setUsername(event.target.value)}
           />
           <input
             type="text"
             placeholder="Room"
-            onChange={ event => setRoom(event.target.value) }
+            onChange={(event) => setRoom(event.target.value)}
           />
           <button onClick={joinRoom}>Join the room</button>
         </div>
@@ -36,7 +36,7 @@ function Chat() {
         <ChatWindow socket={chatSocket} username={username} room={room} />
       )}
     </>
-  )
+  );
 }
 
-export default Chat
+export default Chat;

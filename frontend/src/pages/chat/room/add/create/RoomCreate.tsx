@@ -6,7 +6,7 @@ import { ChatSocket } from "../../../../../services/socket";
 import { ChatInfo, ChatPageContext } from "../../../Chat";
 import { useNavigate } from "react-router-dom";
 import { DialogContext } from "../../../../root/Root";
-import { testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 export enum Visibility {
   PUBLIC = "PUBLIC",
@@ -90,7 +90,7 @@ export function RoomCreate() {
         setDialog("Room created");
         setTimeout(() => {
           chatPageContext.updateChat().catch((error) => {
-            if (testing) console.log(error);
+            devlog(error);
           });
           navigate(`/board/chats/${newChat.id.toString()}`);
         }, 500);

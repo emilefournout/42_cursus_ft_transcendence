@@ -2,10 +2,7 @@ import React from "react";
 import "./RoomToolBar.css";
 import RoomParamsIcon from "./RoomParamsIcon.svg";
 import CloseIcon from "./CloseIcon.svg";
-import {
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChatInfo } from "../../Chat";
 
 export interface RoomNavBarProps {

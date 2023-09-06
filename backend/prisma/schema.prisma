@@ -26,6 +26,7 @@ model User {
   chatMember           ChatMember[]
   messages             Message[]
   achievements         Achievement[]
+  chatBan              Chat[]
 }
 
 model UserFriendship {
@@ -94,12 +95,13 @@ model ChatMember {
 }
 
 model Chat {
-  id         Int            @id @default(autoincrement())
-  name       String
-  visibility ChatVisibility
-  password   String?
-  members    ChatMember[]
-  messages   Message[]
+  id          Int            @id @default(autoincrement())
+  name        String
+  visibility  ChatVisibility
+  password    String?
+  members     ChatMember[]
+  messages    Message[]
+  bannedUsers User[]
 }
 
 model Message {

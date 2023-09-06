@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChatPageContext } from "../../Chat";
-import { testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 
 export function DeleteRoom() {
   const navigate = useNavigate();
@@ -25,13 +25,13 @@ export function DeleteRoom() {
                 navigate("/board/chats");
               })
               .catch((error) => {
-                if (testing) console.log(error);
+                devlog(error);
               });
           }, 500);
         }
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   };
 

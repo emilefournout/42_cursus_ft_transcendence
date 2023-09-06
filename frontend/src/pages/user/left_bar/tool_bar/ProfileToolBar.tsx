@@ -6,7 +6,7 @@ import ReloadBlackIcon from "../../../../common/reload_honey.svg";
 import AddFriendIcon from "./AddFriendIcon.svg";
 import SearchIcon from "./SearchIcon.svg";
 import { DialogContext } from "../../../root/Root";
-import { testing } from "../../../../services/core";
+import { devlog } from "../../../../services/core";
 import { BoardContext } from "../../../board/Board";
 import { useNavigate } from "react-router-dom";
 
@@ -33,7 +33,7 @@ export function ProfileToolBar() {
         }
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
 
   const addFriend = () => {
@@ -57,7 +57,7 @@ export function ProfileToolBar() {
         }
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   };
 
@@ -71,7 +71,7 @@ export function ProfileToolBar() {
         navigate(`/board/user-account/${data.id}`);
       })
       .catch((error) => {
-        if (testing) console.log(error);
+        devlog(error);
       });
   };
 

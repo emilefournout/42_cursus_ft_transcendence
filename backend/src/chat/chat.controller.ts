@@ -38,6 +38,9 @@ import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
 import { ChatShortInfoDto } from './dto/short-info-chat.dto';
 import { JoinChatDto } from './dto/join-chat.dto';
+import { BanUserDto } from './dto/ban-user.dto';
+import { UnbanUserDto } from './dto/unban-user.dto';
+import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -337,5 +340,60 @@ export class ChatController {
     if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
       throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.unmuteUser(chatId, muteUserDto.userId);
+  }
+
+  @Get(':id/bans')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Gets banned user from a chat' })
+  async getBansFromChat(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId
+  ): Promise<UserBasicInfoDto[]> {
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
+    return await this.membershipService.findBansByChatId(chatId);
+  }
+
+  @Post(':id/ban')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Bans a user from a chat' })
+  @ApiResponse({ type: [UserBasicInfoDto] })
+  async banUser(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId: number,
+    @Body() banUserDto: BanUserDto
+  ) {
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
+    if (
+      this.membershipService.isAdministratorOfTheChat(banUserDto.userId, chatId)
+    )
+      throw new ForbiddenException('Cannot ban an administrator of the chat');
+    if (!this.membershipService.isUserBannedFrom(banUserDto.userId, chatId))
+      throw new ForbiddenException('User is already banned from this chat');
+    await this.membershipService.banUser(chatId, banUserDto.userId);
+  }
+
+  @Delete(':id/ban')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @ApiOperation({
+    summary: 'Removes the ban from a user',
+  })
+  async unbanUser(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) chatId,
+    @Body() unbanUserDto: UnbanUserDto
+  ) {
+    if (!this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      throw new ForbiddenException('User is not an administrator of this chat');
+    if (!this.membershipService.isUserBannedFrom(unbanUserDto.userId, chatId))
+      throw new ForbiddenException('User is not banned from this chat');
+    await this.membershipService.unbanUser(chatId, unbanUserDto.userId);
   }
 }

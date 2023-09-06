@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Dialog } from "./Dialog";
-import { testing } from "../../services/core";
+import { devlog } from "../../services/core";
 
 interface DialogContextArgs {
   setDialog: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -14,7 +14,7 @@ export function Root() {
   const [dialog, setDialog] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (testing) console.log("Dev mode : testing console.log displayed");
+    devlog("Dev mode : testing console.log displayed");
     if (location.pathname === "/login" || location.pathname === "/welcome")
       return;
     const jwtToken = localStorage.getItem("access_token");

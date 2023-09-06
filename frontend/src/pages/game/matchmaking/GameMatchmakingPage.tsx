@@ -10,19 +10,18 @@ export function GameMatchmakingPage() {
   let waiting = useRef(false);
 
   useEffect(() => {
-    if (!waiting.current)
-    {
+    if (!waiting.current) {
       gameSocket.emit("join_waiting_room");
       gameSocket.off("game_found");
       gameSocket.on("game_found", (gameId) => {
         navigate(`../${gameId}`);
       });
-      waiting.current = true
+      waiting.current = true;
     }
-    return (() => {
-      waiting.current = false
+    return () => {
+      waiting.current = false;
       gameSocket.emit("leave_waiting_room");
-    })
+    };
   }, [gameSocket, navigate]);
 
   return (
@@ -35,9 +34,12 @@ export function GameMatchmakingPage() {
         <div className="matchmaking-loader"></div>
         <p className="matchmaking-scaling">Finding new rival for you</p>
         <Link to="/board/game">
-          <button className="btn btn-fixed-height matchmaking-scaling" onClick={() => {
-            waiting.current = false
-          }}> 
+          <button
+            className="btn btn-fixed-height matchmaking-scaling"
+            onClick={() => {
+              waiting.current = false;
+            }}
+          >
             Cancel
           </button>
         </Link>

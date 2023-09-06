@@ -19,7 +19,9 @@ export function RankingUserCard(props: RankingUserCardProps) {
         download={true}
       />
       <div className="ranking-position-rank">#{props.position}</div>
-      <div className="ranking-position-user-name ellipsed-txt">{props.user.username}</div>
+      <div className="ranking-position-user-name ellipsed-txt">
+        {props.user.username}
+      </div>
       <div className="ranking-position-wins">W: {props.user.wins}</div>
       <div className="ranking-position-looses">L: {props.user.loses}</div>
     </div>

@@ -124,6 +124,12 @@ CREATE TABLE "_AchievementToUser" (
     "B" INTEGER NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "_ChatToUser" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -138,6 +144,12 @@ CREATE UNIQUE INDEX "_AchievementToUser_AB_unique" ON "_AchievementToUser"("A", 
 
 -- CreateIndex
 CREATE INDEX "_AchievementToUser_B_index" ON "_AchievementToUser"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ChatToUser_AB_unique" ON "_ChatToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ChatToUser_B_index" ON "_ChatToUser"("B");
 
 -- AddForeignKey
 ALTER TABLE "UserFriendship" ADD CONSTRAINT "UserFriendship_requester_id_fkey" FOREIGN KEY ("requester_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -177,4 +189,10 @@ ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_A_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "_AchievementToUser" ADD CONSTRAINT "_AchievementToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ChatToUser" ADD CONSTRAINT "_ChatToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Chat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ChatToUser" ADD CONSTRAINT "_ChatToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

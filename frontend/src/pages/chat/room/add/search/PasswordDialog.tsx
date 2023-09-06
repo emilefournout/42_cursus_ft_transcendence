@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChatInfo } from "../../../Chat";
-import { testing } from "../../../../../services/core";
+import { devlog } from "../../../../../services/core";
 
 interface PasswordDialogProps {
   showDialog: ChatInfo | undefined;
@@ -18,7 +18,7 @@ export function PasswordDialog(props: PasswordDialogProps) {
       return;
     }
     props.fetchJoin(props.showDialog!, password).catch((error) => {
-      if (testing) console.log(error);
+      devlog(error);
       setErrorMessage("Incorrect password");
     });
   };

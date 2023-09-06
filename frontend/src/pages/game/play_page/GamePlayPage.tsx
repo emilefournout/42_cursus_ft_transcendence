@@ -3,7 +3,7 @@ import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
 import { Link, useParams } from "react-router-dom";
 import "./GamePlayPage.css";
-import { testing } from "../../../services/core";
+import { devlog } from "../../../services/core";
 
 enum GameExistState {
   Waiting,
@@ -28,7 +28,7 @@ export function GamePlayPage() {
     ballX: 100,
     ballY: 150,
     primaryColor: "black",
-    secondaryColor: "white"
+    secondaryColor: "white",
   };
 
   const [state, updateGameState] = useState(boardState);
@@ -57,7 +57,7 @@ export function GamePlayPage() {
         else {
           var path = window.location.pathname;
           path = path.substring(path.lastIndexOf("/") + 1);
-          if (testing) console.log("Path is " + path);
+          devlog("Path is " + path);
 
           gameSocket.emit("join_active_room", path);
           setGameExistState(GameExistState.Play);
