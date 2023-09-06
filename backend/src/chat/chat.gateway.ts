@@ -40,7 +40,6 @@ export class ChatGateway
     @MessageBody() data: { chatId: number }
   ) {
     client.join(data.chatId.toString());
-    return this.chatService.findChatMessagesById(Number(data.chatId));
   }
 
   @SubscribeMessage('send_message')
