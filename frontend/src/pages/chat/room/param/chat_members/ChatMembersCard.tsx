@@ -118,27 +118,32 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                 promote
               </button>
             )}
+            {isMe ? (
+              <></>
+            ) : (
+              <>
+                {props.member.muted ? (
+                  <button id="unmute-btn" onClick={unmute}>
+                    unmute
+                  </button>
+                ) : (
+                  <button
+                    id="mute-btn"
+                    onClick={() => muteDialogContext.mute(props.member.userId)}
+                  >
+                    mute
+                  </button>
+                )}
+                <button onClick={kickOut}>ban</button>
+                <button onClick={kickOut}>kick out</button>
+              </>
+            )}
           </>
         )}
         {isMe ? (
           <></>
         ) : (
           <>
-            {props.member.muted ? (
-              <button id="unmute-btn" onClick={unmute}>
-                unmute
-              </button>
-            ) : (
-              <button
-                id="mute-btn"
-                onClick={() => muteDialogContext.mute(props.member.userId)}
-              >
-                mute
-              </button>
-            )}
-            <button onClick={kickOut}>ban</button>
-
-            <button onClick={kickOut}>kick out</button>
             <button
               onClick={() => {
                 navigate("/board/game/new-game", {

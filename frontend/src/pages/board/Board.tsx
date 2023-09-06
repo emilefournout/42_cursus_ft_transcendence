@@ -96,7 +96,6 @@ export function Board() {
           Promise.all(data.map((uuid) => getGameInfo(uuid)))
         )
         .then((data: Array<GameInfo>) => {
-          if (testing) console.log("currents game->", data);
           setCurrentGames(data ?? []);
         })
         .catch((error) => {
