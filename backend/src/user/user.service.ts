@@ -180,8 +180,10 @@ export class UserService {
   }
 
   async addUserBlocked(userId: number, targetId: number) {
-    const user = await this.findUserByFilter({ id: userId });
-    const target = await this.findUserByFilter({ id: targetId });
+    const [user, target] = await Promise.all([
+      this.findUserByFilter({ id: userId }),
+      this.findUserByFilter({ id: targetId }),
+    ]);
     if (!user || !target) throw new NotFoundException('User not found');
     try {
       await this.prisma.userBlocked.create({
@@ -211,14 +213,10 @@ export class UserService {
   }
 
   async checkFriendships(requester_id: number, adressee_id: number) {
-    const friendship = await this.findFriendShipByIds(
-      adressee_id,
-      requester_id
-    );
-    const friendship2 = await this.findFriendShipByIds(
-      requester_id,
-      adressee_id
-    );
+    const [friendship, friendship2] = await Promise.all([
+      this.findFriendShipByIds(adressee_id, requester_id),
+      this.findFriendShipByIds(requester_id, adressee_id),
+    ]);
     if (friendship)
       return friendship.status === 'ENABLED'
         ? 'Alredy friends'
@@ -231,8 +229,10 @@ export class UserService {
   }
 
   async addUserFriends(requester_id: number, adressee_id: number) {
-    const requester = await this.findUserByFilter({ id: requester_id });
-    const adressee = await this.findUserByFilter({ id: adressee_id });
+    const [requester, adressee] = await Promise.all([
+      this.findUserByFilter({ id: requester_id }),
+      this.findUserByFilter({ id: adressee_id }),
+    ]);
     if (!requester || !adressee) throw new NotFoundException('User not found');
 
     const checkFriends = await this.checkFriendships(requester_id, adressee_id);
@@ -287,11 +287,10 @@ export class UserService {
   }
 
   async declineUserFriends(adressee_id: number, requester_id: number) {
-    const friendship = await this.findFriendShipByIds(
-      requester_id,
-      adressee_id
-    );
-    const request = await this.findFriendShipByIds(adressee_id, requester_id);
+    const [friendship, request] = await Promise.all([
+      this.findFriendShipByIds(requester_id, adressee_id),
+      this.findFriendShipByIds(adressee_id, requester_id),
+    ]);
     if (!friendship && !request)
       throw new NotFoundException('Friendship not found');
     if (!friendship) [requester_id, adressee_id] = [adressee_id, requester_id];
@@ -330,8 +329,10 @@ export class UserService {
   }
 
   async assingAchievementToUser(id: number, achievementName: string) {
-    const user = await this.findUserByFilter({ id });
-    const achievement = await this.findAchievementByName(achievementName);
+    const [user, achievement] = await Promise.all([
+      this.findUserByFilter({ id }),
+      this.findAchievementByName(achievementName),
+    ]);
     if (!user) throw new NotFoundException('User not found');
     else if (!achievement) throw new NotFoundException('Achievement not found');
 
