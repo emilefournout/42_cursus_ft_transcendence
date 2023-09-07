@@ -21,7 +21,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserBasicInfoDto } from './dto/info-user.dto';
-import { AssignAchievementDto } from './dto/assign-achievement.dto';
 import { UserControllerError, UserServiceError } from './exceptions/index.dto';
 import { IdValidationPipe } from './pipes/id-validation.pipe';
 
