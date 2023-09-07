@@ -12,6 +12,12 @@ import { GameService } from 'src/game/game.service';
 import { ScoreField } from './types/scorefield.enum';
 import * as UserServiceErrors from './exceptions/user-service.exception';
 
+type UserFilter = {
+  id?: number;
+  username?: string;
+  intraname?: string;
+};
+
 @Injectable()
 export class UserService {
   constructor(
@@ -20,38 +26,10 @@ export class UserService {
     private gameService: GameService
   ) {}
 
-  async findUserById(id: number) {
+  async findUserByFilter(filter: UserFilter) {
     try {
       const user = await this.prisma.user.findFirst({
-        where: {
-          id,
-        },
-      });
-      return user;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async findUserByName(username: string) {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: {
-          username,
-        },
-      });
-      return user;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async findUserByIntraname(intraname: string) {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: {
-          intraname,
-        },
+        where: filter,
       });
       return user;
     } catch (error) {
@@ -80,7 +58,7 @@ export class UserService {
   }
 
   async getUserInfoById(id: number): Promise<UserBasicInfoDto> {
-    const user = await this.findUserById(id);
+    const user = await this.findUserByFilter({ id });
     if (!user) return null;
     const userInfo = UserBasicInfoDto.fromUser(user);
     if (user.status == OnlineStatus.PLAYING)
@@ -118,7 +96,7 @@ export class UserService {
   }
 
   async updateUsername(id: number, newUsername: string) {
-    const user = await this.findUserById(id);
+    const user = await this.findUserByFilter({ id });
     if (!user) return null;
     try {
       const updatedUser = await this.prisma.user.update({
@@ -168,7 +146,7 @@ export class UserService {
   }
 
   async getUserHistory(id: number) {
-    const user = await this.findUserById(id);
+    const user = await this.findUserByFilter({ id });
     if (!user) throw new UserServiceErrors.UserNotFoundException();
 
     const userGames = await this.prisma.$queryRaw`
@@ -186,7 +164,7 @@ export class UserService {
   }
 
   async getBlockedById(userId: number) {
-    const user = await this.findUserById(userId);
+    const user = await this.findUserByFilter({ id: userId });
     if (!user) throw new NotFoundException('User not found');
     const queryResponse = await this.prisma.userBlocked.findMany({
       where: {
@@ -202,8 +180,8 @@ export class UserService {
   }
 
   async addUserBlocked(userId: number, targetId: number) {
-    const user = await this.findUserById(userId);
-    const target = await this.findUserById(targetId);
+    const user = await this.findUserByFilter({ id: userId });
+    const target = await this.findUserByFilter({ id: targetId });
     if (!user || !target) throw new NotFoundException('User not found');
     try {
       await this.prisma.userBlocked.create({
@@ -253,8 +231,8 @@ export class UserService {
   }
 
   async addUserFriends(requester_id: number, adressee_id: number) {
-    const requester = await this.findUserById(requester_id);
-    const adressee = await this.findUserById(adressee_id);
+    const requester = await this.findUserByFilter({ id: requester_id });
+    const adressee = await this.findUserByFilter({ id: adressee_id });
     if (!requester || !adressee) throw new NotFoundException('User not found');
 
     const checkFriends = await this.checkFriendships(requester_id, adressee_id);
@@ -352,7 +330,7 @@ export class UserService {
   }
 
   async assingAchievementToUser(id: number, achievementName: string) {
-    const user = await this.findUserById(id);
+    const user = await this.findUserByFilter({ id });
     const achievement = await this.findAchievementByName(achievementName);
     if (!user) throw new NotFoundException('User not found');
     else if (!achievement) throw new NotFoundException('Achievement not found');

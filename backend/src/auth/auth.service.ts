@@ -35,7 +35,7 @@ export class AuthService {
     code2fa: string
   ) {
     try {
-      let user = await this.userService.findUserByName(username);
+      let user = await this.userService.findUserByFilter({ username });
       if (!user) {
         user = await this.userService.createUser(
           intraname,
@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   async login(username: string) {
-    const user = await this.userService.findUserByName(username);
+    const user = await this.userService.findUserByFilter({ username });
     const access_token = await this.signToken(user.id, user.intraname);
     return { access_token, id: user.id, username: user.username };
   }
@@ -93,7 +93,7 @@ export class AuthService {
     const uri = authenticator.keyuri(username, 'Pong', secret);
     const image = await qrcode.toDataURL(uri);
 
-    const user = await this.userService.findUserByName(username);
+    const user = await this.userService.findUserByFilter({ username });
     await this.prisma.twoFactorAuthentication.deleteMany({
       where: { user_id: user.id },
     });
@@ -108,7 +108,7 @@ export class AuthService {
   }
 
   async set2FA(username: string, code: string) {
-    const user = await this.userService.findUserByName(username);
+    const user = await this.userService.findUserByFilter({ username });
     const tfa = await this.prisma.twoFactorAuthentication.findFirst({
       where: { user_id: user.id },
     });
@@ -141,7 +141,7 @@ export class AuthService {
       });
   }
 
-  async getIntraLogin(token: string) {
+  async getIntraLogin(token: string): Promise<string> {
     const response = await fetch('https://api.intra.42.fr/v2/me', {
       headers: {
         Authorization: `Bearer ${token}`,

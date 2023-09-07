@@ -94,8 +94,8 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     try {
-      const intraname = await this.authService.getIntraLogin(token);
-      const user = await this.userService.findUserByIntraname(intraname);
+      const intraname: string = await this.authService.getIntraLogin(token);
+      const user = await this.userService.findUserByFilter({ intraname });
       if (!user) {
         return res
           .cookie('42token', token)

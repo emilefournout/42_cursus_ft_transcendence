@@ -66,9 +66,9 @@ export class GameGateway
   ) {
     console.log('Creating private game ' + client.id);
     const userId = this.gameService.getUserIdFromSocket(client);
-    const invited = await this.userService.findUserByName(
-      privateGameDataOptions.friendUserName
-    );
+    const invited = await this.userService.findUserByFilter({
+      username: privateGameDataOptions.friendUserName,
+    });
     if (!invited || userId === invited.id) {
       console.log('Not a friend');
       return 'ko';
@@ -195,7 +195,9 @@ export class GameGateway
     gameLoopInterval: NodeJS.Timer
   ) {
     clearInterval(gameLoopInterval);
-    const winnerUser = await this.userService.findUserById(gameState.winnerId);
+    const winnerUser = await this.userService.findUserByFilter({
+      id: gameState.winnerId,
+    });
     this.gameService.removeActiveGame(gameState.id);
     this.server.to(gameState.id).emit('end', winnerUser.username);
     await Promise.all([

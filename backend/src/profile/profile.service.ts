@@ -42,7 +42,7 @@ export class ProfileService {
     } else {
       url = this.generateNewIcon();
     }
-    const user = await this.userService.findUserById(userId);
+    const user = await this.userService.findUserByFilter({ id: userId });
     const previousUrl = user.avatarURL;
     await this.userService.updateProfilePhoto(userId, url);
     fs.unlink('uploads/' + previousUrl, (_err) => {

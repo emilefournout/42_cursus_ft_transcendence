@@ -52,7 +52,7 @@ export class MembershipService {
   async createChatMember(chatId: number, id: number, password?: string) {
     const [chat, user] = await Promise.all([
       this.chatService.findChatById(chatId),
-      this.userService.findUserById(id),
+      this.userService.findUserByFilter({ id }),
     ]);
     if (!chat || !user)
       throw new NotFoundException(`${!chat ? 'Chat' : 'User'} not found`);
