@@ -120,7 +120,9 @@ export class UserController {
       if (!userInfo) throw new UserControllerError.UserNotFoundException();
       return userInfo;
     } catch (error) {
-      throw new UserControllerError.UserNotFoundException();
+      if (error instanceof UserControllerError.UserNotFoundException)
+        throw error;
+      else throw new UserControllerError.UserNotFoundException();
     }
   }
 
