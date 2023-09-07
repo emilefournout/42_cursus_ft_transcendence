@@ -20,6 +20,45 @@ export class UserService {
     private gameService: GameService
   ) {}
 
+  async findUserById(id: number) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          id,
+        },
+      });
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findUserByName(username: string) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          username,
+        },
+      });
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findUserByIntraname(intraname: string) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          intraname,
+        },
+      });
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async createUser(intraname: string, username: string, avatar: string) {
     try {
       const user = await this.prisma.user.create({
@@ -38,37 +77,6 @@ export class UserService {
       }
       throw new error();
     }
-  }
-
-  async findUserById(id: number) {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: {
-          id: id,
-        },
-      });
-      return user;
-    } catch (error) {
-      throw new UserServiceErrors.UserNotFoundException();
-    }
-  }
-
-  async findUserByName(username: string) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        username: username,
-      },
-    });
-    return user;
-  }
-
-  async findUserByIntraname(intraname: string) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        intraname: intraname,
-      },
-    });
-    return user;
   }
 
   async getUserInfoById(id: number): Promise<UserBasicInfoDto> {
