@@ -4,6 +4,12 @@ export class UserNotFoundException extends Error {
   }
 }
 
+export class UserNotCreatedException extends Error {
+  constructor() {
+    super('User not created');
+  }
+}
+
 export class UsernameExistsException extends Error {
   constructor() {
     super('Username already exists');

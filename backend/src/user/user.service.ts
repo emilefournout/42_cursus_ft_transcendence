@@ -75,7 +75,7 @@ export class UserService {
           throw new UserServiceErrors.UsernameExistsException();
         }
       }
-      throw new error();
+      throw new UserServiceErrors.UserNotCreatedException();
     }
   }
 
