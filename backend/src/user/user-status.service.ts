@@ -10,7 +10,12 @@ export class UserStatusService {
 
   registerConnection(client: Socket, userId: number) {
     this.currentConnections.set(client, userId);
-    this.userService.setUserStatus(userId, OnlineStatus.ONLINE);
+    try {
+      this.userService.setUserStatus(userId, OnlineStatus.ONLINE);
+    } catch (error) {
+      this.currentConnections.delete(client)
+      throw new Error()
+    }
   }
 
   unregisterConnection(client: Socket) {
