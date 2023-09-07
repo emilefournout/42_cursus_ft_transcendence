@@ -13,8 +13,8 @@ export class UserStatusService {
     try {
       this.userService.setUserStatus(userId, OnlineStatus.ONLINE);
     } catch (error) {
-      this.currentConnections.delete(client)
-      throw new Error()
+      this.currentConnections.delete(client);
+      throw new Error();
     }
   }
 
