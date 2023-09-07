@@ -18,6 +18,7 @@ import { AchievementService } from 'src/achievement/achievement.service';
 import { GameState } from './types/game-state.class';
 import { GameData } from './types/game-data.class';
 import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
+import { OnlineStatus } from '@prisma/client';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' },
@@ -88,11 +89,18 @@ export class GameGateway
     console.log('Joining private game ' + client.id);
     const game = await this.gameService.joinPrivateRoom(client, friendId);
     if (game) {
-      this.initGame(game);
+      await this.initGame(game);
     }
   }
 
-  private initGame(game: GameState) {
+  private async initGame(game: GameState) {
+    await Promise.all([
+      this.userService.setUserStatus(game.firstPlayer.id, OnlineStatus.PLAYING),
+      this.userService.setUserStatus(
+        game.secondPlayer.id,
+        OnlineStatus.PLAYING
+      ),
+    ]);
     game.firstPlayer.socket.join(game.id);
     game.secondPlayer.socket.join(game.id);
     this.server.to(game.id).emit('game_found', game.id);
@@ -123,7 +131,7 @@ export class GameGateway
     this.gameService.customizeGame(client, gameDataOptions);
     const game = await this.gameService.handleWaitingRoom();
     if (game) {
-      this.initGame(game);
+      await this.initGame(game);
     }
   }
 
@@ -141,7 +149,7 @@ export class GameGateway
     this.gameService.addToWaitingRoom(client);
     const game = await this.gameService.handleWaitingRoom();
     if (game) {
-      this.initGame(game);
+      await this.initGame(game);
     }
   }
 
