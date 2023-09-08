@@ -274,9 +274,10 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() updateChatMember: UpdateChatMemberDto
   ) {
-    if (!(await this.membershipService.isOwnerOfTheChat(user.sub, chatId)))
+    if (!(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      || (await this.membershipService.isOwnerOfTheChat(updateChatMember.userId, chatId)))
       throw new ForbiddenException(
-        'User is not update information from this chat'
+        'User cannot update information from this chat'
       );
     await this.membershipService.updateChatMember(
       updateChatMember.userId,
