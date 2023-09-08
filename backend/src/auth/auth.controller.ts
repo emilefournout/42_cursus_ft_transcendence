@@ -97,9 +97,9 @@ export class AuthController {
       const intraname: string = await this.authService.getIntraLogin(token);
       const user = await this.userService.findUserByFilter({ intraname });
       //if (!user) {
-        return res
-          .cookie('42token', token)
-          .redirect('http://localhost:8000/register');
+      return res
+        .cookie('42token', token)
+        .redirect('http://localhost:8000/register');
       //} else {
       //  return res
       //    .cookie('42token', token)

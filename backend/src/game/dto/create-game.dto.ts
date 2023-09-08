@@ -19,7 +19,6 @@ export class CreateGameDto {
   maxGoals: number;
 
   @IsDefined()
-  @IsNumber()
   @IsBoolean()
   powerUps: boolean;
 
