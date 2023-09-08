@@ -84,7 +84,8 @@ export function Messages() {
               const msgClasses = isMyMessage
                 ? "message-content message-content-right"
                 : "message-content message-content-left";
-
+              const isBlocked = boardContext?.blockedUsers.has(message.userId);
+              if (isBlocked) return <></>;
               if (message.text.length > 0) {
                 return (
                   <Message

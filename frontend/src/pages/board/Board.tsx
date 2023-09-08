@@ -7,6 +7,13 @@ import { UserSocket } from "../../services/socket";
 import { Socket } from "socket.io-client";
 import { devlog } from "../../services/core";
 
+export enum RequestMethod {
+  delete = "DELETE",
+  get = "GET",
+  patch = "PATCH",
+  post = "POST",
+  put = "PUT",
+}
 export interface GameInfo {
   user1_id: number;
   user2_id: number;
@@ -27,6 +34,12 @@ export interface BoardContextArgs {
   updateMe: () => void;
   currentGames: Array<GameInfo>;
   updateWatchGame: () => void;
+  blockedUsers: Set<number>;
+  getBlockedUsers: () => Promise<void>;
+  updateBlockedUsers: (
+    requestMethod: RequestMethod,
+    id: number
+  ) => Promise<void>;
 }
 export const BoardContext = React.createContext<BoardContextArgs | undefined>(
   undefined
@@ -34,9 +47,55 @@ export const BoardContext = React.createContext<BoardContextArgs | undefined>(
 export function Board() {
   const [myUser, setMyUser] = useState<User | undefined>();
   const [currentGames, setCurrentGames] = useState<Array<GameInfo>>([]);
+  const [blockedUsers, setBlockedUsers] = useState<Set<number> | undefined>(
+    undefined
+  );
   const dialogContext = useContext(DialogContext);
   const setDialog = dialogContext.setDialog;
   const navigate = useNavigate();
+
+  const getBlockedUsers = React.useCallback(async () => {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/block`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error getting blocked users");
+        }
+        return response.json();
+      })
+      .then((data: Array<number>) => {
+        setBlockedUsers(new Set(data));
+      })
+      .catch((error) => {
+        devlog(error);
+      });
+  }, []);
+
+  const updateBlockedUsers = React.useCallback(
+    async (requestMethod: RequestMethod, id: number) => {
+      fetch(`${process.env.REACT_APP_BACKEND}/user/block/${id}`, {
+        method: requestMethod,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error updating blocked users");
+          }
+        })
+        .then(() => getBlockedUsers())
+        .catch((error) => {
+          devlog(error);
+        });
+    },
+    [getBlockedUsers]
+  );
+
   const updateMe = React.useCallback(async () => {
     fetch(`${process.env.REACT_APP_BACKEND}/user/me`, {
       headers: {
@@ -107,26 +166,34 @@ export function Board() {
   useEffect(() => {
     updateMe();
     updateWatchGame();
-  }, [updateMe, updateWatchGame]);
+    getBlockedUsers();
+  }, [getBlockedUsers, updateMe, updateWatchGame]);
 
-  return (
-    <>
-      <SEO title={"Pong - Home"} description={"Home of the user"} />
-      <NavBar />
-      {myUser && (
-        <BoardContext.Provider
-          value={
-            {
-              me: myUser,
-              updateMe: updateMe,
-              updateWatchGame: updateWatchGame,
-              currentGames: currentGames,
-            } as BoardContextArgs
-          }
-        >
-          <Outlet />
-        </BoardContext.Provider>
-      )}
-    </>
-  );
+  if (myUser === undefined || blockedUsers === undefined) {
+    return <></>;
+  } else {
+    return (
+      <>
+        <SEO title={"Pong - Home"} description={"Home of the user"} />
+        <NavBar />
+        {
+          <BoardContext.Provider
+            value={
+              {
+                me: myUser,
+                updateMe: updateMe,
+                updateWatchGame: updateWatchGame,
+                currentGames: currentGames,
+                blockedUsers: blockedUsers,
+                getBlockedUsers: getBlockedUsers,
+                updateBlockedUsers: updateBlockedUsers,
+              } as BoardContextArgs
+            }
+          >
+            <Outlet />
+          </BoardContext.Provider>
+        }
+      </>
+    );
+  }
 }
