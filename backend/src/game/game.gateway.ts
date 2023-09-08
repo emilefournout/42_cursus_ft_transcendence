@@ -143,7 +143,8 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() uuid: GameIdDto
   ) {
-    client.join(uuid.gameId);
+    console.log(`${this.gameService.getUserIdFromSocket(client)} JOINED -> |${uuid}|`)
+    client.join(String(uuid));
   }
 
   @SubscribeMessage('join_waiting_room')
