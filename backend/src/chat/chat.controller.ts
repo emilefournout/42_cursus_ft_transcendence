@@ -41,13 +41,15 @@ import { JoinChatDto } from './dto/join-chat.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UnbanUserDto } from './dto/unban-user.dto';
 import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('Chat')
 @Controller('chat')
 export class ChatController {
   constructor(
     private chatService: ChatService,
-    private membershipService: MembershipService
+    private membershipService: MembershipService,
+    private userService: UserService
   ) {}
 
   @Get('me')
@@ -196,6 +198,10 @@ export class ChatController {
       !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
     )
       throw new ForbiddenException('User is not an administrator of this chat');
+    else if(
+      !(await this.userService.getUserInfoById(addChatMemberDto.id))
+    )
+      throw new NotFoundException('User not found');
     await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
   }
 
