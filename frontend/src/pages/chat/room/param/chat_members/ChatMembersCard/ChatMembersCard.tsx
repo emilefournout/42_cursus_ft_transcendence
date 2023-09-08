@@ -135,6 +135,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                 src={demoteIcon}
                 onClick={demote}
                 title="Demote user"
+                alt="Demote user icon"
               />
             ) : (
               <img
@@ -142,6 +143,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                 src={promoteIcon}
                 onClick={promote}
                 title="Promote user"
+                alt="Promote user icon"
               />
             )}
             {isMe ? (
@@ -154,6 +156,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                     src={unmuteIcon}
                     onClick={unmute}
                     title="Unmute user"
+                    alt="Unmute user icon"
                   />
                 ) : (
                   <img
@@ -161,6 +164,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                     src={muteIcon}
                     onClick={() => muteDialogContext.mute(props.member.userId)}
                     title="Mute user"
+                    alt="Mute user icon"
                   />
                 )}
                 <img
@@ -168,12 +172,14 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                   src={banIcon}
                   onClick={ban}
                   title="Ban user"
+                  alt="Ban user icon"
                 />
                 <img
                   id="kick-btn"
                   src={kickIcon}
                   onClick={kickOut}
                   title="Kick out user"
+                  alt="Kick out user icon"
                 />
               </>
             )}
@@ -194,6 +200,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
                 });
               }}
               title="Challenge to a match!"
+              alt="Challenge user to a match icon"
             />
           </>
         )}

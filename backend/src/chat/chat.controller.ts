@@ -41,13 +41,15 @@ import { JoinChatDto } from './dto/join-chat.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { UnbanUserDto } from './dto/unban-user.dto';
 import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('Chat')
 @Controller('chat')
 export class ChatController {
   constructor(
     private chatService: ChatService,
-    private membershipService: MembershipService
+    private membershipService: MembershipService,
+    private userService: UserService
   ) {}
 
   @Get('me')
@@ -196,6 +198,10 @@ export class ChatController {
       !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
     )
       throw new ForbiddenException('User is not an administrator of this chat');
+    else if(
+      !(await this.userService.getUserInfoById(addChatMemberDto.id))
+    )
+      throw new NotFoundException('User not found');
     await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
   }
 
@@ -215,7 +221,7 @@ export class ChatController {
   ) {
     if (await this.membershipService.isUserMemberOfChat(user.sub, chatId))
       throw new ForbiddenException('User is already a member of the chat');
-    if (!(await this.membershipService.isOpenToUsers(chatId)))
+    if (!(await this.membershipService.isOpenToUsers(chatId)) || (await this.membershipService.isUserBannedFrom(chatId, user.sub)))
       throw new ForbiddenException('Chat is not open to join this user');
     await this.membershipService.createChatMember(
       chatId,
@@ -389,7 +395,7 @@ export class ChatController {
     )
       throw new ForbiddenException('Cannot ban an administrator of the chat');
     if (
-      !(await this.membershipService.isUserBannedFrom(
+      (await this.membershipService.isUserBannedFrom(
         banUserDto.userId,
         chatId
       ))
