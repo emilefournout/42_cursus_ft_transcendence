@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsNumber, Max, Min } from 'class-validator';
+import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 
 export class MuteUserDto {
   @IsNumber()
+  @IsValidUserId()
   @IsDefined()
   @ApiProperty({
     type: Number,

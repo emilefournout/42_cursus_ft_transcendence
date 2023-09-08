@@ -4,15 +4,15 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
-  Min,
 } from 'class-validator';
+import { IsValidUserId } from '../validators/user-valid-id.decorator';
 
 export class AssignAchievementDto {
   @ApiProperty()
   @IsDefined()
   @IsNumber()
   @IsNotEmpty()
-  @Min(2)
+  @IsValidUserId()
   id: number;
 
   @ApiProperty()

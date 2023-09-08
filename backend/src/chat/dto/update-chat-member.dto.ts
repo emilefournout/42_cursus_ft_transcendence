@@ -8,6 +8,7 @@ import {
   IsObject,
   IsOptional,
 } from 'class-validator';
+import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 
 export class ChatRoleDto {
   @IsOptional()
@@ -25,6 +26,7 @@ export class UpdateChatMemberDto {
   @ApiProperty()
   @IsDefined()
   @IsNumber()
+  @IsValidUserId()
   userId: number;
 
   @ApiProperty()

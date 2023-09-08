@@ -8,6 +8,7 @@ import {
   IsString,
   IsStrongPassword,
 } from 'class-validator';
+import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 
 export class CreateChatDto {
   @IsDefined()
@@ -37,6 +38,7 @@ export class CreateChatDto {
 
   @IsOptional()
   @IsNumber()
+  @IsValidUserId()
   @ApiProperty({
     type: Number,
   })

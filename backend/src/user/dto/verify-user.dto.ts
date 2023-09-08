@@ -1,9 +1,10 @@
-import { IsDefined, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsDefined, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsValidUserId } from '../validators/user-valid-id.decorator';
 
 export class VerifyUserDto {
   @IsDefined()
   @IsInt()
-  @Min(2)
+  @IsValidUserId()
   id: number;
 
   @IsDefined()
