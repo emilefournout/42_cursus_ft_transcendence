@@ -3,6 +3,14 @@ import { Member, RoomContextArgs } from "../../../Room";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ownerIcon from "./crownIcon.svg";
 import adminIcon from "./shieldIcon.svg";
+import promoteIcon from "./promote.svg";
+import demoteIcon from "./demote.svg";
+import muteIcon from "./mute.svg";
+import unmuteIcon from "./unmute.svg";
+import banIcon from "./ban.svg";
+import unbanIcon from "./unban.svg";
+import kickIcon from "./kick.svg";
+import playIcon from "./play.svg";
 import { MuteDialogContext } from "../../RoomParam";
 import { devlog } from "../../../../../../services/core";
 import { BoardContext } from "../../../../../board/Board";
@@ -97,6 +105,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 		return (
 			<>
 				<div
+					title={props.member.username}
 					style={style}
 					className="room-param-user-name ellipsed-txt"
 					onClick={() => navigate(`/board/user-account/${props.member.userId}`)}
@@ -119,32 +128,26 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 				) : (
 					<>
 						{props.member.administrator ? (
-							<button id="demote-btn" onClick={demote}>
-								demote
-							</button>
+							<img id="demote-btn" src={demoteIcon} onClick={demote} title="Demote user" />
 						) : (
-							<button id="promote-btn" onClick={promote}>
-								promote
-							</button>
+							<img id="promote-btn" src={promoteIcon} onClick={promote} title="Promote user" />
 						)}
 						{isMe ? (
 							<></>
 						) : (
 							<>
 								{props.member.muted ? (
-									<button id="unmute-btn" onClick={unmute}>
-										unmute
-									</button>
+									<img id="unmute-btn" src={unmuteIcon} onClick={unmute} title="Unmute user" />
 								) : (
-									<button
+									<img
 										id="mute-btn"
+										src={muteIcon}
 										onClick={() => muteDialogContext.mute(props.member.userId)}
-									>
-										mute
-									</button>
+										title="Mute user"
+									/>
 								)}
-								<button onClick={ban}>ban</button>
-								<button onClick={kickOut}>kick out</button>
+								<img id="ban-btn" src={banIcon} onClick={ban} title="Ban user" />
+								<img id="kick-btn" src={kickIcon} onClick={kickOut} title="Kick out user" />
 							</>
 						)}
 					</>
@@ -153,7 +156,9 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 					<></>
 				) : (
 					<>
-						<button
+						<img
+							id="play-btn"
+							src={playIcon}
 							onClick={() => {
 								navigate("/board/game/new-game", {
 									state: {
@@ -161,9 +166,8 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 									},
 								});
 							}}
-						>
-							Play
-						</button>
+							title="Challenge to a match!"
+						/>
 					</>
 				)}
 			</>

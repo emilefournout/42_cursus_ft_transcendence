@@ -24,13 +24,13 @@
 	padding: 0.5rem;
 
 	display: grid;
-	grid-template-columns: minmax(2.5rem, 3fr) var(--params-icon-size) 1fr 1fr 1fr;
+	grid-template-columns: minmax(2.5rem, 3fr) repeat(6, 1fr);
 	grid-auto-rows: 1.8em;
 	grid-auto-flow: row;
 	gap: 8px;
 
 	color: var(--Light-Text);
-	font-size: clamp(0.3rem, 3vw, 0.8rem);
+	font-size: clamp(0.3rem, 3vw, 0.7rem);
 
 	overflow: auto;
 }
@@ -43,15 +43,19 @@
 	width: var(--params-icon-size);
 	height: var(--params-icon-size);
 
+	padding: 2px;
+
+	justify-self: center;
 	align-self: center;
 
+	border-radius: 2px;
 	border: 0px solid transparent;
 
-	transition: border .15s ease;
+	transition: border .1s ease;
 }
 
 .room-param > img:hover {
-	border: 2px solid transparent;
+	border: 3px solid transparent;
 }
 
 .room-param > button {
@@ -82,12 +86,9 @@
 .room-param-user-name {
 	grid-column: 1;
 
-	padding: 8px;
+	padding: 0.3em 8px 0.4em 8px;
 
 	cursor: pointer;
-
-	display: flex;
-	align-items: center;
 
 	border-bottom: 2px solid var(--Honey-Yellow);
 	border-image: var(--Cornered-Honey-Crisped) 1;
@@ -103,44 +104,56 @@
 	border-image: var(--LtR-Mooned-Cosmic) 1;
 }
 
-#delete-btn {
+#change-pss-btn {
 	grid-column: 5;
+}
+
+#delete-btn {
+	grid-column: 7;
 }
 
 #demote-btn {
 	grid-column: 3;
 
-	border: none;
-
 	background-color: var(--Crisped-Orange);
-	color: var(--Browned-Text);
 }
 
 #promote-btn {
 	grid-column: 3;
 
-	border: none;
-
 	background-color: var(--Mooned-Teal);
-	color: var(--Darks-Back);
 }
 
 #unmute-btn {
 	grid-column: 4;
 
-	border: none;
-
 	background-color: var(--Crisped-Orange);
-	color: var(--Browned-Text);
 }
 
 #mute-btn {
 	grid-column: 4;
 
-	border: none;
-
 	background-color: var(--Cosmic-Purple);
-	color: var(--Darks-Back);
+}
+
+#unban-btn {
+	grid-column: 5;
+}
+
+#ban-btn {
+	grid-column: 5;
+}
+
+#kick-btn {
+	grid-column: 6;
+
+	background-color: var(--Crisped-Orange);
+}
+
+#play-btn {
+	grid-column: 7;
+
+	background-color: var(--Light-Text);
 }
 
 
