@@ -28,3 +28,51 @@
 
 	background: var(--Cornered-Honey-Crisped);
 }
+
+.columns-wrapper {
+	margin-top: 12px;
+	padding: 8px;
+
+	justify-content: center;
+	gap: 8px;
+}
+
+.single-col-wrapper {
+	justify-content: flex-start;
+	align-self: unset;
+}
+
+.columns-txt {
+	font-size: clamp(0.2rem, 1.5vw, 0.6rem);
+	color: var(--Light-Text);
+}
+
+
+
+.ongoing-game-card {
+	width: clamp(200px, 30vw, 512px);
+
+	padding: 0 8px;
+
+	cursor: pointer;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	transition: transform .2s ease;
+}
+
+.ongoing-game-card:hover {
+	transform: scale(0.85);
+}
+
+.ongoing-game-card > div {
+	max-width: 42%;
+
+	flex-grow: 1;
+
+	font-size: inherit;
+	color: var(--Crisped-Orange);
+	text-align: center;
+}
