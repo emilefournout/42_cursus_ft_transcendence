@@ -46,7 +46,7 @@ function TwoFactorAuth({ username }: { username: string | null }) {
           event.key === "Enter" && set2FA();
         }}
       />
-      <button className="btn btn-bottom" onClick={set2FA}>
+      <button className="btn btn-bottom" style={{height: "2em"}} onClick={set2FA}>
         Send
       </button>
     </div>
