@@ -40,6 +40,7 @@
 .single-col-wrapper {
 	justify-content: flex-start;
 	align-self: unset;
+	gap: 4px;
 }
 
 .columns-txt {
