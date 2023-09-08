@@ -4,16 +4,16 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
-  Min,
   MinLength,
 } from 'class-validator';
+import { IsValidUserId } from '../validators/user-valid-id.decorator';
 
 export class UpdateUserRelationDto {
   @ApiProperty()
   @IsNumber()
   @IsDefined()
   @IsNotEmpty()
-  @Min(2)
+  @IsValidUserId()
   targetId: number;
 }
 

@@ -5,6 +5,7 @@ import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 export class BanUserDto {
   @IsNumber()
   @IsValidUserId()
+  @IsValidUserId()
   @IsDefined()
   @ApiProperty({
     type: Number,

@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { OnlineStatus } from '@prisma/client';
-import { Min } from 'class-validator';
+import { IsValidUserId } from '../validators/user-valid-id.decorator';
 
 export class UserBasicInfoDto {
   @ApiProperty({
     type: Number,
     description: 'Identification number of the user',
   })
-  @Min(2)
+  @IsValidUserId()
   id: number;
 
   @ApiProperty()
