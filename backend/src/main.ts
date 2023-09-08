@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { json } from 'express';
+import { WSValidationPipe } from './pipes/ws-validation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -11,7 +12,8 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-    })
+    }),
+    new WSValidationPipe()
   );
   app.use(json({ limit: '50mb' }));
   const config = new DocumentBuilder()
