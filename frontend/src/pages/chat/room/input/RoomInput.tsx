@@ -11,6 +11,7 @@ interface InputProps {
 
 export function RoomInput({ chatSocket }: InputProps) {
   const [input, setInput] = useState("");
+  const [muted, setMuted] = useState<boolean>(false);
   const { id } = useParams();
   const boardContext = useContext(BoardContext);
   const userId = boardContext?.me.id;
@@ -27,7 +28,13 @@ export function RoomInput({ chatSocket }: InputProps) {
       userId,
       text: input,
     };
-    chatSocket.emit("send_message", data);
+    chatSocket.emit("send_message", data,
+    (response: any) => {
+      if (response === "ko")
+        setMuted(true);
+      else
+        setMuted(false);
+    });
     setInput("");
   };
   return (
@@ -36,6 +43,7 @@ export function RoomInput({ chatSocket }: InputProps) {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          placeholder={muted === true ? "MUTED" : ""}
           onKeyDown={(event) => {
             event.key === "Enter" && sendMessage();
           }}

@@ -100,7 +100,7 @@ export function Messages() {
             })}
           </div>
         </div>
-        <RoomInput chatSocket={chatSocket} />
+        <RoomInput chatSocket={chatSocket}/>
       </>
     );
   }
