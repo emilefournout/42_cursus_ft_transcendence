@@ -128,6 +128,16 @@ export class UserController {
     return await this.userService.getUserFriendships(user.sub);
   }
 
+  @Get('block')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets an array of blocked users',
+  })
+  @UseGuards(JwtAuthGuard)
+  async getBlockedList(@GetUser() user) {
+    return await this.userService.getBlockedById(user.sub);
+  }
+
   @Post('block/:id')
   @ApiParam({
     name: 'id',
@@ -144,7 +154,7 @@ export class UserController {
     @Param('id', IdValidationPipe) id: number
   ) {
     if (user.sub === id)
-      throw new ForbiddenException('Could not create blocked user');
+      throw new ForbiddenException('Cannot blocked yourself');
     await this.userService.addUserBlocked(user.sub, id);
   }
 
@@ -164,16 +174,6 @@ export class UserController {
     @Param('id', IdValidationPipe) id: number
   ) {
     await this.userService.deleteUserBlocked(user.sub, id);
-  }
-
-  @Get('block')
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Gets an array of blocked users',
-  })
-  @UseGuards(JwtAuthGuard)
-  async getBlockedList(@GetUser() user) {
-    return await this.userService.getBlockedById(user.sub);
   }
 
   @Post('friends/send/:id')
