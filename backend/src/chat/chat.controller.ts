@@ -213,7 +213,7 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() joinChatDto: JoinChatDto
   ) {
-    if (!(await this.membershipService.isUserMemberOfChat(user.sub, chatId)))
+    if (await this.membershipService.isUserMemberOfChat(user.sub, chatId))
       throw new ForbiddenException('User is already a member of the chat');
     if (!(await this.membershipService.isOpenToUsers(chatId)))
       throw new ForbiddenException('Chat is not open to join this user');
