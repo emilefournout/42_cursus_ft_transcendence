@@ -2,8 +2,8 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Board } from "./pages/board/Board";
-import { Login } from "./pages/login/Login";
 import { Welcome } from "./pages/welcome/Welcome";
+import { Login } from "./pages/login/Login";
 import { ChatPage } from "./pages/chat/Chat";
 import { RoomParam } from "./pages/chat/room/param/RoomParam";
 import { NotFound } from "./pages/error/NotFound";
@@ -29,6 +29,7 @@ import { GameCreatePage } from "./pages/game/create_page/GameCreatePage";
 import { FullAchievements } from "./pages/user/user_profile/full_achievements/FullAchievement";
 import { RoomAdd } from "./pages/chat/room/add/RoomAdd";
 import { RoomSearch } from "./pages/chat/room/add/search/RoomSearch";
+import { Register } from "./pages/register/Register";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" element={<Root />}>
             <Route path="" element={<Navigate to={"/board"} />} />
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route path="welcome" element={<Welcome />} />
             <Route path="board" element={<Board />}>
               <Route
