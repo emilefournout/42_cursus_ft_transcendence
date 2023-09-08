@@ -108,6 +108,7 @@ export function ProfileToolBar() {
             onClick={() => {
               profileContext.updateFriends();
               boardContext.updateWatchGame();
+              boardContext.getBlockedUsers();
             }}
             alt="Reload friend list icon"
           />

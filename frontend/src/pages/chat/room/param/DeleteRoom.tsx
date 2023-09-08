@@ -20,7 +20,7 @@ export function DeleteRoom() {
         if (response.ok) {
           setTimeout(() => {
             chatPageContext
-              .updateChat()
+              .updateChats()
               .then(() => {
                 navigate("/board/chats");
               })

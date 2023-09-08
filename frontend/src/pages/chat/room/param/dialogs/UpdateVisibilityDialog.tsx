@@ -44,7 +44,7 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
       .then((response) => {
         if (response.ok) {
           //roomContextArgs.getChatInfo(roomContextArgs.chat);
-          chatPageContext.updateChat().catch((error) => {
+          chatPageContext.updateChats().catch((error) => {
             devlog(error);
           });
           close();

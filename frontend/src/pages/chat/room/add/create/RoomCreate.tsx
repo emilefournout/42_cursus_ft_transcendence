@@ -89,7 +89,7 @@ export function RoomCreate() {
       .then((newChat: ChatInfo) => {
         setDialog("Room created");
         setTimeout(() => {
-          chatPageContext.updateChat().catch((error) => {
+          chatPageContext.updateChats().catch((error) => {
             devlog(error);
           });
           navigate(`/board/chats/${newChat.id.toString()}`);
