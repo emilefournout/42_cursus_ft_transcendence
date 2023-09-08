@@ -15,7 +15,7 @@ export function Root() {
 
   useEffect(() => {
     devlog("Dev mode : testing console.log displayed");
-    if (location.pathname === "/login" || location.pathname === "/welcome" || location.pathname === "/register")
+    if (location.pathname === "/login" || location.pathname === "/register")
       return;
     const jwtToken = localStorage.getItem("access_token");
     try {
@@ -26,7 +26,7 @@ export function Root() {
     } catch (error) {
       localStorage.removeItem("access_token");
       setDialog("Please sign in");
-      navigate("/login");
+      navigate("/welcome");
     }
   }, [location.pathname, navigate]);
   return (
