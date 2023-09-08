@@ -286,7 +286,7 @@ export class MembershipService {
     userId: number,
     chatId: number
   ): Promise<boolean> {
-    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    const chatMember = await this.findChatMemberByIds(chatId, userId);
     if (!chatMember) return false;
     if (chatMember.muted && chatMember.mutedExpiringDate > new Date(Date.now()))
       return false;
@@ -294,7 +294,7 @@ export class MembershipService {
   }
 
   async isOwnerOfTheChat(userId: number, chatId: number): Promise<boolean> {
-    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    const chatMember = await this.findChatMemberByIds(chatId, userId);
     if (!chatMember) return false;
     return chatMember.owner;
   }
@@ -303,7 +303,7 @@ export class MembershipService {
     userId: number,
     chatId: number
   ): Promise<boolean> {
-    const chatMember = await this.findChatMemberByIds(userId, chatId);
+    const chatMember = await this.findChatMemberByIds(chatId, userId);
     if (!chatMember) return false;
     return chatMember.administrator;
   }
