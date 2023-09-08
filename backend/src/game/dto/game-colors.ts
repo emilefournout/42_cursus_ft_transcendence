@@ -3,6 +3,10 @@ export const GameColors = {
     primary: 'black',
     secondary: 'white',
   },
+  gboy: {
+    primary: '#323b27ff',
+    secondary: '#9cad87ff',
+  },
   red: {
     primary: '#ff0000ff',
     secondary: 'white',

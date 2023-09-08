@@ -113,6 +113,9 @@ export function GameCreatePage() {
                 <option className={`pastel-color`} value="pastel">
                   Pastel
                 </option>
+                <option className={`gboy-color`} value="gboy">
+                  Gboy
+                </option>
                 <option className={`red-color`} value="red">
                   Red
                 </option>

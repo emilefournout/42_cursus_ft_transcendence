@@ -39,7 +39,7 @@ export function GameCanvas(props: GameCanvasProps) {
       ctx.beginPath();
       ctx.moveTo(props.width / 2, 0);
       ctx.lineTo(props.width / 2, props.height);
-      ctx.strokeStyle = "white";
+      ctx.strokeStyle = props.secondaryColor;
       ctx.lineWidth = 5;
       ctx.stroke();
 

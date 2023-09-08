@@ -31,7 +31,7 @@ export class CreateGameDto {
 
   @IsDefined()
   @IsString()
-  @IsIn(['classic', 'mad', 'pastel', 'red'])
+  @IsIn(['classic', 'mad', 'pastel', 'red', 'gboy'])
   color: string;
 }
 

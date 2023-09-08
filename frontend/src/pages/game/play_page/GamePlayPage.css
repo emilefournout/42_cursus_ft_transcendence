@@ -1,6 +1,6 @@
 #game-canvas{
-	border: 10px solid var(--Honey-Yellow);
-	border-radius: 5px;
+	border: var(--Default-BR) solid var(--Honey-Yellow);
+	border-radius: var(--Default-BR);
 }
 .scores{
 	border-radius: 3px;
