@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../../../Chat";
 import { PasswordDialog } from "./PasswordDialog";
 import { devlog } from "../../../../../services/core";
+import { RoomSearchCard } from "./RoomSearchCard";
 
 export function RoomSearch() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export function RoomSearch() {
         throw new Error("Error joining room");
       }
       chatPageContext
-        .updateChat()
+        .updateChats()
         .catch((error) => {
           devlog(error);
         })
@@ -87,12 +88,7 @@ export function RoomSearch() {
           searchResults.map((chat) => {
             if (chats?.find((c) => c.id === chat.id) !== undefined)
               return <></>;
-            return (
-              <div key={chat.id} className="wrapper-room-search-list">
-                <div className="ellipsed-txt">{chat.name}</div>
-                <button onClick={() => join(chat)}>Join</button>
-              </div>
-            );
+            return <RoomSearchCard chat={chat} join={join} key={chat.id} />;
           })}
         <div
           id="item-margin-bot"

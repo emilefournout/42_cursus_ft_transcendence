@@ -12,6 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { ChatIdDto } from './dto/chat-id.dto';
 import { ChatMessageDto } from './dto/chat-message.dto';
+import { MembershipService } from './membership.service';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
@@ -19,7 +20,10 @@ import { ChatMessageDto } from './dto/chat-message.dto';
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private membershipService: MembershipService
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -46,12 +50,15 @@ export class ChatGateway
 
   @SubscribeMessage('send_message')
   async handleMessage(@MessageBody() data: ChatMessageDto) {
+    if(!(await this.membershipService.isUserAllowedToTextOnChat(data.userId, Number(data.chatId))))
+      return 'ko';
     const msg = await this.chatService.createChatMessages(
       Number(data.chatId),
       data.userId,
       data.text
     );
     this.server.to(data.chatId.toString()).emit('receive_message', msg);
+    return 'ok';
   }
 
   @SubscribeMessage('leave_room')

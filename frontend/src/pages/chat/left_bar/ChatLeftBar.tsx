@@ -23,7 +23,7 @@ export function LeftBar() {
           className="nav-icons"
           src={ReloadBlackIcon}
           onClick={() =>
-            chatPageContext.updateChat().catch((error) => {
+            chatPageContext.updateChats().catch((error) => {
               devlog(error);
             })
           }

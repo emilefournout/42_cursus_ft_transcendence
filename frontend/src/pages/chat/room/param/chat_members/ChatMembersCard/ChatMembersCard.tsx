@@ -31,7 +31,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
   const style = isMe
     ? { backgroundColor: "var(--Trans-Mooned-Teal-Strong)" }
     : {};
-  const action = (route: string, method: string, body: string) =>
+  const action = (route: string, method: string, body?: string) =>
     fetch(`${process.env.REACT_APP_BACKEND}/${route}`, {
       method: method,
       headers: {
@@ -40,7 +40,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       },
       body: body,
     }).then((response) => {
-      if (!response.ok) throw new Error("Error while muting");
+      if (!response.ok) throw new Error("Error action user");
       roomContextArgs.getChatInfo(roomContextArgs.chat);
     });
 

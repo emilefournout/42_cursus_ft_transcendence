@@ -223,11 +223,10 @@ export class ChatController {
   ) {
     if (await this.membershipService.isUserMemberOfChat(user.sub, chatId))
       throw new ForbiddenException('User is already a member of the chat');
-    if (
-      !(await this.membershipService.isOpenToUsers(chatId)) ||
-      (await this.membershipService.isUserBannedFrom(chatId, user.sub))
-    )
+    else if (!(await this.membershipService.isOpenToUsers(chatId)))
       throw new ForbiddenException('Chat is not open to join this user');
+    else if(await this.membershipService.isUserBannedFrom(chatId, user.sub))
+      throw new ForbiddenException('User is banned from this chat');
     await this.membershipService.createChatMember(
       chatId,
       user.sub,
@@ -250,6 +249,7 @@ export class ChatController {
   ) {
     if (
       !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      && user.sub !== deleteChatMemberDto.id
     )
       throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.deleteChatMember(
@@ -272,9 +272,10 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() updateChatMember: UpdateChatMemberDto
   ) {
-    if (!(await this.membershipService.isOwnerOfTheChat(user.sub, chatId)))
+    if (!(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      || (await this.membershipService.isOwnerOfTheChat(updateChatMember.userId, chatId)))
       throw new ForbiddenException(
-        'User is not update information from this chat'
+        'User cannot update information from this chat'
       );
     await this.membershipService.updateChatMember(
       updateChatMember.userId,
@@ -331,9 +332,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: MuteUserDto
   ) {
-    if (
-      !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
-    )
+    if (!(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      || (await this.membershipService.isOwnerOfTheChat(muteUserDto.userId, chatId)))
       throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.muteUser(
       chatId,
@@ -354,9 +354,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId,
     @Body() muteUserDto: UnmuteUserDto
   ) {
-    if (
-      !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
-    )
+    if (!(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      || (await this.membershipService.isOwnerOfTheChat(muteUserDto.userId, chatId)))
       throw new ForbiddenException('User is not an administrator of this chat');
     await this.membershipService.unmuteUser(chatId, muteUserDto.userId);
   }
@@ -388,9 +387,8 @@ export class ChatController {
     @Param('id', ParseIntPipe) chatId: number,
     @Body() banUserDto: BanUserDto
   ) {
-    if (
-      !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
-    )
+    if (!(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
+      || (await this.membershipService.isOwnerOfTheChat(banUserDto.userId, chatId)))
       throw new ForbiddenException('User is not an administrator of this chat');
     if (
       await this.membershipService.isAdministratorOfTheChat(
@@ -424,8 +422,8 @@ export class ChatController {
       throw new ForbiddenException('User is not an administrator of this chat');
     if (
       !(await this.membershipService.isUserBannedFrom(
-        unbanUserDto.userId,
-        chatId
+        chatId,
+        unbanUserDto.userId
       ))
     )
       throw new ForbiddenException('User is not banned from this chat');

@@ -5,10 +5,12 @@ import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 import { ChatInfo, ChatPageContext } from "../Chat";
 import NoMsgsImg from "../NoMsgs.png";
 import { devlog } from "../../../services/core";
+import { User } from "../../board/Board";
 
 export interface ChatFullInfo extends ChatInfo {
   password?: string;
   members?: Array<Member>;
+  banned?: Array<User>;
 }
 
 export interface Member {

@@ -6,6 +6,7 @@ import { RoomInput } from "../input/RoomInput";
 import { BoardContext } from "../../../board/Board";
 import { ChatSocket } from "../../../../services/socket";
 import { devlog } from "../../../../services/core";
+import { ChatPageContext } from "../../Chat";
 
 export interface MsgProps {
   messages: Array<Msg>;
@@ -44,6 +45,7 @@ export function Messages() {
         setHasError(false);
       })
       .catch((error) => {
+        console.log("problem");
         setHasError(true);
         devlog(error);
       });
@@ -60,12 +62,23 @@ export function Messages() {
 
   const boardContext = React.useContext(BoardContext);
   const myUserId = boardContext?.me.id;
-
+  const chatPageContext = React.useContext(ChatPageContext);
   if (hasError)
     return (
       <>
         conv not found
-        <button onClick={() => navigate("/board/chats")}>back</button>
+        <button
+          onClick={() => {
+            chatPageContext
+              .updateChats()
+              .then(() => {
+                navigate("/board/chats");
+              })
+              .catch((error) => {});
+          }}
+        >
+          back
+        </button>
       </>
     );
   else if (
@@ -100,7 +113,7 @@ export function Messages() {
             })}
           </div>
         </div>
-        <RoomInput chatSocket={chatSocket} />
+        <RoomInput chatSocket={chatSocket}/>
       </>
     );
   }
