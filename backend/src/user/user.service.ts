@@ -393,4 +393,18 @@ export class UserService {
       },
     });
   }
+
+  async isUserBlockedBy(blockerId: number, userId: number): Promise<boolean> {
+    try {
+      const user = await this.prisma.userBlocked.findFirst({
+        where: {
+          user1_id: blockerId,
+          user2_id: userId,
+        },
+      });
+      return user != null;
+    } catch (error) {
+      return false;
+    }
+  }
 }

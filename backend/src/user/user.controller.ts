@@ -155,6 +155,8 @@ export class UserController {
   ) {
     if (user.sub === id)
       throw new ForbiddenException('Cannot blocked yourself');
+    if (await this.userService.isUserBlockedBy(id, user.sub))
+      throw new ForbiddenException('The other user has blocked you');
     await this.userService.addUserBlocked(user.sub, id);
   }
 
