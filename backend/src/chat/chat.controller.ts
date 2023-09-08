@@ -200,8 +200,12 @@ export class ChatController {
       throw new ForbiddenException('User is not an administrator of this chat');
     else if(
       !(await this.userService.getUserInfoById(addChatMemberDto.id))
-    )
+      )
       throw new NotFoundException('User not found');
+      else if(
+        (await this.membershipService.isUserBannedFrom(chatId, addChatMemberDto.id))
+      )
+        throw new ForbiddenException('User is banned from chat');
     await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
   }
 
