@@ -422,8 +422,8 @@ export class ChatController {
       throw new ForbiddenException('User is not an administrator of this chat');
     if (
       !(await this.membershipService.isUserBannedFrom(
-        unbanUserDto.userId,
-        chatId
+        chatId,
+        unbanUserDto.userId
       ))
     )
       throw new ForbiddenException('User is not banned from this chat');
