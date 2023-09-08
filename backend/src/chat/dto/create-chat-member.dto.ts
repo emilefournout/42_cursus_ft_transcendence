@@ -11,7 +11,6 @@ import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 export class CreateChatMemberDto {
   @IsNumber()
   @IsDefined()
-  @IsNotEmpty()
   @ApiProperty()
   @IsValidUserId()
   id: number;
