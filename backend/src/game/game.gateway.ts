@@ -19,6 +19,8 @@ import { GameState } from './types/game-state.class';
 import { GameData } from './types/game-data.class';
 import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
 import { OnlineStatus } from '@prisma/client';
+import { GameIdDto } from './dto/game-id.dto';
+import { GameMoveDto } from './dto/game-move.dto';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' },
@@ -57,6 +59,20 @@ export class GameGateway
   handleDisconnect(client: Socket) {
     console.log('Disconneted from ' + client.id);
     this.gameService.unregisterConnection(client);
+  }
+
+  @SubscribeMessage('create_room')
+  async handleCreateRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() gameDataOptions: CreateGameDto
+  ) {
+    console.log('Customizing a game ' + client.id);
+    console.log(`Customizing options ${JSON.stringify(gameDataOptions)}`);
+    this.gameService.customizeGame(client, gameDataOptions);
+    const game = await this.gameService.handleWaitingRoom();
+    if (game) {
+      await this.initGame(game);
+    }
   }
 
   @SubscribeMessage('create_private_room')
@@ -122,25 +138,12 @@ export class GameGateway
     this.gameService.leaveInvitationRoom(client);
   }
 
-  @SubscribeMessage('create_room')
-  async handleCreateRoom(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() gameDataOptions: CreateGameDto
-  ) {
-    console.log('Customizing a game ' + client.id);
-    this.gameService.customizeGame(client, gameDataOptions);
-    const game = await this.gameService.handleWaitingRoom();
-    if (game) {
-      await this.initGame(game);
-    }
-  }
-
   @SubscribeMessage('join_active_room')
   async handleJoinActiveRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() uuid: string | null
+    @MessageBody() uuid: GameIdDto
   ) {
-    client.join(uuid);
+    client.join(uuid.gameId);
   }
 
   @SubscribeMessage('join_waiting_room')
@@ -153,6 +156,14 @@ export class GameGateway
     }
   }
 
+  @SubscribeMessage('move_user')
+  async handleKeyPressed(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: GameMoveDto
+  ) {
+    this.gameService.movePad(client, data.gameId, data.direction);
+  }
+
   @SubscribeMessage('leave_waiting_room')
   handleLeaveWaitingRoom(@ConnectedSocket() client: Socket) {
     console.log('Leaving waiting room', client.id);
@@ -163,14 +174,6 @@ export class GameGateway
   handleLeaveCreatingRoom(@ConnectedSocket() client: Socket) {
     console.log('Leaving creating room', client.id);
     this.gameService.leaveCreatingRoom(client);
-  }
-
-  @SubscribeMessage('move_user')
-  async handleKeyPressed(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() data: { gameId: string; direction: string }
-  ) {
-    this.gameService.movePad(client, data.gameId, data.direction);
   }
 
   private async gameLoop(game: GameState, gameLoopInterval: NodeJS.Timer) {
