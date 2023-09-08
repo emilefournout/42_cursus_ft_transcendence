@@ -215,7 +215,7 @@ export class ChatController {
   ) {
     if (await this.membershipService.isUserMemberOfChat(user.sub, chatId))
       throw new ForbiddenException('User is already a member of the chat');
-    if (!(await this.membershipService.isOpenToUsers(chatId)))
+    if (!(await this.membershipService.isOpenToUsers(chatId)) || (await this.membershipService.isUserBannedFrom(chatId, user.sub)))
       throw new ForbiddenException('Chat is not open to join this user');
     await this.membershipService.createChatMember(
       chatId,
@@ -389,7 +389,7 @@ export class ChatController {
     )
       throw new ForbiddenException('Cannot ban an administrator of the chat');
     if (
-      !(await this.membershipService.isUserBannedFrom(
+      (await this.membershipService.isUserBannedFrom(
         banUserDto.userId,
         chatId
       ))
