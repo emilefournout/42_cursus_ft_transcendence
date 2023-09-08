@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Login.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
-import { Avatar } from "../../components/Avatar";
 import { devlog } from "../../services/core";
 
 export function Login() {
   const [username, setUsername] = useState("");
-  const [image, setImage] = useState<File>();
   const [code2fa, setCode2fa] = useState("");
   const [show2fa, setShow2fa] = useState(false);
+  const loadingLogin = useRef(false)
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   // Guest mode for no 42-students
@@ -17,16 +16,22 @@ export function Login() {
 
   useEffect(() => {
     if (searchParams.get("guest")) return;
-    if (Cookies.get("username")) callRegister(Cookies.get("username"));
     if (!Cookies.get("42token") || Cookies.get("42token") === "j:null") {
       Cookies.remove("42token");
       navigate("/cookie-error");
     }
+    const username: string | undefined = Cookies.get("username")
+    if (username) {
+      loadingLogin.current = true
+      callLogin(username)
+    } else if (!loadingLogin.current) {
+      navigate("/welcome")
+    }
   });
 
-  function callRegister(user_name: string | undefined) {
+  function callLogin(username: string) {
     Cookies.remove("username");
-    register(user_name);
+    register(username);
   }
 
   function register(user_name = username) {
@@ -40,7 +45,6 @@ export function Login() {
 
     const formData = new FormData();
     formData.append("username", user_name);
-    formData.append("image", image as File);
     formData.append("code2fa", code2fa);
 
     fetch(`${process.env.REACT_APP_BACKEND}/auth/register`, {
@@ -53,12 +57,13 @@ export function Login() {
       .then((response: Response) => {
         if (response.ok) return response.json();
         else {
-          throw new Error("Error registering");
+          throw new Error("Error login in");
         }
       })
       .then((data) => {
         if (data.access_token) {
           localStorage.setItem("access_token", data.access_token);
+          loadingLogin.current = false
           navigate("/");
         } else {
           setUsername(data.username);
@@ -68,7 +73,7 @@ export function Login() {
       .catch((error) => {
         setErrorMessage("bad 2fa code");
         devlog(error);
-      });
+      })
   }
 
   return (
@@ -84,7 +89,6 @@ export function Login() {
       {show2fa
             &&
             <div className="window-body-centered">
-            <div className="wrapper-welcome-grid">
               <input
                 id="wp-2fa"
                 className="wp-responsive-txt"
@@ -104,7 +108,6 @@ export function Login() {
               </button>
           <div className="wp-error-msg wp-responsive-txt">{errorMessage}</div>
         </div>
-      </div>
       }
     </div>
   );

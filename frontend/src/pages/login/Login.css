@@ -1,19 +1,5 @@
-#wp-username-input {
-	grid-column: 2 / 4;
-	grid-row: 1;
-}
-
-#wp-submit-no-2fa {
-	grid-column: 2 / 4;
-	grid-row: 2;
-
-	padding: 0;
-	min-height: var(--row-gap);
-}
-
 #wp-2fa {
-	grid-column: 2 / 3;
-	grid-row: 2;
+	max-width: 6rem;
 }
 
 #wp-submit-2fa {
