@@ -239,8 +239,6 @@ export class MembershipService {
       },
     });
     if (!chatMember) throw new NotFoundException('User not found');
-    if (chatMember.administrator)
-      throw new BadRequestException('User not found');
     const muteDate = new Date(Date.now());
     muteDate.setTime(muteDate.getTime() + muteTime);
     await this.prisma.chatMember.update({
