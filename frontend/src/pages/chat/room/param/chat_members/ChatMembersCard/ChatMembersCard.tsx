@@ -128,26 +128,27 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 				) : (
 					<>
 						{props.member.administrator ? (
-							<img id="demote-btn" src={demoteIcon} onClick={demote} title="Demote user" />
+							<img id="demote-btn" src={demoteIcon} onClick={demote} title="Demote user" alt="Demote user icon" />
 						) : (
-							<img id="promote-btn" src={promoteIcon} onClick={promote} title="Promote user" />
+							<img id="promote-btn" src={promoteIcon} onClick={promote} title="Promote user" alt="Promote user icon"/>
 						)}
 						{isMe ? (
 							<></>
 						) : (
 							<>
 								{props.member.muted ? (
-									<img id="unmute-btn" src={unmuteIcon} onClick={unmute} title="Unmute user" />
+									<img id="unmute-btn" src={unmuteIcon} onClick={unmute} title="Unmute user" alt="Unmute user icon"/>
 								) : (
 									<img
 										id="mute-btn"
 										src={muteIcon}
 										onClick={() => muteDialogContext.mute(props.member.userId)}
 										title="Mute user"
+										alt="Mute user icon"
 									/>
 								)}
-								<img id="ban-btn" src={banIcon} onClick={ban} title="Ban user" />
-								<img id="kick-btn" src={kickIcon} onClick={kickOut} title="Kick out user" />
+								<img id="ban-btn" src={banIcon} onClick={ban} title="Ban user" alt="Ban user icon"/>
+								<img id="kick-btn" src={kickIcon} onClick={kickOut} title="Kick out user" alt="Kick out user icon"/>
 							</>
 						)}
 					</>
@@ -167,6 +168,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 								});
 							}}
 							title="Challenge to a match!"
+							alt="Challenge user to a match icon"
 						/>
 					</>
 				)}
