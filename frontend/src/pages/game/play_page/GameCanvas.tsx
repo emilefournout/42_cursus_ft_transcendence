@@ -94,10 +94,10 @@ export function GameCanvas(props: GameCanvasProps) {
   return (
     <>
       <canvas
+        id="game-canvas"
         ref={canvasRef}
         width={props.width}
         height={props.height}
-        style={{ border: "2px solid black" }}
       ></canvas>
     </>
   );
