@@ -21,17 +21,25 @@ export class ChatBasicInfoDto {
   })
   members: ChatMemberBasicInfoDto[];
 
+  @ApiPropertyOptional({
+    type: [ChatMemberBasicInfoDto],
+    description: 'Users banned of the chat',
+  })
+  banned: ChatMemberBasicInfoDto[];
+
   @ApiProperty({
     enum: ChatVisibility,
     description: 'Visibility of the chat',
   })
   visibility: ChatVisibility;
 
-  public static fromChat(chat) {
+  public static fromChat(chat, banned) {
     const chatInfo = new ChatBasicInfoDto();
     chatInfo.id = chat.id;
     chatInfo.name = chat.name;
     chatInfo.visibility = chat.visibility;
+    chatInfo.banned = banned;
+
     if (chat.members)
       chatInfo.members = chat.members.map((chatMember) =>
         ChatMemberBasicInfoDto.fromChatMember(chatMember)

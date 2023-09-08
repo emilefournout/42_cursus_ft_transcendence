@@ -2,9 +2,11 @@ import * as argon2 from 'argon2';
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  forwardRef,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
@@ -17,8 +19,9 @@ import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
 export class MembershipService {
   constructor(
     private prisma: PrismaService,
-    private chatService: ChatService,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(forwardRef(() => ChatService))
+    private chatService: ChatService
   ) {}
 
   async findChatMemberByIds(chatId: number, userId: number) {

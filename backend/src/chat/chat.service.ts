@@ -2,18 +2,25 @@ import * as argon2 from 'argon2';
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Chat, ChatVisibility } from '@prisma/client';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { ChatBasicInfoDto } from './dto/info-chat.dto';
 import { ChatShortInfoDto } from './dto/short-info-chat.dto';
+import { MembershipService } from './membership.service';
 
 @Injectable()
 export class ChatService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => MembershipService))
+    private membershipService: MembershipService
+  ) {}
 
   async findChatsInfoById(id: number): Promise<ChatShortInfoDto[]> {
     const chats: Chat[] = await this.prisma.$queryRaw`
@@ -83,7 +90,7 @@ export class ChatService {
     const chat = await this.prisma.chat.create({
       data: chatData,
     });
-    if (chat) return ChatBasicInfoDto.fromChat(chat);
+    if (chat) return ChatBasicInfoDto.fromChat(chat, []);
     return null;
   }
 
@@ -177,7 +184,8 @@ export class ChatService {
       },
     });
     if (!chat) return null;
-    return ChatBasicInfoDto.fromChat(chat);
+    const banned = await this.membershipService.findBansByChatId(id);
+    return ChatBasicInfoDto.fromChat(chat, banned);
   }
 
   async findChatMessagesById(id: number) {
