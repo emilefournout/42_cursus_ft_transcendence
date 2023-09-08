@@ -45,9 +45,6 @@ export function SettingsHomePage() {
       </Link>
       <div className="underline settings-line-margin"></div>
       <div className="settings-bottom-container">
-        {boardContext && showQr && (
-          <TwoFactorAuth username={boardContext.me.username} />
-        )}
         <button
           className="settings-fixed-height btn settings-btn-txt"
           onClick={() => setShowQr(!showQr)}
@@ -64,6 +61,9 @@ export function SettingsHomePage() {
           Disconnect
         </Link>
       </div>
+      {boardContext && showQr && (
+        <TwoFactorAuth username={boardContext.me.username} />
+      )}
     </div>
   );
 }
