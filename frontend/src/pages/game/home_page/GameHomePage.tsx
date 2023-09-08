@@ -27,7 +27,7 @@ export function GameHomePage() {
         >
           Create a new game
         </Link>
-        <div className="wrapper-row">
+        <div className="wrapper-row columns-wrapper">
           <InvitationsColumns />
           <WatchGameColumn />
         </div>
