@@ -8,6 +8,8 @@ import {
   Body,
   UseGuards,
   ForbiddenException,
+  HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/decorator';
@@ -157,7 +159,15 @@ export class UserController {
       throw new ForbiddenException('Cannot blocked yourself');
     if (await this.userService.isUserBlockedBy(id, user.sub))
       throw new ForbiddenException('The other user has blocked you');
-    await this.userService.addUserBlocked(user.sub, id);
+    try {
+      await this.userService.addUserBlocked(user.sub, id);
+    } catch (error) {
+      if (error instanceof HttpException)
+        throw error
+      else {
+        throw new BadRequestException("Could not unblock the user")
+      }
+    }
   }
 
   @Delete('block/:id')
