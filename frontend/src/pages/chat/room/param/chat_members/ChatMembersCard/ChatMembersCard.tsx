@@ -73,6 +73,15 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 			devlog(error);
 		});
 	};
+	const ban = () =>
+	action(
+		`chat/${chadId}/ban`,
+		"POST",
+		JSON.stringify({ userId: props.member.userId })
+	).catch((error) => {
+		devlog(error);
+	});
+
 	const kickOut = () =>
 		action(
 			`chat/${chadId}/user`,
@@ -134,7 +143,7 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
 										mute
 									</button>
 								)}
-								<button onClick={kickOut}>ban</button>
+								<button onClick={ban}>ban</button>
 								<button onClick={kickOut}>kick out</button>
 							</>
 						)}
