@@ -3,6 +3,7 @@ import { Profile } from "./profile/Profile";
 import { useParams } from "react-router-dom";
 import { ProfilePageContext } from "../UserProfilePage";
 import { BoardContext, User } from "../../board/Board";
+import { devlog } from "../../../services/core";
 
 export function UserProfile() {
   const boardContext = React.useContext(BoardContext);
@@ -31,7 +32,7 @@ export function UserProfile() {
         })
         .then((data: User) => setFetchedUserInfo(data))
         .catch((error) => {
-          throw error;
+          devlog(error);
         });
     } else {
       setFetchedUserInfo(undefined);
