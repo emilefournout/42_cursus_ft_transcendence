@@ -143,7 +143,10 @@ export class GameData {
     this.ballX += this.velocityX;
     this.ballY += this.velocityY;
     if (this.checkOutsideCanva()) {
-      this.ballY = (this.ballY - this.ballRadius < 0) ? this.ballRadius : (this.height - this.ballRadius);
+      this.ballY =
+        this.ballY - this.ballRadius < 0
+          ? this.ballRadius
+          : this.height - this.ballRadius;
       this.velocityY = -this.velocityY * this.getRandomBounce();
     } else if (this.checkLeftPadCollision()) {
       this.velocityX = -this.velocityX * this.getRandomBounce();

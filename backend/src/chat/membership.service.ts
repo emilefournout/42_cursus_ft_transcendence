@@ -338,7 +338,7 @@ export class MembershipService {
   async isUserAllowedToJoin(chatId: number, userId: number) {
     const chat = await this.chatService.findChatById(chatId);
     const user = await this.userService.getUserInfoById(userId);
-    if(!chat || !user || (await this.isUserBannedFrom(chatId, userId)))
+    if (!chat || !user || (await this.isUserBannedFrom(chatId, userId)))
       return false;
     return true;
   }
