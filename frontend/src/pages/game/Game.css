@@ -47,7 +47,32 @@
 	color: var(--Light-Text);
 }
 
+.invitation-game-card {
+	width: clamp(200px, 30vw, 512px);
 
+	padding: 0 8px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.invitation-game-card > button {
+	min-height: 1.4em;
+
+	padding: 0 0.4em;
+
+	font-size: inherit;
+	background-color: var(--Cosmic-Purple);
+
+	transition: background-color .2s ease, color .3s ease;
+}
+
+.invitation-game-card > button:hover {
+	color: var(--Darks-Back);
+	background-color: var(--Mooned-Teal);
+}
 
 .ongoing-game-card {
 	width: clamp(200px, 30vw, 512px);

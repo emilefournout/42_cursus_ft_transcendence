@@ -20,14 +20,14 @@ export function InvitationCard(props: InvitationCardProps) {
 	}, [gameSocket, navigate]);
 
 	return (
-		<div>
+		<div className="invitation-game-card columns-txt">
 			{props.username} invited you{" "}
 			<button
 				onClick={() => {
 					gameSocket.emit("join_private_room", props.id);
 				}}
 			>
-				accept
+				Accept
 			</button>
 		</div>
 	);
