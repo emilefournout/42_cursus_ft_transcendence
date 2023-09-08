@@ -85,7 +85,7 @@ export function Board() {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Error updating blocked users");
+            response.json().then((data) => setDialog(data.message))
           }
         })
         .then(() => getBlockedUsers())
