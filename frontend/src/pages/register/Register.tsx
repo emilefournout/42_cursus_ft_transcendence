@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./Login.css";
+import "./Register.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Avatar } from "../../components/Avatar";
 import { devlog } from "../../services/core";
 
-export function Login() {
+export function Register() {
   const [username, setUsername] = useState("");
   const [image, setImage] = useState<File>();
   const [code2fa, setCode2fa] = useState("");
@@ -74,38 +74,51 @@ export function Login() {
   return (
     <div className="window-module">
       <div className="window-top-bar">
-        <div className="window-title">Login</div>
+        <div className="window-title">Welcome</div>
         <div className="wrapper-col window-overtext">
           <span className="txt txt-shadow-top">
-            Wait a moment for login
+            A bit of setup before we begin:
           </span>
+          <div className="underline wp-underline"></div>
         </div>
       </div>
-      {show2fa
-            &&
-            <div className="window-body-centered">
-            <div className="wrapper-welcome-grid">
-              <input
-                id="wp-2fa"
-                className="wp-responsive-txt"
-                type="text"
-                placeholder="2FA Code"
-                onChange={(event) => setCode2fa(event.target.value)}
-                onKeyDown={(event) => {
-                  event.key === "Enter" && register();
-                }}
-              />
-              <button
-                id={show2fa ? "wp-submit-2fa" : "wp-submit-no-2fa"}
-                className="btn btn-bottom-right wp-responsive-txt"
-                onClick={() => register()}
-              >
-                Done!
-              </button>
+      <div className="window-body-centered">
+        <div className="wrapper-welcome-grid">
+          <Avatar upload={true} download={false} setImg={setImage} />
+          <input
+            id="wp-username-input"
+            className="wp-responsive-txt"
+            type="text"
+            placeholder="User Name"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            onKeyDown={(event) => {
+              event.key === "Enter" && register();
+            }}
+            required
+          />
+          {show2fa && (
+            <input
+              id="wp-2fa"
+              className="wp-responsive-txt"
+              type="text"
+              placeholder="2FA Code"
+              onChange={(event) => setCode2fa(event.target.value)}
+              onKeyDown={(event) => {
+                event.key === "Enter" && register();
+              }}
+            />
+          )}
+          <button
+            id={show2fa ? "wp-submit-2fa" : "wp-submit-no-2fa"}
+            className="btn btn-bottom-right wp-responsive-txt"
+            onClick={() => register()}
+          >
+            Done!
+          </button>
           <div className="wp-error-msg wp-responsive-txt">{errorMessage}</div>
         </div>
       </div>
-      }
     </div>
   );
 }

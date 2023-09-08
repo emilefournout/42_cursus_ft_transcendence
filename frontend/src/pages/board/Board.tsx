@@ -54,7 +54,7 @@ export function Board() {
       .catch((e) => {
         localStorage.removeItem("access_token");
         setDialog("Received bad response from server, try to login again");
-        navigate("/login");
+        navigate("/welcome");
       });
   }, [navigate, setDialog]);
 

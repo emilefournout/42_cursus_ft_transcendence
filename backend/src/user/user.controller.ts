@@ -44,25 +44,6 @@ export class UserController {
     }
   }
 
-  @Delete('me')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Removes the user account.',
-    description: 'Remove your account',
-  })
-  async deleteUser(@GetUser() user) {
-    let userDeleted;
-
-    try {
-      userDeleted = await this.userService.deleteUser(user.sub);
-    } catch (error) {
-      console.log(error);
-      throw new UserControllerError.UserNotDeletedException();
-    }
-    if (!userDeleted) throw new UserControllerError.UserNotDeletedException();
-  }
-
   @Patch('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

@@ -99,17 +99,17 @@ export class AuthController {
       if (!user) {
         return res
           .cookie('42token', token)
-          .redirect('http://localhost:8000/welcome');
+          .redirect('http://localhost:8000/register');
       } else {
         return res
           .cookie('42token', token)
           .cookie('username', user.username)
-          .redirect('http://localhost:8000/welcome');
+          .redirect('http://localhost:8000/login');
       }
     } catch (error) {
       return res
         .cookie('42token', token)
-        .redirect('http://localhost:8000/welcome');
+        .redirect('http://localhost:8000/register');
     }
   }
 }

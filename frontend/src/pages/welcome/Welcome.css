@@ -1,42 +1,29 @@
-#wp-username-input {
-	grid-column: 2 / 4;
-	grid-row: 1;
-}
-
-#wp-submit-no-2fa {
-	grid-column: 2 / 4;
-	grid-row: 2;
-
-	padding: 0;
-	min-height: var(--row-gap);
-}
-
-#wp-2fa {
-	grid-column: 2 / 3;
-	grid-row: 2;
-}
-
-#wp-submit-2fa {
-	grid-column: 3 / 4;
-	grid-row: 2;
-
-	padding: 0;
-	min-height: var(--row-gap);
-}
-
-.wp-underline {
+/* Set root container to center all the stuff */
+#root {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.wp-error-msg {
-	grid-column: 1 / 4;
-	grid-row: 3;
 
-	color: var(--Light-Text);
-	text-align: center;
+
+/* Responsive shit and stuff */
+#login-h1 {
+    text-align: center;
+	margin: 8px 0;
+
+    font-size: clamp(1.5rem, calc(3vw + 4vh), 3rem);
 }
 
-/* Maketext responsive */
-.wp-responsive-txt {
-	font-size: clamp(0.35rem, 3vw, 0.8rem);
+#login-h2 {
+    text-align: center;
+	margin: 8px 0;
+
+    font-size: clamp(0.5rem, calc(1vw + 1.4vh), 1.8rem);
+}
+
+.responsive-button {
+    font-size: clamp(0.7rem, calc(1vw + 2vh), 2rem);
 }

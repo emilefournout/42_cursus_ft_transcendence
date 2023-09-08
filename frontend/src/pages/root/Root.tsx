@@ -15,7 +15,7 @@ export function Root() {
 
   useEffect(() => {
     devlog("Dev mode : testing console.log displayed");
-    if (location.pathname === "/login" || location.pathname === "/welcome")
+    if (location.pathname === "/login" || location.pathname === "/welcome" || location.pathname === "/register")
       return;
     const jwtToken = localStorage.getItem("access_token");
     try {

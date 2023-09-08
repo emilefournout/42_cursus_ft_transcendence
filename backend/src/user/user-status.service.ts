@@ -21,6 +21,8 @@ export class UserStatusService {
   unregisterConnection(client: Socket) {
     const userId = this.currentConnections.get(client);
     this.currentConnections.delete(client);
-    this.userService.setUserStatus(userId, OnlineStatus.OFFLINE);
+    try {
+      this.userService.setUserStatus(userId, OnlineStatus.OFFLINE);
+    } catch (error) {}
   }
 }
