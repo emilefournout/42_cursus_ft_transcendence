@@ -11,9 +11,10 @@ import banIcon from "./ban.svg";
 import unbanIcon from "./unban.svg";
 import kickIcon from "./kick.svg";
 import playIcon from "./play.svg";
-import { MuteDialogContext } from "../../RoomParam";
+import { ErrorBody, MuteDialogContext } from "../../RoomParam";
 import { devlog } from "../../../../../../services/core";
 import { BoardContext } from "../../../../../board/Board";
+import { ChatPageContext } from "../../../../Chat";
 
 export interface ChatMembersCardProps {
   member: Member;
@@ -23,6 +24,7 @@ export interface ChatMembersCardProps {
 
 export function ChatMembersCard(props: ChatMembersCardProps) {
   const roomContextArgs = useOutletContext<RoomContextArgs>();
+  const chatPageContext = useContext(ChatPageContext);
   const muteDialogContext = useContext(MuteDialogContext);
   const chadId = roomContextArgs.chat.id;
   const navigate = useNavigate();
@@ -40,7 +42,19 @@ export function ChatMembersCard(props: ChatMembersCardProps) {
       },
       body: body,
     }).then((response) => {
-      if (!response.ok) throw new Error("Error action user");
+      if (!response.ok) {
+        response
+          .json()
+          .then((data: ErrorBody) => {
+            if (data.message && data.message === "User not in chat") {
+              chatPageContext.updateLeaver("You are not member of this chat");
+            }
+            return;
+          })
+          .catch((error) => {
+            devlog(error);
+          });
+      }
       roomContextArgs.getChatInfo(roomContextArgs.chat);
     });
 

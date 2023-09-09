@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { RoomContextArgs } from "../../Room";
 import "../../../../root/Dialog.css";
 import { devlog } from "../../../../../services/core";
+import { ErrorBody } from "../RoomParam";
+import { ChatPageContext } from "../../../Chat";
 
 interface MuteDialogProps {
   userIdToMute: number | undefined;
@@ -12,7 +14,7 @@ interface MuteDialogProps {
 export function MuteDialog(props: MuteDialogProps) {
   const [value, setValue] = useState(30);
   const roomContextArgs = useOutletContext<RoomContextArgs>();
-
+  const chatPageContext = useContext(ChatPageContext);
   const close = () => {
     props.setUserIdToMute(undefined);
   };
@@ -29,7 +31,19 @@ export function MuteDialog(props: MuteDialogProps) {
       }
     )
       .then((response) => {
-        if (!response.ok) throw new Error("Error while muting");
+        if (!response.ok) {
+          response
+            .json()
+            .then((data: ErrorBody) => {
+              if (data.message && data.message === "User not in chat") {
+                chatPageContext.updateLeaver("You are not member of this chat");
+              }
+              return;
+            })
+            .catch((error) => {
+              devlog(error);
+            });
+        }
         roomContextArgs.getChatInfo(roomContextArgs.chat);
       })
       .then(() => {

@@ -15,6 +15,9 @@ interface MuteDialogContextArgs {
   mute: (value: number | undefined) => void;
 }
 
+export interface ErrorBody {
+  message?: string;
+}
 export const MuteDialogContext = React.createContext(
   {} as MuteDialogContextArgs
 );
@@ -53,7 +56,19 @@ export function RoomParam() {
       }
     )
       .then((response) => {
-        if (!response.ok) throw new Error("Error leaving room");
+        if (!response.ok) {
+          response
+            .json()
+            .then((data: ErrorBody) => {
+              if (data.message && data.message === "User not in chat") {
+                chatPageContext.updateLeaver("You are not member of this chat");
+              }
+              return;
+            })
+            .catch((error) => {
+              devlog(error);
+            });
+        }
         chatPageContext.updateLeaver();
       })
       .catch((error) => {
@@ -84,7 +99,6 @@ export function RoomParam() {
           <ChatMembers isManager={isManager} />
         </MuteDialogContext.Provider>
       </div>
-
       <button className="leave-room-btn" onClick={leaveRoom}>
         Leave room
       </button>

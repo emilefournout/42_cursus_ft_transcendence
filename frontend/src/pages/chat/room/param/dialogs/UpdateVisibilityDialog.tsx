@@ -6,6 +6,7 @@ import { ChatPageContext } from "../../../Chat";
 import { DialogContext } from "../../../../root/Root";
 import "../../../../root/Dialog.css";
 import { devlog } from "../../../../../services/core";
+import { ErrorBody } from "../RoomParam";
 
 interface UpdateVisibilityDialogProps {
   showUpdateDialog: boolean;
@@ -49,6 +50,18 @@ export function UpdateVisibilityDialog(props: UpdateVisibilityDialogProps) {
           });
           close();
           setDialog("visibility updated to " + Visibility.PUBLIC);
+        } else {
+          response
+            .json()
+            .then((data: ErrorBody) => {
+              if (data.message && data.message === "User not in chat") {
+                chatPageContext.updateLeaver("You are not member of this chat");
+              }
+              return;
+            })
+            .catch((error) => {
+              devlog(error);
+            });
         }
       })
       .catch((error) => {

@@ -85,7 +85,7 @@ export function Board() {
       })
         .then((response) => {
           if (!response.ok) {
-            response.json().then((data) => setDialog(data.message))
+            response.json().then((data) => setDialog(data.message));
           }
         })
         .then(() => getBlockedUsers())

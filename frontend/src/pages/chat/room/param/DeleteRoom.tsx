@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChatPageContext } from "../../Chat";
 import { devlog } from "../../../../services/core";
+import { ErrorBody } from "./RoomParam";
 
 export function DeleteRoom() {
   const navigate = useNavigate();
@@ -28,6 +29,22 @@ export function DeleteRoom() {
                 devlog(error);
               });
           }, 500);
+        } else {
+          {
+            response
+              .json()
+              .then((data: ErrorBody) => {
+                if (data.message && data.message === "User not in chat") {
+                  chatPageContext.updateLeaver(
+                    "You are not member of this chat"
+                  );
+                }
+                return;
+              })
+              .catch((error) => {
+                devlog(error);
+              });
+          }
         }
       })
       .catch((error) => {

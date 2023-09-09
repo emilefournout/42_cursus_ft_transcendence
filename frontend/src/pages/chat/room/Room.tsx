@@ -46,8 +46,14 @@ export function Room() {
         if (!response.ok) throw new Error("Error getting chat");
         return response.json();
       })
-      .then((chat: ChatFullInfo) => setChat(chat));
+      .then((chat: ChatFullInfo) => setChat(chat))
+      .catch((error) => {
+        devlog(error);
+      });
 
+  useEffect(() => {
+    console.log("chat ->", chat);
+  }, [chat]);
   useEffect(() => {
     if (chats === undefined || id === undefined) return;
     let chat: ChatInfo | undefined;

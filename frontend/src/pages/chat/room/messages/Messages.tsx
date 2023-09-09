@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Message } from "./Message";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./Messages.css";
 import { RoomInput } from "../input/RoomInput";
 import { BoardContext } from "../../../board/Board";
@@ -113,7 +113,7 @@ export function Messages() {
             })}
           </div>
         </div>
-        <RoomInput chatSocket={chatSocket}/>
+        <RoomInput chatSocket={chatSocket} />
       </>
     );
   }
