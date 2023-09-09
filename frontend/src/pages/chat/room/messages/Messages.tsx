@@ -28,7 +28,7 @@ export function Messages() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    chatSocket.emit("join_room", { chatId: id });
+    chatSocket.emit("join_room", { chatId: Number(id) });
     fetch(`${process.env.REACT_APP_BACKEND}/chat/${id}/messages`, {
       method: "GET",
       headers: {
