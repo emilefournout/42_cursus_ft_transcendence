@@ -13,6 +13,9 @@ import { ChatService } from './chat.service';
 import { ChatIdDto } from './dto/chat-id.dto';
 import { ChatMessageDto } from './dto/chat-message.dto';
 import { MembershipService } from './membership.service';
+import { ConnectionStorage } from 'src/game/types/connection-storage.class';
+import { JwtPayload } from 'src/auth/interface';
+import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
@@ -20,8 +23,11 @@ import { MembershipService } from './membership.service';
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  private userConnections = new ConnectionStorage();
+
   constructor(
     private chatService: ChatService,
+    private jwtService: JwtService,
     private membershipService: MembershipService
   ) {}
 
@@ -34,10 +40,20 @@ export class ChatGateway
 
   handleConnection(client: Socket, ..._args: any[]) {
     console.log('Connection from ' + client.id);
+    try {
+      const token = client.handshake.headers.authentication as string;
+      const payload: JwtPayload = this.jwtService.verify(token);
+      this.userConnections.addUser(client, payload.sub);
+    } catch (error) {
+      console.log('Error when verifying token');
+      client.disconnect();
+      return;
+    }
   }
 
   handleDisconnect(client: Socket) {
     console.log('Disconneted from ' + client.id);
+    this.userConnections.removeUserBySocket(client);
   }
 
   @SubscribeMessage('join_room')
@@ -49,12 +65,22 @@ export class ChatGateway
   }
 
   @SubscribeMessage('send_message')
-  async handleMessage(@MessageBody() data: ChatMessageDto) {
-    if(!(await this.membershipService.isUserAllowedToTextOnChat(data.userId, Number(data.chatId))))
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: ChatMessageDto
+  ) {
+    const userId = this.userConnections.getUserIdFromSocket(client);
+    if (userId === undefined) return;
+    if (
+      !(await this.membershipService.isUserAllowedToTextOnChat(
+        this.userConnections.getUserIdFromSocket(client),
+        data.chatId
+      ))
+    )
       return 'ko';
     const msg = await this.chatService.createChatMessages(
-      Number(data.chatId),
-      data.userId,
+      data.chatId,
+      userId,
       data.text
     );
     this.server.to(data.chatId.toString()).emit('receive_message', msg);
@@ -62,7 +88,7 @@ export class ChatGateway
   }
 
   @SubscribeMessage('leave_room')
-  handleLeaveRoom(client: Socket, @MessageBody() chatId: ChatIdDto) {
-    client.leave(chatId.toString());
+  handleLeaveRoom(client: Socket, @MessageBody() chatIdDto: ChatIdDto) {
+    client.leave(chatIdDto.chatId.toString());
   }
 }

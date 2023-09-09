@@ -29,10 +29,8 @@ function ChatWindow({ socket, username, room }: IChatWindow) {
   function sendMessage() {
     if (message !== "") {
       const data = {
-        room,
-        author: username,
-        message,
-        time: getTime(),
+        chatId: room,
+        text: message,
       };
       socket.emit("send_message", data);
       setMessage("");
