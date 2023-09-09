@@ -207,7 +207,8 @@ export class GameGateway
     playerNumber: 1 | 2
   ) {
     game.disconnectPlayer(playerNumber);
-    await this.finishGame(game, gameLoopInterval);
+    if(!game.isFinished)
+      await this.finishGame(game, gameLoopInterval);
   }
 
   private async finishGame(

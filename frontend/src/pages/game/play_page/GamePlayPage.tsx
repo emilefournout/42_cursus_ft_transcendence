@@ -91,9 +91,15 @@ export function GamePlayPage() {
         <>
           <h1 className="title light-text">Game</h1>
           <div className="title scores">
-            <span className="score">{player1Score}</span>
-            <span> / </span>
-            <span className="score">{player2Score}</span>
+            {(player1Score !== -1 && player2Score !== -1) ? (
+              <>
+                <span className="score">{player1Score}</span>
+                <span> / </span>
+                <span className="score">{player2Score}</span>
+              </>
+            ): (
+                <span> Disconnection </span>
+            )}
           </div>
           <GameCanvas {...state} />
           {showModal !== null && (
