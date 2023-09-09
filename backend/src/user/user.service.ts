@@ -208,7 +208,7 @@ export class UserService {
         },
       });
     } catch (error) {
-      throw new ForbiddenException('Could not remove blocked user');
+      throw new ForbiddenException('Could not unblock user');
     }
   }
 
@@ -402,7 +402,7 @@ export class UserService {
           user2_id: userId,
         },
       });
-      return user != null;
+      return user !== null;
     } catch (error) {
       return false;
     }

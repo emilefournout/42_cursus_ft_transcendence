@@ -155,8 +155,7 @@ export class UserController {
     @GetUser() user,
     @Param('id', IdValidationPipe) id: number
   ) {
-    if (user.sub === id)
-      throw new ForbiddenException('Cannot blocked yourself');
+    if (user.sub === id) throw new ForbiddenException('Cannot block yourself');
     if (await this.userService.isUserBlockedBy(id, user.sub))
       throw new ForbiddenException('The other user has blocked you');
     try {
@@ -164,7 +163,7 @@ export class UserController {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       else {
-        throw new BadRequestException('Could not unblock the user');
+        throw new BadRequestException('Could not block the user');
       }
     }
   }
@@ -184,7 +183,18 @@ export class UserController {
     @GetUser() user,
     @Param('id', IdValidationPipe) id: number
   ) {
-    await this.userService.deleteUserBlocked(user.sub, id);
+    if (user.sub === id)
+      throw new ForbiddenException('Cannot unblock yourself');
+    if (await this.userService.isUserBlockedBy(id, user.sub))
+      throw new ForbiddenException('The other user has blocked you');
+    try {
+      await this.userService.deleteUserBlocked(user.sub, id);
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      else {
+        throw new BadRequestException('Could not unblock the user');
+      }
+    }
   }
 
   @Post('friends/send/:id')
