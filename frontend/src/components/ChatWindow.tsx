@@ -29,7 +29,7 @@ function ChatWindow({ socket, username, room }: IChatWindow) {
   function sendMessage() {
     if (message !== "") {
       const data = {
-        chatId: room,
+        chatId: Number(room),
         text: message,
       };
       socket.emit("send_message", data);

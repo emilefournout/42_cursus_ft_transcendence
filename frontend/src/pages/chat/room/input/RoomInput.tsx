@@ -24,7 +24,7 @@ export function RoomInput({ chatSocket }: InputProps) {
       return;
     }
     const data = {
-      chatId: id,
+      chatId: Number(id),
       text: input,
     };
     chatSocket.emit("send_message", data,
