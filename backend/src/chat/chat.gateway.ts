@@ -52,7 +52,7 @@ export class ChatGateway
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Disconneted from ' + client.id);
+    console.log('Disconnected from ' + client.id);
     this.userConnections.removeUserBySocket(client);
   }
 

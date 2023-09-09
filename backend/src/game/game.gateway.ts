@@ -58,7 +58,7 @@ export class GameGateway
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Disconneted from ' + client.id);
+    console.log('Disconnected from ' + client.id);
     this.gameService.unregisterConnection(client);
   }
 

@@ -42,7 +42,7 @@ export class UserGateway
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Disconneted from ' + client.id);
+    console.log('Disconnected from ' + client.id);
     this.userStatusService.unregisterConnection(client);
   }
 }
