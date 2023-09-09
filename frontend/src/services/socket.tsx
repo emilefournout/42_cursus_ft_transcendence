@@ -5,7 +5,13 @@ export class ChatSocket {
   private socketIo;
 
   private constructor() {
-    this.socketIo = io(`${process.env.REACT_APP_CHAT_SOCKET}`);
+    const access_token = localStorage.getItem("access_token");
+    if (!access_token) throw new Error("Access token not found");
+    this.socketIo = io(`${process.env.REACT_APP_CHAT_SOCKET}`, {
+      extraHeaders: {
+        authentication: access_token,
+      },
+    });
   }
 
   public static getInstance() {
