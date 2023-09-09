@@ -44,6 +44,19 @@ export class GameService {
     return await this.getUserInvitationsById(id);
   }
 
+  async isUserInGame(client: Socket) {
+    const user_id = this.getUserIdFromSocket(client);
+    const active_game = await this.prisma.game.findFirst({
+      where: {
+        OR: [{user1_id: user_id}, {user2_id: user_id}],
+        status: 'PLAYING'
+      }
+    });
+    if(!active_game)
+      return null;
+    return active_game.uuid;
+  }
+
   findActiveGames(): string[] {
     return Array.from(this.games.keys());
   }

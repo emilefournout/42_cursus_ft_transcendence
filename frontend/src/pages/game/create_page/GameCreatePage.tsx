@@ -150,7 +150,9 @@ export function GameCreatePage() {
                   onChange={(e) => setUserInvited(e.target.value)}
                 />
               )}
-              {error && <>Could not invite user</>}
+              {error &&
+                (<label htmlFor="errorCreateGame">Could not create game</label>)
+              }
               {error && (
                 <button
                   className="btn game-creation-btn create-game-btn btn-bottom"
@@ -162,7 +164,6 @@ export function GameCreatePage() {
                 </button>
               )}
             </fieldset>
-
             <div className="wrapper-row create-game-btns-wrapper">
               <button
                 className="btn game-creation-btn btn-bottom-left cancel-game-btn"
@@ -179,9 +180,15 @@ export function GameCreatePage() {
                       maxGoals,
                       powerUps,
                       color,
+                    }, (data: any) => {
+                      if(data === 'ok') {
+                        waiting.current = false;
+                        setHiddenForm(true);
+                      } else {
+                        waiting.current = false;
+                        setError(true);
+                      }
                     });
-                    waiting.current = false;
-                    setHiddenForm(true);
                   } else {
                     createPrivateGame();
                   }
