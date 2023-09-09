@@ -162,10 +162,9 @@ export class UserController {
     try {
       await this.userService.addUserBlocked(user.sub, id);
     } catch (error) {
-      if (error instanceof HttpException)
-        throw error
+      if (error instanceof HttpException) throw error;
       else {
-        throw new BadRequestException("Could not unblock the user")
+        throw new BadRequestException('Could not unblock the user');
       }
     }
   }
