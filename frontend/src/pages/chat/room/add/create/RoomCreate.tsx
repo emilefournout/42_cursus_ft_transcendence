@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { VisibilityButton } from "./VisibilityButton";
 import validator from "validator";
 import "./RoomCreate.css";
-import { ChatSocket } from "../../../../../services/socket";
 import { ChatInfo, ChatPageContext } from "../../../Chat";
 import { useNavigate } from "react-router-dom";
 import { DialogContext } from "../../../../root/Root";
@@ -21,7 +20,8 @@ enum passwordStrength {
 }
 
 export function RoomCreate() {
-  const chatSocket = ChatSocket.getInstance().socket;
+  const chatContext = useContext(ChatPageContext);
+  const chatSocket = chatContext.socket;
   const [selected, setSelected] = useState<Visibility>(Visibility.PUBLIC);
   const [passwordSecurity, setPasswordSecurity] = useState(
     passwordStrength.EMPTY

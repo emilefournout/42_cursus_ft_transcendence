@@ -6,6 +6,8 @@ import { Visibility } from "./room/add/create/RoomCreate";
 import { LeftBar } from "./left_bar/ChatLeftBar";
 import { devlog } from "../../services/core";
 import { Dialog } from "../root/Dialog";
+import { ChatSocket } from "../../services/socket";
+import { Socket } from "socket.io-client";
 
 export interface ChatInfo {
   id: number;
@@ -16,6 +18,7 @@ interface ChatPageContextArgs {
   updateChats: () => Promise<void>;
   updateLeaver: (message?: string) => Promise<void>;
   chats: ChatInfo[] | undefined;
+  socket: Socket;
 }
 
 export const ChatPageContext = React.createContext({} as ChatPageContextArgs);
@@ -64,6 +67,7 @@ export function ChatPage() {
           value={
             {
               updateChats: updateChats,
+              socket: ChatSocket.getInstance().socket,
               chats: chats,
               updateLeaver: updateLeaver,
             } as ChatPageContextArgs

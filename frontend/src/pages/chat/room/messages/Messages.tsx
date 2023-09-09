@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Message } from "./Message";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Messages.css";
 import { RoomInput } from "../input/RoomInput";
 import { BoardContext } from "../../../board/Board";
-import { ChatSocket } from "../../../../services/socket";
 import { devlog } from "../../../../services/core";
 import { ChatPageContext } from "../../Chat";
 
@@ -23,7 +22,8 @@ export interface Msg {
 export function Messages() {
   const [messages, setMessages] = useState<Array<Msg> | undefined>(undefined);
   const [hasError, setHasError] = useState<boolean | undefined>(undefined);
-  const chatSocket = ChatSocket.getInstance().socket;
+  const chatContext = useContext(ChatPageContext);
+  const chatSocket = chatContext.socket;
   const { id } = useParams();
   const navigate = useNavigate();
 

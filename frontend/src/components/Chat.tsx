@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { ChatSocket } from "../services/socket";
+import { useState, useContext } from "react";
 import ChatWindow from "./ChatWindow";
 import "./Chat.css";
+import { ChatPageContext } from "../pages/chat/Chat";
 
 function Chat() {
   const [username, setUsername] = useState(""); // TODO get username
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
-  const chatSocket = ChatSocket.getInstance().socket;
+  const chatContext = useContext(ChatPageContext);
+  const chatSocket = chatContext.socket;
   function joinRoom() {
     if (room !== "") {
       chatSocket.emit("join_room", { chatId: Number(room) });
