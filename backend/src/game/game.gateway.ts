@@ -21,6 +21,7 @@ import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
 import { OnlineStatus } from '@prisma/client';
 import { GameIdDto } from './dto/game-id.dto';
 import { GameMoveDto } from './dto/game-move.dto';
+import { UserIdDto } from '../user/dto/user-id.dto';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' },
@@ -100,10 +101,13 @@ export class GameGateway
   @SubscribeMessage('join_private_room')
   async handleJoinPrivateRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() friendId: number
+    @MessageBody() friendDto: UserIdDto
   ) {
     console.log('Joining private game ' + client.id);
-    const game = await this.gameService.joinPrivateRoom(client, friendId);
+    const game = await this.gameService.joinPrivateRoom(
+      client,
+      friendDto.userId
+    );
     if (game) {
       await this.initGame(game);
     }
@@ -143,8 +147,7 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() uuid: GameIdDto
   ) {
-    console.log(`${this.gameService.getUserIdFromSocket(client)} JOINED -> |${uuid}|`)
-    client.join(String(uuid));
+    client.join(uuid.gameId);
   }
 
   @SubscribeMessage('join_waiting_room')

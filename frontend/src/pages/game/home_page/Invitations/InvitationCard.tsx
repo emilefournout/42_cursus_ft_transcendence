@@ -24,7 +24,7 @@ export function InvitationCard(props: InvitationCardProps) {
 			{props.username} invited you{" "}
 			<button
 				onClick={() => {
-					gameSocket.emit("join_private_room", props.id);
+					gameSocket.emit("join_private_room", {userId: props.id});
 				}}
 			>
 				Accept

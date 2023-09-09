@@ -59,7 +59,7 @@ export function GamePlayPage() {
           path = path.substring(path.lastIndexOf("/") + 1);
           devlog("Path is " + path);
 
-          gameSocket.emit("join_active_room", path);
+          gameSocket.emit("join_active_room", {gameId: path});
           setGameExistState(GameExistState.Play);
         }
       });
