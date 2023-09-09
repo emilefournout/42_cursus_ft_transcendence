@@ -15,8 +15,10 @@ export class ChatSocket {
   }
 
   public static getInstance() {
-    if (!this.singleton)
+    if (!this.singleton || !this.singleton.socket.connected)
+    {
       this.singleton = new ChatSocket();
+    }
     return this.singleton;
   }
 
@@ -40,7 +42,7 @@ export class GameSocket {
   }
 
   public static getInstance() {
-    if (!this.singleton)
+    if (!this.singleton || !this.singleton.socket.connected)
       this.singleton = new GameSocket();
     return this.singleton;
   }
@@ -65,7 +67,7 @@ export class UserSocket {
   }
 
   public static getInstance() {
-    if (!this.singleton)
+    if (!this.singleton || !this.singleton.socket.connected)
       this.singleton = new UserSocket();
     return this.singleton;
   }
