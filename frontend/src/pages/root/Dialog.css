@@ -24,3 +24,11 @@
 .dialog-window > button:hover {
 	background: var(--Crisped-Orange);
 }
+
+.dialog-window > input {
+	height: 1.5em;
+
+	background: var(--Darks-Back);
+
+	font-size: clamp(0.3rem, 2vw, 0.8rem);
+}
