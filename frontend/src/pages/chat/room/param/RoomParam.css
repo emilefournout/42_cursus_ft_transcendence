@@ -115,11 +115,15 @@
 #demote-btn {
 	grid-column: 3;
 
+	cursor: pointer;
+
 	background-color: var(--Crisped-Orange);
 }
 
 #promote-btn {
 	grid-column: 3;
+
+	cursor: pointer;
 
 	background-color: var(--Mooned-Teal);
 }
@@ -127,31 +131,43 @@
 #unmute-btn {
 	grid-column: 4;
 
+	cursor: pointer;
+
 	background-color: var(--Crisped-Orange);
 }
 
 #mute-btn {
 	grid-column: 4;
 
+	cursor: pointer;
+
 	background-color: var(--Cosmic-Purple);
 }
 
 #unban-btn {
 	grid-column: 5;
+
+	cursor: pointer;
 }
 
 #ban-btn {
 	grid-column: 5;
+
+	cursor: pointer;
 }
 
 #kick-btn {
 	grid-column: 6;
+
+	cursor: pointer;
 
 	background-color: var(--Crisped-Orange);
 }
 
 #play-btn {
 	grid-column: 7;
+
+	cursor: pointer;
 
 	background-color: var(--Light-Text);
 }
