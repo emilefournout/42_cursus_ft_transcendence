@@ -107,7 +107,7 @@ export class MembershipService {
     let newOwner;
     if (!chatMember) throw new NotFoundException('Chat member not found');
     if (chatMember.owner === true) {
-      newOwner = await this.findNewOwner(userId);
+      newOwner = await this.findNewOwner(userId, chatId);
     }
     try {
       await this.prisma.chatMember.delete({
@@ -145,12 +145,13 @@ export class MembershipService {
       })
   }
 
-  private async findNewOwner(userId: number) {
+  private async findNewOwner(userId: number, chatId: number) {
     return await this.prisma.chatMember.findFirst({
       where: {
         userId: {
           not: userId,
         },
+        chatId: chatId
       },
       orderBy: [
         {
