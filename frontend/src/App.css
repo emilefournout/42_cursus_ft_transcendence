@@ -12,6 +12,7 @@
 
 	/* Translucent colours */
 	--Trans-Light-Text: rgba(255, 233, 214, 0.24);
+	--Trans-Light-Text-Extra: rgba(255, 233, 214, 0.08);
 	--Trans-Paled-Beige: rgba(220, 192, 166, 0.08);
 	--Trans-Mooned-Teal-Strong: #0FA3B144;
 	--Trans-Cosmic-Purple: rgba(151, 71, 255, 0.08);
