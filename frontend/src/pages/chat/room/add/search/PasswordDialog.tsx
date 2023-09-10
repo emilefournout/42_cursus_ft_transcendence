@@ -26,7 +26,7 @@ export function PasswordDialog(props: PasswordDialogProps) {
 	return (
 		<>
 			{props.showDialog ? (
-				<dialog className="dialog-window wrapper-col" open={!!props.showDialog}>
+				<dialog className="dialog-window proc-room-dialog wrapper-col" open={!!props.showDialog}>
 					{props.showDialog?.name} is protected, please enter password:
 					<input
 						value={password}

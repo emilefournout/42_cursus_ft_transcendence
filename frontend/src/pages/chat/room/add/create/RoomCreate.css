@@ -114,3 +114,12 @@
 
 	transition: color .2s ease;
 }
+
+.proc-room-dialog {
+	min-width: min-content;
+
+	margin-top: 0;
+	margin-bottom: 8px;
+
+	position: unset;
+}
