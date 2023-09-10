@@ -132,6 +132,17 @@ export class MembershipService {
         owner: true,
         administrator: true,
       });
+      await this.prisma.chatMember.update({
+        where: {
+          chatId_userId: {
+            userId: newOwner.userId,
+            chatId: chatId
+          }
+        },
+        data: {
+          muted: false,
+        }
+      })
   }
 
   private async findNewOwner(userId: number) {
