@@ -46,12 +46,12 @@ export class AchievementService {
     for (const user of [user1, user2]) {
       if (user.wins === 1) this.grantGameAchievement(user.id, 'First Win');
       if (user.wins === 10)
-        this.grantGameAchievement(user.id, 'eSport trainee');
+        this.grantGameAchievement(user.id, 'Esport Trainee');
     }
     if (game.firstPlayerScore === 0)
-      this.grantGameAchievement(game.secondPlayer.id, 'KO');
+      this.grantGameAchievement(game.secondPlayer.id, 'What A Player');
     if (game.secondPlayerScore === 0)
-      this.grantGameAchievement(game.firstPlayer.id, 'KO');
+      this.grantGameAchievement(game.firstPlayer.id, 'What A Player');
   }
 
   private async grantGameAchievement(
@@ -63,22 +63,18 @@ export class AchievementService {
     });
 
     if (achievement) {
-      await this.prisma.achievement.update({
-        where: {
-          name: achievementName,
-        },
-        data: {
-          users: { connect: { id: userId } },
-        },
-      });
-    } else {
-      await this.prisma.achievement.create({
-        data: {
-          name: achievementName,
-          description: achievementName,
-          users: { connect: { id: userId } },
-        },
-      });
+      try {
+        await this.prisma.achievement.update({
+          where: {
+            name: achievementName,
+          },
+          data: {
+            users: { connect: { id: userId } },
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }

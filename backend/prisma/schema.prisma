@@ -43,6 +43,7 @@ model Achievement {
   id          Int    @id @default(autoincrement())
   name        String @unique
   description String
+  rarity      AchievementRarity
   users       User[]
 }
 
@@ -125,6 +126,12 @@ enum TwoFactorAuthenticationStatus {
   DISABLED
   PENDING
   ENABLED
+}
+
+enum AchievementRarity {
+  COMMON
+  RARE
+  EPIC
 }
 
 enum FriendshipStatus {

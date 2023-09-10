@@ -5,6 +5,9 @@ CREATE TYPE "ChatVisibility" AS ENUM ('PUBLIC', 'PRIVATE', 'PROTECTED', 'DIRECT'
 CREATE TYPE "TwoFactorAuthenticationStatus" AS ENUM ('DISABLED', 'PENDING', 'ENABLED');
 
 -- CreateEnum
+CREATE TYPE "AchievementRarity" AS ENUM ('COMMON', 'RARE', 'EPIC');
+
+-- CreateEnum
 CREATE TYPE "FriendshipStatus" AS ENUM ('PENDING', 'ENABLED');
 
 -- CreateEnum
@@ -41,6 +44,7 @@ CREATE TABLE "Achievement" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "rarity" "AchievementRarity" NOT NULL,
 
     CONSTRAINT "Achievement_pkey" PRIMARY KEY ("id")
 );
