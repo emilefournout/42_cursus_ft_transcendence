@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SEO from "../../../components/Seo";
 import "./GameCreatePage.css";
 import { GameSocket } from "../../../services/socket";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { devlog } from "../../../services/core";
 
 export function GameCreatePage() {
@@ -201,7 +201,17 @@ export function GameCreatePage() {
         )}
         {hiddenForm && (
           <>
-            <div className="matchmaking-loader"></div>
+            <div className="matchmaking-loader"></div><br></br>
+            <Link to="/board/game">
+              <button className="btn btn-fixed-height matchmaking-scaling"
+              onClick={() => {
+                waiting.current = false;
+                gameSocket.emit("leave_creating_room");
+                gameSocket.emit("leave_private_room");
+              }}>
+                Cancel
+              </button>
+            </Link>
             <p className="matchmaking-scaling">
               {!invitation
                 ? "Finding new rival for you"
