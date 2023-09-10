@@ -55,7 +55,7 @@ export function GamePlayPage() {
         if (body && body.status !== "PLAYING")
           setGameExistState(GameExistState.NotFound);
         else {
-          var path = window.location.pathname;
+          let path = window.location.pathname;
           path = path.substring(path.lastIndexOf("/") + 1);
           devlog("Path is " + path);
 
