@@ -123,7 +123,8 @@ export class ChatService {
     if (!chat) throw new NotFoundException('Chat not found');
     if (updateChatDto.chatVisibility !== 'PROTECTED')
       updateChatDto.password = null;
-    chat.password = await argon2.hash(updateChatDto.password);
+    if(chat.password)
+      chat.password = await argon2.hash(updateChatDto.password);
     chat.visibility = updateChatDto.chatVisibility;
     try {
       await this.prisma.chat.update({
