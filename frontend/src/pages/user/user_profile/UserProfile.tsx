@@ -41,7 +41,7 @@ export function UserProfile() {
   }, [id, userInfo]);
 
   if (userInfo === undefined && fetchedUserInfo === undefined) {
-    return <div className="prof-cards-wrapper">Loading user profile...</div>;
+    return <div className="prof-cards-wrapper">user not found</div>;
   } else {
     return (
       <>
