@@ -3,7 +3,6 @@ import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
 import { Link, useParams } from "react-router-dom";
 import "./GamePlayPage.css";
-import { devlog } from "../../../services/core";
 
 enum GameExistState {
   Waiting,
@@ -55,15 +54,14 @@ export function GamePlayPage() {
         if (body && body.status !== "PLAYING")
           setGameExistState(GameExistState.NotFound);
         else {
-          var path = window.location.pathname;
+          let path = window.location.pathname;
           path = path.substring(path.lastIndexOf("/") + 1);
-          devlog("Path is " + path);
 
           gameSocket.emit("join_active_room", {gameId: path});
           setGameExistState(GameExistState.Play);
         }
       });
-  }, [id]);
+  }, [gameSocket, id]);
 
   useEffect(() => {
     gameSocket.off("update");
