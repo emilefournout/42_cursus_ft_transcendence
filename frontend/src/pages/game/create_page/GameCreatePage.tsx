@@ -202,6 +202,11 @@ export function GameCreatePage() {
         {hiddenForm && (
           <>
             <div className="matchmaking-loader"></div><br></br>
+            <p className="matchmaking-scaling">
+              {!invitation
+                ? "Finding new rival for you"
+                : `Waiting for ${userInvited} to join`}
+            </p>
             <Link to="/board/game">
               <button className="btn btn-fixed-height matchmaking-scaling"
               onClick={() => {
@@ -212,11 +217,6 @@ export function GameCreatePage() {
                 Cancel
               </button>
             </Link>
-            <p className="matchmaking-scaling">
-              {!invitation
-                ? "Finding new rival for you"
-                : `Waiting for ${userInvited} to join`}
-            </p>
           </>
         )}
       </div>
