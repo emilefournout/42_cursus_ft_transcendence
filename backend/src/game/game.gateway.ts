@@ -68,9 +68,8 @@ export class GameGateway
     @MessageBody() gameDataOptions: CreateGameDto
   ) {
     const active_game = await this.gameService.isUserInGame(client);
-    console.log(`Active game is: ${active_game}`)
-    if (active_game)
-      return 'ko';
+    console.log(`Active game is: ${active_game}`);
+    if (active_game) return 'ko';
     console.log('Customizing a game ' + client.id);
     console.log(`Customizing options ${JSON.stringify(gameDataOptions)}`);
     this.gameService.customizeGame(client, gameDataOptions);
@@ -87,9 +86,8 @@ export class GameGateway
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto
   ) {
     const active_game = await this.gameService.isUserInGame(client);
-    console.log(`Active game is: ${active_game}`)
-    if (active_game)
-      return 'ko';
+    console.log(`Active game is: ${active_game}`);
+    if (active_game) return 'ko';
     console.log('Creating private game ' + client.id);
     const userId = this.gameService.getUserIdFromSocket(client);
     const invited = await this.userService.findUserByFilter({
@@ -162,15 +160,14 @@ export class GameGateway
   @SubscribeMessage('join_waiting_room')
   async handleJoinWaitingRoom(@ConnectedSocket() client: Socket) {
     const active_game = await this.gameService.isUserInGame(client);
-    if (active_game)
-      return {status: 'ko', uuid: active_game};
+    if (active_game) return { status: 'ko', uuid: active_game };
     console.log('Joining waiting room ', client.id);
     this.gameService.addToWaitingRoom(client);
     const game = await this.gameService.handleWaitingRoom();
     if (game) {
       await this.initGame(game);
     }
-    return {status: 'ok', uuid: null};
+    return { status: 'ok', uuid: null };
   }
 
   @SubscribeMessage('move_user')
@@ -207,8 +204,7 @@ export class GameGateway
     playerNumber: 1 | 2
   ) {
     game.disconnectPlayer(playerNumber);
-    if(!game.isFinished)
-      await this.finishGame(game, gameLoopInterval);
+    if (!game.isFinished) await this.finishGame(game, gameLoopInterval);
   }
 
   private async finishGame(

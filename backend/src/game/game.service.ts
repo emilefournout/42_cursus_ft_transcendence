@@ -48,12 +48,11 @@ export class GameService {
     const user_id = this.getUserIdFromSocket(client);
     const active_game = await this.prisma.game.findFirst({
       where: {
-        OR: [{user1_id: user_id}, {user2_id: user_id}],
-        status: 'PLAYING'
-      }
+        OR: [{ user1_id: user_id }, { user2_id: user_id }],
+        status: 'PLAYING',
+      },
     });
-    if(!active_game)
-      return null;
+    if (!active_game) return null;
     return active_game.uuid;
   }
 
