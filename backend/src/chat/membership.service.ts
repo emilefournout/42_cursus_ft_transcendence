@@ -132,17 +132,17 @@ export class MembershipService {
         owner: true,
         administrator: true,
       });
-      await this.prisma.chatMember.update({
-        where: {
-          chatId_userId: {
-            userId: newOwner.userId,
-            chatId: chatId
-          }
+    await this.prisma.chatMember.update({
+      where: {
+        chatId_userId: {
+          userId: newOwner.userId,
+          chatId: chatId,
         },
-        data: {
-          muted: false,
-        }
-      })
+      },
+      data: {
+        muted: false,
+      },
+    });
   }
 
   private async findNewOwner(userId: number, chatId: number) {
@@ -151,7 +151,7 @@ export class MembershipService {
         userId: {
           not: userId,
         },
-        chatId: chatId
+        chatId: chatId,
       },
       orderBy: [
         {
@@ -303,6 +303,19 @@ export class MembershipService {
     if (!chatMember) return false;
     if (chatMember.muted && chatMember.mutedExpiringDate > new Date(Date.now()))
       return false;
+    if (chatMember.muted) {
+      await this.prisma.chatMember.update({
+        where: {
+          chatId_userId: {
+            chatId: chatId,
+            userId: userId,
+          },
+        },
+        data: {
+          muted: false,
+        },
+      });
+    }
     return true;
   }
 
