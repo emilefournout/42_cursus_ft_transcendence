@@ -5,7 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import * as fs from 'fs';
 import { WSValidationPipe } from './pipes/ws-validation.pipe';
-import { ExtendedSocketIoAdapter } from './ExtendedIoAdapter';
 
 async function bootstrap() {
   const httpsOptions = {
