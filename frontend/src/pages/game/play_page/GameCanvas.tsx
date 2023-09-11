@@ -72,12 +72,12 @@ export function GameCanvas(props: GameCanvasProps) {
 
   useEffect(() => {
     function handleKeyDown(event: any) {
-      if (event.key === "ArrowUp") {
+      if (event.key === "ArrowUp" || event.key === "w") {
         gameSocket.emit("move_user", {
           gameId: id,
           direction: "up",
         });
-      } else if (event.key === "ArrowDown") {
+      } else if (event.key === "ArrowDown" || event.key === "s") {
         gameSocket.emit("move_user", {
           gameId: id,
           direction: "down",
