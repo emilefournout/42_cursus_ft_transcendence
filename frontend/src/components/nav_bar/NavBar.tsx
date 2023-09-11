@@ -9,13 +9,13 @@ export function NavBar() {
   return (
     <nav>
       <div id="nav-left-side">
-        <Link to="/board/settings" className="nav-icons">
+        <Link to="/board/settings" className="nav-icons" title="Settings">
           <img src={settingsIcon} alt="Setting icon"></img>
         </Link>
-        <Link to="/board/chats" className="nav-icons">
+        <Link to="/board/chats" className="nav-icons" title="Chats">
           <img src={chatsIcon} alt="Chat icon"></img>
         </Link>
-        <Link to="/board/user-account" className="nav-icons">
+        <Link to="/board/user-account" className="nav-icons" title="Profile">
           <img src={userIcon} alt="User icon"></img>
         </Link>
       </div>
