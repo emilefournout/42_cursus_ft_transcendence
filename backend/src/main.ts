@@ -22,7 +22,6 @@ async function bootstrap() {
     new WSValidationPipe()
   );
   app.use(json({ limit: '50mb' }));
-  // app.useWebSocketAdapter(new ExtendedSocketIoAdapter(app.getHttpServer()));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Transcendence API')
