@@ -1,7 +1,14 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {Type} from 'class-transformer';
-import {IsBoolean, IsDefined, IsNotEmpty, IsNumber, IsObject, IsOptional,} from 'class-validator';
-import {IsValidUserId} from 'src/user/validators/user-valid-id.decorator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDefined,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsOptional,
+} from 'class-validator';
+import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
 
 export class ChatRoleDto {
   @IsOptional()

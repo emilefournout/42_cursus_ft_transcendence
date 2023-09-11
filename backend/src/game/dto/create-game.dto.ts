@@ -1,5 +1,15 @@
-import {Transform, TransformFnParams} from 'class-transformer';
-import {IsBoolean, IsDefined, IsIn, IsNotEmpty, IsNumber, IsString, Max, Min, ValidateNested,} from 'class-validator';
+import { Transform, TransformFnParams } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDefined,
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 
 export class CreateGameDto {
   @IsDefined()

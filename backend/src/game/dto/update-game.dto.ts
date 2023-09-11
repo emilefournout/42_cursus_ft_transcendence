@@ -1,5 +1,5 @@
-import {GameStatus} from '@prisma/client';
-import {IsDefined, IsEnum, IsNumber} from 'class-validator';
+import { GameStatus } from '@prisma/client';
+import { IsDefined, IsEnum, IsNumber } from 'class-validator';
 
 export class UpdateGameDto {
   @IsDefined()

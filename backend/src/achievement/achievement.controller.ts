@@ -1,9 +1,21 @@
-import {Controller, Get, Param, ParseIntPipe, UseGuards,} from '@nestjs/common';
-import {ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags,} from '@nestjs/swagger';
-import {GetUser} from 'src/auth/decorator';
-import {JwtAuthGuard} from 'src/auth/guard';
-import {AchievementService} from './achievement.service';
-import {AchievementDto} from './dto/achievement.dto';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GetUser } from 'src/auth/decorator';
+import { JwtAuthGuard } from 'src/auth/guard';
+import { AchievementService } from './achievement.service';
+import { AchievementDto } from './dto/achievement.dto';
 
 @ApiTags('Achievements')
 @Controller('achievements')

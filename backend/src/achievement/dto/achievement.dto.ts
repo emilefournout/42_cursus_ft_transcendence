@@ -1,5 +1,5 @@
-import {ApiProperty} from '@nestjs/swagger';
-import {Achievement, AchievementRarity} from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
+import { Achievement, AchievementRarity } from '@prisma/client';
 
 export class AchievementDto {
   @ApiProperty()

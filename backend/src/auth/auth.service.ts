@@ -1,13 +1,18 @@
-import {JwtService} from '@nestjs/jwt';
-import {BadRequestException, ForbiddenException, Injectable, UnauthorizedException,} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {PrismaService} from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PrismaService } from 'src/prisma/prisma.service';
 import * as qrcode from 'qrcode';
-import {authenticator} from 'otplib';
-import {UserService} from 'src/user/user.service';
-import {TwoFactorAuthenticationStatus} from '@prisma/client';
-import {I42_oauth} from './interface/I42_oauth';
-import {UserServiceError} from '../user/exceptions/index.dto';
+import { authenticator } from 'otplib';
+import { UserService } from 'src/user/user.service';
+import { TwoFactorAuthenticationStatus } from '@prisma/client';
+import { I42_oauth } from './interface/I42_oauth';
+import { UserServiceError } from '../user/exceptions/index.dto';
 
 @Injectable()
 export class AuthService {

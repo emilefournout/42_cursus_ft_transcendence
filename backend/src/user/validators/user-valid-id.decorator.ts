@@ -1,4 +1,8 @@
-import {registerDecorator, ValidationArguments, ValidationOptions,} from 'class-validator';
+import {
+  registerDecorator,
+  ValidationArguments,
+  ValidationOptions,
+} from 'class-validator';
 
 export function IsValidUserId(validationOptions?: ValidationOptions) {
   return function (object: unknown, propertyName: string) {

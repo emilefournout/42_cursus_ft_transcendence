@@ -1,34 +1,47 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    ForbiddenException,
-    Get,
-    NotFoundException,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    UnauthorizedException,
-    UseGuards,
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import {ChatService} from './chat.service';
-import {AddChatMemberDto, CreateChatDto, CreateMessageDto, DeleteChatMemberDto, UpdateChatMemberDto,} from './dto';
-import {MembershipService} from './membership.service';
-import {ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags,} from '@nestjs/swagger';
-import {UpdateChatDto} from './dto/update-chat.dto';
-import {GetUser} from 'src/auth/decorator';
-import {JwtAuthGuard} from 'src/auth/guard';
-import {MuteUserDto} from './dto/mute-user.dto';
-import {UnmuteUserDto} from './dto/unmute-user.dto';
-import {ChatMemberBasicInfoDto} from './dto/info-chat-member.dto';
-import {ChatBasicInfoDto} from './dto/info-chat.dto';
-import {ChatShortInfoDto} from './dto/short-info-chat.dto';
-import {JoinChatDto} from './dto/join-chat.dto';
-import {BanUserDto} from './dto/ban-user.dto';
-import {UnbanUserDto} from './dto/unban-user.dto';
-import {UserBasicInfoDto} from 'src/user/dto/info-user.dto';
-import {UserService} from 'src/user/user.service';
+import { ChatService } from './chat.service';
+import {
+  AddChatMemberDto,
+  CreateChatDto,
+  CreateMessageDto,
+  DeleteChatMemberDto,
+  UpdateChatMemberDto,
+} from './dto';
+import { MembershipService } from './membership.service';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UpdateChatDto } from './dto/update-chat.dto';
+import { GetUser } from 'src/auth/decorator';
+import { JwtAuthGuard } from 'src/auth/guard';
+import { MuteUserDto } from './dto/mute-user.dto';
+import { UnmuteUserDto } from './dto/unmute-user.dto';
+import { ChatMemberBasicInfoDto } from './dto/info-chat-member.dto';
+import { ChatBasicInfoDto } from './dto/info-chat.dto';
+import { ChatShortInfoDto } from './dto/short-info-chat.dto';
+import { JoinChatDto } from './dto/join-chat.dto';
+import { BanUserDto } from './dto/ban-user.dto';
+import { UnbanUserDto } from './dto/unban-user.dto';
+import { UserBasicInfoDto } from 'src/user/dto/info-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('Chat')
 @Controller('chat')

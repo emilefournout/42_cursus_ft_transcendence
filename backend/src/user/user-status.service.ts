@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
-import {UserService} from './user.service';
-import {Socket} from 'socket.io';
-import {OnlineStatus} from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { UserService } from './user.service';
+import { Socket } from 'socket.io';
+import { OnlineStatus } from '@prisma/client';
 
 @Injectable()
 export class UserStatusService {

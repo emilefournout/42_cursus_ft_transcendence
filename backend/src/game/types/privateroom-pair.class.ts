@@ -1,4 +1,4 @@
-import {GameDataOptions} from './game-data.class';
+import { GameDataOptions } from './game-data.class';
 
 export class Pair {
   constructor(public gameData: GameDataOptions, public invitedId: number) {

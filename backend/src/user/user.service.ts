@@ -1,9 +1,15 @@
-import {ForbiddenException, forwardRef, Inject, Injectable, NotFoundException,} from '@nestjs/common';
-import {PrismaService} from '../prisma/prisma.service';
-import {UserBasicInfoDto} from './dto/info-user.dto';
-import {OnlineStatus, Prisma} from '@prisma/client';
-import {GameService} from 'src/game/game.service';
-import {ScoreField} from './types/scorefield.enum';
+import {
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { UserBasicInfoDto } from './dto/info-user.dto';
+import { OnlineStatus, Prisma } from '@prisma/client';
+import { GameService } from 'src/game/game.service';
+import { ScoreField } from './types/scorefield.enum';
 import * as UserServiceErrors from './exceptions/user-service.exception';
 
 type UserFilter = {

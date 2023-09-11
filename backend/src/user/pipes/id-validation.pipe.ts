@@ -1,4 +1,4 @@
-import {BadRequestException, PipeTransform} from '@nestjs/common';
+import { BadRequestException, PipeTransform } from '@nestjs/common';
 
 export class IdValidationPipe implements PipeTransform {
   transform(value: any) {

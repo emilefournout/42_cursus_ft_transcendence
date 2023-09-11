@@ -1,6 +1,12 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {Transform, TransformFnParams} from 'class-transformer';
-import {IsDefined, IsNotEmpty, IsOptional, IsString, MinLength,} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, TransformFnParams } from 'class-transformer';
+import {
+  IsDefined,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterUserDto {
   @IsDefined()

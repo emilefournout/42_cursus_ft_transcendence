@@ -1,22 +1,22 @@
 import {
-    Body,
-    Controller,
-    Get,
-    Post,
-    Query,
-    Req,
-    Res,
-    UnauthorizedException,
-    UploadedFile,
-    UseInterceptors,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+  UnauthorizedException,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import {AuthService} from './auth.service';
-import {Express, Request, Response} from 'express';
-import {FileInterceptor} from '@nestjs/platform-express';
-import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
-import {ProfileService} from '../profile/profile.service';
-import {RegisterUserDto} from 'src/user/dto/register-user.dto';
-import {UserService} from 'src/user/user.service';
+import { AuthService } from './auth.service';
+import { Express, Request, Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ProfileService } from '../profile/profile.service';
+import { RegisterUserDto } from 'src/user/dto/register-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('Auth')
 @Controller('auth')

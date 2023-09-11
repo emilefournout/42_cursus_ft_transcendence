@@ -1,8 +1,21 @@
-import {Controller, Get, NotFoundException, Param, ParseUUIDPipe, UseGuards,} from '@nestjs/common';
-import {GameService} from './game.service';
-import {ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags,} from '@nestjs/swagger';
-import {JwtAuthGuard} from 'src/auth/guard';
-import {GetUser} from 'src/auth/decorator';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  UseGuards,
+} from '@nestjs/common';
+import { GameService } from './game.service';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guard';
+import { GetUser } from 'src/auth/decorator';
 
 @ApiTags('Game')
 @Controller('game')

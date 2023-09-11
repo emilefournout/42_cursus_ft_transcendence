@@ -1,14 +1,14 @@
 import {
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    WebSocketGateway,
-    WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import {Server, Socket} from 'socket.io';
-import {JwtService} from '@nestjs/jwt';
-import {JwtPayload} from 'src/auth/interface/jwtpayload.dto';
-import {UserStatusService} from './user-status.service';
+import { Server, Socket } from 'socket.io';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
+import { UserStatusService } from './user-status.service';
 
 @WebSocketGateway(3003, {
   cors: { origin: '*' },

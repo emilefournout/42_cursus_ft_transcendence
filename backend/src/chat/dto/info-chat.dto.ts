@@ -1,6 +1,6 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {ChatVisibility} from '@prisma/client';
-import {ChatMemberBasicInfoDto} from './info-chat-member.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ChatVisibility } from '@prisma/client';
+import { ChatMemberBasicInfoDto } from './info-chat-member.dto';
 
 export class ChatBasicInfoDto {
   @ApiProperty({
