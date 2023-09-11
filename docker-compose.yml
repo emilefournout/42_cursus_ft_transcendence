@@ -48,7 +48,7 @@ services:
     build: ./frontend/.
     restart: unless-stopped
     ports:
-      - 8000:8000
+      - 8000:80
     volumes:
       - ./frontend:/app
       - /app/node_modules
