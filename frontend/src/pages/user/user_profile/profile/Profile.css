@@ -24,7 +24,7 @@
 	margin-bottom: 12px;
 
 	text-align: center;
-	font-size: clamp(0.5rem, calc(1.5vw + 1vh), 0.75rem);
+	font-size: clamp(0.4rem, calc(1.5vw + 1vh), 0.7rem);
 }
 
 .prof-cards-wrapper > button {
