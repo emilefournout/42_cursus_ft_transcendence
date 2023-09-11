@@ -99,11 +99,7 @@ export class AuthController {
       //if (!user) {
       return res
         .cookie('42token', token)
-<<<<<<< Updated upstream
         .redirect(`${process.env.FRONTEND_URI}/register`);
-=======
-        .redirect('http://c3r10s6.42malaga.com:8000/register');
->>>>>>> Stashed changes
       //} else {
       //  return res
       //    .cookie('42token', token)
@@ -113,11 +109,7 @@ export class AuthController {
     } catch (error) {
       return res
         .cookie('42token', token)
-<<<<<<< Updated upstream
         .redirect(`${process.env.FRONTEND_URI}/register`);
-=======
-        .redirect('http://c3r10s6.42malaga.com:8000/register');
->>>>>>> Stashed changes
     }
   }
 }
