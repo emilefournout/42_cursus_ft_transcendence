@@ -277,10 +277,10 @@ export class ChatController {
     )
       throw new ForbiddenException('User is not an administrator of this chat');
     if (
-      await this.membershipService.isOwnerOfTheChat(
+      (await this.membershipService.isOwnerOfTheChat(
         deleteChatMemberDto.id,
         chatId
-      ) &&
+      )) &&
       user.sub !== deleteChatMemberDto.id
     )
       throw new ForbiddenException(
