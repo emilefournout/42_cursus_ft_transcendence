@@ -23,7 +23,7 @@
 		margin-top: 8px;
 		margin-bottom: 12px;
 
-		overflow: initial;
+		overflow-y: initial;
 		text-align: center;
 		font-size: clamp(0.5rem, calc(1.5vw + 1vh), 0.75rem);
 	}
