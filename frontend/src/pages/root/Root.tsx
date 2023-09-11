@@ -24,6 +24,7 @@ export function Root() {
       const expirationDate: number = jwtData.exp * 1000;
       if (expirationDate < Date.now()) throw new Error("Expired token");
     } catch (error) {
+      console.log(error);
       localStorage.removeItem("access_token");
       setDialog("Please sign in");
       navigate("/welcome");
