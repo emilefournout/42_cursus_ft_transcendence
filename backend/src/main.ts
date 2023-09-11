@@ -3,10 +3,16 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
+import * as fs from 'fs';
 import { WSValidationPipe } from './pipes/ws-validation.pipe';
+import { ExtendedSocketIoAdapter } from './ExtendedIoAdapter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const httpsOptions = {
+    key: fs.readFileSync('./certification/key.pem'),
+    cert: fs.readFileSync('./certification/certificate.pem'),
+  };
+  const app = await NestFactory.create(AppModule, { cors: true, httpsOptions });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,6 +22,7 @@ async function bootstrap() {
     new WSValidationPipe()
   );
   app.use(json({ limit: '50mb' }));
+  // app.useWebSocketAdapter(new ExtendedSocketIoAdapter(app.getHttpServer()));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Transcendence API')
