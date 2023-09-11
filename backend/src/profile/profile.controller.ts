@@ -1,30 +1,23 @@
 import {
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Res,
-  UploadedFile,
-  UseInterceptors,
-  UseGuards,
-  BadRequestException,
-  ForbiddenException,
+    BadRequestException,
+    Controller,
+    ForbiddenException,
+    Get,
+    Param,
+    Patch,
+    Res,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import {FileInterceptor} from '@nestjs/platform-express';
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags,} from '@nestjs/swagger';
 import * as path from 'path';
 import * as fs from 'fs';
-import { GetUser } from 'src/auth/decorator';
-import { JwtAuthGuard } from 'src/auth/guard';
-import { ProfileService } from './profile.service';
-import { UserService } from 'src/user/user.service';
+import {GetUser} from 'src/auth/decorator';
+import {JwtAuthGuard} from 'src/auth/guard';
+import {ProfileService} from './profile.service';
+import {UserService} from 'src/user/user.service';
 
 @Controller('profile')
 @ApiTags('Profile Images')

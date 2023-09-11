@@ -1,18 +1,18 @@
 import * as argon2 from 'argon2';
 import {
-  BadRequestException,
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  forwardRef,
+    BadRequestException,
+    ForbiddenException,
+    forwardRef,
+    Inject,
+    Injectable,
+    NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { Chat, ChatVisibility } from '@prisma/client';
-import { UpdateChatDto } from './dto/update-chat.dto';
-import { ChatBasicInfoDto } from './dto/info-chat.dto';
-import { ChatShortInfoDto } from './dto/short-info-chat.dto';
-import { MembershipService } from './membership.service';
+import {PrismaService} from 'src/prisma/prisma.service';
+import {Chat, ChatVisibility} from '@prisma/client';
+import {UpdateChatDto} from './dto/update-chat.dto';
+import {ChatBasicInfoDto} from './dto/info-chat.dto';
+import {ChatShortInfoDto} from './dto/short-info-chat.dto';
+import {MembershipService} from './membership.service';
 
 @Injectable()
 export class ChatService {

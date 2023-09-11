@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import ChatWindow from "./ChatWindow";
 import "./Chat.css";
 import { ChatPageContext } from "../pages/chat/Chat";

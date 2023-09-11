@@ -15,8 +15,7 @@ export class ChatSocket {
   }
 
   public static getInstance() {
-    if (!this.singleton || !this.singleton.socket.connected)
-    {
+    if (!this.singleton || !this.singleton.socket.connected) {
       this.singleton = new ChatSocket();
     }
     return this.singleton;

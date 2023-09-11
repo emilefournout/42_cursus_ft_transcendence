@@ -8,14 +8,14 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { ChatService } from './chat.service';
-import { ChatIdDto } from './dto/chat-id.dto';
-import { ChatMessageDto } from './dto/chat-message.dto';
-import { MembershipService } from './membership.service';
-import { ConnectionStorage } from 'src/game/types/connection-storage.class';
-import { JwtPayload } from 'src/auth/interface';
-import { JwtService } from '@nestjs/jwt';
+import {Server, Socket} from 'socket.io';
+import {ChatService} from './chat.service';
+import {ChatIdDto} from './dto/chat-id.dto';
+import {ChatMessageDto} from './dto/chat-message.dto';
+import {MembershipService} from './membership.service';
+import {ConnectionStorage} from 'src/game/types/connection-storage.class';
+import {JwtPayload} from 'src/auth/interface';
+import {JwtService} from '@nestjs/jwt';
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },

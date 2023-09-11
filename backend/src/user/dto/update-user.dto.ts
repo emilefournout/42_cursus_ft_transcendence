@@ -1,12 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDefined,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  MinLength,
-} from 'class-validator';
-import { IsValidUserId } from '../validators/user-valid-id.decorator';
+import {ApiProperty} from '@nestjs/swagger';
+import {IsDefined, IsNotEmpty, IsNumber, IsString, MinLength,} from 'class-validator';
+import {IsValidUserId} from '../validators/user-valid-id.decorator';
 
 export class UpdateUserRelationDto {
   @ApiProperty()

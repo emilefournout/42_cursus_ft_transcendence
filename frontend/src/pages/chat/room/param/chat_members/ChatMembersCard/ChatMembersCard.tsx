@@ -8,7 +8,6 @@ import demoteIcon from "./demote.svg";
 import muteIcon from "./mute.svg";
 import unmuteIcon from "./unmute.svg";
 import banIcon from "./ban.svg";
-import unbanIcon from "./unban.svg";
 import kickIcon from "./kick.svg";
 import playIcon from "./play.svg";
 import { ErrorBody, MuteDialogContext } from "../../RoomParam";

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { GameCanvas, GameCanvasProps } from "./GameCanvas";
 import { GameSocket } from "../../../services/socket";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./GamePlayPage.css";
+import { EngGameDialog } from "./EndGameDialog";
 
 enum GameExistState {
   Waiting,
@@ -34,7 +35,16 @@ export function GamePlayPage() {
   const [player1Score, updatePlayer1Score] = useState(0);
   const [player2Score, updatePlayer2Score] = useState(0);
 
-  const [showModal, setShowModal] = useState(null);
+  const [showModal, setShowModal] = useState<string | undefined>(undefined);
+
+  const [showDialog, setShowDialog] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (showModal !== undefined) {
+      setShowDialog(showModal + " win");
+    }
+    return () => {};
+  }, [showModal]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/game/info/${id}`, {
@@ -57,7 +67,7 @@ export function GamePlayPage() {
           let path = window.location.pathname;
           path = path.substring(path.lastIndexOf("/") + 1);
 
-          gameSocket.emit("join_active_room", {gameId: path});
+          gameSocket.emit("join_active_room", { gameId: path });
           setGameExistState(GameExistState.Play);
         }
       });
@@ -81,6 +91,7 @@ export function GamePlayPage() {
 
   return (
     <>
+      <EngGameDialog dialog={showDialog} setDialog={setShowDialog} />
       {gameExistState === GameExistState.Waiting ? (
         <div className="light-text">Waiting</div>
       ) : gameExistState === GameExistState.NotFound ? (
@@ -89,18 +100,18 @@ export function GamePlayPage() {
         <>
           <h1 className="title light-text">Game</h1>
           <div className="title scores">
-            {(player1Score !== -1 && player2Score !== -1) ? (
+            {player1Score !== -1 && player2Score !== -1 ? (
               <>
                 <span className="score">{player1Score}</span>
                 <span> / </span>
                 <span className="score">{player2Score}</span>
               </>
-            ): (
-                <span> Disconnection </span>
+            ) : (
+              <span> Disconnection </span>
             )}
           </div>
           <GameCanvas {...state} />
-          {showModal !== null && (
+          {/*showModal !== null && (
             <div className="modal">
               <div className="modal-content wrapper-col">
                 <p className="light-text">{showModal} wins</p>
@@ -109,7 +120,7 @@ export function GamePlayPage() {
                 </Link>
               </div>
             </div>
-          )}
+          )*/}
         </>
       )}
     </>

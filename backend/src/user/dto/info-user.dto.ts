@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { OnlineStatus } from '@prisma/client';
-import { IsValidUserId } from '../validators/user-valid-id.decorator';
+import {ApiProperty} from '@nestjs/swagger';
+import {OnlineStatus} from '@prisma/client';
+import {IsValidUserId} from '../validators/user-valid-id.decorator';
 
 export class UserBasicInfoDto {
   @ApiProperty({

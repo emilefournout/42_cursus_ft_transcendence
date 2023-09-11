@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useOutletContext } from "react-router-dom";
 import { Member, RoomContextArgs } from "../../Room";
 import { ChatMembersCard } from "./ChatMembersCard/ChatMembersCard";

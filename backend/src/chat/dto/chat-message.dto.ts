@@ -1,6 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { IsValidUserId } from 'src/user/validators/user-valid-id.decorator';
+import {ApiProperty} from '@nestjs/swagger';
+import {IsDefined, IsNotEmpty, IsNumber, IsString} from 'class-validator';
 
 export class ChatMessageDto {
   @IsNumber()

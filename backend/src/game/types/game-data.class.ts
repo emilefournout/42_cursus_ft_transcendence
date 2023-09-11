@@ -1,4 +1,4 @@
-import { GameColors } from '../dto/game-colors';
+import {GameColors} from '../dto/game-colors';
 
 export class GameDataOptions {
   maxGoals: number;

@@ -1,6 +1,5 @@
 import React from "react";
 import { ChatInfo } from "../../../Chat";
-import chat from "../../../../../components/Chat";
 
 interface RoomSearchCardProps {
   chat: ChatInfo;

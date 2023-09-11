@@ -1,5 +1,5 @@
-import { IsDefined, IsInt, IsNotEmpty, IsString } from 'class-validator';
-import { IsValidUserId } from '../validators/user-valid-id.decorator';
+import {IsDefined, IsInt, IsNotEmpty, IsString} from 'class-validator';
+import {IsValidUserId} from '../validators/user-valid-id.decorator';
 
 export class VerifyUserDto {
   @IsDefined()

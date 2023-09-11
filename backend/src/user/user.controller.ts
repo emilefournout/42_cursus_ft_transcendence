@@ -1,30 +1,24 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Patch,
-  Delete,
-  Body,
-  UseGuards,
-  ForbiddenException,
-  HttpException,
-  BadRequestException,
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    ForbiddenException,
+    Get,
+    HttpException,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { GetUser } from '../auth/decorator';
-import { JwtAuthGuard } from 'src/auth/guard';
-import { UpdateUserDto } from './dto/update-user.dto';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { UserBasicInfoDto } from './dto/info-user.dto';
-import { UserControllerError, UserServiceError } from './exceptions/index.dto';
-import { IdValidationPipe } from './pipes/id-validation.pipe';
+import {UserService} from './user.service';
+import {GetUser} from '../auth/decorator';
+import {JwtAuthGuard} from 'src/auth/guard';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags,} from '@nestjs/swagger';
+import {UserBasicInfoDto} from './dto/info-user.dto';
+import {UserControllerError, UserServiceError} from './exceptions/index.dto';
+import {IdValidationPipe} from './pipes/id-validation.pipe';
 
 @ApiTags('User')
 @Controller('user')

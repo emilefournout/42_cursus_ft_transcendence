@@ -1,4 +1,4 @@
-import { IsDefined, IsString, IsUUID } from 'class-validator';
+import {IsDefined, IsString, IsUUID} from 'class-validator';
 
 export class GameIdDto {
   @IsDefined()

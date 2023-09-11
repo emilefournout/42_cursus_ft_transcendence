@@ -1,10 +1,5 @@
-import {
-  ArgumentMetadata,
-  HttpException,
-  ValidationPipe,
-  ValidationPipeOptions,
-} from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
+import {ArgumentMetadata, HttpException, ValidationPipe, ValidationPipeOptions,} from '@nestjs/common';
+import {WsException} from '@nestjs/websockets';
 
 export class WSValidationPipe extends ValidationPipe {
   constructor(options?: ValidationPipeOptions) {

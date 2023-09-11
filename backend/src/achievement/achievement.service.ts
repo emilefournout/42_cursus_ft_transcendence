@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { AchievementDto } from './dto/achievement.dto';
-import { GameState } from 'src/game/types/game-state.class';
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from 'src/prisma/prisma.service';
+import {AchievementDto} from './dto/achievement.dto';
+import {GameState} from 'src/game/types/game-state.class';
 
 @Injectable()
 export class AchievementService {

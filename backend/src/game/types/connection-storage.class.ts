@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io';
+import {Socket} from 'socket.io';
 
 export class ConnectionStorage {
   private connectedSockets: Map<Socket, number> = new Map<Socket, number>();

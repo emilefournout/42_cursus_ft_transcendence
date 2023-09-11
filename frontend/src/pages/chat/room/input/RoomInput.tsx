@@ -27,12 +27,9 @@ export function RoomInput({ chatSocket }: InputProps) {
       chatId: Number(id),
       text: input,
     };
-    chatSocket.emit("send_message", data,
-    (response: any) => {
-      if (response === "ko")
-        setMuted(true);
-      else
-        setMuted(false);
+    chatSocket.emit("send_message", data, (response: any) => {
+      if (response === "ko") setMuted(true);
+      else setMuted(false);
     });
     setInput("");
   };

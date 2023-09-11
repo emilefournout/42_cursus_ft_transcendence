@@ -150,9 +150,9 @@ export function GameCreatePage() {
                   onChange={(e) => setUserInvited(e.target.value)}
                 />
               )}
-              {error &&
-                (<label htmlFor="errorCreateGame">Could not create game</label>)
-              }
+              {error && (
+                <label htmlFor="errorCreateGame">Could not create game</label>
+              )}
               {error && (
                 <button
                   className="btn game-creation-btn create-game-btn btn-bottom"
@@ -175,20 +175,24 @@ export function GameCreatePage() {
                 className="btn game-creation-btn btn-bottom-right create-game-btn"
                 onClick={(event) => {
                   if (!invitation) {
-                    gameSocket.emit("create_room", {
-                      speed,
-                      maxGoals,
-                      powerUps,
-                      color,
-                    }, (data: any) => {
-                      if(data === 'ok') {
-                        waiting.current = false;
-                        setHiddenForm(true);
-                      } else {
-                        waiting.current = false;
-                        setError(true);
+                    gameSocket.emit(
+                      "create_room",
+                      {
+                        speed,
+                        maxGoals,
+                        powerUps,
+                        color,
+                      },
+                      (data: any) => {
+                        if (data === "ok") {
+                          waiting.current = false;
+                          setHiddenForm(true);
+                        } else {
+                          waiting.current = false;
+                          setError(true);
+                        }
                       }
-                    });
+                    );
                   } else {
                     createPrivateGame();
                   }
@@ -201,19 +205,22 @@ export function GameCreatePage() {
         )}
         {hiddenForm && (
           <>
-            <div className="matchmaking-loader"></div><br></br>
+            <div className="matchmaking-loader"></div>
+            <br></br>
             <p className="matchmaking-scaling">
               {!invitation
                 ? "Finding new rival for you"
                 : `Waiting for ${userInvited} to join`}
             </p>
             <Link to="/board/game">
-              <button className="btn btn-fixed-height matchmaking-scaling"
-              onClick={() => {
-                waiting.current = false;
-                gameSocket.emit("leave_creating_room");
-                gameSocket.emit("leave_private_room");
-              }}>
+              <button
+                className="btn btn-fixed-height matchmaking-scaling"
+                onClick={() => {
+                  waiting.current = false;
+                  gameSocket.emit("leave_creating_room");
+                  gameSocket.emit("leave_private_room");
+                }}
+              >
                 Cancel
               </button>
             </Link>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Login.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -8,7 +8,7 @@ export function Login() {
   const [username, setUsername] = useState("");
   const [code2fa, setCode2fa] = useState("");
   const [show2fa, setShow2fa] = useState(false);
-  const loadingLogin = useRef(false)
+  const loadingLogin = useRef(false);
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   // Guest mode for no 42-students
@@ -20,12 +20,12 @@ export function Login() {
       Cookies.remove("42token");
       navigate("/cookie-error");
     }
-    const username: string | undefined = Cookies.get("username")
+    const username: string | undefined = Cookies.get("username");
     if (username) {
-      loadingLogin.current = true
-      callLogin(username)
+      loadingLogin.current = true;
+      callLogin(username);
     } else if (!loadingLogin.current) {
-      navigate("/welcome")
+      navigate("/welcome");
     }
   });
 
@@ -63,7 +63,7 @@ export function Login() {
       .then((data) => {
         if (data.access_token) {
           localStorage.setItem("access_token", data.access_token);
-          loadingLogin.current = false
+          loadingLogin.current = false;
           navigate("/");
         } else {
           setUsername(data.username);
@@ -73,7 +73,7 @@ export function Login() {
       .catch((error) => {
         setErrorMessage("bad 2fa code");
         devlog(error);
-      })
+      });
   }
 
   return (
@@ -81,34 +81,31 @@ export function Login() {
       <div className="window-top-bar">
         <div className="window-title">Login</div>
         <div className="wrapper-col window-overtext">
-          <span className="txt txt-shadow-top">
-            Wait a moment for login
-          </span>
+          <span className="txt txt-shadow-top">Wait a moment for login</span>
         </div>
       </div>
-      {show2fa
-            &&
-            <div className="window-body-centered">
-              <input
-                id="wp-2fa"
-                className="wp-responsive-txt"
-                type="text"
-                placeholder="2FA Code"
-                onChange={(event) => setCode2fa(event.target.value)}
-                onKeyDown={(event) => {
-                  event.key === "Enter" && register();
-                }}
-              />
-              <button
-                id={show2fa ? "wp-submit-2fa" : "wp-submit-no-2fa"}
-                className="btn btn-bottom-right wp-responsive-txt"
-                onClick={() => register()}
-              >
-                Done!
-              </button>
+      {show2fa && (
+        <div className="window-body-centered">
+          <input
+            id="wp-2fa"
+            className="wp-responsive-txt"
+            type="text"
+            placeholder="2FA Code"
+            onChange={(event) => setCode2fa(event.target.value)}
+            onKeyDown={(event) => {
+              event.key === "Enter" && register();
+            }}
+          />
+          <button
+            id={show2fa ? "wp-submit-2fa" : "wp-submit-no-2fa"}
+            className="btn btn-bottom-right wp-responsive-txt"
+            onClick={() => register()}
+          >
+            Done!
+          </button>
           <div className="wp-error-msg wp-responsive-txt">{errorMessage}</div>
         </div>
-      }
+      )}
     </div>
   );
 }

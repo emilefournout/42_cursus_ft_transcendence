@@ -1,10 +1,10 @@
 import * as jdenticon from 'jdenticon';
 import * as fs from 'fs';
-import { Injectable } from '@nestjs/common';
-import { randomBytes } from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
+import {Injectable} from '@nestjs/common';
+import {randomBytes} from 'crypto';
+import {v4 as uuidv4} from 'uuid';
 import * as path from 'path';
-import { UserService } from 'src/user/user.service';
+import {UserService} from 'src/user/user.service';
 
 @Injectable()
 export class ProfileService {

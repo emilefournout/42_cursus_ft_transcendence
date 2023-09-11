@@ -1,27 +1,27 @@
 import {
-  ConnectedSocket,
-  MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
+    ConnectedSocket,
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { GameService } from './game.service';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
-import { UserService } from 'src/user/user.service';
-import { ScoreField } from 'src/user/types/scorefield.enum';
-import { AchievementService } from 'src/achievement/achievement.service';
-import { GameState } from './types/game-state.class';
-import { GameData } from './types/game-data.class';
-import { CreateGameDto, CreatePrivateGameDto } from './dto/create-game.dto';
-import { OnlineStatus } from '@prisma/client';
-import { GameIdDto } from './dto/game-id.dto';
-import { GameMoveDto } from './dto/game-move.dto';
-import { UserIdDto } from '../user/dto/user-id.dto';
+import {Server, Socket} from 'socket.io';
+import {GameService} from './game.service';
+import {JwtService} from '@nestjs/jwt';
+import {JwtPayload} from 'src/auth/interface/jwtpayload.dto';
+import {UserService} from 'src/user/user.service';
+import {ScoreField} from 'src/user/types/scorefield.enum';
+import {AchievementService} from 'src/achievement/achievement.service';
+import {GameState} from './types/game-state.class';
+import {GameData} from './types/game-data.class';
+import {CreateGameDto, CreatePrivateGameDto} from './dto/create-game.dto';
+import {OnlineStatus} from '@prisma/client';
+import {GameIdDto} from './dto/game-id.dto';
+import {GameMoveDto} from './dto/game-move.dto';
+import {UserIdDto} from '../user/dto/user-id.dto';
 
 @WebSocketGateway(3002, {
   cors: { origin: '*' },

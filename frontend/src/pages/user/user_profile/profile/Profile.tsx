@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Stats } from "./stats/Stats";
 import { MatchHistory } from "./match_history/MatchHistory";
 import { Achievements } from "./achievements/Achievements";
 import { Avatar } from "../../../../components/Avatar";
 import { BoardContext, RequestMethod, User } from "../../../board/Board";
 import "./Profile.css";
-import { devlog } from "../../../../services/core";
 
 interface ProfileProps {
   userInfo?: User;

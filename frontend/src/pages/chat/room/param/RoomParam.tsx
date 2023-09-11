@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./RoomParam.css";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { AddUser } from "./chat_members/AddUser";
 import { ChatMembers } from "./chat_members/ChatMembers";
 import { RoomContextArgs } from "../Room";

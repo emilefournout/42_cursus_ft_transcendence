@@ -12,8 +12,7 @@ export function GameMatchmakingPage() {
   useEffect(() => {
     if (!waiting.current) {
       gameSocket.emit("join_waiting_room", null, (data: any) => {
-        if(data.status === 'ko')
-          navigate(`../${data.uuid}`);
+        if (data.status === "ko") navigate(`../${data.uuid}`);
       });
       gameSocket.off("game_found");
       gameSocket.on("game_found", (gameId) => {

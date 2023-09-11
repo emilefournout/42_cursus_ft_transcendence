@@ -1,18 +1,12 @@
-import {
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-  forwardRef,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { GameData, GameDataOptions } from './types/game-data.class';
-import { Socket } from 'socket.io';
-import { UpdateGameDto } from './dto/update-game.dto';
-import { GameState } from './types/game-state.class';
-import { ConnectionStorage } from './types/connection-storage.class';
-import { Pair } from './types/privateroom-pair.class';
-import { UserService } from 'src/user/user.service';
+import {ForbiddenException, forwardRef, Inject, Injectable, NotFoundException,} from '@nestjs/common';
+import {PrismaService} from 'src/prisma/prisma.service';
+import {GameData, GameDataOptions} from './types/game-data.class';
+import {Socket} from 'socket.io';
+import {UpdateGameDto} from './dto/update-game.dto';
+import {GameState} from './types/game-state.class';
+import {ConnectionStorage} from './types/connection-storage.class';
+import {Pair} from './types/privateroom-pair.class';
+import {UserService} from 'src/user/user.service';
 
 @Injectable()
 export class GameService {
