@@ -46,7 +46,9 @@ export function AddUser() {
           setNewUser("");
           roomContextArgs.getChatInfo(roomContextArgs.chat);
         } else {
-          setDialog("bad connection, try again");
+          response.json()
+            .then((data) => setDialog(data.message))
+            .catch(() => setDialog("Error at joining the chat"));
           throw new Error();
         }
       })

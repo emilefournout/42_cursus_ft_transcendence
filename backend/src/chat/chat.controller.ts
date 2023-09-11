@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -202,6 +203,8 @@ export class ChatController {
   ) {
     if (!(await this.membershipService.isUserMemberOfChat(user.sub, chatId)))
       throw new NotFoundException(this.redirectError);
+    if (await this.membershipService.isUserMemberOfChat(addChatMemberDto.id, chatId))
+      throw new BadRequestException("User is already part of the chat")
     if (
       !(await this.membershipService.isAdministratorOfTheChat(user.sub, chatId))
     )
@@ -212,7 +215,11 @@ export class ChatController {
       await this.membershipService.isUserBannedFrom(chatId, addChatMemberDto.id)
     )
       throw new ForbiddenException('User is banned from chat');
-    await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
+    try {
+        await this.membershipService.addChatMember(chatId, addChatMemberDto.id);
+    } catch (error) {
+      throw new BadRequestException("User could not be added")
+    }
   }
 
   @Post(':id/join')
