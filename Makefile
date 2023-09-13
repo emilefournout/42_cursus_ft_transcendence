@@ -1,5 +1,5 @@
 up:
-	docker compose up
+	docker compose --env-file frontend/.env up --build
 
 down:
 	docker compose down

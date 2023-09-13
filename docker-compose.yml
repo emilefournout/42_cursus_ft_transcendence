@@ -30,6 +30,7 @@ services:
     container_name: backend
     build: ./backend/.
     restart: unless-stopped
+    env_file: ./backend/.env
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -45,7 +46,17 @@ services:
         condition: service_started
   frontend:
     container_name: frontend
-    build: ./frontend/.
+    build:
+      context: ./frontend
+      args:
+        - ARG_PORT=${PORT}
+        - ARG_REACT_APP_BACKEND=${REACT_APP_BACKEND}
+        - ARG_REACT_APP_INTRA_UID=${REACT_APP_INTRA_UID}
+        - ARG_REACT_APP_REDIRECT_URI=${REACT_APP_REDIRECT_URI}
+        - ARG_REACT_APP_CHAT_SOCKET=${REACT_APP_CHAT_SOCKET}
+        - ARG_REACT_APP_GAME_SOCKET=${REACT_APP_GAME_SOCKET}
+        - ARG_REACT_APP_USER_SOCKET=${REACT_APP_USER_SOCKET}
+        - ARG_REACT_APP_TESTING=${REACT_APP_TESTING}
     restart: unless-stopped
     ports:
       - 8080:80
@@ -55,6 +66,7 @@ services:
       - /app/node_modules
     networks:
       - transcendence_network
+
 
 volumes:
   db-data:
