@@ -99,7 +99,7 @@ export function GamePlayPage() {
 			) : (
 				<>
 					<h1 className="game-title">Game</h1>
-					<h3 className="game-title"></h3>
+					<h3 className="game-title game-controls">Controls: W/S or Up/Down</h3>
 					<div className="scores">
 						{player1Score !== -1 && player2Score !== -1 ? (
 							<span>{player1Score} / {player2Score}</span>

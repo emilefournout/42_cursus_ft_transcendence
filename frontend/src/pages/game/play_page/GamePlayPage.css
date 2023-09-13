@@ -9,6 +9,10 @@
 	font-size: clamp(0.6rem, 2vw, 1rem);
 }
 
+.game-controls {
+	font-size: clamp(0.3rem, 2vw, 0.6rem);
+}
+
 .scores{
 	height: 1.5em;
 
