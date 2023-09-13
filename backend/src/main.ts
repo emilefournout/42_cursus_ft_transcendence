@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import * as fs from 'fs';
 import { WSValidationPipe } from './sockets/ws-validation.pipe';
-import * as https from 'https'
+import * as https from 'https';
 import { WsAdapter } from './sockets/ws-adapter.class';
 
 async function bootstrap() {
@@ -22,14 +22,9 @@ async function bootstrap() {
       transform: true,
     }),
     new WSValidationPipe()
-
   );
-  const httpsServer = https.createServer(httpsOptions);
-  app.useWebSocketAdapter(new WsAdapter(httpsServer));
-
-
   initSwaggerDoc(app);
-  app.listen(3000);
+  await app.listen(3000);
 }
 bootstrap();
 
@@ -43,4 +38,3 @@ function initSwaggerDoc(app) {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 }
-

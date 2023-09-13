@@ -11,6 +11,8 @@ export class ChatSocket {
       extraHeaders: {
         authentication: access_token,
       },
+      path: '/ws/chat',
+      secure: true
     });
   }
 
@@ -33,10 +35,13 @@ export class GameSocket {
   private constructor() {
     const access_token = localStorage.getItem("access_token");
     if (!access_token) throw new Error("Access token not found");
+    
     this.socketIo = io(`${process.env.REACT_APP_GAME_SOCKET}`, {
       extraHeaders: {
         authentication: access_token,
       },
+      path: '/ws/game',
+      secure: true
     });
   }
 
@@ -62,6 +67,8 @@ export class UserSocket {
       extraHeaders: {
         authentication: access_token,
       },
+      path: '/ws/user',
+      secure: true
     });
   }
 

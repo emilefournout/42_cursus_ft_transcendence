@@ -10,8 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
 import { UserStatusService } from './user-status.service';
 
-@WebSocketGateway(3003, {
-  cors: { origin: '*' },
+@WebSocketGateway({
+  cors: { origin: '*' }, path: '/ws/user'
 })
 export class UserGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -29,7 +29,7 @@ export class UserGateway
   }
 
   handleConnection(client: Socket, ..._args: any[]) {
-    console.log(client.id + ' is connecting');
+    console.log(client.id + ' is connecting to UserSocket');
     try {
       const token = client.handshake.headers.authentication as string;
       const payload: JwtPayload = this.jwtService.verify(token);
