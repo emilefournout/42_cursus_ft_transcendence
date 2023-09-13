@@ -18,7 +18,8 @@ import { JwtPayload } from 'src/auth/interface';
 import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({
-  cors: { origin: '*' }, path: '/ws/chat'
+  cors: { origin: '*' },
+  path: '/ws/chat',
 })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -36,7 +37,6 @@ export class ChatGateway
 
   afterInit(_server: Server) {
     console.log(`Init ChatGateway`);
-    
   }
 
   handleConnection(client: Socket, ..._args: any[]) {

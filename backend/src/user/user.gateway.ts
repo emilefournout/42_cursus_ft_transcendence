@@ -11,7 +11,8 @@ import { JwtPayload } from 'src/auth/interface/jwtpayload.dto';
 import { UserStatusService } from './user-status.service';
 
 @WebSocketGateway({
-  cors: { origin: '*' }, path: '/ws/user'
+  cors: { origin: '*' },
+  path: '/ws/user',
 })
 export class UserGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect

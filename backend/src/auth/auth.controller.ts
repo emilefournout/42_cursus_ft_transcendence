@@ -26,7 +26,7 @@ export class AuthController {
     private authService: AuthService,
     private userService: UserService,
     private profileService: ProfileService
-  ) { }
+  ) {}
 
   @Post('register')
   @UseInterceptors(FileInterceptor('image'))

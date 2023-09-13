@@ -24,6 +24,8 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase().trim())
+  @Transform((name: TransformFnParams) =>
+    (name.value as string).toLowerCase().trim()
+  )
   username: string;
 }
