@@ -51,14 +51,14 @@ export function ChangeNamePage() {
 				value={newUsername}
 				type="text"
 				placeholder="new username"
-				onChange={(e) => setNewUsername(e.target.value)}
+				onChange={(e) => setNewUsername(e.target.value.trim().toLowerCase())}
 			/>
 			<input
 				id="unc-in2"
 				value={confirm}
 				type="text"
 				placeholder="confirm new username"
-				onChange={(e) => setConfirm(e.target.value)}
+				onChange={(e) => setConfirm(e.target.value.trim().toLowerCase())}
 				onKeyDown={(e) => {
 					e.key === "Enter" && validateUsername();
 				}}

@@ -375,7 +375,7 @@ export class UserService {
   }
 
   async setUserStatus(id: number, status: OnlineStatus) {
-    await this.prisma.user.update({
+    await this.prisma.user.updateMany({
       where: {
         id,
       },

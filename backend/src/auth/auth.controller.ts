@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -43,6 +44,8 @@ export class AuthController {
     if (!token) {
       throw new UnauthorizedException();
     }
+    if (registerUser.username.length < 5)
+      throw new BadRequestException('Username must be at least 5 characters long');
     try {
       const intraname =
         token === 'guest'
