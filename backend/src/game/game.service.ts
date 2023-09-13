@@ -255,7 +255,7 @@ export class GameService {
 
   public registerConnection(client: Socket, userId: number) {
     // Disable duplicated user - Commented for development
-    // this.disconnectPreviousConnection(userId);
+    this.disconnectPreviousConnection(userId);
     this.userConnections.addUser(client, userId);
   }
 
