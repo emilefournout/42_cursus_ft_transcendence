@@ -84,7 +84,7 @@ export function ProfileToolBar() {
             value={newFriend}
             type="text"
             placeholder="Add Friend!"
-            onChange={(e) => setNewFriend(e.target.value)}
+            onChange={(e) => setNewFriend(e.target.value.trim().toLowerCase())}
             onKeyDown={(e) => {
               e.key === "Enter" && addFriend();
             }}

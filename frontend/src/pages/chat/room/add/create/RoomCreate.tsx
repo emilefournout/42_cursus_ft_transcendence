@@ -127,7 +127,7 @@ export function RoomCreate() {
           type="text"
           placeholder="Room name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value.trim().toLowerCase())}
         />
         <h3 className="txt-light mini-title">Visibility:</h3>
         <div className="wrapper-row wrapper-vis-btns">

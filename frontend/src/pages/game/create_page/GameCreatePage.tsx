@@ -147,7 +147,7 @@ export function GameCreatePage() {
                   type="text"
                   value={userInvited}
                   placeholder="Invited username"
-                  onChange={(e) => setUserInvited(e.target.value)}
+                  onChange={(e) => setUserInvited(e.target.value.trim().toLowerCase())}
                 />
               )}
               {error && (

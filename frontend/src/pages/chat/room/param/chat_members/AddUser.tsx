@@ -63,7 +63,7 @@ export function AddUser() {
         type="text"
         placeholder="Add new user"
         value={newUser}
-        onChange={(e) => setNewUser(e.target.value)}
+        onChange={(e) => setNewUser(e.target.value.trim().toLowerCase())}
       />
       <img
         src={addChatterIcon}

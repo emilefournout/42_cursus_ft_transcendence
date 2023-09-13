@@ -86,8 +86,8 @@ export function RoomSearch() {
           style={{ margin: "8px 0" }}
           value={searchInput}
           onChange={(e) => {
-            setSearchInput(e.target.value);
-            search_room(e.target.value);
+            setSearchInput(e.target.value.trim().toLowerCase());
+            search_room(e.target.value.trim().toLowerCase());
           }}
           type="text"
           placeholder="room name"

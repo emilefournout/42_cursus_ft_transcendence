@@ -93,7 +93,7 @@ export function Register() {
             type="text"
             placeholder="User Name"
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) => setUsername(event.target.value.trim().toLowerCase())}
             onKeyDown={(event) => {
               event.key === "Enter" && register();
             }}
