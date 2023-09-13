@@ -7,6 +7,7 @@ import { Avatar } from "../../components/Avatar";
 import TwoFactorAuth from "../../components/TwoFactorAuth";
 import { BoardContext } from "../board/Board";
 import { DialogContext } from "../root/Root";
+import { UserSocket } from "../../services/socket";
 
 export function SettingsHomePage() {
   const [showQr, setShowQr] = useState(false);
@@ -56,6 +57,7 @@ export function SettingsHomePage() {
           to="/welcome"
           onClick={() => {
             localStorage.removeItem("access_token");
+            UserSocket.getInstance().socket.disconnect()
           }}
         >
           Disconnect
