@@ -1,3 +1,4 @@
+import { Transform, TransformFnParams } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDefined,
@@ -23,5 +24,6 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
+  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase().trim())
   username: string;
 }

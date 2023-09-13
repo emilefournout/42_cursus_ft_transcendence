@@ -42,6 +42,6 @@ export class CreatePrivateGameDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase())
+  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase().trim())
   friendUserName: string;
 }

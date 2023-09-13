@@ -17,8 +17,8 @@ import { ConnectionStorage } from 'src/game/types/connection-storage.class';
 import { JwtPayload } from 'src/auth/interface';
 import { JwtService } from '@nestjs/jwt';
 
-@WebSocketGateway(3001, {
-  cors: { origin: '*' },
+@WebSocketGateway({
+  cors: { origin: '*' }, path: '/ws/chat'
 })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -35,7 +35,8 @@ export class ChatGateway
   server: Server;
 
   afterInit(_server: Server) {
-    console.log('Init ChatGateway');
+    console.log(`Init ChatGateway`);
+    
   }
 
   handleConnection(client: Socket, ..._args: any[]) {

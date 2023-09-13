@@ -4,7 +4,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import * as fs from 'fs';
-import { WSValidationPipe } from './pipes/ws-validation.pipe';
+import { WSValidationPipe } from './sockets/ws-validation.pipe';
+import * as https from 'https';
+import { WsAdapter } from './sockets/ws-adapter.class';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -12,6 +14,7 @@ async function bootstrap() {
     cert: fs.readFileSync('./certification/certificate.pem'),
   };
   const app = await NestFactory.create(AppModule, { cors: true, httpsOptions });
+  app.use(json({ limit: '50mb' }));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,7 +23,12 @@ async function bootstrap() {
     }),
     new WSValidationPipe()
   );
-  app.use(json({ limit: '50mb' }));
+  initSwaggerDoc(app);
+  await app.listen(3000);
+}
+bootstrap();
+
+function initSwaggerDoc(app) {
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Transcendence API')
@@ -29,6 +37,4 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
 }
-bootstrap();

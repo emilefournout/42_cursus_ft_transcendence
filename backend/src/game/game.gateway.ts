@@ -23,8 +23,8 @@ import { GameIdDto } from './dto/game-id.dto';
 import { GameMoveDto } from './dto/game-move.dto';
 import { UserIdDto } from '../user/dto/user-id.dto';
 
-@WebSocketGateway(3002, {
-  cors: { origin: '*' },
+@WebSocketGateway({
+  cors: { origin: '*' }, path: '/ws/game'
 })
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
