@@ -4,14 +4,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import * as fs from 'fs';
-import { WSValidationPipe } from './pipes/ws-validation.pipe';
+import { WSValidationPipe } from './sockets/ws-validation.pipe';
+import * as https from 'https'
+import { WsAdapter } from './sockets/ws-adapter.class';
 
 async function bootstrap() {
   const httpsOptions = {
     key: fs.readFileSync('./certification/key.pem'),
     cert: fs.readFileSync('./certification/certificate.pem'),
   };
-  const app = await NestFactory.create(AppModule, { cors: true, httpsOptions });
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.use(json({ limit: '50mb' }));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -19,8 +22,18 @@ async function bootstrap() {
       transform: true,
     }),
     new WSValidationPipe()
+
   );
-  app.use(json({ limit: '50mb' }));
+  const httpsServer = https.createServer(httpsOptions);
+  app.useWebSocketAdapter(new WsAdapter(httpsServer));
+
+
+  initSwaggerDoc(app);
+  httpsServer.listen(3000);
+}
+bootstrap();
+
+function initSwaggerDoc(app) {
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Transcendence API')
@@ -29,6 +42,5 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
 }
-bootstrap();
+
