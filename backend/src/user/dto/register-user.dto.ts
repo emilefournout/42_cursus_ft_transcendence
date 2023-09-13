@@ -16,7 +16,7 @@ export class RegisterUserDto {
   @ApiProperty({
     description: 'Username to register, can be different than the intraname.',
   })
-  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase())
+  @Transform((name: TransformFnParams) => (name.value as string).toLowerCase().trim())
   username: string;
 
   @IsOptional()
