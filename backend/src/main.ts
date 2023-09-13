@@ -13,7 +13,7 @@ async function bootstrap() {
     key: fs.readFileSync('./certification/key.pem'),
     cert: fs.readFileSync('./certification/certificate.pem'),
   };
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, { cors: true, httpsOptions });
   app.use(json({ limit: '50mb' }));
   app.useGlobalPipes(
     new ValidationPipe({
@@ -29,7 +29,7 @@ async function bootstrap() {
 
 
   initSwaggerDoc(app);
-  httpsServer.listen(3000);
+  app.listen(3000);
 }
 bootstrap();
 
