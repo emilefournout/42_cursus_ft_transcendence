@@ -47,3 +47,6 @@ lerna-debug.log*
 
 # apena-ba test
 docker-compose.yml
+
+# Keys
+certification/key.pem
