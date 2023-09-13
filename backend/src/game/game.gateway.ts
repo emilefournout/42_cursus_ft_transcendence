@@ -85,6 +85,7 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() privateGameDataOptions: CreatePrivateGameDto
   ) {
+    if(privateGameDataOptions.friendUserName.length < 5) return 'ko';
     const active_game = await this.gameService.isUserInGame(client);
     console.log(`Active game is: ${active_game}`);
     if (active_game) return 'ko';

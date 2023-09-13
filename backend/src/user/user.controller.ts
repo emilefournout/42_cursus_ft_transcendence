@@ -29,7 +29,7 @@ import { IdValidationPipe } from './pipes/id-validation.pipe';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -56,6 +56,8 @@ export class UserController {
   async updateUser(@GetUser() user, @Body() updateUserDto: UpdateUserDto) {
     let userUpdated;
 
+    if (updateUserDto.username.length < 5)
+      throw new BadRequestException('Username must be at least 5 characters long');
     try {
       userUpdated = await this.userService.updateUsername(
         user.sub,
