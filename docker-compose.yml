@@ -6,7 +6,7 @@ services:
     container_name: database
     image: postgres:15.3-alpine3.18
     restart: unless-stopped
-    env_file: ./backend/sql/.env
+    env_file: .env
     ports:
       - 5432:5432
     volumes:
@@ -30,7 +30,7 @@ services:
     container_name: backend
     build: ./backend/.
     restart: unless-stopped
-    env_file: ./backend/.env
+    env_file: .env
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -57,6 +57,7 @@ services:
         - ARG_REACT_APP_GAME_SOCKET=${REACT_APP_GAME_SOCKET}
         - ARG_REACT_APP_USER_SOCKET=${REACT_APP_USER_SOCKET}
         - ARG_REACT_APP_TESTING=${REACT_APP_TESTING}
+    env_file: .env
     restart: unless-stopped
     ports:
       - 8080:80
