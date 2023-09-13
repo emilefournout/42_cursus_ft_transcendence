@@ -38,9 +38,6 @@ services:
       - transcendence_network
     ports:
       - 3000:3000
-      - 3001:3001
-      - 3002:3002
-      - 3003:3003
     depends_on:
       db:
         condition: service_started
