@@ -137,10 +137,12 @@ export class UserService {
           id: 1,
         },
       },
-      orderBy: {
+      orderBy: [{
         wins: 'desc',
-        loses: 'asc',
       },
+      {
+        loses: 'asc',
+      }],
       take: 10,
     });
     return users.map((chat) => UserBasicInfoDto.fromUser(chat));
