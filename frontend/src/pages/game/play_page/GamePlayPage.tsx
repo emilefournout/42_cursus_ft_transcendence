@@ -102,7 +102,11 @@ export function GamePlayPage() {
 					<h3 className="game-title game-controls">Controls: W/S or Up/Down</h3>
 					<div className="scores">
 						{player1Score !== -1 && player2Score !== -1 ? (
-							<span>{player1Score} / {player2Score}</span>
+							<>
+								<span>{player1Score}</span>
+								<span>/</span>
+								<span>{player2Score}</span>
+							</>
 						) : (
 							<span> Disconnection </span>
 						)}
