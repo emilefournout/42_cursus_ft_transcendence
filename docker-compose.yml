@@ -30,16 +30,16 @@ services:
     container_name: backend
     build: ./backend/.
     restart: unless-stopped
-    ports:
-      - 3000:3000
-      - 3001:3001
-      - 3002:3002
-      - 3003:3003
     volumes:
       - ./backend:/app
       - /app/node_modules
     networks:
       - transcendence_network
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 3002:3002
+      - 3003:3003
     depends_on:
       db:
         condition: service_started
@@ -48,7 +48,8 @@ services:
     build: ./frontend/.
     restart: unless-stopped
     ports:
-      - 8000:80
+      - 8080:80
+      - 443:443
     volumes:
       - ./frontend:/app
       - /app/node_modules
