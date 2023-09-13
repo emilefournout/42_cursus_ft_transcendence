@@ -41,9 +41,9 @@ export function GamePlayPage() {
 
 	useEffect(() => {
 		if (showModal !== undefined) {
-			setShowDialog(showModal + " win");
+			setShowDialog(showModal + " wins");
 		}
-		return () => {};
+		return () => { };
 	}, [showModal]);
 
 	useEffect(() => {
