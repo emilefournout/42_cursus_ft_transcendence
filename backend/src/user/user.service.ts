@@ -24,7 +24,7 @@ export class UserService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => GameService))
     private gameService: GameService
-  ) { }
+  ) {}
 
   async findUserByFilter(filter: UserFilter) {
     try {
@@ -137,12 +137,14 @@ export class UserService {
           id: 1,
         },
       },
-      orderBy: [{
-        wins: 'desc',
-      },
-      {
-        loses: 'asc',
-      }],
+      orderBy: [
+        {
+          wins: 'desc',
+        },
+        {
+          loses: 'asc',
+        },
+      ],
       take: 10,
     });
     return users.map((chat) => UserBasicInfoDto.fromUser(chat));
