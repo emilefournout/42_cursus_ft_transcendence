@@ -96,16 +96,16 @@ export class AuthController {
     try {
       const intraname: string = await this.authService.getIntraLogin(token);
       const user = await this.userService.findUserByFilter({ intraname });
-      //if (!user) {
-      return res
-        .cookie('42token', token)
-        .redirect(`${process.env.FRONTEND_URI}/register`);
-      //} else {
-      //  return res
-      //    .cookie('42token', token)
-      //    .cookie('username', user.username)
-      //    .redirect(`${process.env.FRONTEND_URI}/login`);
-      //}
+      if (!user) {
+        return res
+          .cookie('42token', token)
+          .redirect(`${process.env.FRONTEND_URI}/register`);
+      } else {
+        return res
+          .cookie('42token', token)
+          .cookie('username', user.username)
+          .redirect(`${process.env.FRONTEND_URI}/login`);
+      }
     } catch (error) {
       return res
         .cookie('42token', token)
