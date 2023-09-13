@@ -15,31 +15,29 @@ export function Message(props: MessageProps) {
     .replace(", ", "\n");
   const [userName, setUserName] = useState<string | undefined>(undefined);
   useEffect(() => {
-    return () => {
-      fetch(
-        `${process.env.REACT_APP_BACKEND}/user/info/${props.message.userId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      )
-        .then((response) => {
-          if (response.ok) return response.json();
-          else throw new Error("Error getting user info");
-        })
-        .then((data) => {
-          setUserName(
-            data.username.length > 20
-              ? data.username.substring(0, 17) + "..."
-              : data.username
-          );
-        })
-        .catch((error) => {
-          devlog(error);
-        });
-    };
+    fetch(
+      `${process.env.REACT_APP_BACKEND}/user/info/${props.message.userId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        else throw new Error("Error getting user info");
+      })
+      .then((data) => {
+        setUserName(
+          data.username.length > 20
+            ? data.username.substring(0, 17) + "..."
+            : data.username
+        );
+      })
+      .catch((error) => {
+        devlog(error);
+      });
   }, [props.message.userId]);
 
   return (
