@@ -24,7 +24,7 @@ export class UserService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => GameService))
     private gameService: GameService
-  ) {}
+  ) { }
 
   async findUserByFilter(filter: UserFilter) {
     try {
@@ -244,7 +244,7 @@ export class UserService {
     if (checkFriends !== null) throw new ForbiddenException(checkFriends);
 
     if (requester_id === adressee_id)
-      throw new ForbiddenException('Requester and adressee has same id');
+      throw new ForbiddenException('You cannot add yourself as a friend');
 
     try {
       await this.prisma.userFriendship.create({
