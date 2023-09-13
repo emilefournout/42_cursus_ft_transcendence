@@ -4,13 +4,23 @@
 	height: 50%;
 }
 
-.scores{
-	border-radius: 3px;
-	background-color: var(--Honey-Yellow);
+.game-title {
+	color: var(--Light-Text);
+	font-size: clamp(0.6rem, 2vw, 1rem);
 }
 
-.score{
-	padding: 0.5rem;
+.scores{
+	height: 1.5em;
+
+	border-radius: var(--Default-BR);
+	background-color: var(--Honey-Yellow);
+
+	color: var(--Light-Text);
+	font-size: clamp(0.4rem, 2vw, 0.8rem);
+}
+
+.scores > span {
+	font-size: inherit;
 }
 
 .light-text{
