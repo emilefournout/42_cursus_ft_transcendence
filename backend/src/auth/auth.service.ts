@@ -35,7 +35,7 @@ export class AuthService {
     code2fa: string
   ) {
     try {
-      let user = await this.userService.findUserByFilter({ username });
+      let user = await this.userService.findUserByFilter({ intraname });
       if (!user) {
         user = await this.userService.createUser(
           intraname,
