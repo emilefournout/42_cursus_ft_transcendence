@@ -66,7 +66,7 @@ export function SettingsHomePage() {
         </Link>
       </div>
       {boardContext && showQr && (
-        <TwoFactorAuth username={boardContext.me.username} />
+        <TwoFactorAuth username={boardContext.me.username} setShowQr={setShowQr}/>
       )}
     </div>
   );

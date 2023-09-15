@@ -21,7 +21,7 @@ export function EngGameDialog(props: DialogProps) {
               navigate("/board/game");
             }}
           >
-            home
+            back
           </button>
         </dialog>
       ) : (

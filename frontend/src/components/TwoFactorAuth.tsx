@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { DialogContext } from "../pages/root/Root";
 import { devlog } from "../services/core";
 
-function TwoFactorAuth({ username }: { username: string | null }) {
+function TwoFactorAuth({ username, setShowQr }: { username: string | null, setShowQr: React.Dispatch<React.SetStateAction<boolean>>; }) {
   // TODO maybe we can get username or other value from cookies or localstore to make the secret
   const [code, setCode] = useState("");
   const [qrImage, setQrImage] = useState("");
@@ -28,7 +28,13 @@ function TwoFactorAuth({ username }: { username: string | null }) {
       }
     )
       .then((response: Response) => {
-        response.ok ? setDialog("Good") : setDialog("Incorrect code");
+        if (response.ok) {
+          setDialog("2FA enabled")
+          setShowQr(false);
+        }
+        else {
+          setDialog("Incorrect code");
+        }
       })
       .catch((error) => {
         devlog("Error on setting 2FA");
