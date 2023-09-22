@@ -76,7 +76,6 @@ export class ChatController {
   async findChatsByName(
     @Param('chatName') chatName: string
   ): Promise<ChatShortInfoDto[]> {
-    console.log(chatName);
     const chat = await this.chatService.findChatsInfoContainingName(chatName);
     if (!chat) throw new NotFoundException('Chats not found');
     return chat;

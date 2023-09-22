@@ -74,7 +74,7 @@ export function Room() {
       </div>
     );
   } else if (location.pathname === "/board/chats") {
-    return <Navigate to={`/board/chats/${chats[0].id}`} />;
+    return <Navigate replace to={`/board/chats/${chats[0].id}`} />;
   } else if (chat === undefined) return <>Chat not found</>;
   else
     return (

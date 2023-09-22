@@ -18,10 +18,10 @@ export function EngGameDialog(props: DialogProps) {
           <button
             onClick={() => {
               closeDialog();
-              navigate("/board");
+              navigate("/board/game");
             }}
           >
-            home
+            back
           </button>
         </dialog>
       ) : (

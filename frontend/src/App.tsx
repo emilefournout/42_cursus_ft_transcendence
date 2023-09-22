@@ -37,14 +37,15 @@ function App() {
       <HelmetProvider>
         <Routes>
           <Route path="/" element={<Root />}>
-            <Route path="" element={<Navigate to={"/board"} />} />
+            <Route path="" element={<Navigate replace to={"/board"} />} />
+
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="welcome" element={<Welcome />} />
             <Route path="board" element={<Board />}>
               <Route
                 path=""
-                element={<Navigate to={"/board/user-account"} />}
+                element={<Navigate replace to={"/board/user-account"} />}
               />
               <Route path="game" element={<Game />}>
                 <Route path="" element={<GameHomePage />} />

@@ -12,11 +12,11 @@ export function GameMatchmakingPage() {
   useEffect(() => {
     if (!waiting.current) {
       gameSocket.emit("join_waiting_room", null, (data: any) => {
-        if (data.status === "ko") navigate(`../${data.uuid}`);
+        if (data.status === "ko") navigate(`../${data.uuid}`, { replace: true });
       });
       gameSocket.off("game_found");
       gameSocket.on("game_found", (gameId) => {
-        navigate(`../${gameId}`);
+        navigate(`../${gameId}`, { replace: true });
       });
       waiting.current = true;
     }
